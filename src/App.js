@@ -18,7 +18,7 @@ class App extends Component {
               <Label mb="3" className="h3 font-weight-normal" for="exampleEmail">Please Sign In</Label>
             </FormGroup>
             <FormGroup>
-              <Input type="email" name="email" id="exampleEmail" placeholder="Email" />
+              <Input type="email" name="email" id="exampleEmail" placeholder="Testing" />
             </FormGroup>
             <FormGroup>
               <Input type="password" name="password" id="examplePassword" placeholder="Password" />
