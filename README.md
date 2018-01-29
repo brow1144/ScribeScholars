@@ -10,7 +10,7 @@
 
 ## Using the Repository
 
-#####I would highly recommend downloading Github Desktop because it gives a nice visualization of what is going on with all the different forks and branches. 
+###### I would highly recommend downloading Github Desktop because it gives a nice visualization of what is going on with all the different forks and branches. 
 
 1. Fork the Repository onto your own github
 2. Go to your personal repository and clone it do your computer 
