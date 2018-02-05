@@ -1,35 +1,75 @@
 import React, { Component } from 'react';
-import logo from './logo.svg'
-import { Route } from 'react-router-dom';
-import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
+
+import firebase from './base.js';
+
+import { Route, Switch, Redirect } from 'react-router-dom';
+
+import SignIn from './SignIn';
+import HomePage from './HomePage';
 
 import './App.css';
 
 class App extends Component {
+
+  constructor() {
+    super();
+
+    this.state = {
+      uid: null,
+    }
+  }
+
+  componentWillMount() {
+    this.getUserFromLocalStorage();
+    firebase.auth().onAuthStateChanged(
+      (user) => {
+        if (user) {
+          // finished signing in
+          this.authHandler(user)
+        } else {
+          // finished signing out
+          this.setState({ uid: null })
+        }
+      }
+    )
+  }
+
+  getUserFromLocalStorage() {
+    const uid = localStorage.getItem('uid');
+    if (!uid) return;
+    this.setState({ uid })
+  }
+
+  authHandler = (user) => {
+    localStorage.setItem('uid', user.uid);
+    this.setState(
+      { uid: user.uid },
+      )
+  };
+
+  signedIn = () => {
+    return this.state.uid
+  };
+
   render() {
     return (
-      <div className="App text-center">
-        <Route path='/sign-in' />
-        <div className="Absolute-Center is-Responsive">
-          <Form>
-            <FormGroup>
-              <img src={logo} alt="" width="100" height="100"/>
-            </FormGroup>
-            <FormGroup>
-              <Label mb="3" className="h3 font-weight-normal" for="exampleEmail">Please Sign In</Label>
-            </FormGroup>
-            <FormGroup>
-              <Input type="email" name="email" id="exampleEmail" placeholder="Email" />
-            </FormGroup>
-            <FormGroup>
-              <Input type="password" name="password" id="examplePassword" placeholder="Password" />
-            </FormGroup>
-            <FormGroup>
-              <Button className="signInButton" size="lg" block>Sign In!</Button>
-            </FormGroup>
-          </Form>
-        </div>
-      </div>
+      <Switch>
+
+        <Route exact path='/HomePage' render={() => (
+          this.signedIn()
+            ? <HomePage />
+            : <Redirect to="/sign-in" />
+        )} />
+
+        <Route exact path='/sign-in' render={() => (
+          !this.signedIn()
+            ? <SignIn />
+            : <Redirect to="/HomePage" />
+        )} />
+
+        <Route render={() => <Redirect to="/HomePage" />} />
+
+      </Switch>
     );
   }
 }
