@@ -1,27 +1,46 @@
 import React, { Component } from 'react';
 
-import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
-
 import { fireauth, googleProvider } from './base.js';
+
+import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import './SignIn.css';
 import logo from './logo.svg'
 
 class SignIn extends Component {
 
-  onFormSubmit = (e) => {
-    e.preventDefault()
+  constructor() {
+    super();
 
-    fireauth.auth().signInWithEmailAndPassword(e.target.email.value, e.target.password.value)
+    this.state = {
+      errorCode: "",
+      visible: false,
+    };
+  }
+
+  onFormSubmit = (ev) => {
+    ev.preventDefault();
+    let self = this;
+
+    fireauth.auth().signInWithEmailAndPassword(ev.target.email.value, ev.target.password.value)
       .catch(function(err) {
         // Handle errors
-        console.log(err.code)
-      });
+        console.log(err.message);
 
+        self.setState({
+          errorCode: err.message,
+          visible: true,
+        })
+
+      });
   };
 
   handleGoogle = () => {
     fireauth.auth().signInWithPopup(googleProvider);
   };
+
+onDismiss = () => {
+  this.setState({ visible: false });
+};
 
   render() {
     return (
@@ -40,6 +59,9 @@ class SignIn extends Component {
             <FormGroup>
               <Input type="password" name="password" id="examplePassword" placeholder="Password" />
             </FormGroup>
+            <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
+              {this.state.errorCode}
+            </Alert>
             <FormGroup>
               <Button className="signInButton" size="lg" block>Sign In!</Button>
             </FormGroup>
