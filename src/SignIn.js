@@ -54,7 +54,7 @@ onDismiss = () => {
               <Label mb="3" className="h3 font-weight-normal" for="exampleEmail">Please Sign In</Label>
             </FormGroup>
             <FormGroup>
-              <Input type="email" name="email" id="exampleEmail" placeholder="walter" />
+              <Input type="email" name="email" id="exampleEmail" placeholder="Email" />
             </FormGroup>
             <FormGroup>
               <Input type="password" name="password" id="examplePassword" placeholder="Password" />
