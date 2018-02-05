@@ -3,15 +3,30 @@ import logo from './logo.svg'
 import { Route } from 'react-router-dom';
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap';
 
+import firebase from './base.js';
+
 import './App.css';
 
 class App extends Component {
+
+  onFormSubmit(e) {
+    e.preventDefault()
+
+    firebase.auth().signInWithEmailAndPassword(e.target.email.value, e.target.password.value)
+      .catch(function(err) {
+        // Handle errors
+        console.log(err.code)
+      });
+
+    console.log(firebase.auth().currentUser.uid);
+  }
+
   render() {
     return (
       <div className="App text-center">
         <Route path='/sign-in' />
         <div className="Absolute-Center is-Responsive">
-          <Form>
+          <Form onSubmit={ this.onFormSubmit }>
             <FormGroup>
               <img src={logo} alt="" width="100" height="100"/>
             </FormGroup>

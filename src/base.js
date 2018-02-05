@@ -1,8 +1,7 @@
-var Rebase = require('re-base');
 var firebase = require('firebase/app');
-require('firebase/database');
+require('firebase/auth');
 
-const app = firebase.initializeApp({
+firebase.initializeApp({
   apiKey: "AIzaSyChlfKvDE7NooubBJdFgaVuVElhO8h0jm8",
   authDomain: "scribescholars-ad86f.firebaseapp.com",
   databaseURL: "https://scribescholars-ad86f.firebaseio.com",
@@ -11,6 +10,5 @@ const app = firebase.initializeApp({
   messagingSenderId: "972953349504"
 });
 
-var db = firebase.database(app);
-export default Rebase.createClass(db);
+export default firebase;
 
