@@ -22,7 +22,6 @@
     $ cd cs307/ScribeScholars
     $ git clone https://github.com/YOUR-USERNAME/ScribeScholars
     ```
-    b. Or just click clone and it will download a zip file you can manually place in your project folder.
 3. Once you have the repository cloned onto your computer run these commands to initialize your repo.
    ```bash
    $ cd cs307/ScribeScholars
@@ -34,6 +33,9 @@
    $ git remote -v
    $ git push origin master
    ```
+   
+  ###Once you have the repository set up, type "yarn" in the directoy to add all dependencies. After that you can type "yarn start" and it will open the development server.
+   
    a. Once you have this setup you will be able to use git how you normally would on a personal project (branches, commits, pushes, etc.)
 4. While you can pull through terminal I believe it is easier to do through git hub.
     
