@@ -35,13 +35,12 @@
    ```
    
   ###Once you have the repository set up, type "yarn" in the directoy to add all dependencies. After that you can type "yarn start" and it will open the development server.
+  
+  
    
    a. Once you have this setup you will be able to use git how you normally would on a personal project (branches, commits, pushes, etc.)
-4. While you can pull through terminal I believe it is easier to do through git hub.
+4. Before you start working on anything make sure you get up to date with the master branch. You can do this in Github Desktop by going to Branch->Merge Into Current Branch then choose that you want to merge with upstream master. Then make sure to click fetch origin to refresh your local files. 
     
     a. When you have a version of your repository you want to add to the main repository, 
         
-        1. Go to Create Pull Request in Github
-        2. There you can edit the branch you want to merge with / your branch you want to send to merge.
-        3. Add some messages to explain what you added in case of conflicts.
-        4. Will shortly check the repo and if nothing seems wrong I will add it to the main repo.
+        1. Go to github in your browser and click pull request, write a short description of what you are adding and then if you feel it is ready then commmit merge and it will be updated on the master branch.
