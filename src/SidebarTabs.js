@@ -11,7 +11,7 @@ const Sidebar = () => {
     <div>
       <img src={logo} alt="Logo" />
       <hr />
-      <Link to="">
+      <Link style={{ textDecoration: 'none' }} to="">
         <p className="classOne" >CS 307</p>
       </Link>
       <hr />
