@@ -45,7 +45,7 @@ class App extends Component {
     localStorage.setItem('uid', user.uid);
     this.setState(
       { uid: user.uid },
-      )
+    )
   };
 
   signedIn = () => {
