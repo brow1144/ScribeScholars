@@ -12,29 +12,10 @@
 
 
 ## Using the Repository
-
-###### I would highly recommend downloading Github Desktop because it gives a nice visualization of what is going on with all the different forks and branches. 
-
-1. Fork the Repository onto your own github
-2. Go to your personal repository and clone it do your computer 
- a. The Green button on your page will have a link to use command line to clone 
-    ```bash
-    $ cd cs307/ScribeScholars
-    $ git clone https://github.com/YOUR-USERNAME/ScribeScholars
-    ```
-3. Once you have the repository cloned onto your computer run these commands to initialize your repo.
-   ```bash
-   $ cd cs307/ScribeScholars
-   $ git init 
-   $ git add .
-   $ git commit -m "Initial Commit"
-   $ git remote -v
-   $ git remote add upstream https://github.com/brow1144/ScribeScholars.git
-   $ git remote -v
-   $ git push origin master
-   ```
+ 
+  ## Clone the repo to your github desktop from brow1144/ScribeScholars
    
-  ###Once you have the repository set up, type "yarn" in the directoy to add all dependencies. After that you can type "yarn start" and it will open the development server.
+  ### Once you have the repository set up, type "yarn" in the directoy to add all dependencies. After that you can type "yarn start" and it will open the development server.
   
   
    
