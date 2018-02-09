@@ -6,7 +6,7 @@ class Settings extends Component {
   render() {
     return (
       <div>
-        <b> Walter's Settings Page </b>
+        <b> MY! Settings Page </b>
       </div>
     )
   }
