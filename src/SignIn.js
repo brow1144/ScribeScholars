@@ -4,7 +4,7 @@ import { fireauth, googleProvider } from './base.js';
 
 import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import './SignIn.css';
-import logo from './logo.svg'
+import logo from './logo.svg';
 
 class SignIn extends Component {
 
@@ -24,7 +24,7 @@ class SignIn extends Component {
     fireauth.auth().signInWithEmailAndPassword(ev.target.email.value, ev.target.password.value)
       .catch(function(err) {
         // Handle errors
-        console.log(err.message);
+        //console.log(err.message);
 
         self.setState({
           errorCode: err.message,
@@ -44,7 +44,7 @@ onDismiss = () => {
 
   render() {
     return (
-      <div className="App text-center">
+      <div className="text-center">
         <div className="Absolute-Center is-Responsive">
           <Form onSubmit={ this.onFormSubmit }>
             <FormGroup>
