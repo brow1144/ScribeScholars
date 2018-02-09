@@ -10,11 +10,16 @@ const Sidebar = () => {
   return (
     <div>
       <img src={logo} alt="Logo" />
-      <hr />
+
       <NavLink style={{ textDecoration: 'none' }} to={`/HomePage/cs307`}>
         <p className="classOne" >CS 307</p>
       </NavLink>
-      <hr />
+
+      <NavLink style={{ textDecoration: 'none' }} to={`/HomePage/cs252`}>
+        <p className="classOne" >CS 252</p>
+      </NavLink>
+
+
     </div>
   )
 }
