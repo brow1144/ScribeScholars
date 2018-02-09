@@ -2,9 +2,11 @@ import React from 'react'
 
 import { NavLink } from 'react-router-dom'
 
+import UserIcon from './UserIcon';
+
 import logo from './logo.svg';
 
-import './SidebarTabs.css'
+import './Side.css'
 
 const Sidebar = () => {
   return (
@@ -20,6 +22,8 @@ const Sidebar = () => {
       <NavLink style={{ textDecoration: 'none' }} to={`/HomePage/cs252`}>
         <p className="classOne" >CS 252</p>
       </NavLink>
+
+      <UserIcon />
 
     </div>
   )

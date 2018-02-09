@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 
 import Sidebar from 'react-sidebar';
-import SidebarTabs from './SidebarTabs';
+import Side from './Side';
 
 import './HomePage.css';
 
@@ -65,7 +65,7 @@ class HomePage extends Component {
 
   render() {
 
-    let sidebarContent = <SidebarTabs />;
+    let sidebarContent = <Side />;
 
     const sidebarStyles = {
       sidebar: {
@@ -73,27 +73,7 @@ class HomePage extends Component {
         width: '8em',
         textAlign: 'center',
       },
-      content: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        overflowY: 'scroll',
-        WebkitOverflowScrolling: 'touch',
-        transition: 'left .3s ease-out, right .3s ease-out',
-      },
       overlay: {
-        zIndex: 1,
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        opacity: 0,
-        visibility: 'hidden',
-        transition: 'opacity .3s ease-out, visibility .3s ease-out',
-        //backgroundColor: 'rgba(0,0,0,.3)',
         backgroundColor: '#f3f3f3'
       },
     };
@@ -107,11 +87,12 @@ class HomePage extends Component {
 
         {this.state.sideButtonVisibility
           ?
-          <Button outline onClick={this.dockSideBar}>
-            <i className="fas fa-bars"/>
-          </Button>
+            <Button outline onClick={this.dockSideBar}>
+              <i className="fas fa-bars"/>
+            </Button>
           :
-          <b>Main Section</b>
+            <b>Main Section</b>
+
         }
 
       </Sidebar>
