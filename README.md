@@ -15,7 +15,7 @@
  
   ## Clone the repo to your github desktop from brow1144/ScribeScholars
    
-  ### Once you have the repository set up, type "yarn" in the directoy to add all dependencies. After that you can type "yarn start" and it will open the development server.
+  ### Once you have the repository set up, type "yarn" in the directory to add all dependencies. After that you can type "yarn start" and it will open the development server.
   
   
    
