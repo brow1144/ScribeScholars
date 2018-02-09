@@ -6,7 +6,8 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 
 import SignIn from './SignIn';
 import HomePage from './HomePage';
-import Settings from './Settings'
+import Settings from './Settings';
+import About from './AboutPage';
 
 import './App.css';
 
@@ -68,6 +69,12 @@ class App extends Component {
             ? <SignIn />
             : <Redirect to="/HomePage" />
         )} />
+
+          <Route exact path='/About' render={() => (
+              <About />
+          )} />
+
+
 
         <Route path='/settings' render={() => (
           this.signedIn()
