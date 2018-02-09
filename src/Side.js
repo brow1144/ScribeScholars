@@ -23,7 +23,9 @@ const Sidebar = () => {
         <p className="classOne" >CS 252</p>
       </NavLink>
 
-      <UserIcon />
+      <NavLink style={{ textDecoration: 'none' }} to={`/settings`}>
+        <UserIcon />
+      </NavLink>
 
     </div>
   )
