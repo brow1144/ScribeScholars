@@ -2,8 +2,6 @@ import React from 'react'
 
 import { NavLink } from 'react-router-dom'
 
-import UserIcon from './UserIcon';
-
 import logo from './logo.svg';
 
 import './Side.css'
@@ -24,11 +22,11 @@ const Sidebar = () => {
       </NavLink>
 
       <NavLink style={{ textDecoration: 'none' }} to={`/settings`}>
-        <UserIcon />
+        <i className="fas fa-cogs fa-2x settingsLogo" />
       </NavLink>
 
     </div>
   )
-}
+};
 
 export default Sidebar
