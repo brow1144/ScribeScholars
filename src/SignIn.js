@@ -44,7 +44,7 @@ onDismiss = () => {
 
   render() {
     return (
-      <div className="App text-center">
+      <div className="text-center">
         <div className="Absolute-Center is-Responsive">
           <Form onSubmit={ this.onFormSubmit }>
             <FormGroup>

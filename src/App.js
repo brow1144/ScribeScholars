@@ -56,7 +56,7 @@ class App extends Component {
     return (
       <Switch>
 
-        <Route exact path='/HomePage' render={() => (
+        <Route path='/HomePage' render={() => (
           this.signedIn()
             ? <HomePage />
             : <Redirect to="/sign-in" />

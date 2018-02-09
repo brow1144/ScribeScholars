@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 import logo from './logo.svg';
 
@@ -11,9 +11,9 @@ const Sidebar = () => {
     <div>
       <img src={logo} alt="Logo" />
       <hr />
-      <Link style={{ textDecoration: 'none' }} to="">
+      <NavLink style={{ textDecoration: 'none' }} to={`/HomePage/cs307`}>
         <p className="classOne" >CS 307</p>
-      </Link>
+      </NavLink>
       <hr />
     </div>
   )
