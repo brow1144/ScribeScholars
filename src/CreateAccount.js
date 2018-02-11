@@ -39,6 +39,8 @@ class CreateAccount extends Component {
                     visible: true,
                 })
             })
+
+
     };
 
     handleGoogle = () => {
@@ -58,7 +60,16 @@ class CreateAccount extends Component {
                             <img src={logo} alt="" width="100" height="100"/>
                         </FormGroup>
                         <FormGroup>
-                            <Label mb="3" className="h3 font-weight-normal" for="exampleEmail">Please Sign In</Label>
+                            <Label mb="3" className="h3 font-weight-normal" for="exampleEmail">Create a New Account</Label>
+                        </FormGroup>
+                        <FormGroup>
+                            <Input type="firstName" name="firstName" id="exampleFirstName" placeholder="First Name" />
+                        </FormGroup>
+                        <FormGroup>
+                            <Input type="lastName" name="lastName" id="exampleLastName" placeholder="Last Name" />
+                        </FormGroup>
+                        <FormGroup>
+                            <Input type="dateOfBirth" name="dateOfBirth" id="exampleDateOfBirth" placeholder="Date of Birth" />
                         </FormGroup>
                         <FormGroup>
                             <Input type="email" name="email" id="exampleEmail" placeholder="Email" />
