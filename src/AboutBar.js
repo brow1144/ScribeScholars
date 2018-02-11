@@ -86,7 +86,7 @@ class AboutBar extends React.Component {
                     </TabPane>
                     <TabPane tabId="4">
                         <Row>
-                            <img className="picPar" src={picPar}/>
+                            <img className="picPar center" src={picPar}/>
                         </Row>
                         <Row>
                             <Col className={"col"}>

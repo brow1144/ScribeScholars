@@ -10,29 +10,31 @@ h1 {
 }
 
 .row {
-    border: solid 1px lawngreen;
+    \\border: solid 1px lawngreen;
 
     font-family: "Times New Roman";
     font-weight: bold;
 }
 
 .col {
-    border: solid 1px red;
+    \\border: solid 1px red;
 
 }
 
 .intro {
-    border: solid 1px yellow;
+    \\border: solid 1px yellow;
 
 }
 
 .title {
     text-align: center;
-    font-size: xx-large;
+    font-size: 70px;
+    font-weight: bold;
+    font-style: italic;
 }
 
 .about {
-    //border: solid 3px #21CE99;
+    \\border: solid 3px #21CE99;
     background-image: url(./paperWood.jpg);
     background-size: cover;
     background-repeat: no-repeat;
@@ -40,9 +42,9 @@ h1 {
 }
 
 .nav {
-    border: solid 2px purple;
+    \\border: solid 2px purple;
 }
 
 .footer {
-    border: solid 1px brown;
+    \\border: solid 1px brown;
 }
