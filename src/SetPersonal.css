@@ -1,0 +1,45 @@
+
+.ContainerRules
+{
+    max-width: 100%;
+    overflow-x: hidden;
+
+}
+
+.BannerRow
+{
+    background: #21CE99;
+    color: #6C6A69;
+    padding-left: 5rem;
+}
+
+.BannerCol
+{
+    padding-top: 2rem;
+
+}
+
+.Filler
+{
+    height: 2rem;
+}
+.Absolute-Center {
+    margin: auto;
+    position: relative;
+    top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.PasswordButton {
+    background-color: #21CE99 !important;
+    border-color: #21CE99 !important;
+}
+
+.Absolute-Center.is-Responsive {
+    width: 65%;
+    height: 50%;
+    min-width: 40rem;
+    max-width: 40rem;
+    padding: 10px;
+    background: gray;
+}
+
