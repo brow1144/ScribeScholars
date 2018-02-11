@@ -5,6 +5,7 @@ import Sidebar from 'react-sidebar';
 import SettingsSide from './SettingsSide';
 
 import SetPersonal from './SetPersonal'
+import SetClassroom from './SetClassroom';
 
 import './Settings.css'
 
@@ -16,6 +17,7 @@ class Settings extends Component {
         super(props);
 
         this.state = {
+
             mql: mql,
             docked: props.docked,
             open: props.open,
@@ -94,7 +96,7 @@ class Settings extends Component {
                     :
                     <br/>
                 }
-
+                {/*<SetClassroom/>*/}
                 <SetPersonal/>
             </Sidebar>
         );
