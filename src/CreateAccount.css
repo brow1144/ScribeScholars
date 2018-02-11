@@ -21,6 +21,3 @@
     max-width: 400px;
     padding: 10px;
 }
-
-/*<Button onClick={ <NavLink to={`/create-account`}> </NavLink> } className="createAccountButton" size="lg" block>Sign Up!</Button>*/
-/*<Button as {NavLink} to={"/create-account"} className="createAccountButton" size="lg" block>Sign Up!</Button>*/

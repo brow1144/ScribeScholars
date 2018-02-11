@@ -7,32 +7,43 @@ import './CreateAccount.css';
 import logo from './logo.svg';
 
 class CreateAccount extends Component {
-
     constructor() {
         super();
 
         this.state = {
             errorCode: "",
             visible: false,
+            uid: null,
         };
     }
+
+    /*getUserFromLocalStorage() {
+        const uid = localStorage.getItem('uid');
+        if (!uid) return;
+        alert(uid);
+        this.setState({ uid })
+    }*/
 
     onFormSubmit = (ev) => {
         ev.preventDefault();
         let self = this;
 
         fireauth.auth().createUserAndRetrieveDataWithEmailAndPassword(ev.target.email.value, ev.target.password.value)
+            .then( (userCredential) => {
+                userCredential.user.displayName = ev.target.firstName.value + ev.target.lastName.value;
+
+            })
             .catch(function(err) {
                 // Handle errors
                 //console.log(err.message);
-                let errCode = err.code;
-                let errMessage = err.message;
-                if (errCode !== 'auth/weak-password') {
+                //let errCode = err.code;
+                //let errMessage = err.message;
+                /*if (errCode !== 'auth/weak-password') {
                     alert(errMessage);
                 } else {
                     alert('The password is too weak.');
-                }
-                console.log(err);
+                }*/
+                //console.log(err);
 
                 self.setState({
                     errorCode: err.message,
@@ -40,10 +51,20 @@ class CreateAccount extends Component {
                 })
             });
 
+        /*fireauth.onAuth(function(authData) {
+           if (authData) {
+               fireauth.child("users").child(authData.uid).set({
+                 firstName: authData.firstName,
+                 lastName: authData.lastName
+               });
+           }
+        });*/
+
        // let rootRef = firebase.database().ref();
         //let userRef = rootRef.child("Students/")
 
         //this.getUserFromLocalStorage();
+        //alert(this.state.uid);
       /* let postsRef = ref.child("Students");
         postsRef.push({
             firstName: "firstName",
@@ -77,9 +98,9 @@ class CreateAccount extends Component {
                         <FormGroup>
                             <Input type="lastName" name="lastName" id="exampleLastName" placeholder="Last Name" />
                         </FormGroup>
-                        <FormGroup>
+                        /*<FormGroup>
                             <Input type="dateOfBirth" name="dateOfBirth" id="exampleDateOfBirth" placeholder="Date of Birth" />
-                        </FormGroup>
+                        </FormGroup>*/
                         <FormGroup>
                             <Input type="email" name="email" id="exampleEmail" placeholder="Email" />
                         </FormGroup>
