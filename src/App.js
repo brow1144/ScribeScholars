@@ -16,7 +16,7 @@ class App extends Component {
 
   constructor() {
     super();
-    
+
 
     this.state = {
       uid: null,
@@ -76,10 +76,9 @@ class App extends Component {
           )} />
 
         <Route exact path='/create-account' render={() => (
-            /*!this.signedIn()
+            !this.signedIn()
                 ? <CreateAccount />
-                : <Redirect to="/HomePage" />*/
-            <CreateAccount />
+                : <Redirect to="/HomePage" />
         )} />
 
         <Route path='/settings' render={() => (

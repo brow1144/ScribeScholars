@@ -32,6 +32,18 @@ class CreateAccount extends Component {
             .then( (userCredential) => {
                 userCredential.user.displayName = ev.target.firstName.value + ev.target.lastName.value;
 
+                let ref = fireauth.database().ref("Students");
+                ref.set({
+                    firstName: ev.target.firstName.value,
+                    lastName: ev.target.lastName.value
+                })
+                  .then( () => {
+                      return ref.once("value");
+                    })
+                  .then ( (snapshot) => {
+                      let data = snapshot.val();
+                      alert(data.firstName);
+                  });
             })
             .catch(function(err) {
                 // Handle errors
@@ -98,9 +110,6 @@ class CreateAccount extends Component {
                         <FormGroup>
                             <Input type="lastName" name="lastName" id="exampleLastName" placeholder="Last Name" />
                         </FormGroup>
-                        /*<FormGroup>
-                            <Input type="dateOfBirth" name="dateOfBirth" id="exampleDateOfBirth" placeholder="Date of Birth" />
-                        </FormGroup>*/
                         <FormGroup>
                             <Input type="email" name="email" id="exampleEmail" placeholder="Email" />
                         </FormGroup>
