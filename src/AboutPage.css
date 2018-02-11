@@ -1,8 +1,21 @@
-.container {
-
+h1 {
+    text-align: center;
+    padding-bottom: 20px;
 }
 
-.nav {
+.container {
+    display: grid;
+    justify-items: center;
+}
 
+.start {
+}
 
+.intro {
+    justify-items: center;
+}
+
+.topPic{
+    width: 900px;
+    height: 300px;
 }

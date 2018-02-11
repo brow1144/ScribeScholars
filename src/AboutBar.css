@@ -1,7 +1,28 @@
-p {
-    font-size: 30px;
+.container {
+    justify-items: center;
 }
 
-.names {
+p {
+    font-size: 20px;
+}
 
+h2 {
+    padding: 20px;
+}
+
+h3 {
+    padding: 30px;
+    text-align: center;
+}
+
+.picOne {
+    width: 40%;
+    height: 30%;
+    justify-self: stretch;
+}
+
+.picTwo {
+    width: 40%;
+    height: 30%;
+    justify-self: stretch;
 }
