@@ -120,8 +120,8 @@ class AboutBar extends React.Component {
                                 <h3 className={"title"}>Contact Us</h3>
                                 <p>
                                     For any questions you may have, bugs you’d like fixed, or features you’d like added, you can reach our team at:
+                                    <p className={"ssColor center"}>scribescholars@gmail.com</p>
 
-                                    scribescholars@gmail.com
                                 </p>
                             </Col>
                         </Row>
