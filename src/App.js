@@ -8,6 +8,7 @@ import SignIn from './SignIn';
 import HomePage from './HomePage';
 import Settings from './Settings';
 import About from './AboutPage';
+import CreateAccount from './CreateAccount';
 
 import './App.css';
 
