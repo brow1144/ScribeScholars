@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'reactstrap';
+import { Button, Container } from 'reactstrap';
 
 import Sidebar from 'react-sidebar';
 import SettingsSide from './SettingsSide';
