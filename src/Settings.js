@@ -4,6 +4,8 @@ import { Button } from 'reactstrap';
 import Sidebar from 'react-sidebar';
 import SettingsSide from './SettingsSide';
 
+import SetPersonal from './SetPersonal'
+
 import './Settings.css'
 
 const mql = window.matchMedia(`(min-width: 800px)`);
@@ -90,10 +92,10 @@ class Settings extends Component {
                         <i className="fas fa-bars"/>
                     </Button>
                     :
-                    <b>Start of the Settings</b>
-
+                    <br/>
                 }
 
+                <SetPersonal/>
             </Sidebar>
         );
     }
