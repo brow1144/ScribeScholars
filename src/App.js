@@ -74,7 +74,11 @@ class App extends Component {
               <About />
           )} />
 
-
+        <Route exact path='/CreateAccount' render={() => (
+            !this.signedIn()
+                ? <CreateAccount />
+                : <Redirect to="/HomePage" />
+        )} />
 
         <Route path='/settings' render={() => (
           this.signedIn()
