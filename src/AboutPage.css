@@ -1,0 +1,28 @@
+.container {
+    display: grid;
+    grid-template-rows: 10% 1fr 2fr 1fr;
+}
+
+.nav {
+    background-color: black;
+    justify-content: center;
+
+}
+
+.rect {
+    background-color: white;
+    border: solid 1px black;
+}
+
+
+.picture {
+    position:relative;
+    overflow:hidden;/*keeps the image in the container*/
+    height: 200px;
+}
+
+.picture img{
+    position:absolute;
+    bottom:0;
+    width:100%
+}

@@ -1,0 +1,19 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-content: space-evenly;
+    grid-column-gap: 10px;
+}
+
+.button {
+    border: solid 1px green;
+    color: white;
+    text-align: center;
+    font-size: large;
+    font-family: "Bookman Old Style";
+
+}
+
+.button:hover {
+    color: #a39f9d;
+}

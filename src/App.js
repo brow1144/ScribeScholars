@@ -70,10 +70,9 @@ class App extends Component {
             : <Redirect to="/HomePage" />
         )} />
 
-          <Route exact path='/About' render={() => (
+          <Route path='/About' render={() => (
               <About />
           )} />
-
 
 
         <Route path='/settings' render={() => (
