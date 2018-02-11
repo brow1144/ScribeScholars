@@ -35,14 +35,6 @@ class SignIn extends Component {
       });
   };
 
-  createAccount = () => {
-     return (
-      <NavLink style={{ textDecoration: 'none' }} to="/create-account">
-        Create Account
-      </NavLink>
-     )
-  };
-
   handleGoogle = () => {
     fireauth.auth().signInWithPopup(googleProvider);
   };
@@ -75,7 +67,9 @@ onDismiss = () => {
               <Button className="signInButton" size="lg" block>Sign In!</Button>
             </FormGroup>
           </Form>
-          <Button onClick={ this.createAccount } className="createAccountButton" size="lg" block>Sign Up!</Button>
+          <NavLink style={{ textDecoration: 'none' }} to="/create-account">
+            <Button onClick={ this.createAccount } className="createAccountButton" size="lg" block>Sign Up!</Button>
+          </NavLink>
           <hr />
           <Button onClick={ this.handleGoogle } className="google-button"> <i className="fab fa-google"></i>  Sign in with Google!</Button>
         </div>
