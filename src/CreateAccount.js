@@ -38,9 +38,18 @@ class CreateAccount extends Component {
                     errorCode: err.message,
                     visible: true,
                 })
-            })
+            });
 
+       // let rootRef = firebase.database().ref();
+        //let userRef = rootRef.child("Students/")
 
+        //this.getUserFromLocalStorage();
+      /* let postsRef = ref.child("Students");
+        postsRef.push({
+            firstName: "firstName",
+            lastName: "lastName",
+            dateOfBirth: "dateOfBirth"
+        });*/
     };
 
     handleGoogle = () => {

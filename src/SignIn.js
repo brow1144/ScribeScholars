@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { fireauth, googleProvider } from './base.js';
 
+import { NavLink } from 'react-router-dom';
 import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import './SignIn.css';
 import logo from './logo.svg';
@@ -32,6 +33,14 @@ class SignIn extends Component {
         })
 
       });
+  };
+
+  createAccount = () => {
+     return (
+      <NavLink style={{ textDecoration: 'none' }} to="/create-account">
+        Create Account
+      </NavLink>
+     )
   };
 
   handleGoogle = () => {
@@ -66,6 +75,7 @@ onDismiss = () => {
               <Button className="signInButton" size="lg" block>Sign In!</Button>
             </FormGroup>
           </Form>
+          <Button onClick={ this.createAccount } className="createAccountButton" size="lg" block>Sign Up!</Button>
           <hr />
           <Button onClick={ this.handleGoogle } className="google-button"> <i className="fab fa-google"></i>  Sign in with Google!</Button>
         </div>
