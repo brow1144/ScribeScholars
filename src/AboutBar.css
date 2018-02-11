@@ -14,3 +14,21 @@ h3 {
     padding: 30px;
     text-align: center;
 }
+
+.picOne {
+    width: 40%;
+    height: 30%;
+    justify-self: stretch;
+}
+
+.picTwo {
+    width: 40%;
+    height: 30%;
+    justify-self: stretch;
+}
+
+.picPar {
+    width: 40%;
+    height: 30%;
+    justify-self: stretch;
+}

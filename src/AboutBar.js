@@ -4,6 +4,7 @@ import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, Ca
 import classnames from 'classnames';
 import './AboutBar.css';
 import picB from './students2.jpg';
+import picPar from './parentChild.jpg';
 
 class AboutBar extends React.Component {
 
@@ -38,6 +39,9 @@ class AboutBar extends React.Component {
                     </NavItem>
                     <NavItem>
                         <NavLink className={classnames({ active: this.state.activeTab === '4' })} onClick={() => { this.toggle('4'); }}><h2>Parents</h2></NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink className={classnames({ active: this.state.activeTab === '5' })} onClick={() => { this.toggle('5'); }}><h2>Contact Us</h2></NavLink>
                     </NavItem>
                 </Nav>
                 <TabContent activeTab={this.state.activeTab}>
@@ -76,6 +80,33 @@ class AboutBar extends React.Component {
                         <Row>
                             <Col className={"col"}>
                                 <h1>Look at me</h1>
+                            </Col>
+                        </Row>
+                    </TabPane>
+                    <TabPane tabId="4">
+                        <Row>
+                            <img className="picPar" src={picPar}/>
+                        </Row>
+                        <Row>
+                            <Col className={"col"}>
+                                <h3 className={"title"}>Parents</h3>
+                                <p>
+                                    How we make your role as a parent an integrated part of our classrooms
+                                    ScribeScholars is designed in order to create a simple and easy-to-use system for
+                                    parents to monitor their child’s performance in the classroom from a safe distance.
+                                    Once linked to your child’s account, a parent has the access to see everything that the child can see.<br />
+                                <br />This includes the ability to see:<br /><br />
+                                    <ul>
+                                        <li>All currently enrolled classes</li><br />
+                                        <li>All assigned homeworks</li><br />
+                                        <li>All curriculum posted by the teacher (Course Schedule, Syllabus, Book List, etc.)</li><br />
+                                        <li>Students current grades</li><br />
+                                        <li>Dynamically calculated GPA</li><br />
+                                        <li>Current Rank in each class</li><br />
+                                        <li>Any posts that your child has made or has been a part of on the class forum</li><br />
+                                    </ul><br />
+                                    Simply Navigate to your My Children tab and select the desired child to view all of the above options.
+                                    </p>
                             </Col>
                         </Row>
                     </TabPane>
