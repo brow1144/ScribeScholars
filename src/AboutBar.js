@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import './AboutBar.css';
 import picB from './students2.jpg';
 import picPar from './parentChild.jpg';
+import logo from './logo.svg';
 
 class AboutBar extends React.Component {
 
@@ -107,6 +108,21 @@ class AboutBar extends React.Component {
                                     </ul><br />
                                     Simply Navigate to your My Children tab and select the desired child to view all of the above options.
                                     </p>
+                            </Col>
+                        </Row>
+                    </TabPane>
+                    <TabPane tabId="5">
+                        <Row>
+                            <img className="conLogo center" src={logo}/>
+                        </Row>
+                        <Row>
+                            <Col className={"col"}>
+                                <h3 className={"title"}>Contact Us</h3>
+                                <p>
+                                    For any questions you may have, bugs you’d like fixed, or features you’d like added, you can reach our team at:
+
+                                    scribescholars@gmail.com
+                                </p>
                             </Col>
                         </Row>
                     </TabPane>

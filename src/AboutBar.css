@@ -12,6 +12,8 @@ h2 {
 
 h3 {
     padding: 30px;
+    font-size: 40px;
+    font-weight: bold;
     text-align: center;
 }
 
@@ -31,4 +33,18 @@ h3 {
     width: 40%;
     height: 30%;
     justify-self: stretch;
+}
+
+.conLogo {
+    width: 20%;
+    height: 20%;
+    justify-self: stretch;
+    align-content: center;
+}
+
+.center {
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
 }
