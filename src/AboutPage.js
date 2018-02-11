@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import { TabContent, TabPane, Nav, NavItem,Row, Col } from 'reactstrap';
 
 import AboutBar from './AboutBar';
 
 import logo from './logo.svg';
-import top from './wood.jpeg';
 import './AboutPage.css';
 
 class AboutPage extends Component {
@@ -11,15 +11,23 @@ class AboutPage extends Component {
         return (
             <div>
                 <div className={"container"}>
-                    <div className={"intro"}>
-                        <img className="topPic" src={top}/>
-                    </div>
                     <div className={"about"}>
-                        <img className="logo" src={logo}/>
-                        <h1>About</h1>
+                        <Row className={"row"}>
+                            <Col className={"col"}>
+                                <img className="logo" src={logo}/>
+                            </Col>
+                        </Row>
+                        <Row className={"row"}>
+                            <Col className={"col"}>
+                                <h1 className={"title"}>About</h1>
+                            </Col>
+                        </Row>
                     </div>
                     <div className="nav">
                         <AboutBar/>
+                    </div>
+                    <div className={"footer"}>
+                        <h4>Here's the footer</h4>
                     </div>
                 </div>
             </div>

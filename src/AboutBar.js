@@ -43,9 +43,6 @@ class AboutBar extends React.Component {
                 <TabContent activeTab={this.state.activeTab}>
                     <TabPane tabId="1">
                         <Row>
-                            <img className="picOne" src={picB}/>
-                        </Row>
-                        <Row>
                             <Col className={"col"}>
                                 <h3 className={"title"}>Student</h3>
                                 <p>Kennedy's time in office was marked by high tensions with communist states in the Cold War. He increased the number of American military advisers
