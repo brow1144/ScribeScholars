@@ -9,7 +9,10 @@ h1 {
 }
 
 .row {
+
     //border: solid 1px lawngreen;
+    \\border: solid 1px lawngreen;
+
     font-family: "Times New Roman";
     font-weight: bold;
 }
@@ -22,6 +25,11 @@ h1 {
 .intro {
     //border: solid 1px yellow;
     \\border: solid 1px red;
+
+}
+
+.intro {
+    \\border: solid 1px yellow;
 }
 
 .title {
