@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Button, Container, Row, Col, Form, FormGroup, Label, Input, FormText} from 'reactstrap';
+import { Button, Container, Row, Col, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 
 import './SetClassroom.css';
 
@@ -20,7 +20,41 @@ class SetClassroom extends Component
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
                     <Col xs={"12"}>
+                        <Form>
+                            <FormGroup row>
+                                <Label size={"lg"} for="exampleSelectMulti" sm={2}>Enrolled Courses:</Label>
+                                <Col sm={5}>
+                                    <Input className="ClassSelection" size="lg" type="select" name="selectMulti" id="exampleSelectMulti" multiple>
+                                        <option>AP CompSci</option>
+                                        <option>Chemistry</option>
+                                        <option>AP Calculus</option>
+                                        <option>Literature</option>
+                                        <option>Band</option>
+                                    </Input>
+                                </Col>
+                            </FormGroup>
+                        <FormGroup check row>
+                            <Col sm={{ size: 10, offset: 2 }}>
+                                <Button color={"info"} size={"lg"}>Specific Class Options</Button>
+                                <Row className={"Filler"}> </Row>
+                                <Button color="danger" size={"lg"}>Delete Selected Class</Button>
+                            </Col>
+                        </FormGroup>
+                        <Row className={"Filler"}> </Row>
+                        <Row className={"Filler"}> </Row>
 
+                        <Form>
+                            <FormGroup row check>
+                                <Col sm={{ size: 2, offset: 2}}>
+                                    <Input size="lg" type="username" name="classCode" id="classToAdd" placeholder="ClassCode" />
+                                    <Row className={"Filler"}> </Row>
+                                    <Button size={"lg"}>Add This Class</Button>
+
+                                </Col>
+                            </FormGroup>
+                        </Form>
+
+                        </Form>
                     </Col>
                 </Row>
             </Container>

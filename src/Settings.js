@@ -96,8 +96,10 @@ class Settings extends Component {
                     :
                     <br/>
                 }
-                {/*<SetClassroom/>*/}
+                <SetClassroom/>
+{/*
                 <SetPersonal/>
+*/}
             </Sidebar>
         );
     }
