@@ -45,7 +45,7 @@ onDismiss = () => {
   render() {
     return (
       <div className="text-center">
-        <div className="Absolute-Center is-Responsive">
+        <div className="Absolute-CenterK is-ResponsiveK">
           <Form onSubmit={ this.onFormSubmit }>
             <FormGroup>
               <img src={logo} alt="" width="100" height="100"/>
