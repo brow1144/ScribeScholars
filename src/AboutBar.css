@@ -17,6 +17,11 @@ h3 {
     text-align: center;
 }
 
+#bgLogo {
+    background-image: url("logo.svg");
+    background-position: center;
+}
+
 .picOne {
     width: 40%;
     height: 30%;
@@ -39,6 +44,11 @@ h3 {
     width: 15%;
     height: 15%;
     justify-self: stretch;
+}
+
+.email {
+    font-size: 40px;
+    text-align: center;
 }
 
 .center {
