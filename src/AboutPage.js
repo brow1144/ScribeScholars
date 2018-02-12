@@ -26,9 +26,6 @@ class AboutPage extends Component {
                     <div className="nav">
                         <AboutBar/>
                     </div>
-                    <div className={"footer"}>
-                        <h4>Here's the footer</h4>
-                    </div>
                 </div>
             </div>
         )
