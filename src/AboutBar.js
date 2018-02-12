@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import './AboutBar.css';
 import picB from './students2.jpg';
 import picPar from './parentChild.jpg';
+import logo from './logo.svg';
 
 class AboutBar extends React.Component {
 
@@ -85,6 +86,7 @@ class AboutBar extends React.Component {
                     </TabPane>
                     <TabPane tabId="4">
                         <Row>
+                            <img className="picPar center" src={picPar}/>
                         </Row>
                         <Row>
                             <Col className={"col"}>
@@ -95,7 +97,7 @@ class AboutBar extends React.Component {
                                     parents to monitor their child’s performance in the classroom from a safe distance.
                                     Once linked to your child’s account, a parent has the access to see everything that the child can see.<br />
                                 <br />This includes the ability to see:<br /><br />
-                                    <ul>
+                                    <ul id="bgLogo">
                                         <li>All currently enrolled classes</li><br />
                                         <li>All assigned homeworks</li><br />
                                         <li>All curriculum posted by the teacher (Course Schedule, Syllabus, Book List, etc.)</li><br />
