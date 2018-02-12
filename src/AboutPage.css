@@ -6,24 +6,20 @@ h1 {
 .container {
     display: grid;
     justify-items: center;
-
 }
 
 .row {
     //border: solid 1px lawngreen;
-
     font-family: "Times New Roman";
     font-weight: bold;
 }
 
 .col {
     //border: solid 1px red;
-
 }
 
 .intro {
     //border: solid 1px yellow;
-
 }
 
 .title {
@@ -37,12 +33,9 @@ h1 {
     background-size: cover;
     background-repeat: no-repeat;
     width: 100%;
+
 }
 
 .nav {
     //border: solid 2px purple;
-}
-
-.footer {
-    //border: solid 1px brown;
 }

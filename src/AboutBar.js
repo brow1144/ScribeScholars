@@ -48,7 +48,7 @@ class AboutBar extends React.Component {
                     <TabPane tabId="1">
                         <Row>
                             <Col className={"col"}>
-                                <h3 className={"title"}>Student</h3>
+                                <h3 className={"title"}>Students</h3>
                                 <p>Kennedy's time in office was marked by high tensions with communist states in the Cold War. He increased the number of American military advisers
                                     in South Vietnam by a factor of 18 over President Dwight D. Eisenhower. In April 1961, he authorized a failed joint-CIA attempt to overthrow the
                                     Cuban government of Fidel Castro in the Bay of Pigs Invasion.[2] He subsequently rejected Operation Northwoods plans by the Joint Chiefs of Staff
