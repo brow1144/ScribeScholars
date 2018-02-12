@@ -35,7 +35,7 @@ h1 {
 
 .about {
     \\border: solid 3px #21CE99;
-    background-image: url(./paperWood.jpg);
+    background-image: url('./paperWood.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     width: 100%;
