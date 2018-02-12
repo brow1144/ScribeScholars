@@ -33,7 +33,26 @@ class SetClassroom extends Component
                                     </Input>
                                 </Col>
                             </FormGroup>
+                        <FormGroup check row>
+                            <Col sm={{ size: 10, offset: 2 }}>
+                                <Button color={"info"} size={"lg"}>Specific Class Options</Button>
+                                <Row className={"Filler"}> </Row>
+                                <Button color="danger" size={"lg"}>Delete Selected Class</Button>
+                            </Col>
+                        </FormGroup>
+                        <Row className={"Filler"}> </Row>
+                        <Row className={"Filler"}> </Row>
 
+                        <Form>
+                            <FormGroup row check>
+                                <Col sm={{ size: 2, offset: 2}}>
+                                    <Input size="lg" type="username" name="classCode" id="classToAdd" placeholder="ClassCode" />
+                                    <Row className={"Filler"}> </Row>
+                                    <Button size={"lg"}>Add This Class</Button>
+
+                                </Col>
+                            </FormGroup>
+                        </Form>
 
                         </Form>
                     </Col>
