@@ -20,16 +20,19 @@ h1 {
 
 .intro {
     //border: solid 1px yellow;
+>>>>>>> updatedSubBranch/Riley
 }
 
 .title {
     text-align: center;
-    font-size: xx-large;
+    font-size: 70px;
+    font-weight: bold;
+    font-style: italic;
 }
 
 .about {
-    //border: solid 3px #21CE99;
-    background-image: url(./paperWood.jpg);
+    \\border: solid 3px #21CE99;
+    background-image: url('./paperWood.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     width: 100%;
@@ -37,5 +40,5 @@ h1 {
 }
 
 .nav {
-    //border: solid 2px purple;
+    \\border: solid 2px purple;
 }

@@ -85,7 +85,6 @@ class AboutBar extends React.Component {
                     </TabPane>
                     <TabPane tabId="4">
                         <Row>
-                            <img className="picPar" src={picPar}/>
                         </Row>
                         <Row>
                             <Col className={"col"}>
@@ -107,6 +106,21 @@ class AboutBar extends React.Component {
                                     </ul><br />
                                     Simply Navigate to your My Children tab and select the desired child to view all of the above options.
                                     </p>
+                            </Col>
+                        </Row>
+                    </TabPane>
+                    <TabPane tabId="5">
+                        <Row>
+                            <img className="conLogo center" src={logo}/>
+                        </Row>
+                        <Row>
+                            <Col className={"col"}>
+                                <h3 className={"title"}>Contact Us</h3>
+                                <p>
+                                    For any questions you may have, bugs you’d like fixed, or features you’d like added, you can reach our team at:
+                                    <p className="ssColor email">scribescholars@gmail.com</p>
+
+                                </p>
                             </Col>
                         </Row>
                     </TabPane>
