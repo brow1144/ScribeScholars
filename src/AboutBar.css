@@ -1,0 +1,64 @@
+.container {
+    justify-items: center;
+}
+
+p {
+    font-size: 20px;
+}
+
+h2 {
+    padding: 20px;
+}
+
+h3 {
+    padding: 30px;
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#bgLogo {
+    background-image: url("logo.svg");
+    background-position: center;
+}
+
+.picOne {
+    width: 40%;
+    height: 30%;
+    justify-self: stretch;
+}
+
+.picTwo {
+    width: 40%;
+    height: 30%;
+    justify-self: stretch;
+}
+
+.picPar {
+    width: 40%;
+    height: 30%;
+    justify-self: stretch;
+}
+
+.conLogo {
+    width: 10%;
+    height: 10%;
+    justify-self: stretch;
+}
+
+.email {
+    font-size: 40px;
+    text-align: center;
+}
+
+.center {
+    margin: auto;
+    width: 50%;
+    \\border: 3px solid green;
+    padding: 10px;
+    text-align: center;
+}
+
+.ssColor {
+    color: 	#21CE99;
+}
