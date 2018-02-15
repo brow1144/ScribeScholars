@@ -35,7 +35,7 @@ class SignIn extends Component {
   };
 
   handleGoogle = () => {
-    fireauth.auth().signInWithPopup(googleProvider);
+    fireauth.signInWithPopup(googleProvider);
   };
 
 onDismiss = () => {
