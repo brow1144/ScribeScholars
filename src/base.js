@@ -1,4 +1,4 @@
-var firebase = require('firebase/app');
+var firebase = require('firebase');
 require('firebase/auth');
 require("firebase/firestore");
 
@@ -11,8 +11,8 @@ firebase.initializeApp({
   messagingSenderId: "972953349504"
 });
 
-export const fireauth = firebase;
-export const firestore = firebase;
+export const fireauth = firebase.auth();
+export const firestore = firebase.firestore();
 export const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 export default firebase;

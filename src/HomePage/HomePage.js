@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { firestore } from '../base.js';
+import { firestore } from "../base";
 
 import { Button } from 'reactstrap';
 
@@ -16,13 +16,9 @@ class HomePage extends Component {
   constructor(props) {
     super(props);
 
-
-
-
-
-
-
     this.state = {
+      uid: props.uid,
+      classes: [],
       mql: mql,
       docked: props.docked,
       open: props.open,
@@ -52,11 +48,29 @@ class HomePage extends Component {
   };
 
   componentWillMount() {
+    this.getClasses();
     mql.addListener(this.mediaQueryChanged);
     this.setState({
       mql: mql,
       sidebarDocked: mql.matches,
       sideButtonVisibility: !this.state.mql.matches,
+    });
+  };
+
+  getClasses = () => {
+    var docRef = firestore.collection("users").doc(this.state.uid);
+    let self = this;
+
+    docRef.get().then(function(doc) {
+      if (doc.exists) {
+        self.setState({
+          classes: doc.data().classes,
+        });
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function(error) {
+      console.log("Error getting document:", error);
     });
   };
 
@@ -73,7 +87,7 @@ class HomePage extends Component {
 
   render() {
 
-    let sidebarContent = <Side />;
+    let sidebarContent = <Side classes={this.state.classes} />;
 
     const sidebarStyles = {
       sidebar: {
