@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom'
 
 import logo from './logo.svg';
 
-import './Side.css'
+import './HomePage/Side.css'
 
 const SettingsSide = () => {
     return (
