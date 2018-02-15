@@ -21,7 +21,7 @@ class SignIn extends Component {
     ev.preventDefault();
     let self = this;
 
-    fireauth.auth().signInWithEmailAndPassword(ev.target.email.value, ev.target.password.value)
+    fireauth.signInWithEmailAndPassword(ev.target.email.value, ev.target.password.value)
       .catch(function(err) {
         // Handle errors
         //console.log(err.message);
@@ -35,7 +35,7 @@ class SignIn extends Component {
   };
 
   handleGoogle = () => {
-    fireauth.auth().signInWithPopup(googleProvider);
+    fireauth.signInWithPopup(googleProvider);
   };
 
 onDismiss = () => {
