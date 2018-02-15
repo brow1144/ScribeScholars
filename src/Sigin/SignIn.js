@@ -4,7 +4,7 @@ import { fireauth, googleProvider } from '../base.js';
 
 import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import './SignIn.css';
-import logo from './logo.svg';
+import logo from '../logo.svg';
 
 class SignIn extends Component {
 
