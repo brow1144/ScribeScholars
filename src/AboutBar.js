@@ -3,11 +3,10 @@ import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, Ca
 
 import classnames from 'classnames';
 import './AboutBar.css';
-import picB from './students2.jpg';
 import picPar from './parentChild.jpg';
 import logo from './logo.svg';
 
-class AboutBar extends React.Component {
+class AboutBar extends Component {
 
     constructor(props) {
         super(props);
@@ -86,7 +85,7 @@ class AboutBar extends React.Component {
                     </TabPane>
                     <TabPane tabId="4">
                         <Row>
-                            <img className="picPar center" src={picPar}/>
+                            <img className="picPar center" alt="logo" src={picPar}/>
                         </Row>
                         <Row>
                             <Col className={"col"}>
@@ -113,7 +112,7 @@ class AboutBar extends React.Component {
                     </TabPane>
                     <TabPane tabId="5">
                         <Row>
-                            <img className="conLogo center" src={logo}/>
+                            <img className="conLogo center" alt="logo" src={logo}/>
                         </Row>
                         <Row>
                             <Col className={"col"}>

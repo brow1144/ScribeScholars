@@ -1,5 +1,6 @@
 var firebase = require('firebase/app');
 require('firebase/auth');
+require("firebase/firestore");
 
 firebase.initializeApp({
   apiKey: "AIzaSyChlfKvDE7NooubBJdFgaVuVElhO8h0jm8",
@@ -11,6 +12,7 @@ firebase.initializeApp({
 });
 
 export const fireauth = firebase;
+export const firestore = firebase;
 export const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 export default firebase;

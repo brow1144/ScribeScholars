@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { firestore } from '../base.js';
+
 import { Button } from 'reactstrap';
 
 import Sidebar from 'react-sidebar';
@@ -13,6 +15,12 @@ class HomePage extends Component {
 
   constructor(props) {
     super(props);
+
+
+
+
+
+
 
     this.state = {
       mql: mql,

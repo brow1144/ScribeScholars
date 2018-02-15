@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Button, Container, Row, Col, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
+import { Button, Container, Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
 
 import './SetClassroom.css';
 
