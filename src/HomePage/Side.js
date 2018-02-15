@@ -19,6 +19,10 @@ const Sidebar = (props) => {
                </NavLink>
       })}
 
+      <NavLink style={{ textDecoration: 'none' }} to={`/settings`}>
+        <i className="fas fa-cogs fa-2x settingsLogo" />
+      </NavLink>
+
     </div>
   )
 };

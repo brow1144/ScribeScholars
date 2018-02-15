@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { fireauth, googleProvider } from './base.js';
+import { fireauth, googleProvider } from '../base.js';
 
 import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import './SignIn.css';
@@ -24,8 +24,6 @@ class SignIn extends Component {
     fireauth.signInWithEmailAndPassword(ev.target.email.value, ev.target.password.value)
       .catch(function(err) {
         // Handle errors
-        //console.log(err.message);
-
         self.setState({
           errorCode: err.message,
           visible: true,

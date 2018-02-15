@@ -3,7 +3,7 @@ import { Row, Col } from 'reactstrap';
 
 import AboutBar from './AboutBar';
 
-import logo from './logo.svg';
+import logo from '../logo.svg';
 import './AboutPage.css';
 
 class AboutPage extends Component {

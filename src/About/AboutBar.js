@@ -3,7 +3,7 @@ import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, Ca
 
 import classnames from 'classnames';
 import './AboutBar.css';
-import picPar from './parentChild.jpg';
+import picPar from './Pictures/parentChild.jpg';
 import logo from './logo.svg';
 
 class AboutBar extends Component {
