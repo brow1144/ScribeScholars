@@ -4,10 +4,10 @@ import firebase from './base.js';
 
 import { Route, Switch, Redirect } from 'react-router-dom';
 
-import SignIn from './SignIn';
+import SignIn from './Sigin/SignIn';
 import HomePage from './HomePage/HomePage';
-import Settings from './Settings';
-import About from './AboutPage';
+import Settings from './Settings/Settings';
+import About from './About/AboutPage';
 
 import './App.css';
 

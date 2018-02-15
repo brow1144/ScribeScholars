@@ -3,9 +3,9 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 
 
-import logo from './logo.svg';
+import logo from '../logo.svg';
 
-import './HomePage/Side.css'
+import '../HomePage/Side.css'
 
 const SettingsSide = () => {
     return (
