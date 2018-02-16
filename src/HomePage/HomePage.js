@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
 
 import { firestore } from "../base";
-
 import { Button } from 'reactstrap';
 
 import Sidebar from 'react-sidebar';
+import BigCalendar from 'react-big-calendar';
+import moment from 'moment';
+
 import Side from './Side';
 
 import './HomePage.css';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const mql = window.matchMedia(`(min-width: 800px)`);
+
+BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
 
 class HomePage extends Component {
 
   constructor(props) {
     super(props);
+
 
     this.state = {
       uid: props.uid,
@@ -58,7 +64,7 @@ class HomePage extends Component {
   };
 
   getClasses = () => {
-    var docRef = firestore.collection("users").doc(this.state.uid);
+    let docRef = firestore.collection("users").doc(this.state.uid);
     let self = this;
 
     docRef.get().then(function(doc) {
@@ -85,6 +91,16 @@ class HomePage extends Component {
     });
   };
 
+  eventStyleGetter = () => {
+    let style = {
+      backgroundColor: '#21ce99',
+    };
+
+    return {
+      style: style
+    };
+  };
+
   render() {
 
     let sidebarContent = <Side classes={this.state.classes} />;
@@ -100,7 +116,24 @@ class HomePage extends Component {
       },
     };
 
+    const calendarStyles = {
+      padding: "5em 0em 0em 5em",
+      height: "55rem",
+      width: "85rem"
+    };
+
+    const events = [
+      {
+        'title': 'All Day Event',
+        'allDay': true,
+        'start': new Date(2015, 3, 0),
+        'end': new Date(2015, 3, 0)
+      },
+
+    ];
+
     return (
+
       <Sidebar styles={sidebarStyles}
                sidebar={sidebarContent}
                open={this.state.sidebarOpen}
@@ -113,9 +146,15 @@ class HomePage extends Component {
               <i className="fas fa-bars"/>
             </Button>
           :
-            <b>Main Section</b>
-
+            null
         }
+
+        <BigCalendar
+          events={events}
+          style={calendarStyles}
+          defaultDate={new Date()}
+          eventPropGetter={(this.eventStyleGetter)}
+        />
 
       </Sidebar>
     );
