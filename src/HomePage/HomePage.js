@@ -24,7 +24,18 @@ class HomePage extends Component {
 
     this.state = {
       uid: props.uid,
-      classes: [],
+
+      classes: [{
+        class: null,
+        teacher: null,
+      }],
+
+      dates: [{
+        title: null,
+        start: null,
+        end: null,
+        }],
+
       mql: mql,
       docked: props.docked,
       open: props.open,
@@ -72,12 +83,45 @@ class HomePage extends Component {
         self.setState({
           classes: doc.data().classes,
         });
+        self.getDeadlines();
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function(error) {
+      console.log("Error getting document:", error);
+    })
+
+  };
+
+  getDeadlines = () => {
+
+    let docRef = firestore.collection("users").doc(this.state.classes[0].teacher);
+    let dateRef = docRef.collection(this.state.classes[0].class).doc("deadlines");
+    let self = this;
+
+
+    dateRef.get().then(function(doc) {
+      if (doc.exists) {
+        let data = doc.data();
+        let object = [{}];
+        for (let i in data.array) {
+          object[i] = {
+            title: data.array[i].title,
+            start: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
+            end: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
+          }
+        }
+
+        self.setState({
+          dates: object
+        })
       } else {
         console.log("No such document!");
       }
     }).catch(function(error) {
       console.log("Error getting document:", error);
     });
+
   };
 
   componentWillUnmount() {
@@ -122,16 +166,6 @@ class HomePage extends Component {
       width: "85rem"
     };
 
-    const events = [
-      {
-        'title': 'All Day Event',
-        'allDay': true,
-        'start': new Date(2015, 3, 0),
-        'end': new Date(2015, 3, 0)
-      },
-
-    ];
-
     return (
 
       <Sidebar styles={sidebarStyles}
@@ -142,15 +176,15 @@ class HomePage extends Component {
 
         {this.state.sideButtonVisibility
           ?
-            <Button outline onClick={this.dockSideBar}>
-              <i className="fas fa-bars"/>
-            </Button>
+          <Button outline onClick={this.dockSideBar}>
+            <i className="fas fa-bars"/>
+          </Button>
           :
-            null
+          null
         }
 
         <BigCalendar
-          events={events}
+          events={this.state.dates}
           style={calendarStyles}
           defaultDate={new Date()}
           eventPropGetter={(this.eventStyleGetter)}

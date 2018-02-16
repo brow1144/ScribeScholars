@@ -14,8 +14,8 @@ const Sidebar = (props) => {
       </NavLink>
 
       {Object.keys(props.classes).map((key, index) => {
-        return <NavLink key={key} style={{ textDecoration: 'none' }} to={`/HomePage/${props.classes[index]}`}>
-                  <p className="classOne"  >{props.classes[index]}</p>
+        return <NavLink key={key} style={{ textDecoration: 'none' }} to={`/HomePage/${props.classes[index].class}`}>
+                  <p className="classOne"  >{props.classes[index].class}</p>
                </NavLink>
       })}
 
