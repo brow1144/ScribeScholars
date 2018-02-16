@@ -4,10 +4,10 @@ import firebase from './base.js';
 
 import { Route, Switch, Redirect } from 'react-router-dom';
 
-import SignIn from './SignIn';
-import HomePage from './HomePage';
-import Settings from './Settings';
-import About from './AboutPage';
+import SignIn from './Sigin/SignIn';
+import HomePage from './HomePage/HomePage';
+import Settings from './Settings/Settings';
+import About from './About/AboutPage';
 
 import './App.css';
 
@@ -60,7 +60,7 @@ class App extends Component {
 
         <Route path='/HomePage' render={() => (
           this.signedIn()
-            ? <HomePage />
+            ? <HomePage uid={this.state.uid}/>
             : <Redirect to="/sign-in" />
         )} />
 

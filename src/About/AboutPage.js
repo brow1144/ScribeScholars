@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { TabContent, TabPane, Nav, NavItem,Row, Col } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 
 import AboutBar from './AboutBar';
 
-import logo from './logo.svg';
+import logo from '../logo.svg';
 import './AboutPage.css';
 
 class AboutPage extends Component {
@@ -14,7 +14,7 @@ class AboutPage extends Component {
                     <div className={"about"}>
                         <Row className={"row"}>
                             <Col className={"col"}>
-                                <img className="logo" src={logo}/>
+                                <img className="logo" alt="logo" src={logo}/>
                             </Col>
                         </Row>
                         <Row className={"row"}>

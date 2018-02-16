@@ -1,0 +1,11 @@
+.ClassSelection
+{
+    height: 15rem;
+}
+
+option
+{
+    height: 3rem;
+    font-size: large;
+    border: solid thin;
+}

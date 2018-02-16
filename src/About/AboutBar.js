@@ -3,11 +3,10 @@ import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, Ca
 
 import classnames from 'classnames';
 import './AboutBar.css';
-import picB from './students2.jpg';
-import picPar from './parentChild.jpg';
-import logo from './logo.svg';
+import picPar from './Pictures/parentChild.jpg';
+import logo from '../logo.svg';
 
-class AboutBar extends React.Component {
+class AboutBar extends Component {
 
     constructor(props) {
         super(props);
@@ -86,7 +85,7 @@ class AboutBar extends React.Component {
                     </TabPane>
                     <TabPane tabId="4">
                         <Row>
-                            <img className="picPar center" src={picPar}/>
+                            <img className="picPar center" alt="logo" src={picPar}/>
                         </Row>
                         <Row>
                             <Col className={"col"}>
@@ -96,6 +95,8 @@ class AboutBar extends React.Component {
                                     ScribeScholars is designed in order to create a simple and easy-to-use system for
                                     parents to monitor their child’s performance in the classroom from a safe distance.
                                     Once linked to your child’s account, a parent has the access to see everything that the child can see.<br />
+                                </p>
+
                                 <br />This includes the ability to see:<br /><br />
                                     <ul id="bgLogo">
                                         <li>All currently enrolled classes</li><br />
@@ -107,22 +108,21 @@ class AboutBar extends React.Component {
                                         <li>Any posts that your child has made or has been a part of on the class forum</li><br />
                                     </ul><br />
                                     Simply Navigate to your My Children tab and select the desired child to view all of the above options.
-                                    </p>
                             </Col>
                         </Row>
                     </TabPane>
                     <TabPane tabId="5">
                         <Row>
-                            <img className="conLogo center" src={logo}/>
+                            <img className="conLogo center" alt="logo" src={logo}/>
                         </Row>
                         <Row>
                             <Col className={"col"}>
                                 <h3 className={"title"}>Contact Us</h3>
-                                <p>
+                                <h4>
                                     For any questions you may have, bugs you’d like fixed, or features you’d like added, you can reach our team at:
                                     <p className="ssColor email">scribescholars@gmail.com</p>
 
-                                </p>
+                                </h4>
                             </Col>
                         </Row>
                     </TabPane>
