@@ -95,6 +95,8 @@ class AboutBar extends Component {
                                     ScribeScholars is designed in order to create a simple and easy-to-use system for
                                     parents to monitor their child’s performance in the classroom from a safe distance.
                                     Once linked to your child’s account, a parent has the access to see everything that the child can see.<br />
+                                </p>
+
                                 <br />This includes the ability to see:<br /><br />
                                     <ul id="bgLogo">
                                         <li>All currently enrolled classes</li><br />
@@ -106,7 +108,6 @@ class AboutBar extends Component {
                                         <li>Any posts that your child has made or has been a part of on the class forum</li><br />
                                     </ul><br />
                                     Simply Navigate to your My Children tab and select the desired child to view all of the above options.
-                                    </p>
                             </Col>
                         </Row>
                     </TabPane>
@@ -117,11 +118,11 @@ class AboutBar extends Component {
                         <Row>
                             <Col className={"col"}>
                                 <h3 className={"title"}>Contact Us</h3>
-                                <p>
+                                <h4>
                                     For any questions you may have, bugs you’d like fixed, or features you’d like added, you can reach our team at:
                                     <p className="ssColor email">scribescholars@gmail.com</p>
 
-                                </p>
+                                </h4>
                             </Col>
                         </Row>
                     </TabPane>
