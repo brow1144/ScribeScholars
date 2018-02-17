@@ -26,3 +26,5 @@ base.js
 *.xml
 .idea\workspace.xml
 **\.idea\workspace.xml
+.idea/workspace.xml
+someapp/src/.idea/workspace.xml
