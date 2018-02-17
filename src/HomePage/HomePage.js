@@ -13,7 +13,7 @@ import HomeNav from './HomeNav'
 import './HomePage.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-const mql = window.matchMedia(`(min-width: 800px)`);
+const mql = window.matchMedia(`(min-width: 600px)`);
 
 BigCalendar.momentLocalizer(moment);
 
@@ -281,7 +281,7 @@ class HomePage extends Component {
     };
 
     // If Screen is Big
-    if (this.state.width > 500) {
+    if (this.state.width > 600) {
       return (
 
         <Sidebar styles={sidebarStyles}

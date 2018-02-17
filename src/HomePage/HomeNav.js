@@ -3,7 +3,7 @@ import { Navbar, NavbarToggler, NavbarBrand } from 'reactstrap';
 
 const HomeNav = (props) => {
 
-  if (props.width < 800 ) {
+  if (props.width < 600 ) {
     return (
       <div>
         <Navbar color="faded" light>
