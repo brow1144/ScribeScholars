@@ -24,3 +24,4 @@ base.js
 
 *.xml
 *.xml
+.idea/workspace.xml
