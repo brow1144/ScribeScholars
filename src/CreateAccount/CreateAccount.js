@@ -21,7 +21,7 @@ class CreateAccount extends Component {
         ev.preventDefault();
         let self = this;
 
-        fireauth.auth().createUserAndRetrieveDataWithEmailAndPassword(ev.target.email.value, ev.target.password.value)
+        fireauth.createUserAndRetrieveDataWithEmailAndPassword(ev.target.email.value, ev.target.password.value)
             /*.then( (userCredential) => {
                 userCredential.user.displayName = ev.target.firstName.value + ev.target.lastName.value;
             })*/
