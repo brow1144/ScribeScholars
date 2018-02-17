@@ -30,7 +30,9 @@ class HomePage extends Component {
      *
      * classes: |Object of arrays|students array of objects holding their class name and teacher identifier
      *
-     * mql: |Boolean| used for screen size recognition
+     * width: |Boolean| used for screen side recognition for calendar
+     *
+     * mql: |Boolean| used for screen size recognition sidebar
      *
      * docked: |Boolean| set sidebar to show or hide;
      *
@@ -52,44 +54,14 @@ class HomePage extends Component {
         end: null,
       }],
 
+      width: window.innerWidth,
+
       mql: mql,
       docked: props.docked,
       open: props.open,
       sideButtonVisibility: !props.docked,
     };
   }
-
-  /**
-   *
-   * Toggle side bar from hidden side bar button
-   *
-   */
-  dockSideBar = () => {
-    if (this.state.sidebarDocked)
-      this.setState({
-        sidebarOpen: false,
-        sideButtonVisibility: true,
-      });
-    else
-      this.setState({
-        sidebarOpen: true,
-        sideButtonVisibility: false,
-      });
-  };
-
-
-  /**
-   *
-   * Set state when side bar is open
-   *
-   * @param open: |Boolean|
-   */
-  onSetSidebarOpen = (open) => {
-    this.setState({
-      sidebarOpen: open,
-      sideButtonVisibility: true,
-    });
-  };
 
   /**
    *
@@ -106,11 +78,35 @@ class HomePage extends Component {
   componentWillMount() {
     this.getClasses();
     mql.addListener(this.mediaQueryChanged);
+    window.addEventListener('resize', this.handleWindowChange)
     this.setState({
       mql: mql,
       sidebarDocked: mql.matches,
       sideButtonVisibility: !this.state.mql.matches,
     });
+  };
+
+  /**
+   *
+   * Method called when component is leaving
+   *
+   * Removes screen size action listener
+   *
+   */
+  componentWillUnmount() {
+    this.state.mql.removeListener(this.mediaQueryChanged);
+    window.removeEventListener('resize', this.handleWindowChange)
+  };
+
+  /**
+   *
+   * When window size changes, update state width
+   *
+   */
+  handleWindowChange = () => {
+    this.setState({
+      width: window.innerWidth,
+    })
   };
 
   /**
@@ -196,13 +192,34 @@ class HomePage extends Component {
 
   /**
    *
-   * Method called when component is leaving
-   *
-   * Removes screen size action listener
+   * Toggle side bar from hidden side bar button
    *
    */
-  componentWillUnmount() {
-    this.state.mql.removeListener(this.mediaQueryChanged);
+  dockSideBar = () => {
+    if (this.state.sidebarDocked)
+      this.setState({
+        sidebarOpen: false,
+        sideButtonVisibility: true,
+      });
+    else
+      this.setState({
+        sidebarOpen: true,
+        sideButtonVisibility: false,
+      });
+  };
+
+
+  /**
+   *
+   * Set state when side bar is open
+   *
+   * @param open: |Boolean|
+   */
+  onSetSidebarOpen = (open) => {
+    this.setState({
+      sidebarOpen: open,
+      sideButtonVisibility: true,
+    });
   };
 
   /**
@@ -252,6 +269,7 @@ class HomePage extends Component {
    */
   render() {
 
+
     let sidebarContent = <Side classes={this.state.classes} />;
 
     const sidebarStyles = {
@@ -266,34 +284,23 @@ class HomePage extends Component {
     };
 
     const calendarStyles = {
-      // padding: "5em 0em 0em 5em",
       height: "55rem",
-      // width: "85rem"
     };
 
-    return (
-
-      <div>
+    // If Screen is Big
+    if (this.state.width > 500) {
+      return (
 
         <Sidebar styles={sidebarStyles}
                  sidebar={sidebarContent}
                  open={this.state.sidebarOpen}
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
-
+          <HomeNav classes={this.state.classes}/>
           <Row>
-            <HomeNav/>
-            <Col xs="12" md="1" />
-            <Col xs="0" s="12" md="8">
-              {this.state.sideButtonVisibility
-                ?
-                <Button outline onClick={this.dockSideBar}>
-                  <i className="fas fa-bars"/>
-                </Button>
-                :
-                null
-              }
 
+            <Col md="1"/>
+            <Col md="8">
               <BigCalendar
                 events={this.state.dates}
                 style={calendarStyles}
@@ -301,15 +308,24 @@ class HomePage extends Component {
                 eventPropGetter={(this.eventStyleGetter)}
               />
             </Col>
-
-            <Col xs="0" md="3"/>
+            <Col md="3"/>
           </Row>
+        </Sidebar>
+      );
+      // If Screen is Small
+    } else {
+      return (
+        <Sidebar styles={sidebarStyles}
+                 sidebar={sidebarContent}
+                 open={this.state.sidebarOpen}
+                 docked={this.state.sidebarDocked}
+                 onSetOpen={this.onSetSidebarOpen}>
 
+          <HomeNav classes={this.state.classes}/>
 
         </Sidebar>
-      </div>
-
-    );
+      );
+    }
   }
 }
 
