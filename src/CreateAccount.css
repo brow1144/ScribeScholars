@@ -1,0 +1,23 @@
+.createAccountButton {
+    background-color: #21CE99 !important;
+    border-color: #21CE99 !important;
+}
+
+.google-button {
+    background-color: #4285F4 !important;
+    border-color: #4285F4 !important;
+}
+
+.Absolute-Center {
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.Absolute-Center.is-Responsive {
+    width: 50%;
+    height: 50%;
+    min-width: 400px;
+    max-width: 400px;
+    padding: 10px;
+}
