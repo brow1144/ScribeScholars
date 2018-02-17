@@ -14,7 +14,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
-BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
+BigCalendar.momentLocalizer(moment);
 
 class HomePage extends Component {
 
@@ -22,6 +22,21 @@ class HomePage extends Component {
     super(props);
 
 
+    /**
+     * State of the Homepage
+     *
+     * uid: |String| current user firebase identifier.
+     *
+     * classes: |Object of arrays|students array of objects holding their class name and teacher identifier
+     *
+     * mql: |Boolean| used for screen size recognition
+     *
+     * docked: |Boolean| set sidebar to show or hide;
+     *
+     * open: |Boolean| set sidebar to show or hide;
+     *
+     * sideButtonVisibility: |Boolean| show or hide side bar gone button
+     **/
     this.state = {
       uid: props.uid,
 
@@ -34,7 +49,7 @@ class HomePage extends Component {
         title: null,
         start: null,
         end: null,
-        }],
+      }],
 
       mql: mql,
       docked: props.docked,
@@ -43,6 +58,11 @@ class HomePage extends Component {
     };
   }
 
+  /**
+   *
+   * Toggle side bar from hidden side bar button
+   *
+   */
   dockSideBar = () => {
     if (this.state.sidebarDocked)
       this.setState({
@@ -57,6 +77,12 @@ class HomePage extends Component {
   };
 
 
+  /**
+   *
+   * Set state when side bar is open
+   *
+   * @param open: |Boolean|
+   */
   onSetSidebarOpen = (open) => {
     this.setState({
       sidebarOpen: open,
@@ -64,6 +90,18 @@ class HomePage extends Component {
     });
   };
 
+  /**
+   *
+   * Method called before components are loaded
+   * on the page.
+   *
+   * 1. Gets classes from firebase
+   *
+   * 2. Sets screen size action listener
+   *
+   * 3. Sets sidebar visibility
+   *
+   */
   componentWillMount() {
     this.getClasses();
     mql.addListener(this.mediaQueryChanged);
@@ -74,6 +112,15 @@ class HomePage extends Component {
     });
   };
 
+  /**
+   *
+   * Call firebase to get users array of classes
+   * that hold their teachers uid.
+   *
+   * When then use the uid of the teacher to compare with her
+   * classroom data.
+   *
+   */
   getClasses = () => {
     let docRef = firestore.collection("users").doc(this.state.uid);
     let self = this;
@@ -90,9 +137,22 @@ class HomePage extends Component {
     }).catch(function(error) {
       console.log("Error getting document:", error);
     })
-
   };
 
+  /**
+   *
+   * Now that we have the teacher uid and the students
+   * array of classes,
+   *
+   * 1. We got to the teachers uid and find her classes
+   *
+   * 2. When then find the classes that correlate with the
+   *    student and the teacher
+   *
+   * 3. Then we get the deadlines from the central classroom data
+   *    and set state to update the calendar
+   *
+   */
   getDeadlines = () => {
 
     let object = [{}];
@@ -133,11 +193,22 @@ class HomePage extends Component {
     });
   };
 
+  /**
+   *
+   * Method called when component is leaving
+   *
+   * Removes screen size action listener
+   *
+   */
   componentWillUnmount() {
     this.state.mql.removeListener(this.mediaQueryChanged);
-    this.setState(this.state);
   };
 
+  /**
+   *
+   * Screen size changes called by the action listener
+   *
+   */
   mediaQueryChanged = () => {
     this.setState({
       sidebarDocked: this.state.mql.matches,
@@ -145,16 +216,39 @@ class HomePage extends Component {
     });
   };
 
+  /**
+   *
+   * Sets color of dates on calendar
+   *
+   * @returns {{style: {backgroundColor: string}}}
+   */
   eventStyleGetter = () => {
-    let style = {
-      backgroundColor: '#21ce99',
-    };
-
     return {
-      style: style
+      style: {
+        backgroundColor: '#21ce99',
+      }
     };
   };
 
+  /**
+   *
+   * Method called to add components to the webpage
+   *
+   * 1. Creates the side bar
+   *
+   * 2. Set sidebar styles
+   *
+   * 3. Set calendar styles
+   *
+   * 4. Render
+   *
+   *    a. All wrapped in a side bar
+   *        A. If the screen is large enough show
+   *           Side bar, if not show button to expand
+   *        B. Add Calendar to page
+   *
+   * @returns {XML}
+   */
   render() {
 
     let sidebarContent = <Side classes={this.state.classes} />;
