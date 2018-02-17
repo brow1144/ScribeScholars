@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 
 import { firestore } from "../base";
-import { Button } from 'reactstrap';
+import { Button, Row, Col } from 'reactstrap';
 
 import Sidebar from 'react-sidebar';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 
 import Side from './Side';
+import HomeNav from './HomeNav'
 
 import './HomePage.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -265,36 +266,49 @@ class HomePage extends Component {
     };
 
     const calendarStyles = {
-      padding: "5em 0em 0em 5em",
+      // padding: "5em 0em 0em 5em",
       height: "55rem",
-      width: "85rem"
+      // width: "85rem"
     };
 
     return (
 
-      <Sidebar styles={sidebarStyles}
-               sidebar={sidebarContent}
-               open={this.state.sidebarOpen}
-               docked={this.state.sidebarDocked}
-               onSetOpen={this.onSetSidebarOpen}>
+      <div>
 
-        {this.state.sideButtonVisibility
-          ?
-          <Button outline onClick={this.dockSideBar}>
-            <i className="fas fa-bars"/>
-          </Button>
-          :
-          null
-        }
+        <Sidebar styles={sidebarStyles}
+                 sidebar={sidebarContent}
+                 open={this.state.sidebarOpen}
+                 docked={this.state.sidebarDocked}
+                 onSetOpen={this.onSetSidebarOpen}>
 
-        <BigCalendar
-          events={this.state.dates}
-          style={calendarStyles}
-          defaultDate={new Date()}
-          eventPropGetter={(this.eventStyleGetter)}
-        />
+          <Row>
+            <HomeNav/>
+            <Col xs="12" md="1" />
+            <Col xs="0" s="12" md="8">
+              {this.state.sideButtonVisibility
+                ?
+                <Button outline onClick={this.dockSideBar}>
+                  <i className="fas fa-bars"/>
+                </Button>
+                :
+                null
+              }
 
-      </Sidebar>
+              <BigCalendar
+                events={this.state.dates}
+                style={calendarStyles}
+                defaultDate={new Date()}
+                eventPropGetter={(this.eventStyleGetter)}
+              />
+            </Col>
+
+            <Col xs="0" md="3"/>
+          </Row>
+
+
+        </Sidebar>
+      </div>
+
     );
   }
 }
