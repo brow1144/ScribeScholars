@@ -108,12 +108,14 @@ class HomePage extends Component {
       dateRef.get().then(function (doc) {
         if (doc.exists) {
           let data = doc.data();
-          //let object = [{}];
           for (let i in data.array) {
             object.unshift( {
               title: data.array[i].title,
               start: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
               end: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
+            })
+            self.setState({
+              dates: object,
             })
           }
 
@@ -129,11 +131,11 @@ class HomePage extends Component {
     self.setState({
       dates: object
     });
-
   };
 
   componentWillUnmount() {
     this.state.mql.removeListener(this.mediaQueryChanged);
+    this.setState(this.state);
   };
 
   mediaQueryChanged = () => {
