@@ -38,7 +38,6 @@ class HomePage extends Component {
      *
      * open: |Boolean| set sidebar to show or hide;
      *
-     * sideButtonVisibility: |Boolean| show or hide side bar gone button
      **/
     this.state = {
       uid: props.uid,
@@ -59,7 +58,6 @@ class HomePage extends Component {
       mql: mql,
       docked: props.docked,
       open: props.open,
-      sideButtonVisibility: !props.docked,
     };
   }
 
@@ -82,7 +80,6 @@ class HomePage extends Component {
     this.setState({
       mql: mql,
       sidebarDocked: mql.matches,
-      sideButtonVisibility: !this.state.mql.matches,
     });
   };
 
@@ -199,12 +196,10 @@ class HomePage extends Component {
     if (this.state.sidebarDocked)
       this.setState({
         sidebarOpen: false,
-        sideButtonVisibility: true,
       });
     else
       this.setState({
         sidebarOpen: true,
-        sideButtonVisibility: false,
       });
   };
 
@@ -218,7 +213,6 @@ class HomePage extends Component {
   onSetSidebarOpen = (open) => {
     this.setState({
       sidebarOpen: open,
-      sideButtonVisibility: true,
     });
   };
 
@@ -230,7 +224,6 @@ class HomePage extends Component {
   mediaQueryChanged = () => {
     this.setState({
       sidebarDocked: this.state.mql.matches,
-      sideButtonVisibility: !this.state.mql.matches,
     });
   };
 
@@ -296,7 +289,7 @@ class HomePage extends Component {
                  open={this.state.sidebarOpen}
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
-          <HomeNav width={this.state.width}/>
+          <HomeNav expand={this.dockSideBar} width={this.state.width}/>
           <Row>
 
             <Col md="1"/>
@@ -321,7 +314,7 @@ class HomePage extends Component {
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
 
-          <HomeNav width={this.state.width}/>
+          <HomeNav expand={this.dockSideBar} width={this.state.width}/>
 
         </Sidebar>
       );
