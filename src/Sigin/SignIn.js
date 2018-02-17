@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 
-import { fireauth, googleProvider } from './base.js';
+import { fireauth, googleProvider } from '../base.js';
 
 import { NavLink } from 'react-router-dom';
 import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import './SignIn.css';
-import logo from './logo.svg';
+import logo from '../logo.svg';
 
 class SignIn extends Component {
 
@@ -22,11 +22,9 @@ class SignIn extends Component {
     ev.preventDefault();
     let self = this;
 
-    fireauth.auth().signInWithEmailAndPassword(ev.target.email.value, ev.target.password.value)
+    fireauth.signInWithEmailAndPassword(ev.target.email.value, ev.target.password.value)
       .catch(function(err) {
         // Handle errors
-        //console.log(err.message);
-
         self.setState({
           errorCode: err.message,
           visible: true,
@@ -36,7 +34,7 @@ class SignIn extends Component {
   };
 
   handleGoogle = () => {
-    fireauth.auth().signInWithPopup(googleProvider);
+    fireauth.signInWithPopup(googleProvider);
   };
 
 onDismiss = () => {
@@ -46,7 +44,7 @@ onDismiss = () => {
   render() {
     return (
       <div className="text-center">
-        <div className="Absolute-Center is-Responsive">
+        <div className="Absolute-CenterK is-ResponsiveK">
           <Form onSubmit={ this.onFormSubmit }>
             <FormGroup>
               <img src={logo} alt="" width="100" height="100"/>
