@@ -4,18 +4,11 @@ import firebase from './base.js';
 
 import { Route, Switch, Redirect } from 'react-router-dom';
 
-<<<<<<< HEAD
-import SignIn from './SignIn';
-import HomePage from './HomePage';
-import Settings from './Settings';
-import About from './AboutPage';
-import CreateAccount from './CreateAccount';
-=======
 import SignIn from './Sigin/SignIn';
 import HomePage from './HomePage/HomePage';
 import Settings from './Settings/Settings';
 import About from './About/AboutPage';
->>>>>>> master
+import CreateAccount from './CreateAccount/CreateAccount';
 
 import './App.css';
 
@@ -82,14 +75,11 @@ class App extends Component {
               <About />
           )} />
 
-<<<<<<< HEAD
         <Route exact path='/create-account' render={() => (
             !this.signedIn()
                 ? <CreateAccount />
                 : <Redirect to="/HomePage" />
         )} />
-=======
->>>>>>> master
 
         <Route path='/settings' render={() => (
           this.signedIn()

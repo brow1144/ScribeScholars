@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-import { fireauth, googleProvider } from './base.js';
+import { fireauth, googleProvider } from '../base.js';
 
 import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import './CreateAccount.css';
-import logo from './logo.svg';
+import logo from '../logo.svg';
 
 class CreateAccount extends Component {
     constructor() {
