@@ -17,34 +17,14 @@ class CreateAccount extends Component {
         };
     }
 
-    /*getUserFromLocalStorage() {
-        const uid = localStorage.getItem('uid');
-        if (!uid) return;
-        alert(uid);
-        this.setState({ uid })
-    }*/
-
     onFormSubmit = (ev) => {
         ev.preventDefault();
         let self = this;
 
         fireauth.auth().createUserAndRetrieveDataWithEmailAndPassword(ev.target.email.value, ev.target.password.value)
-            .then( (userCredential) => {
+            /*.then( (userCredential) => {
                 userCredential.user.displayName = ev.target.firstName.value + ev.target.lastName.value;
-
-               /* let ref = fireauth.database().ref("users");
-                ref.set({
-                    firstName: ev.target.firstName.value,
-                    lastName: ev.target.lastName.value
-                })
-                  .then( () => {
-                      return ref.once("value");
-                    })
-                  .then ( (snapshot) => {
-                      let data = snapshot.val();
-                      alert(data.firstName);
-                  });*/
-            })
+            })*/
             .catch(function(err) {
                 // Handle errors
                 //console.log(err.message);
@@ -62,27 +42,6 @@ class CreateAccount extends Component {
                     visible: true,
                 })
             });
-
-        /*fireauth.onAuth(function(authData) {
-           if (authData) {
-               fireauth.child("users").child(authData.uid).set({
-                 firstName: authData.firstName,
-                 lastName: authData.lastName
-               });
-           }
-        });*/
-
-       // let rootRef = firebase.database().ref();
-        //let userRef = rootRef.child("Students/")
-
-        //this.getUserFromLocalStorage();
-        //alert(this.state.uid);
-      /* let postsRef = ref.child("Students");
-        postsRef.push({
-            firstName: "firstName",
-            lastName: "lastName",
-            dateOfBirth: "dateOfBirth"
-        });*/
     };
 
     handleGoogle = () => {
