@@ -296,7 +296,7 @@ class HomePage extends Component {
                  open={this.state.sidebarOpen}
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
-          <HomeNav classes={this.state.classes}/>
+          <HomeNav width={this.state.width}/>
           <Row>
 
             <Col md="1"/>
@@ -321,7 +321,7 @@ class HomePage extends Component {
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
 
-          <HomeNav classes={this.state.classes}/>
+          <HomeNav width={this.state.width}/>
 
         </Sidebar>
       );
