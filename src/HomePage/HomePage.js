@@ -95,31 +95,39 @@ class HomePage extends Component {
 
   getDeadlines = () => {
 
-    let docRef = firestore.collection("users").doc(this.state.classes[0].teacher);
-    let dateRef = docRef.collection(this.state.classes[0].class).doc("deadlines");
+    let object = [{}];
+
     let self = this;
 
+    for(let j in self.state.classes) {
 
-    dateRef.get().then(function(doc) {
-      if (doc.exists) {
-        let data = doc.data();
-        let object = [{}];
-        for (let i in data.array) {
-          object[i] = {
-            title: data.array[i].title,
-            start: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
-            end: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
+      let docRef = firestore.collection("users").doc(self.state.classes[j].teacher);
+      let dateRef = docRef.collection(self.state.classes[j].class).doc("deadlines");
+
+
+      dateRef.get().then(function (doc) {
+        if (doc.exists) {
+          let data = doc.data();
+          //let object = [{}];
+          for (let i in data.array) {
+            object.unshift( {
+              title: data.array[i].title,
+              start: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
+              end: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
+            })
           }
-        }
 
-        self.setState({
-          dates: object
-        })
-      } else {
-        console.log("No such document!");
-      }
-    }).catch(function(error) {
-      console.log("Error getting document:", error);
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(function (error) {
+        console.log("Error getting document:", error);
+      });
+    }
+    object.pop();
+
+    self.setState({
+      dates: object
     });
 
   };
