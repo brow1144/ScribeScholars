@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { firestore } from "../base";
-import { Button, Row, Col } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 
 import Sidebar from 'react-sidebar';
 import BigCalendar from 'react-big-calendar';
