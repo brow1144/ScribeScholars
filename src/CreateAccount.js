@@ -32,7 +32,7 @@ class CreateAccount extends Component {
             .then( (userCredential) => {
                 userCredential.user.displayName = ev.target.firstName.value + ev.target.lastName.value;
 
-                let ref = fireauth.database().ref("Students");
+               /* let ref = fireauth.database().ref("users");
                 ref.set({
                     firstName: ev.target.firstName.value,
                     lastName: ev.target.lastName.value
@@ -43,7 +43,7 @@ class CreateAccount extends Component {
                   .then ( (snapshot) => {
                       let data = snapshot.val();
                       alert(data.firstName);
-                  });
+                  });*/
             })
             .catch(function(err) {
                 // Handle errors
