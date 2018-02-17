@@ -5,6 +5,8 @@ import Sidebar from 'react-sidebar';
 import SettingsSide from './SettingsSide';
 
 import SetClassroom from './SetClassroom';
+import SetPersonal from './SetPersonal';
+
 
 import './Settings.css'
 
@@ -16,6 +18,8 @@ class Settings extends Component {
         super(props);
 
         this.state = {
+            uid: props.uid,
+            personalPage: true,
 
             mql: mql,
             docked: props.docked,
@@ -65,9 +69,21 @@ class Settings extends Component {
         });
     };
 
+    flipToClass = () => {
+      this.setState({
+          personalPage: false,
+      });
+    };
+
+    flipToPersonal = () => {
+        this.setState({
+            personalPage: true,
+        });
+    };
+
     render() {
 
-        let sidebarContent = <SettingsSide />;
+        let sidebarContent = <SettingsSide flipc={this.flipToClass.bind(this)} flipp={this.flipToPersonal.bind(this)}/>;
 
         const sidebarStyles = {
             sidebar: {
@@ -95,10 +111,14 @@ class Settings extends Component {
                     :
                     <br/>
                 }
-                <SetClassroom/>
-{/*
-                <SetPersonal/>
-*/}
+                {this.state.personalPage
+                        ?
+                        <SetPersonal uid={this.state.uid}/>
+                        :
+                        <SetClassroom uid={this.state.uid}/>
+                }
+                
+
             </Sidebar>
         );
     }
