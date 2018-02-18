@@ -12,6 +12,9 @@ class AboutPage extends Component {
         return (
             <div>
                 <div className={"page-section"}>
+                    <Row className="bar">
+                        <AboutBar/>
+                    </Row>
                     <Row className="row title">
                         <Col className="about">
                             <p>About Scribe Scholars</p>
@@ -38,6 +41,7 @@ class AboutPage extends Component {
                         </Col>
                     </Row>
                     <Row className="row teach">
+                        <a name="headline2"></a>
                         <Col className="col text teach">
                             <h1>Teachers</h1>
                             <p>There are a wide variety of features available to teachers for use in the class room.  In-class activities keep students
@@ -48,6 +52,7 @@ class AboutPage extends Component {
                         </Col>
                     </Row>
                     <Row className="row admin">
+                        <a name="headline3"></a>
                         <Col className="col administrator">
                         </Col>
                         <Col className="col text admin">

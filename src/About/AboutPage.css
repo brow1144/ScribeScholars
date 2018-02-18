@@ -8,6 +8,12 @@ h1 {
 p {
     font-size: large;
 }
+
+.bar {
+    height: 5em;
+    position: sticky;
+}
+
 .page-section {
     text-align: center;
     align-content: center;
@@ -16,9 +22,6 @@ p {
     overflow: hidden;
 }
 
-.row {
-
-}
 
 .col {
     //border: solid 2px green;

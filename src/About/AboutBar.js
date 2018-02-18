@@ -29,7 +29,16 @@ class AboutBar extends Component {
             <div className="main">
                 <Nav>
                     <NavItem className="link">
-                        <NavLink href="#" active>Link</NavLink>
+                        <NavLink href="#headline1">Students</NavLink>
+                    </NavItem>
+                    <NavItem className="link">
+                        <NavLink href="#headline2">Teacher</NavLink>
+                    </NavItem>
+                    <NavItem className="link">
+                        <NavLink href="#headline3">Administrator</NavLink>
+                    </NavItem>
+                    <NavItem className="link">
+                        <NavLink href="#headline4">Parents</NavLink>
                     </NavItem>
                 </Nav>
             </div>
