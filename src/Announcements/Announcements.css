@@ -1,0 +1,65 @@
+h1 {
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.container {
+    display: grid;
+    justify-items: center;
+}
+
+.row {
+
+//border: solid 1px lawngreen;
+    \\border: solid 1px lawngreen;
+
+    font-family: "Times New Roman";
+    font-weight: bold;
+}
+
+.col {
+
+//border: solid 1px red;
+}
+
+.intro {
+//border: solid 1px yellow;
+    \\border: solid 1px red;
+
+}
+
+.intro {
+    \\border: solid 1px yellow;
+}
+
+.title {
+    text-align: center;
+    font-size: 70px;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.whiteb {
+    position: relative;
+}
+
+.whitebtext {
+    left: 0;
+    position: absolute;
+    text-align: center;
+    top: 30px;
+    width: 100%;
+}
+
+.announce {
+    \\border: solid 3px #21CE99;
+    \\background-image: url('pics/whiteboard.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+
+}
+
+.nav {
+    \\border: solid 2px purple;
+}

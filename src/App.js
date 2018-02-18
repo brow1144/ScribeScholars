@@ -11,6 +11,7 @@ import About from './About/AboutPage';
 import CreateAccount from './CreateAccount/CreateAccount';
 
 import './App.css';
+import Announcements from "./Announcements/Announcements";
 
 class App extends Component {
 
@@ -73,6 +74,10 @@ class App extends Component {
 
           <Route path='/About' render={() => (
               <About />
+          )} />
+
+          <Route path='/Announcements' render={() => (
+              <Announcements />
           )} />
 
         <Route exact path='/create-account' render={() => (
