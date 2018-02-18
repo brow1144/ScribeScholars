@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { fireauth, googleProvider } from '../base.js';
+import { firestore, fireauth, googleProvider } from '../base.js';
 
 import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import './CreateAccount.css';
@@ -22,9 +22,20 @@ class CreateAccount extends Component {
         let self = this;
 
         fireauth.createUserAndRetrieveDataWithEmailAndPassword(ev.target.email.value, ev.target.password.value)
-            /*.then( (userCredential) => {
-                userCredential.user.displayName = ev.target.firstName.value + ev.target.lastName.value;
-            })*/
+            .then( (credential) => {
+                alert(credential.user.uid);
+
+                let docRef = firestore.collection("users").doc(credential.user.uid);
+                docRef.set({
+                  firstName: ev.target.firstName.value,
+                  lastName: ev.target.lastName.value,
+                  email: ev.target.email.value
+                }).then(function() {
+                  console.log("successfully written!");
+                }).catch(function(error) {
+                  console.log("error");
+                });
+            })
             .catch(function(err) {
                 // Handle errors
                 //console.log(err.message);
@@ -42,6 +53,9 @@ class CreateAccount extends Component {
                     visible: true,
                 })
             });
+
+        //this.getUserFromLocalStorage();
+
     };
 
     handleGoogle = () => {
