@@ -5,7 +5,6 @@ import Sidebar from 'react-sidebar';
 import SettingsSide from './SettingsSide';
 
 import SetClassroom from './SetClassroom';
-import SetPersonal from './SetPersonal';//
 
 import './Settings.css'
 
@@ -96,8 +95,7 @@ class Settings extends Component {
                     :
                     <br/>
                 }
-                /*<SetClassroom/>*/
-                <SetPersonal/>
+                <SetClassroom/>
 {/*
                 <SetPersonal/>
 */}
