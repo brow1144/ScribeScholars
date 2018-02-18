@@ -6,6 +6,9 @@ import './SetClassroom.css';
 
 class SetClassroom extends Component
 {
+    constructor(props) {
+        super(props);
+    }
     render()
     {
         return(
@@ -13,7 +16,7 @@ class SetClassroom extends Component
                 <Row className={"Filler"}> </Row>
                 <Row className={"BannerRow"}>
                     <Col xs={"12"} sm={"12"} md={"12"} lg={"12"} xl={"12"} className={"BannerCol"}>
-                        <h1>Walter Jacquette's Classroom Settings:</h1>
+                        <h1>{this.props.name}'s Classroom Settings:</h1>
                     </Col>
                 </Row>
                 <Row className={"Filler"}> </Row>

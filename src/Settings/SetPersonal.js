@@ -6,13 +6,27 @@ import './SetPersonal.css';
 
 class SetPersonal extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            uid: props.uid,
+            name: props.name,
+            email: props.email,
+            phoneN: props.phoneN,
+            descript: props.descript,
+        };
+
+    }
+
+
     render() {
         return (
+
             <Container fluid className={"ContainerRules"}>
                 <Row className={"Filler"}> </Row>
                 <Row className={"BannerRow"}>
                     <Col xs={"12"} sm={"12"} md={"12"} lg={"12"} xl={"12"} className={"BannerCol"}>
-                        <h1>Walter Jacquette's Personal Settings:</h1>
+                        <h1>{this.state.name}'s Personal Settings:</h1>
                     </Col>
                 </Row>
                 <Row className={"Filler"}> </Row>
@@ -23,19 +37,20 @@ class SetPersonal extends Component {
                             <FormGroup row>
                                 <Label size="lg" for="exampleEmail" sm={2}>Email:</Label>
                                 <Col sm={6}>
-                                    <Input size="lg" type="email" name="email" id="exampleEmail" placeholder="wjacquet@purdue.edu" />
+                                    <Input size="lg" type="email" name="email" id="exampleEmail" defaultValue={this.state.email}
+                                    />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label size="lg" for="exampleNumber" sm={2}>Phone Number:</Label>
                                 <Col sm={6}>
-                                    <Input size="lg" type="username" name="number" id="exampleNumber" placeholder="(888)-888-8888" />
+                                    <Input size="lg" type="username" name="number" id="exampleNumber" defaultValue={this.state.phoneN} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label size="lg" for="exampleText" sm={2}>Profile Description:</Label>
                                 <Col sm={6}>
-                                    <Input size="lg" type="textarea" name="text" id="exampleText" />
+                                    <Input size="lg" type="textarea" name="text" id="exampleText" defaultValue={this.state.descript} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>

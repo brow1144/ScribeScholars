@@ -9,6 +9,7 @@ import SetPersonal from './SetPersonal';
 
 
 import './Settings.css'
+import {firestore} from "../base";
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
@@ -20,12 +21,20 @@ class Settings extends Component {
         this.state = {
             uid: props.uid,
             personalPage: true,
+            name: null,
+            email: null,
+            phoneN: null,
+            descript: null,
 
             mql: mql,
             docked: props.docked,
             open: props.open,
             sideButtonVisibility: !props.docked,
         };
+        this.getEmail();
+        this.getPhone();
+        this.getDescript();
+        this.getName();
     }
 
     dockSideBar = () => {
@@ -60,6 +69,7 @@ class Settings extends Component {
 
     componentWillUnmount() {
         this.state.mql.removeListener(this.mediaQueryChanged);
+        this.setState(this.state);
     };
 
     mediaQueryChanged = () => {
@@ -81,8 +91,79 @@ class Settings extends Component {
         });
     };
 
-    render() {
+    getName = () => {
+        let docRef = firestore.collection("users").doc(this.state.uid);
+        let self = this;
 
+        docRef.get().then(function(doc) {
+            if (doc.exists) {
+                self.setState({
+                    name: doc.data().name,
+                });
+            } else {
+                console.log("No such document!");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+
+    };
+
+    getEmail = () => {
+        let docRef = firestore.collection("users").doc(this.state.uid);
+        let self = this;
+
+        docRef.get().then(function(doc) {
+            if (doc.exists) {
+                self.setState({
+                    email: doc.data().email,
+                });
+            } else {
+                console.log("No such document!");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+
+    };
+
+    getPhone = () => {
+        let docRef = firestore.collection("users").doc(this.state.uid);
+        let self = this;
+
+        docRef.get().then(function(doc) {
+            if (doc.exists) {
+                self.setState({
+                    phoneN: doc.data().phone,
+                });
+            } else {
+                console.log("No such document!");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+
+    };
+
+    getDescript = () => {
+        let docRef = firestore.collection("users").doc(this.state.uid);
+        let self = this;
+
+        docRef.get().then(function(doc) {
+            if (doc.exists) {
+                self.setState({
+                    descript: doc.data().descript,
+                });
+            } else {
+                console.log("No such document!");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+
+    };
+
+    render() {
         let sidebarContent = <SettingsSide flipc={this.flipToClass.bind(this)} flipp={this.flipToPersonal.bind(this)}/>;
 
         const sidebarStyles = {
@@ -96,6 +177,8 @@ class Settings extends Component {
             },
         };
 
+        if (this.state.name == null)
+            return false;
         return (
             <Sidebar styles={sidebarStyles}
                      sidebar={sidebarContent}
@@ -111,14 +194,25 @@ class Settings extends Component {
                     :
                     <br/>
                 }
+                {console.log(this.state.name)}
                 {this.state.personalPage
                         ?
-                        <SetPersonal uid={this.state.uid}/>
+                        <SetPersonal
+                            uid={this.state.uid}
+                            name={this.state.name}
+                            email={this.state.email}
+                            phoneN={this.state.phoneN}
+                            descript={this.state.descript}
+                        />
                         :
-                        <SetClassroom uid={this.state.uid}/>
+                        <SetClassroom
+                            uid={this.state.uid}
+                            name={this.state.name}
+                            email={this.state.email}
+                            phoneN={this.state.phoneN}
+                            descript={this.state.descript}
+                        />
                 }
-                
-
             </Sidebar>
         );
     }
