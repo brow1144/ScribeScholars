@@ -6,7 +6,7 @@ import './SetPersonal.css';
 import {fireauth, firestore} from "../base";
 
 class SetPersonal extends Component {
- /* constructor(props) {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -14,7 +14,7 @@ class SetPersonal extends Component {
         email: null,
     };
     console.log(props);
-  }*/
+  }
 
   sendPasswordEmail = () => {
       let docRef = firestore.collection("users").doc("test");

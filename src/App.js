@@ -9,6 +9,7 @@ import HomePage from './HomePage/HomePage';
 import Settings from './Settings/Settings';
 import About from './About/AboutPage';
 import CreateAccount from './CreateAccount/CreateAccount';
+import ResetPassword from './CreateAccount/ResetPassword';
 
 import './App.css';
 
@@ -86,6 +87,10 @@ class App extends Component {
             ? <Settings />
             : <Redirect to="/sign-in" />
         )} />
+
+        <Route exact path='/reset-password' render={() => (
+          <ResetPassword />
+          )} />
 
         <Route render={() => <Redirect to="/HomePage" />} />
 

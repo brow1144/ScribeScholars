@@ -7,6 +7,7 @@ import SettingsSide from './SettingsSide';
 import SetClassroom from './SetClassroom';
 
 import './Settings.css'
+import SetPersonal from "./SetPersonal";
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
@@ -95,7 +96,7 @@ class Settings extends Component {
                     :
                     <br/>
                 }
-                <SetClassroom/>
+                <SetPersonal/>
 {/*
                 <SetPersonal/>
 */}

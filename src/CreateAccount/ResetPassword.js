@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 
-import { fireauth } from '../base.js';
+import { firestore, fireauth } from '../base.js';
 
 import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
-import './CreateAccount.css';
+import './ResetPassword.css';
 import logo from '../logo.svg';
-import {firestore} from "../base";
 
 class ResetPassword extends Component {
   constructor(props) {
@@ -22,49 +21,14 @@ class ResetPassword extends Component {
     ev.preventDefault();
     let self = this;
 
-    fireauth.createUserAndRetrieveDataWithEmailAndPassword(ev.target.email.value, ev.target.password.value)
-      .then( (credential) => {
-        alert(credential.user.uid);
-
-        this.addInfo(ev, credential.user.uid);
-      })
-      .catch(function(err) {
-        // Handle errors
-        //console.log(err.message);
-        //let errCode = err.code;
-        //let errMessage = err.message;
-        /*if (errCode !== 'auth/weak-password') {
-            alert(errMessage);
-        } else {
-            alert('The password is too weak.');
-        }*/
-        //console.log(err);
-
-        self.setState({
-          errorCode: err.message,
-          visible: true,
-        })
-      });
-
-
-  };
-
-  getClasses = () => {
-    let docRef = firestore.collection("users").doc(this.state.uid);
-    let self = this;
-
-    docRef.get().then(function(doc) {
-      if (doc.exists) {
-        self.setState({
-          classes: doc.data().classes,
+      fireauth.confirmPasswordReset(null, ev.target.newPassword)
+        .catch(function(err) {
+          //handle errors
+          self.setState({
+            errorCode: err.message,
+            visible: true,
+          })
         });
-        self.getDeadlines();
-      } else {
-        console.log("No such document!");
-      }
-    }).catch(function(error) {
-      console.log("Error getting document:", error);
-    })
   };
 
   onDismiss = () => {
@@ -80,13 +44,10 @@ class ResetPassword extends Component {
               <img src={logo} alt="" width="100" height="100"/>
             </FormGroup>
             <FormGroup>
-              <Label mb="3" className="h3 font-weight-normal" for="exampleEmail">Create a New Account</Label>
+              <Label mb="3" className="h3 font-weight-normal" for="exampleNewPassword">Reset Password</Label>
             </FormGroup>
             <FormGroup>
               <Input type="newPassword" name="newPassword" id="exampleNewPassword" placeholder="New Password" />
-            </FormGroup>
-            <FormGroup>
-              <Input type="confirmNewPassword" name="confirmNewPassword" id="exampleConfirmNewPassword" placeholder="Confirm New Password" />
             </FormGroup>
             <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
               {this.state.errorCode}
