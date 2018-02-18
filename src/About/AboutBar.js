@@ -26,6 +26,15 @@ class AboutBar extends Component {
     }
     render() {
         return (
+            <div className="main">
+                <div id="nav" className="clearfix">
+                    <a href="#headline1">Student</a>
+                    <a href="#headline2">Teacher</a>
+                    <a href="#headline3">Administrator</a>
+                    <a href="#headline4">Parent</a>
+                </div>
+            </div>
+            /*
             <div className={"container"}>
                 <Nav tabs>
                     <NavItem>
@@ -127,7 +136,7 @@ class AboutBar extends Component {
                         </Row>
                     </TabPane>
                 </TabContent>
-            </div>
+            </div>*/
         );
     }
 }
