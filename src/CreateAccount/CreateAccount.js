@@ -25,7 +25,16 @@ class CreateAccount extends Component {
             .then( (credential) => {
                 alert(credential.user.uid);
 
-                //this.addInfo(ev, credential.user.uid);
+                let docRef = firestore.collection("users").doc(credential.user.uid);
+                docRef.set({
+                  firstName: ev.target.firstName.value,
+                  lastName: ev.target.lastName.value,
+                  email: ev.target.email.value
+                }).then(function() {
+                  console.log("successfully written!");
+                }).catch(function(error) {
+                  console.log("error");
+                });
             })
             .catch(function(err) {
                 // Handle errors
@@ -48,29 +57,6 @@ class CreateAccount extends Component {
         //this.getUserFromLocalStorage();
 
     };
-
-    /*addInfo = () => {
-      fireauth.onAuthStateChanged( (user) => {
-          if (user) {
-            // finished signing in
-            this.authHandler(user)
-          } else {
-            // finished signing out
-            this.setState({ uid: null })
-          }
-        }
-      )
-      let docRef = firestore.collection("users").doc(uid);
-      docRef.set({
-        firstName: ev.target.firstName.value,
-        lastName: ev.target.lastName.value,
-        email: ev.target.email.value
-      }).then(function() {
-        console.log("successfully written!");
-      }).catch(function(error) {
-        console.log("error");
-      });
-    };*/
 
     handleGoogle = () => {
         fireauth.auth().signInWithPopup(googleProvider);

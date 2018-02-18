@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { Button, Container, Row, Col, Form, FormGroup, Label, Input, FormText} from 'reactstrap';
 
 import './SetPersonal.css';
-import {fireauth, firestore} from "../base";
 
 class SetPersonal extends Component {
+<<<<<<< HEAD
  /* constructor(props) {
     super(props);
 
@@ -35,6 +35,8 @@ class SetPersonal extends Component {
       })
 
   };
+=======
+>>>>>>> parent of 641228c... Work on sending password reset email
 
     render() {
         return (
@@ -79,7 +81,7 @@ class SetPersonal extends Component {
                             </FormGroup>
                             <FormGroup row>
                                 <Col sm={{ size:6, offset: 2}}>
-                                    <Button onClick={this.sendPasswordEmail()} className={"PasswordButton"} size={"lg"}>Reset Password</Button>
+                                    <Button className={"PasswordButton"} size={"lg"}>Reset Password</Button>
                                 </Col>
                             </FormGroup>
                             <FormGroup check row>
