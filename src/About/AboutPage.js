@@ -12,41 +12,36 @@ class AboutPage extends Component {
         return (
             <div>
                 <div className={"page-section"}>
-                    <Row className={"rowBar"}>
-                        <h3><a href="#headline1">Student</a></h3>
-                    </Row>
-                    <Row className="row">
+                    <Row className="row title">
                         <Col className="about">
+                            <p>About Scribe Scholars</p>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col>
+                    <Row className="row scribe">
+                        <Col className="col text scribe">
                             <h1>Scribe Scholars</h1>
                             <p>We are dedicated to making a better in-class experience using our website</p>
                         </Col>
                     </Row>
-                    <Row className="row">
+                    <Row className="row stu">
                         <a name="headline1"></a>
-                        <Col className="colFirst">
+                        <Col className="col student stu">
+                        </Col>
+                        <Col className="col text stu" /*-12 col-lg-6 offset-lg-1 text-left"*/>
+                            <h1 className="">Students</h1>
+                            <p>Moz was founded by Rand Fishkin and Gillian Muessig in 2004. It was called SEOmoz,
+                                and started as a blog and an online community where some of the world's first SEO
+                                experts shared their research and ideas. We launched the Beginner's Guide to SEO and
+                                our first Search Ranking Factors study, and that hub of industry expertise transformed
+                                into a small consulting firm and led us to create some of our first SEO tools.</p>
                         </Col>
                     </Row>
-                    <Row className="row">
-                        <Col className="col" /*-12 col-lg-6 offset-lg-1 text-left"*/>
-                            <div className="page-section-headline">
-                                <h1 className="">Student</h1>
-                            </div>
-                            <div class="page-section-body">
-                                <p>Moz was founded by Rand Fishkin and Gillian Muessig in 2004. It was called SEOmoz,
-                                    and started as a blog and an online community where some of the world's first SEO
-                                    experts shared their research and ideas. We launched the Beginner's Guide to SEO and
-                                    our first Search Ranking Factors study, and that hub of industry expertise transformed
-                                    into a small consulting firm and led us to create some of our first SEO tools.</p>
-                            </div>
+                    <Row className="row teach">
+                        <Col className="col text teach">
+                            <h1>Teachers</h1>
+                            <p>There are a wide variety of features available to teachers for use in the class room</p>
                         </Col>
-                    </Row>
-                    <Row className="row">
-                        <Col className="colSecond">
-                            <h3>Student</h3>
+                        <Col className="col teacher">
                         </Col>
                     </Row>
                 </div>

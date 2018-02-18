@@ -1,5 +1,6 @@
 h1 {
     text-align: center;
+    font-weight: bold;
 }
 
 .page-section {
@@ -9,15 +10,9 @@ h1 {
     font-family: "Times New Roman";
 }
 
-.row {
-    //border: solid 1px orange;
-    font-family: "Times New Roman";
-    font-weight: bold;
-}
-
-.rowBar {
+.topBar {
     height: 6em;
-    border: solid 1px white;
+    //border: solid 1px white;
     font-color: white;
     background-color: black;
 }
@@ -27,36 +22,65 @@ h1 {
     font-color: white;
 }
 
+.row {
+    //border: solid 1px orange;
+    font-family: "Times New Roman";
+    font-weight: bold;
+}
+
 .col {
-    height:100vh;
+    //border: solid 2px green;
     background-color: #616D7E;
     align-content: center;
-    padding-top: 25em;
+}
+
+.text {
+    padding-top: 6em;
 }
 
 .about {
     background-image: url("./Pictures/paperWood.jpg");
     background-repeat: no-repeat;
     background-size: cover;
+    height: 100vh;
 }
 
-.colFirst {
-    border: solid 1px deeppink;
+.about p {
+    padding-top: 3em;
+    font-size: 10em;
+    font-weight: bold;
+
+}
+
+.student {
     background-image: url("./Pictures/Students.jpg");
     background-repeat: no-repeat;
-    background-size: cover;
-    //justify-content: center;
+    background-size: contain;
     align-content: center;
-    height: 100vh;
     overflow: hidden;
 }
 
-.colSecond {
-    border: solid 1px lightseagreen;
+.teacher {
     background-image: url("./Pictures/Teachers.jpeg");
     background-repeat: no-repeat;
     background-size: contain;
     align-content: center;
-    height: 100vh;
     overflow: hidden;
+}
+
+.title {
+    height: 100vh;
+}
+
+.scribe {
+    height: 40vh
+}
+
+.stu {
+    background-color: dodgerblue;
+    height: 40vh;
+}
+
+.teach {
+    height: 40vh;
 }

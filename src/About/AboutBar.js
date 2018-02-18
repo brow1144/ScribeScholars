@@ -27,14 +27,29 @@ class AboutBar extends Component {
     render() {
         return (
             <div className="main">
-                <div id="nav" className="clearfix">
-                    <a href="#headline1">Student</a>
-                    <a href="#headline2">Teacher</a>
-                    <a href="#headline3">Administrator</a>
-                    <a href="#headline4">Parent</a>
-                </div>
+                <Nav>
+                    <NavItem className="link">
+                        <NavLink href="#" active>Link</NavLink>
+                    </NavItem>
+                </Nav>
             </div>
             /*
+            <div id="nav" className="bar">
+                    <Row className="row">
+                        <Col className="col">
+                            <a href="#headline1" className="link">Student</a>
+                        </Col>
+                        <Col className="col">
+                            <a href="#headline2" className="link">Teacher</a>
+                        </Col>
+                        <Col className="col">
+                            <a href="#headline3" className="link">Administrator</a>
+                        </Col>
+                        <Col className="col">
+                            <a href="#headline4" className="link">Parent</a>
+                        </Col>
+                    </Row>
+                </div>
             <div className={"container"}>
                 <Nav tabs>
                     <NavItem>
