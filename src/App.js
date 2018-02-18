@@ -12,6 +12,7 @@ import CreateAccount from './CreateAccount/CreateAccount';
 
 import './App.css';
 import Announcements from "./Announcements/Announcements";
+import CreateAnn from "./Announcements/CreateAnn";
 
 class App extends Component {
 
@@ -78,6 +79,10 @@ class App extends Component {
 
           <Route path='/Announcements' render={() => (
               <Announcements />
+          )} />
+
+          <Route path='/CreateAnnouncements' render={() => (
+              <CreateAnn/>
           )} />
 
         <Route exact path='/create-account' render={() => (

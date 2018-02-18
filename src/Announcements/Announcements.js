@@ -23,9 +23,9 @@ class Announcements extends Component {
                             </Col>
                         </Row>
                     </div>
-                    <div className="nav">
-                        <AnnAcc/>
-                    </div>
+                </div>
+                <div className={"cards"}>
+                    <AnnAcc/>
                 </div>
             </div>
         )
