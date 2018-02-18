@@ -33,7 +33,7 @@ class AboutPage extends Component {
                             <h1 className="">Students</h1>
                             <p>Students will have full access to their grades at a momments notice.  In-class activities can be set up by teachers
                                 to make the classroom engaging and fun.  Adding classes is easy to do and all located within our website.  The message
-                                board provides an environment for students to interact with each other and their teachers in an easy to access way</p>
+                                board provides an environment for students to interact with each other and their teachers</p>
 
                         </Col>
                     </Row>
