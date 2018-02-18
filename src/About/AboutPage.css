@@ -1,8 +1,13 @@
 h1 {
     text-align: center;
     font-weight: bold;
+    padding-bottom: 1em;
+    font-weight: bold;
 }
 
+p {
+    font-size: large;
+}
 .page-section {
     text-align: center;
     align-content: center;
@@ -10,27 +15,12 @@ h1 {
     font-family: "Times New Roman";
 }
 
-.topBar {
-    height: 6em;
-    //border: solid 1px white;
-    font-color: white;
-    background-color: black;
-}
-
-.colBar {
-    align-content: center;
-    font-color: white;
-}
-
 .row {
-    //border: solid 1px orange;
-    font-family: "Times New Roman";
-    font-weight: bold;
+
 }
 
 .col {
     //border: solid 2px green;
-    background-color: #616D7E;
     align-content: center;
 }
 
@@ -48,8 +38,8 @@ h1 {
 .about p {
     padding-top: 3em;
     font-size: 10em;
-    font-weight: bold;
-
+    font-style: italic;
+    font-family: "Baskerville Old Face";
 }
 
 .student {
@@ -73,14 +63,20 @@ h1 {
 }
 
 .scribe {
-    height: 40vh
+    height: 40vh;
+    background-color: #ecf7fb;
 }
 
 .stu {
-    background-color: dodgerblue;
+    background-color: #c9e8f4;
     height: 40vh;
+}
+
+.stu p {
+    text-align: center;
 }
 
 .teach {
     height: 40vh;
+    background-color: #ecf7fb;
 }

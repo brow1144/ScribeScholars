@@ -19,8 +19,10 @@ class AboutPage extends Component {
                     </Row>
                     <Row className="row scribe">
                         <Col className="col text scribe">
-                            <h1>Scribe Scholars</h1>
-                            <p>We are dedicated to making a better in-class experience using our website</p>
+                            <h1>Scribe Scholars' Mission</h1>
+                            <p>We are dedicated to making a better in-class experience for teachers and students.</p>
+                            <p>Interactive assignments, grades, and in website chat board are just some of the features
+                                that make scribe scholars the premier learning experience</p>
                         </Col>
                     </Row>
                     <Row className="row stu">
@@ -29,11 +31,10 @@ class AboutPage extends Component {
                         </Col>
                         <Col className="col text stu" /*-12 col-lg-6 offset-lg-1 text-left"*/>
                             <h1 className="">Students</h1>
-                            <p>Moz was founded by Rand Fishkin and Gillian Muessig in 2004. It was called SEOmoz,
-                                and started as a blog and an online community where some of the world's first SEO
-                                experts shared their research and ideas. We launched the Beginner's Guide to SEO and
-                                our first Search Ranking Factors study, and that hub of industry expertise transformed
-                                into a small consulting firm and led us to create some of our first SEO tools.</p>
+                            <p>Students will have full access to their grades at a momments notice.  In-class activities can be set up by teachers
+                                to make the classroom engaging and fun.  Adding classes is easy to do and all located within our website.  The message
+                                board provides an environment for students to interact with each other and their teachers in an easy to access way</p>
+
                         </Col>
                     </Row>
                     <Row className="row teach">
