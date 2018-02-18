@@ -34,9 +34,18 @@ h1 {
 
 .title {
     text-align: center;
-    font-size: 70px;
+    font-size: 60px;
     font-weight: bold;
     font-style: italic;
+}
+
+.beSure {
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+    font-style: italic;
+    background-color: #21CE99;
+    padding: 5px;
 }
 
 .whiteb {

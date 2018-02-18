@@ -4,3 +4,15 @@ p {
     font-style: normal;
     font-weight: bolder;
 }
+
+.formpad {
+    padding: 10px;
+    alignment: center;
+}
+
+.labelSize {
+    font-weight: bold;
+    font-size: 24px;
+    alignment: center;
+    padding: 5px;
+}
