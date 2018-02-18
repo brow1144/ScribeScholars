@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 
-import { Button, Container, Row, Col, Form, FormGroup, Label, Input, FormText} from 'reactstrap';
+import { Button, Container, Row, Col, Form, FormGroup, Label, Input, FormText, Modal, ModalHeader, ModalFooter, ModalBody} from 'reactstrap';
+
+import {firestore} from "../base";
+import firebase from '../base.js';
 
 import './SetPersonal.css';
 
@@ -14,9 +17,28 @@ class SetPersonal extends Component {
             email: props.email,
             phoneN: props.phoneN,
             descript: props.descript,
+            modal: false,
         };
 
+        this.toggle = this.toggle.bind(this);
+        this.resetPass = this.resetPass.bind(this);
     }
+    toggle() {
+        this.setState({
+            modal: !this.state.modal,
+        });
+    }
+
+    resetPass = () => {
+        firebase.auth().sendPasswordResetEmail(
+            this.state.email)
+            .then(function () {
+                console.log("Reset Email Sent")
+            })
+            .catch(function (error) {
+                console.log("Cannot send reset email")
+            });
+    };
 
 
     render() {
@@ -64,7 +86,17 @@ class SetPersonal extends Component {
                             </FormGroup>
                             <FormGroup row>
                                 <Col sm={{ size:6, offset: 2}}>
-                                    <Button className={"PasswordButton"} size={"lg"}>Reset Password</Button>
+                                    <Button className={"PasswordButton"} size={"lg"} onClick={this.toggle}>Reset Password</Button>
+                                    <Modal size={"lg"} isOpen={this.state.modal} toggle={this.toggle}>
+                                        <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+                                        <ModalBody className={"ModalFonts"}>
+                                            Are you sure you want to reset your password? (An email will be sent to your account)
+                                        </ModalBody>
+                                        <ModalFooter>
+                                            <Button size={"lg"} color="info" onClick={this.resetPass}>Send Reset Email</Button>
+                                            <Button size={"lg"} color="secondary" onClick={this.toggle}>Close</Button>
+                                        </ModalFooter>
+                                    </Modal>
                                 </Col>
                             </FormGroup>
                             <FormGroup check row>
