@@ -13,6 +13,7 @@ p {
     align-content: center;
     display: grid;
     font-family: "Times New Roman";
+    overflow: hidden;
 }
 
 .row {
@@ -58,6 +59,14 @@ p {
     overflow: hidden;
 }
 
+.administrator {
+    background-image: url("./Pictures/Admin.jpeg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    align-content: center;
+    overflow: hidden;
+}
+
 .title {
     height: 100vh;
 }
@@ -79,4 +88,9 @@ p {
 .teach {
     height: 40vh;
     background-color: #ecf7fb;
+}
+
+.admin {
+    height: 40vh;
+    background-color: #c9e8f4;
 }
