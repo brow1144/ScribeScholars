@@ -3,8 +3,37 @@ import React, { Component } from 'react';
 import { Button, Container, Row, Col, Form, FormGroup, Label, Input, FormText} from 'reactstrap';
 
 import './SetPersonal.css';
+import {fireauth, firestore} from "../base";
 
 class SetPersonal extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+        uid: props.uid,
+        email: null,
+    };
+  }
+
+  sendPasswordEmail = () => {
+      let docRef = firestore.collection("users").doc("test");
+      let self = this;
+
+      docRef.get().then(function(doc) {
+        if (doc.exists) {
+            self.setState({
+              email: doc.data().email,
+            });
+            fireauth.sendPasswordEmail(self.state.email, null);
+        } else {
+            console.log("No such document!");
+            //alert("no such doc!");
+        }
+      }).catch(function(error) {
+        console.log("Error getting document:", error);
+      })
+
+  };
 
     render() {
         return (
@@ -49,7 +78,7 @@ class SetPersonal extends Component {
                             </FormGroup>
                             <FormGroup row>
                                 <Col sm={{ size:6, offset: 2}}>
-                                    <Button className={"PasswordButton"} size={"lg"}>Reset Password</Button>
+                                    <Button onClick={this.sendPasswordEmail()} className={"PasswordButton"} size={"lg"}>Reset Password</Button>
                                 </Col>
                             </FormGroup>
                             <FormGroup check row>
