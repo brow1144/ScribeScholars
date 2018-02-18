@@ -17,7 +17,7 @@ class Settings extends Component {
         super(props);
 
         this.state = {
-
+            uid: props.uid,
             mql: mql,
             docked: props.docked,
             open: props.open,

@@ -12,6 +12,7 @@ import CreateAccount from './CreateAccount/CreateAccount';
 import ResetPassword from './CreateAccount/ResetPassword';
 
 import './App.css';
+import SetPersonal from "./Settings/SetPersonal";
 
 class App extends Component {
 
@@ -84,7 +85,13 @@ class App extends Component {
 
         <Route path='/settings' render={() => (
           this.signedIn()
-            ? <Settings />
+            ? <Settings uid={this.state.uid} />
+            : <Redirect to="/sign-in" />
+        )} />
+
+        <Route path='/settings/personal' render={() => (
+          this.signedIn()
+            ? <SetPersonal uid={this.state.uid} />
             : <Redirect to="/sign-in" />
         )} />
 

@@ -59,7 +59,7 @@ class CreateAccount extends Component {
             this.setState({ uid: null })
           }
         }
-      )
+      );
       let docRef = firestore.collection("users").doc(uid);
       docRef.set({
         firstName: ev.target.firstName.value,

@@ -17,22 +17,24 @@ class SetPersonal extends Component {
   }
 
   sendPasswordEmail = () => {
-      let docRef = firestore.collection("users").doc("test");
-      let self = this;
+    alert("reached!");
+    let docRef = firestore.collection("users").doc(this.state.uid);
+    let self = this;
 
-      docRef.get().then(function(doc) {
-        if (doc.exists) {
-            self.setState({
-              email: doc.data().email,
-            });
-            fireauth.sendPasswordEmail(self.state.email, null);
-        } else {
-            console.log("No such document!");
-            //alert("no such doc!");
-        }
-      }).catch(function(error) {
-        console.log("Error getting document:", error);
-      })
+    docRef.get().then(function(doc) {
+      if (doc.exists) {
+        self.setState({
+          email: doc.data().email,
+        });
+        fireauth.sendPasswordEmail(self.state.email, null);
+        console.log("message sent!");
+      } else {
+        console.log("No such document!");
+        //alert("no such doc!");
+      }
+    }).catch(function(error) {
+      console.log("Error getting document:", error);
+    })
 
   };
 
@@ -79,7 +81,7 @@ class SetPersonal extends Component {
                             </FormGroup>
                             <FormGroup row>
                                 <Col sm={{ size:6, offset: 2}}>
-                                    <Button onClick={this.sendPasswordEmail()} className={"PasswordButton"} size={"lg"}>Reset Password</Button>
+                                    <Button onClick={this.sendPasswordEmail} className={"PasswordButton"} size={"lg"}>Reset Password</Button>
                                 </Col>
                             </FormGroup>
                             <FormGroup check row>
