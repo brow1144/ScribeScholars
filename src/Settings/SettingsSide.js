@@ -14,13 +14,13 @@ const SettingsSide = (props) => {
             </NavLink>
 
 
-            <NavLink onClick={props.flipp} style={{ textDecoration: 'none' }} to={`/settings/personal`}>
-                <p  className="classOne">Personal</p>
+            <NavLink onClick={props.flipp} style={{ textDecoration: 'none' }} to={`/settings/Personal`}>
+                <p  className="settingsSide">Personal</p>
             </NavLink>
 
 
-            <NavLink onClick={props.flipc} style={{ textDecoration: 'none' }} to={`/settings/classroom`}>
-                <p className="classOne" >Classroom</p>
+            <NavLink onClick={props.flipc} style={{ textDecoration: 'none' }} to={`/settings/Classroom`}>
+                <p className="settingsSide" >Classroom</p>
             </NavLink>
 
 
