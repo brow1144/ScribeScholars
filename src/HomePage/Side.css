@@ -26,9 +26,33 @@
     margin-bottom: 5rem;
 }
 
-img {
+.logo {
     margin-top: 2em;
     margin-bottom: 2em;
     width: 5em;
     height: 5em;
 }
+
+.settingsLogo {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border:2px solid darkgrey;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

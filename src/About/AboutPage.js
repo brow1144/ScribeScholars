@@ -3,8 +3,6 @@ import { Row, Col } from 'reactstrap';
 
 import AboutBar from './AboutBar';
 
-import logo from './Pictures/logo.svg';
-import student from './Pictures/Students.jpg';
 import './AboutPage.css';
 
 class AboutPage extends Component {
@@ -29,7 +27,7 @@ class AboutPage extends Component {
                         </Col>
                     </Row>
                     <Row className="row stu">
-                        <a name="headline1"></a>
+                        <p name="headline1" />
                         <Col className="colA student stu">
                         </Col>
                         <Col lg="6" className="colA text stu" >
@@ -41,7 +39,7 @@ class AboutPage extends Component {
                         </Col>
                     </Row>
                     <Row className="row teach">
-                        <a name="headline2"></a>
+                        <p name="headline2" />
                         <Col className="colA text teach">
                             <h1>Teachers</h1>
                             <p>There are a wide variety of features available to teachers for use in the class room.  In-class activities keep students
@@ -52,7 +50,7 @@ class AboutPage extends Component {
                         </Col>
                     </Row>
                     <Row className="row admin">
-                        <a name="headline3"></a>
+                        <p name="headline3" />
                         <Col className="colA administrator">
                         </Col>
                         <Col className="colA text admin">

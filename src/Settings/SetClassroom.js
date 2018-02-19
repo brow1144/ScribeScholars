@@ -4,11 +4,7 @@ import { Button, Container, Row, Col, Form, FormGroup, Label, Input } from 'reac
 
 import './SetClassroom.css';
 
-class SetClassroom extends Component
-{
-    constructor(props) {
-        super(props);
-    }
+class SetClassroom extends Component {
     render()
     {
         return(

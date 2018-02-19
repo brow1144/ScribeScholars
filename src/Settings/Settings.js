@@ -215,7 +215,7 @@ class Settings extends Component {
             },
         };
 
-        if (this.state.name == null)
+        if (this.state.name === null)
             return false;
         return (
             <Sidebar styles={sidebarStyles}

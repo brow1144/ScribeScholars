@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
+import { Nav, NavItem, NavLink } from 'reactstrap';
 
-import classnames from 'classnames';
 import './AboutBar.css';
-import picPar from './Pictures/parentChild.jpg';
-import logo from '../logo.svg';
 
 class AboutBar extends Component {
 

@@ -4,11 +4,11 @@
     color: #666;
 
     margin-bottom: 0;
+  
     padding-top: 3rem;
     padding-bottom: 3rem;
     padding-left: 0.5rem;
     text-align: left;
-
 
     -o-transition: .5s;
     -ms-transition: .5s;
@@ -28,6 +28,7 @@
     margin-top: 2rem;
     margin-bottom: 5rem;
 }
+
 
 img {
     margin-top: 2em;

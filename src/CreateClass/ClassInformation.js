@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 
-import { fireauth } from '../base.js'
-
-import { Form, FormGroup, Input, Button } from 'reactstrap';
+import { Form } from 'reactstrap';
 import logo from '../logo.svg'
 
 class ClassInformation extends Component {

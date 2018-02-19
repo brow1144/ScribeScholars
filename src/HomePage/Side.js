@@ -10,7 +10,7 @@ const Sidebar = (props) => {
   return (
     <div>
       <NavLink style={{ textDecoration: 'none' }} to={`/HomePage`}>
-        <img src={logo} alt="Logo" />
+        <img className="logo" src={logo} alt="Logo" />
       </NavLink>
 
       {Object.keys(props.classes).map((key, index) => {
@@ -20,7 +20,7 @@ const Sidebar = (props) => {
       })}
 
       <NavLink style={{ textDecoration: 'none' }} to={`/settings`}>
-        <i className="fas fa-cogs fa-2x settingsLogo" />
+        <img className="settingsLogo" src={"https://firebasestorage.googleapis.com/v0/b/scribescholars-ad86f.appspot.com/o/userImage.jpg?alt=media&token=c3319c17-22b0-46de-9fcc-ca7bde927d9d"} alt="userIcon" />
       </NavLink>
 
     </div>

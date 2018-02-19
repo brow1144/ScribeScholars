@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Jumbotron, Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
+import { Alert, Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
 
 
 import logo from '../logo.svg';
@@ -140,7 +140,7 @@ export default class CreateAnn extends React.Component {
 
 
                         <FormGroup tag="fieldset" row className={"formpad"}>
-                            <legend className={"labelSize"} className="col-form-label col-sm-2">Announcement Type</legend>
+                            <legend className="col-form-label col-sm-2 labelSize">Announcement Type</legend>
                             <Col sm={10}>
                                 <FormGroup check>
                                     <Label check>

@@ -2,7 +2,6 @@ import React from 'react'
 
 import { NavLink } from 'react-router-dom'
 
-
 import logo from '../logo.svg';
 
 import './SettingsSide.css'
@@ -11,7 +10,7 @@ const SettingsSide = (props) => {
     return (
         <div>
             <NavLink style={{ textDecoration: 'none' }} to={`/HomePage`}>
-                <img src={logo} alt="Logo" />
+                <img className="logo" src={logo} alt="Logo" />
             </NavLink>
 
 
