@@ -264,7 +264,7 @@ class HomePage extends Component {
   render() {
 
 
-    let sidebarContent = <Side classes={this.state.classes} />;
+    let sidebarContent = <Side uid={this.state.uid} classes={this.state.classes} />;
 
     const sidebarStyles = {
       sidebar: {
