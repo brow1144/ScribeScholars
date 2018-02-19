@@ -1,0 +1,37 @@
+.classOne {
+    font-size: 1.5em !important;
+    font-family: 'Nunito', sans-serif;
+    color: #666;
+
+    margin-bottom: 0;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    padding-left: 0.5rem;
+    text-align: left;
+
+
+    -o-transition: .5s;
+    -ms-transition: .5s;
+    -moz-transition: .5s;
+    -webkit-transition: .5s;
+    /* ...and now for the proper property */
+    transition: .5s;
+}
+
+.classOne:hover {
+    background-color: #dddddd;
+}
+
+.settingsLogo {
+    color: grey;
+
+    margin-top: 2rem;
+    margin-bottom: 5rem;
+}
+
+img {
+    margin-top: 2em;
+    margin-bottom: 2em;
+    width: 5em;
+    height: 5em;
+}
