@@ -14,6 +14,9 @@ const SettingsSide = () => {
                 <img src={logo} alt="Logo" />
             </NavLink>
 
+            <NavLink style={{ textDecoration: 'none' }} to={`/Announcements`}>
+                <p className="classOne" >Announcements</p>
+            </NavLink>
 
             <NavLink style={{ textDecoration: 'none' }} to={`/createAnnouncements`}>
                 <p className="classOne" >Make Announcement</p>
