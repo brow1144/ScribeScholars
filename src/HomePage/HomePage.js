@@ -9,6 +9,7 @@ import moment from 'moment';
 
 import Side from './Side';
 import HomeNav from './HomeNav'
+import Cards from './Cards'
 
 import './HomePage.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -304,6 +305,14 @@ class HomePage extends Component {
             </Col>
             <Col md="3"/>
           </Row>
+
+          <hr />
+          <b className="annTest">Announcements</b>
+
+            <div className="announcementsDiv">
+              <Cards />
+            </div>
+
         </Sidebar>
       );
       // If Screen is Small
@@ -316,6 +325,13 @@ class HomePage extends Component {
                  onSetOpen={this.onSetSidebarOpen}>
 
           <HomeNav expand={this.dockSideBar} width={this.state.width}/>
+
+          <hr />
+          <b>Announcements</b>
+
+          <div className="announcementsDiv">
+            <Cards />
+          </div>
 
         </Sidebar>
       );
