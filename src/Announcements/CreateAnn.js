@@ -5,7 +5,10 @@ import { Alert, Jumbotron, Col, Button, Form, FormGroup, Label, Input, FormText,
 import logo from '../logo.svg';
 import './Announcements.css';
 import './CreateAnn.css';
+import Sidebar from 'react-sidebar';
+import AnnSide from "./AnnSide";
 
+const mql = window.matchMedia(`(min-width: 800px)`);
 
 export default class CreateAnn extends React.Component {
 
@@ -69,8 +72,40 @@ export default class CreateAnn extends React.Component {
 
 
     render() {
+
+        let sidebarContent = <AnnSide />;
+
+        const sidebarStyles = {
+            sidebar: {
+                backgroundColor: 'f3f3f3',
+                width: '8em',
+                textAlign: 'center',
+            },
+            overlay: {
+                backgroundColor: '#f3f3f3'
+            },
+        };
         return (
 
+
+
+            <Sidebar styles={sidebarStyles}
+                     sidebar={sidebarContent}
+                     open={this.state.sidebarOpen}
+                     docked={this.state.sidebarDocked}
+                     onSetOpen={this.onSetSidebarOpen}>
+
+                {this.state.sideButtonVisibility
+                    ?
+                    <Button outline onClick={this.dockSideBar}>
+                        <i className="fas fa-bars"/>
+                    </Button>
+                    :
+                    <br/>
+                }
+                {/*
+                <SetPersonal/>
+*/}
             <div>
                 <div className={"container"}>
                     <div className={"about"}>
@@ -164,6 +199,7 @@ export default class CreateAnn extends React.Component {
                     </Form>
                 </div>
             </div>
+            </Sidebar>
         );
     }
 }

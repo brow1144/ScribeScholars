@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Button } from 'reactstrap';
 
-import SettingsSide from '../Settings/SettingsSide';
-
 import '../Settings/Settings.css'
 import Sidebar from 'react-sidebar';
 import logo from '../logo.svg';
