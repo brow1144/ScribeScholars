@@ -1,41 +1,100 @@
 import React, { Component } from 'react';
 
-import { Button, Container, Row, Col, Form, FormGroup, Label, Input, FormText} from 'reactstrap';
+import { Button, Container, Row, Col, Form, FormGroup, Label, Input, FormText, Modal, ModalHeader, ModalFooter, ModalBody} from 'reactstrap';
+
+import {firestore} from "../base";
+import firebase from '../base.js';
 
 import './SetPersonal.css';
 
 class SetPersonal extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            uid: props.uid,
+            name: props.name,
+            email: props.email,
+            phoneN: props.phoneN,
+            descript: props.descript,
+            modal: false,
+        };
+
+        this.toggle = this.toggle.bind(this);
+        this.resetPass = this.resetPass.bind(this);
+    }
+    toggle() {
+        this.setState({
+            modal: !this.state.modal,
+        });
+    }
+
+    resetPass = () => {
+        firebase.auth().sendPasswordResetEmail(
+            this.state.email)
+            .then(function () {
+                console.log("Reset Email Sent")
+            })
+            .catch(function () {
+                console.log("Cannot send reset email")
+            });
+    };
+
+    onFormSubmit = (ev) => {
+        ev.preventDefault();
+        let self = this;
+        let user = firestore.collection("users").doc(this.state.uid);
+
+        user.update({
+            "email": ev.target.email.value,
+            "phone": ev.target.number.value,
+            "descript": ev.target.descriptText.value,
+
+        }).then(function() {
+           console.log("Document Updated.")
+        });
+        self.props.updateP(ev.target.email.value, ev.target.number.value, ev.target.descriptText.value);
+        self.setState({
+            email: ev.target.email.value,
+            phone: ev.target.number.value,
+            descript: ev.target.descriptText.value,
+        });
+        window.location.reload();
+    };
+
+
     render() {
         return (
+
             <Container fluid className={"ContainerRules"}>
                 <Row className={"Filler"}> </Row>
                 <Row className={"BannerRow"}>
                     <Col xs={"12"} sm={"12"} md={"12"} lg={"12"} xl={"12"} className={"BannerCol"}>
-                        <h1>Walter Jacquette's Personal Settings:</h1>
+                        <h1>{this.state.name}'s Personal Settings:</h1>
                     </Col>
                 </Row>
                 <Row className={"Filler"}> </Row>
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
                     <Col xs={"12"}>
-                        <Form>
+                        <Form onSubmit={this.onFormSubmit}>
                             <FormGroup row>
                                 <Label size="lg" for="exampleEmail" sm={2}>Email:</Label>
                                 <Col sm={6}>
-                                    <Input size="lg" type="email" name="email" id="exampleEmail" placeholder="wjacquet@purdue.edu" />
+                                    <Input size="lg" type="email" name="email" id="exampleEmail" defaultValue={this.state.email}
+                                    />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label size="lg" for="exampleNumber" sm={2}>Phone Number:</Label>
                                 <Col sm={6}>
-                                    <Input size="lg" type="username" name="number" id="exampleNumber" placeholder="(888)-888-8888" />
+                                    <Input size="lg" type="username" name="number" id="exampleNumber" defaultValue={this.state.phoneN} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label size="lg" for="exampleText" sm={2}>Profile Description:</Label>
                                 <Col sm={6}>
-                                    <Input size="lg" type="textarea" name="text" id="exampleText" />
+                                    <Input size="lg" type="textarea" name="descriptText" id="exampleText" defaultValue={this.state.descript} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -49,7 +108,17 @@ class SetPersonal extends Component {
                             </FormGroup>
                             <FormGroup row>
                                 <Col sm={{ size:6, offset: 2}}>
-                                    <Button className={"PasswordButton"} size={"lg"}>Reset Password</Button>
+                                    <Button className={"PasswordButton"} size={"lg"} onClick={this.toggle}>Reset Password</Button>
+                                    <Modal size={"lg"} isOpen={this.state.modal} toggle={this.toggle}>
+                                        <ModalHeader toggle={this.toggle}>Password Reset</ModalHeader>
+                                        <ModalBody className={"ModalFonts"}>
+                                            Are you sure you want to reset your password? (An email will be sent to your account)
+                                        </ModalBody>
+                                        <ModalFooter>
+                                            <Button size={"lg"} color="info" onClick={this.resetPass}>Send Reset Email</Button>
+                                            <Button size={"lg"} color="secondary" onClick={this.toggle}>Close</Button>
+                                        </ModalFooter>
+                                    </Modal>
                                 </Col>
                             </FormGroup>
                             <FormGroup check row>

@@ -83,7 +83,7 @@ class App extends Component {
 
         <Route path='/settings' render={() => (
           this.signedIn()
-            ? <Settings />
+            ? <Settings uid={this.state.uid}/>
             : <Redirect to="/sign-in" />
         )} />
 
