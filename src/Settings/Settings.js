@@ -37,6 +37,11 @@ class Settings extends Component {
         this.getName();
     }
 
+    /*componentDidUpdate() {
+        console.log("Forcing State Update")
+    }*/
+
+
     dockSideBar = () => {
         if (this.state.sidebarDocked)
             this.setState({
@@ -163,6 +168,15 @@ class Settings extends Component {
 
     };
 
+    updatePersonal = (mail, number, descriptText) => {
+        this.setState({
+            email: mail,
+            phoneN: number,
+            descript: descriptText,
+        });
+
+    };
+
     render() {
         let sidebarContent = <SettingsSide flipc={this.flipToClass.bind(this)} flipp={this.flipToPersonal.bind(this)}/>;
 
@@ -194,7 +208,6 @@ class Settings extends Component {
                     :
                     <br/>
                 }
-                {console.log(this.state.name)}
                 {this.state.personalPage
                         ?
                         <SetPersonal
@@ -203,6 +216,7 @@ class Settings extends Component {
                             email={this.state.email}
                             phoneN={this.state.phoneN}
                             descript={this.state.descript}
+                            updateP={this.updatePersonal.bind(this)}
                         />
                         :
                         <SetClassroom

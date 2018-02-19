@@ -35,9 +35,31 @@ class SetPersonal extends Component {
             .then(function () {
                 console.log("Reset Email Sent")
             })
-            .catch(function (error) {
+            .catch(function () {
                 console.log("Cannot send reset email")
             });
+    };
+
+    onFormSubmit = (ev) => {
+        ev.preventDefault();
+        let self = this;
+        let user = firestore.collection("users").doc(this.state.uid);
+
+        user.update({
+            "email": ev.target.email.value,
+            "phone": ev.target.number.value,
+            "descript": ev.target.descriptText.value,
+
+        }).then(function() {
+           console.log("Document Updated.")
+        });
+        self.props.updateP(ev.target.email.value, ev.target.number.value, ev.target.descriptText.value);
+        self.setState({
+            email: ev.target.email.value,
+            phone: ev.target.number.value,
+            descript: ev.target.descriptText.value,
+        });
+        window.location.reload();
     };
 
 
@@ -55,7 +77,7 @@ class SetPersonal extends Component {
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
                     <Col xs={"12"}>
-                        <Form>
+                        <Form onSubmit={this.onFormSubmit}>
                             <FormGroup row>
                                 <Label size="lg" for="exampleEmail" sm={2}>Email:</Label>
                                 <Col sm={6}>
@@ -72,7 +94,7 @@ class SetPersonal extends Component {
                             <FormGroup row>
                                 <Label size="lg" for="exampleText" sm={2}>Profile Description:</Label>
                                 <Col sm={6}>
-                                    <Input size="lg" type="textarea" name="text" id="exampleText" defaultValue={this.state.descript} />
+                                    <Input size="lg" type="textarea" name="descriptText" id="exampleText" defaultValue={this.state.descript} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
@@ -88,7 +110,7 @@ class SetPersonal extends Component {
                                 <Col sm={{ size:6, offset: 2}}>
                                     <Button className={"PasswordButton"} size={"lg"} onClick={this.toggle}>Reset Password</Button>
                                     <Modal size={"lg"} isOpen={this.state.modal} toggle={this.toggle}>
-                                        <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+                                        <ModalHeader toggle={this.toggle}>Password Reset</ModalHeader>
                                         <ModalBody className={"ModalFonts"}>
                                             Are you sure you want to reset your password? (An email will be sent to your account)
                                         </ModalBody>
