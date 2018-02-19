@@ -31,6 +31,7 @@ class App extends Component {
       (user) => {
         if (user) {
           // finished signing in
+
           this.authHandler(user)
         } else {
           // finished signing out

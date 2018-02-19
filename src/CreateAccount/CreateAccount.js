@@ -49,7 +49,7 @@ class CreateAccount extends Component {
 
     };
 
-    /*addInfo = () => {
+
       fireauth.onAuthStateChanged( (user) => {
           if (user) {
             // finished signing in
@@ -70,7 +70,7 @@ class CreateAccount extends Component {
       }).catch(function(error) {
         console.log("error");
       });
-    };*/
+
 
     handleGoogle = () => {
         fireauth.auth().signInWithPopup(googleProvider);
