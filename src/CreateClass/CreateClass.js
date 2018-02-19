@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 
 import { fireauth } from '../base.js'
 
-import { Form, FormGroup, Input, Button, } from 'reactstrap';
+import { Form, FormGroup, Input, Button, Alert } from 'reactstrap';
 import './CreateClass.css'
 import logo from '../logo.svg'
-
+  
 class CreateClass extends Component {
 
   constructor(){
@@ -20,6 +20,7 @@ class CreateClass extends Component {
       codeValid: false,
       passwordValid: false,
       formValid: false,
+      errorVisible: false,
     };
   }
 
@@ -27,9 +28,13 @@ class CreateClass extends Component {
     ev.preventDefault();
     if(this.state.formValid){
       console.log("Success!");
+
+      //TODO Add submit logic
+
     } else {
-      console.log("Failure!");
-}
+      this.setState({ errorVisible: true });
+      //console.log("Error: Form Submit Failure");
+    }
   }
 
   handleInput = (e) => {
