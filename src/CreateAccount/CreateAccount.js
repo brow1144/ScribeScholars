@@ -54,7 +54,7 @@ class CreateAccount extends Component {
     };
 
     addInfo = (email, firstName, lastName) => {
-      fireauth.onAuthStateChanged( (user) => {
+        fireauth.onAuthStateChanged( (user) => {
           if (user) {
             // finished signing in
             this.setFirebase(user, email, firstName, lastName)
