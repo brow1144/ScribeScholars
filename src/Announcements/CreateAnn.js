@@ -49,7 +49,7 @@ export default class CreateAnn extends React.Component {
 
 
                 <div>
-                    <Form>
+                    <Form className={"form"}>
 
                         <FormGroup row className={"formpad"}>
                             <Label className={"labelSize"}for="exampleText" sm={2}>Announcement Title</Label>
