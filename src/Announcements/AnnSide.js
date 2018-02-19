@@ -15,7 +15,7 @@ const SettingsSide = () => {
             </NavLink>
 
 
-            <NavLink style={{ textDecoration: 'none' }} to={`/createAnnouncement`}>
+            <NavLink style={{ textDecoration: 'none' }} to={`/createAnnouncements`}>
                 <p className="classOne" >Make Announcement</p>
             </NavLink>
 

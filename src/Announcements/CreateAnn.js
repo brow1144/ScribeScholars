@@ -9,17 +9,62 @@ import './CreateAnn.css';
 
 export default class CreateAnn extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             errorCode: "",
             visible: true,
+            mql: mql,
+            docked: props.docked,
+            open: props.open,
+            sideButtonVisibility: !props.docked,
         };
     }
 
     onDismiss = () => {
         this.setState({ visible: false });
+    };
+
+    dockSideBar = () => {
+        if (this.state.sidebarDocked)
+            this.setState({
+                sidebarOpen: false,
+                sideButtonVisibility: true,
+            });
+        else
+            this.setState({
+                sidebarOpen: true,
+                sideButtonVisibility: false,
+            });
+    };
+
+
+    onSetSidebarOpen = (open) => {
+        this.setState({
+            sidebarOpen: open,
+            sideButtonVisibility: true,
+        });
+    };
+
+    componentWillMount() {
+        mql.addListener(this.mediaQueryChanged);
+        this.setState({
+            mql: mql,
+            sidebarDocked: mql.matches,
+            sideButtonVisibility: !this.state.mql.matches,
+        });
+    };
+
+    componentWillUnmount() {
+        this.state.mql.removeListener(this.mediaQueryChanged);
+    };
+
+    mediaQueryChanged = () => {
+        this.setState({
+            sidebarDocked: this.state.mql.matches,
+            sideButtonVisibility: !this.state.mql.matches,
+        });
     };
 
 
