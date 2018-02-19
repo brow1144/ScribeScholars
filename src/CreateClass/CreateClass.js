@@ -7,6 +7,7 @@ import './CreateClass.css'
 import logo from '../logo.svg'
 
 class CreateClass extends Component {
+
   constructor(){
     super();
 
@@ -27,34 +28,55 @@ class CreateClass extends Component {
   }
 
   handleInput = (e) => {
-    console.log("handle change called");
     const name = e.target.name;
     const value = e.target.value;
     this.setState({[name]: value},
       () => {this.validateField(name, value)});
   }
 
-  validateField(fieldName, value) {
-    if(fieldName === 'password'){
-      this.setState({passwordValid: true});
-      return;
-    }
+  validateField(fieldName, value){
 
-    else if(fieldName === 'code'){
-      let ret = false;
-      const len = this.state.code.length;
-      if(len === 6) ret = true;
-      this.setState({emailValid: ret}, this.validateForm);
+    switch(fieldName){
+
+      case 'code':
+
+        console.log("Code length: " + this.state.code.length);
+
+        if(this.state.code.length === 5){
+          this.setState({codeValid: true}, this.validateForm);
+        }
+        else {
+          this.setState({codeValid: false}, this.validateForm);
+        }
+        console.log("Code Valid " + this.state.codeValid)
+        return;
+
+      case 'password':
+
+        if(this.state.password.length >= 5){
+          this.setState({passwordValid: true}, this.validateFrom);
+        }
+        else {
+          this.setState({passwordValid: false}, this.validateForm);
+        }
+        console.log("Password Valid " + this.state.passwordValid);
+        return;
+
+      default:
+        console.log("Error: incorrect fieldName");
+        return;
     }
   }
 
   validateForm(){
     this.setState({formValid: this.state.codeValid && this.state.passwordValid});
+    console.log("Form valid " + this.state.formValid);
   }
 
 
   //TODO Add input labels
   render() {
+
     return (
       <div className="text-center">
         <div className ="Absolute-Center is-Responsive">
@@ -68,7 +90,7 @@ class CreateClass extends Component {
               />
             </div>
             <div className = "form-group">
-              <Input name="password" type="password"  placeholder="Enter your password"
+              <Input name="password" type="password" placeholder="Enter your password"
                 value={this.state.password}
                 onChange={this.handleInput}
               />
