@@ -1,53 +1,99 @@
 h1 {
     text-align: center;
-    padding-bottom: 20px;
-}
-
-.container {
-    display: grid;
-    justify-items: center;
-}
-
-.row {
-
-    //border: solid 1px lawngreen;
-    \\border: solid 1px lawngreen;
-
-    font-family: "Times New Roman";
+    font-weight: bold;
+    padding-bottom: 1em;
     font-weight: bold;
 }
+
+p {
+    font-size: large;
+}
+
+.bar {
+    height: 5em;
+    position: sticky;
+}
+
+.page-section {
+    text-align: center;
+    align-content: center;
+    display: grid;
+    font-family: "Times New Roman";
+    overflow: hidden;
+}
+
 
 .col {
-
-    //border: solid 1px red;
+    //border: solid 2px green;
+    align-content: center;
 }
 
-.intro {
-    //border: solid 1px yellow;
-    \\border: solid 1px red;
-
-}
-
-.intro {
-    \\border: solid 1px yellow;
-}
-
-.title {
-    text-align: center;
-    font-size: 70px;
-    font-weight: bold;
-    font-style: italic;
+.text {
+    padding-top: 6em;
 }
 
 .about {
-    \\border: solid 3px #21CE99;
-    background-image: url('Pictures/paperWood.jpg');
-    background-size: cover;
+    background-image: url("./Pictures/paperWood.jpg");
     background-repeat: no-repeat;
-    width: 100%;
-
+    background-size: cover;
+    height: 100vh;
 }
 
-.nav {
-    \\border: solid 2px purple;
+.about p {
+    padding-top: 3em;
+    font-size: 10em;
+    font-style: italic;
+    font-family: "Baskerville Old Face";
+}
+
+.student {
+    background-image: url("./Pictures/Students.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    align-content: center;
+    overflow: hidden;
+}
+
+.teacher {
+    background-image: url("./Pictures/Teachers.jpeg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    align-content: center;
+    overflow: hidden;
+}
+
+.administrator {
+    background-image: url("./Pictures/Admin.jpeg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    align-content: center;
+    overflow: hidden;
+}
+
+.title {
+    height: 100vh;
+}
+
+.scribe {
+    height: 40vh;
+    background-color: #ecf7fb;
+}
+
+.stu {
+    background-color: #c9e8f4;
+    height: 40vh;
+}
+
+.stu p {
+    text-align: center;
+}
+
+.teach {
+    height: 40vh;
+    background-color: #ecf7fb;
+}
+
+.admin {
+    height: 40vh;
+    background-color: #c9e8f4;
 }
