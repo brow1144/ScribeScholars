@@ -21,11 +21,15 @@ class CreateAccount extends Component {
         ev.preventDefault();
         let self = this;
 
-        fireauth.createUserAndRetrieveDataWithEmailAndPassword(ev.target.email.value, ev.target.password.value)
-            .then( (credential) => {
-                alert(credential.user.uid);
+        let firstName = ev.target.firstName.value;
+        let lastName = ev.target.lastName.value;
+        let email = ev.target.email.value;
 
-                //this.addInfo(ev, credential.user.uid);
+      fireauth.createUserAndRetrieveDataWithEmailAndPassword(email,  ev.target.password.value)
+            .then( (credential) => {
+
+                self.addInfo(email, firstName, lastName);
+
             })
             .catch(function(err) {
                 // Handle errors
@@ -49,28 +53,31 @@ class CreateAccount extends Component {
 
     };
 
-    /*addInfo = () => {
+    addInfo = (email, firstName, lastName) => {
       fireauth.onAuthStateChanged( (user) => {
           if (user) {
             // finished signing in
-            this.authHandler(user)
+            this.setFirebase(user, email, firstName, lastName)
           } else {
             // finished signing out
             this.setState({ uid: null })
           }
         }
       );
-      let docRef = firestore.collection("users").doc(uid);
+    };
+
+    setFirebase = (user, email, firstName, lastName) => {
+      let docRef = firestore.collection("users").doc(user.uid);
       docRef.set({
-        firstName: ev.target.firstName.value,
-        lastName: ev.target.lastName.value,
-        email: ev.target.email.value
+        firstName: firstName,
+        lastName: lastName,
+        email: email
       }).then(function() {
         console.log("successfully written!");
       }).catch(function(error) {
         console.log("error");
       });
-    };*/
+    };
 
     handleGoogle = () => {
         fireauth.auth().signInWithPopup(googleProvider);
@@ -84,7 +91,7 @@ class CreateAccount extends Component {
         return (
             <div className="text-center">
                 <div className="Absolute-Center is-Responsive">
-                    <Form onSubmit={ this.onFormSubmit }>
+                    <Form onSubmit={ (ev) => this.onFormSubmit(ev) }>
                         <FormGroup>
                             <img src={logo} alt="" width="100" height="100"/>
                         </FormGroup>
