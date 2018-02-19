@@ -28,11 +28,9 @@ class SetClassroom extends Component
                                 <Label size={"lg"} for="exampleSelectMulti" sm={2}>Enrolled Courses:</Label>
                                 <Col sm={5}>
                                     <Input className="ClassSelection" bsSize="lg" type="select" name="selectMulti" id="exampleSelectMulti" multiple>
-                                        <option>AP CompSci</option>
-                                        <option>Chemistry</option>
-                                        <option>AP Calculus</option>
-                                        <option>Literature</option>
-                                        <option>Band</option>
+                                        {Object.keys(this.props.classes).map((key, index) => {
+                                            return <option key={key}>{this.props.classes[index].class}</option>
+                                        })}
                                     </Input>
                                 </Col>
                             </FormGroup>
@@ -50,7 +48,7 @@ class SetClassroom extends Component
                         <Form>
                             <FormGroup row check>
                                 <Col sm={{ size: 2, offset: 2}}>
-                                    <Input bsSize="lg" type="username" name="classCode" id="classToAdd" placeholder="ClassCode" />
+                                    <Input bsSize="lg" type="username" name="className" id="classToAdd" placeholder="Class Name" />
                                     <Row className={"Filler"}> </Row>
                                     <Button size={"lg"}>Add This Class</Button>
 

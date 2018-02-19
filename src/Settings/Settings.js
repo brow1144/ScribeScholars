@@ -30,10 +30,15 @@ class Settings extends Component {
             docked: props.docked,
             open: props.open,
             sideButtonVisibility: !props.docked,
+            classes: [{
+                class: null,
+                teacher: null,
+            }],
         };
         this.getEmail();
         this.getPhone();
         this.getDescript();
+        this.getClasses();
         this.getName();
     }
 
@@ -168,6 +173,25 @@ class Settings extends Component {
 
     };
 
+    getClasses = () => {
+        let docRef = firestore.collection("users").doc(this.state.uid);
+        let self = this;
+
+        docRef.get().then(function(doc) {
+            if (doc.exists) {
+                self.setState({
+                    classes: doc.data().classes,
+                });
+            } else {
+                console.log("No such document!");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        })
+
+    };
+
+
     updatePersonal = (mail, number, descriptText) => {
         this.setState({
             email: mail,
@@ -225,6 +249,7 @@ class Settings extends Component {
                             email={this.state.email}
                             phoneN={this.state.phoneN}
                             descript={this.state.descript}
+                            classes={this.state.classes}
                         />
                 }
             </Sidebar>
