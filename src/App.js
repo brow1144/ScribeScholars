@@ -9,6 +9,8 @@ import HomePage from './HomePage/HomePage';
 import Settings from './Settings/Settings';
 import About from './About/AboutPage';
 import CreateAccount from './CreateAccount/CreateAccount';
+import CreateClass from './CreateClass/CreateClass';
+import ClassInformation from './CreateClass/ClassInformation';
 
 import './App.css';
 
@@ -78,7 +80,17 @@ class App extends Component {
         <Route exact path='/create-account' render={() => (
             !this.signedIn()
                 ? <CreateAccount />
-                : <Redirect to="/HomePage" />
+                :<Redirect to="/HomePage" />
+        )} />
+
+        <Route exact path='/create-class' render={() => (
+          //!this.signedIn()
+          /*? */<CreateClass />
+          //:<Redirect to="/HomePage" />
+        )} />
+
+        <Route exact path='/class-information' render={() => (
+          <ClassInformation />
         )} />
 
         <Route path='/settings' render={() => (
