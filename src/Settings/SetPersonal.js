@@ -23,6 +23,7 @@ class SetPersonal extends Component {
         this.toggle = this.toggle.bind(this);
         this.resetPass = this.resetPass.bind(this);
     }
+
     toggle() {
         this.setState({
             modal: !this.state.modal,
@@ -62,6 +63,12 @@ class SetPersonal extends Component {
         window.location.reload();
     };
 
+    handlePicture = (ev) => {
+        ev.preventDefault();
+
+        console.log(ev.target);
+    };
+
 
     render() {
         return (
@@ -81,26 +88,26 @@ class SetPersonal extends Component {
                             <FormGroup row>
                                 <Label size="lg" for="exampleEmail" sm={2}>Email:</Label>
                                 <Col sm={6}>
-                                    <Input size="lg" type="email" name="email" id="exampleEmail" defaultValue={this.state.email}
+                                    <Input bsSize="lg" type="email" name="email" id="exampleEmail" defaultValue={this.state.email}
                                     />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label size="lg" for="exampleNumber" sm={2}>Phone Number:</Label>
                                 <Col sm={6}>
-                                    <Input size="lg" type="username" name="number" id="exampleNumber" defaultValue={this.state.phoneN} />
+                                    <Input bsSize="lg" type="username" name="number" id="exampleNumber" defaultValue={this.state.phoneN} />
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label size="lg" for="exampleText" sm={2}>Profile Description:</Label>
                                 <Col sm={6}>
-                                    <Input size="lg" type="textarea" name="descriptText" id="exampleText" defaultValue={this.state.descript} />
+                                    <Input bsSize="lg" type="textarea" name="descriptText" id="exampleText" defaultValue={this.state.descript} />
                                 </Col>
                             </FormGroup>
-                            <FormGroup row>
+                            <FormGroup onClick={this.handlePicture} row>
                                 <Label size="lg" for="exampleFile" sm={2}>Profile Picture:</Label>
                                 <Col sm={10}>
-                                    <Input size="lg" type="file" name="file" id="exampleFile" />
+                                    <Input bsSize="lg" type="file" name="file" id="exampleFile" />
                                     <FormText size="lg" color="muted">
                                         Please only upload an image for your picture.
                                     </FormText>

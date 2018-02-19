@@ -167,7 +167,7 @@ class HomePage extends Component {
               title: data.array[i].title,
               start: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
               end: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
-            })
+            });
             self.setState({
               dates: object,
             })
@@ -277,7 +277,7 @@ class HomePage extends Component {
     };
 
     const calendarStyles = {
-      height: "55rem",
+      height: "60em",
     };
 
     // If Screen is Big

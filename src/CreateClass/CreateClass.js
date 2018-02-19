@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 
-import { fireauth } from '../base.js'
 
-import { Form, FormGroup, Input, Button, Alert } from 'reactstrap';
+import { Form, Input, Button } from 'reactstrap';
 import './CreateClass.css'
 import logo from '../logo.svg'
   
