@@ -25,6 +25,11 @@ class CreateClass extends Component {
 
   onFormSubmit = (ev) => {
     ev.preventDefault();
+    if(this.state.formValid){
+      console.log("Success!");
+    } else {
+      console.log("Failure!");
+}
   }
 
   handleInput = (e) => {
@@ -40,26 +45,40 @@ class CreateClass extends Component {
 
       case 'code':
 
-        console.log("Code length: " + this.state.code.length);
+        //console.log("Code length: " + this.state.code.length);
 
-        if(this.state.code.length === 5){
-          this.setState({codeValid: true}, this.validateForm);
+        if(this.state.code.length === 6){
+          this.setState({codeValid: true}, function() {
+            this.validateForm();
+          });
+          //console.log("Code Valid!")
         }
         else {
-          this.setState({codeValid: false}, this.validateForm);
+          this.setState({codeValid: false}, function() {
+            this.validateForm();
+          });
+          //console.log("Code Invalid!")
         }
-        console.log("Code Valid " + this.state.codeValid)
+        //console.log("Code Valid " + this.state.codeValid)
         return;
 
       case 'password':
 
-        if(this.state.password.length >= 5){
-          this.setState({passwordValid: true}, this.validateFrom);
+        //console.log("Password length: " + this.state.password.length);
+
+        if(this.state.password.length >= 6){
+          this.setState({passwordValid: true}, function() {
+            this.validateForm();
+          });
+          //console.log("Password Valid!")
         }
         else {
-          this.setState({passwordValid: false}, this.validateForm);
+          this.setState({passwordValid: false}, function() {
+            this.validateForm();
+          });
+          //console.log("Password Invalid!")
         }
-        console.log("Password Valid " + this.state.passwordValid);
+        //console.log("Password Valid " + this.state.passwordValid);
         return;
 
       default:
@@ -68,9 +87,15 @@ class CreateClass extends Component {
     }
   }
 
-  validateForm(){
-    this.setState({formValid: this.state.codeValid && this.state.passwordValid});
-    console.log("Form valid " + this.state.formValid);
+  validateForm = () =>{
+    this.setState({formValid: this.state.codeValid && this.state.passwordValid}, function() {
+      this.printForm();
+    });
+
+  }
+
+  printForm(){
+    //console.log("formValid: " + this.state.formValid);
   }
 
 
