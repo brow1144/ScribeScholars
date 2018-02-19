@@ -267,7 +267,7 @@ class HomePage extends Component {
 
     const sidebarStyles = {
       sidebar: {
-        backgroundColor: 'f3f3f3',
+        backgroundColor: '##f2f2f2',
         width: '8em',
         textAlign: 'center',
       },
@@ -289,6 +289,7 @@ class HomePage extends Component {
                  open={this.state.sidebarOpen}
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
+
           <HomeNav expand={this.dockSideBar} width={this.state.width}/>
           <Row>
 

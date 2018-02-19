@@ -1,11 +1,13 @@
-.classOne {
-    font-size: 1.5em !important;
+.classSide {
+    font-size: 1.4em !important;
     font-family: 'Nunito', sans-serif;
-    color: #666;
+    color: grey;
 
     margin-bottom: 0;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+
+    padding: 3rem 0 3rem 0;
+
+    text-align: center;
 
     -o-transition: .5s;
     -ms-transition: .5s;
@@ -15,15 +17,8 @@
     transition: .5s;
 }
 
-.classOne:hover {
+.classSide:hover {
     background-color: #dddddd;
-}
-
-.settingsLogo {
-    color: grey;
-
-    margin-top: 2rem;
-    margin-bottom: 5rem;
 }
 
 .logo {
@@ -34,6 +29,9 @@
 }
 
 .settingsLogo {
+    margin-top: 2rem;
+    margin-bottom: 5rem;
+
     vertical-align: middle;
     width: 50px;
     height: 50px;

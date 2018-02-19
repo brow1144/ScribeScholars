@@ -1,14 +1,13 @@
-.classOne {
-    font-size: 1.5em !important;
+.settingsSide {
+    font-size: 1.3em !important;
     font-family: 'Nunito', sans-serif;
     color: #666;
 
     margin-bottom: 0;
-  
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-    padding-left: 0.5rem;
-    text-align: left;
+
+    padding: 3rem 0 3rem 0;
+
+    text-align: center;
 
     -o-transition: .5s;
     -ms-transition: .5s;
@@ -18,7 +17,7 @@
     transition: .5s;
 }
 
-.classOne:hover {
+.settingsSide:hover {
     background-color: #dddddd;
 }
 
@@ -28,7 +27,6 @@
     margin-top: 2rem;
     margin-bottom: 5rem;
 }
-
 
 img {
     margin-top: 2em;

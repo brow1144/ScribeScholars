@@ -13,9 +13,9 @@ class ClassInformation extends Component {
     };
   }
 
-  onFormSubmit = (ev) => {}
+  onFormSubmit = (ev) => {};
 
-  validateForm = () => {}
+  validateForm = () => {};
 
   render() {
     return (
