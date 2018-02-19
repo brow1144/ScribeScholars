@@ -105,13 +105,13 @@ class Announcements extends Component {
             <div>
                 <div className={"container"}>
                     <div className={"about"}>
-                        <Row className={"row"}>
-                            <Col className={"col"}>
+                        <Row className={"rowt"}>
+                            <Col className={"colt"}>
                                 <img className="logo" alt="logo" src={logo}/>
                             </Col>
                         </Row>
-                        <Row className={"row"}>
-                            <Col className={"col"}>
+                        <Row className={"rowt"}>
+                            <Col className={"colt"}>
                                 <h1 className={"title"}>Announcements</h1>
                             </Col>
                         </Row>
