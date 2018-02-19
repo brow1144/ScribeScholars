@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { fireauth } from '../base.js'
 
-import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
+import { Form, FormGroup, Input, Button, } from 'reactstrap';
 import './CreateClass.css'
 import logo from '../logo.svg'
 
@@ -10,11 +10,15 @@ class CreateClass extends Component {
   constructor(){
     super();
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleInput = this.handleInput.bind(this);
 
     this.state = {
-      uid: null,
-      value: null
+      uid: '',
+      code: '',
+      password: '',
+      codeValid: false,
+      passwordValid: false,
+      formValid: false,
     };
   }
 
@@ -22,32 +26,57 @@ class CreateClass extends Component {
     ev.preventDefault();
   }
 
-  handleChange(e) {
-    this.setState({ value: e.target.value });
+  handleInput = (e) => {
+    console.log("handle change called");
+    const name = e.target.name;
+    const value = e.target.value;
+    this.setState({[name]: value},
+      () => {this.validateField(name, value)});
   }
 
-  validate() {
-    const len = this.state.value.length;
-    if(len != 6) return 'warning';
-    else return 'success';
+  validateField(fieldName, value) {
+    if(fieldName === 'password'){
+      this.setState({passwordValid: true});
+      return;
+    }
+
+    else if(fieldName === 'code'){
+      let ret = false;
+      const len = this.state.code.length;
+      if(len === 6) ret = true;
+      this.setState({emailValid: ret}, this.validateForm);
+    }
   }
 
+  validateForm(){
+    this.setState({formValid: this.state.codeValid && this.state.passwordValid});
+  }
+
+
+  //TODO Add input labels
   render() {
     return (
-      <Form>
-        <FormGroup
-          controlId="formBasicText"
-          validationState={this.validate()}
-        >
-          <FormControl
-            type="text"
-            value={this.state.value}
-            placeholder="Enter 6 digit class code"
-            onChange={this.handleChange}
-          />
-          <FormControl.Feedback />
-        </FormGroup>
-      </Form>
+      <div className="text-center">
+        <div className ="Absolute-Center is-Responsive">
+          <Form onSubmit={this.onFormSubmit}>
+            <img src={logo} alt="" width="100" height="100"/>
+            <h3 className = "h3 font-weight-normal">Create New Class</h3>
+            <div className="form-group">
+              <Input name="code" type="text" placeholder="Enter 6 digit class code"
+                value={this.state.code}
+                onChange={this.handleInput}
+              />
+            </div>
+            <div className = "form-group">
+              <Input name="password" type="password"  placeholder="Enter your password"
+                value={this.state.password}
+                onChange={this.handleInput}
+              />
+            </div>
+            <Button type="submit" className="createClassButton" size ="lg" block>Create Class!</Button>
+          </Form>
+        </div>
+      </div>
     );
   }
 }
