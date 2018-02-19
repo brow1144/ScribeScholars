@@ -26,57 +26,26 @@ class AboutBar extends Component {
     }
     render() {
         return (
-            <div className="main">
-                <Nav>
-                    <NavItem className="link">
-                        <NavLink href="#headline1">Students</NavLink>
-                    </NavItem>
-                    <NavItem className="link">
-                        <NavLink href="#headline2">Teacher</NavLink>
-                    </NavItem>
-                    <NavItem className="link">
-                        <NavLink href="#headline3">Administrator</NavLink>
-                    </NavItem>
-                    <NavItem className="link">
-                        <NavLink href="#headline4">Parents</NavLink>
-                    </NavItem>
-                </Nav>
-            </div>
-            /*
-            <div id="nav" className="bar">
-                    <Row className="row">
-                        <Col className="col">
-                            <a href="#headline1" className="link">Student</a>
-                        </Col>
-                        <Col className="col">
-                            <a href="#headline2" className="link">Teacher</a>
-                        </Col>
-                        <Col className="col">
-                            <a href="#headline3" className="link">Administrator</a>
-                        </Col>
-                        <Col className="col">
-                            <a href="#headline4" className="link">Parent</a>
-                        </Col>
-                    </Row>
-                </div>
             <div className={"container"}>
                 <Nav tabs>
                     <NavItem>
-                        <NavLink className={classnames({ active: this.state.activeTab === '1' })} onClick={() => { this.toggle('1'); }}><h2>Students</h2></NavLink>
+                        <NavLink className="link" href="#headline1" ><h2>Students</h2></NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink className={classnames({ active: this.state.activeTab === '2' })} onClick={() => { this.toggle('2'); }}><h2>Teachers</h2></NavLink>
+                        <NavLink className="link" href="#headline2" ><h2>Teachers</h2></NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink className={classnames({ active: this.state.activeTab === '3' })} onClick={() => { this.toggle('3'); }}><h2>Administrators</h2></NavLink>
+                        <NavLink className="link" href="#headline3" ><h2>Administrators</h2></NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink className={classnames({ active: this.state.activeTab === '4' })} onClick={() => { this.toggle('4'); }}><h2>Parents</h2></NavLink>
+                        <NavLink className="link" href="#headline4" ><h2>Parents</h2></NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink className={classnames({ active: this.state.activeTab === '5' })} onClick={() => { this.toggle('5'); }}><h2>Contact Us</h2></NavLink>
+                        <NavLink className="link" href="#headline5" ><h2>Contact Us</h2></NavLink>
                     </NavItem>
                 </Nav>
+            </div>
+                /*
                 <TabContent activeTab={this.state.activeTab}>
                     <TabPane tabId="1">
                         <Row>
@@ -159,8 +128,7 @@ class AboutBar extends Component {
                             </Col>
                         </Row>
                     </TabPane>
-                </TabContent>
-            </div>*/
+                </TabContent>*/
         );
     }
 }
