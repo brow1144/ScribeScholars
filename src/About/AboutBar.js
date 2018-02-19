@@ -26,6 +26,39 @@ class AboutBar extends Component {
     }
     render() {
         return (
+            <div className="main">
+                <Nav>
+                    <NavItem className="link">
+                        <NavLink href="#headline1">Students</NavLink>
+                    </NavItem>
+                    <NavItem className="link">
+                        <NavLink href="#headline2">Teacher</NavLink>
+                    </NavItem>
+                    <NavItem className="link">
+                        <NavLink href="#headline3">Administrator</NavLink>
+                    </NavItem>
+                    <NavItem className="link">
+                        <NavLink href="#headline4">Parents</NavLink>
+                    </NavItem>
+                </Nav>
+            </div>
+            /*
+            <div id="nav" className="bar">
+                    <Row className="row">
+                        <Col className="col">
+                            <a href="#headline1" className="link">Student</a>
+                        </Col>
+                        <Col className="col">
+                            <a href="#headline2" className="link">Teacher</a>
+                        </Col>
+                        <Col className="col">
+                            <a href="#headline3" className="link">Administrator</a>
+                        </Col>
+                        <Col className="col">
+                            <a href="#headline4" className="link">Parent</a>
+                        </Col>
+                    </Row>
+                </div>
             <div className={"container"}>
                 <Nav tabs>
                     <NavItem>
@@ -127,7 +160,7 @@ class AboutBar extends Component {
                         </Row>
                     </TabPane>
                 </TabContent>
-            </div>
+            </div>*/
         );
     }
 }
