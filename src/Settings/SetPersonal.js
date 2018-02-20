@@ -82,7 +82,7 @@ class SetPersonal extends Component {
       userImageRef.put(file).then(function(snapshot) {
         imageUrl = snapshot.metadata.downloadURLs[0];
         console.log('Uploaded a blob or file!');
-      }.then(function(ev) {
+      }).then(function(ev) {
 
         let user = firestore.collection("users").doc(self.state.uid);
 
@@ -92,7 +92,7 @@ class SetPersonal extends Component {
           console.log("Document Updated.")
         });
 
-      });
+      })
     };
 
 
