@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom'
 import { firestore } from "../base";
 
 import logo from '../logo.svg';
+import defaultUser from './defUser.png'
 
 import './Side.css'
 
@@ -51,11 +52,21 @@ class Side extends Component {
           </NavLink>
         })}
 
-        <NavLink style={{textDecoration: 'none'}} to={`/settings`}>
-          <img className="settingsLogo"
-               src={this.state.userImage}
-               alt="userIcon"/>
+        {this.state.userImage
+          ?
+          <NavLink style={{textDecoration: 'none'}} to={`/settings`}>
+            <img className="settingsLogo"
+                 src={this.state.userImage}
+                 alt="userIcon"/>
           </NavLink>
+          :
+          <NavLink style={{textDecoration: 'none'}} to={`/settings`}>
+            <img className="settingsLogo"
+                 src={defaultUser}
+                 alt="userIcon"/>
+          </NavLink>
+        }
+
         </div>
       )
     }
