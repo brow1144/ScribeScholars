@@ -19,6 +19,14 @@ class Side extends Component {
     });
   }
 
+  /**
+   *
+   * Method called when component is about to load
+   *
+   * 1. Calls firestore and attempts to get userImageURL
+   *    for the image in the side bar.
+   *
+   */
   componentWillMount() {
     // Add Firebase Code to get image.
     let docRef = firestore.collection("users").doc(this.state.uid);

@@ -41,7 +41,7 @@ class SetPersonal extends Component {
             });
     };
 
-    onFormSubmit = (ev) => {
+  onFormSubmit = (ev) => {
         ev.preventDefault();
         let self = this;
         let user = firestore.collection("users").doc(this.state.uid);
@@ -63,7 +63,20 @@ class SetPersonal extends Component {
         window.location.reload();
     };
 
-    handlePicture = (ev) => {
+
+  /**
+   *
+   * Method to handle retrieving users file -> uploading it to
+   * firebase storage -> save it in firestore database.
+   *
+   * 1. Prevent default handling of files because
+   *    I need to save files to firebase after selection
+   * 2. Save File to firebase under user ID
+   * 3. Save imageURL to users database.
+   *
+   * @param ev Event to retreive the file picker
+   */
+  handlePicture = (ev) => {
       ev.preventDefault();
       let self = this;
       let reader = new FileReader();
@@ -82,7 +95,7 @@ class SetPersonal extends Component {
       userImageRef.put(file).then(function(snapshot) {
         imageUrl = snapshot.metadata.downloadURLs[0];
         console.log('Uploaded a blob or file!');
-      }).then(function(ev) {
+      }).then(() => {
 
         let user = firestore.collection("users").doc(self.state.uid);
 
