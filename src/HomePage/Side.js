@@ -2,14 +2,48 @@ import React, { Component } from 'react'
 
 import { NavLink } from 'react-router-dom'
 
+import { firestore } from "../base";
+
 import logo from '../logo.svg';
+import defaultUser from './defUser.png'
 
 import './Side.css'
 
-class Sidebar extends Component {
+class Side extends Component {
   constructor(props) {
     super(props);
 
+    this.state = ({
+      uid: props.uid,
+      userImage: null,
+    });
+  }
+
+  /**
+   *
+   * Method called when component is about to load
+   *
+   * 1. Calls firestore and attempts to get userImageURL
+   *    for the image in the side bar.
+   *
+   */
+  componentWillMount() {
+    // Add Firebase Code to get image.
+    let docRef = firestore.collection("users").doc(this.state.uid);
+    let self = this;
+
+    docRef.get().then(function(doc) {
+      if (doc.exists) {
+        self.setState({
+          userImage: doc.data().userImage,
+        });
+
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function(error) {
+      console.log("Error getting document:", error);
+    })
   }
 
   render() {
@@ -20,20 +54,31 @@ class Sidebar extends Component {
         </NavLink>
 
         {Object.keys(this.props.classes).map((key, index) => {
-          return <NavLink key={key} style={{textDecoration: 'none'}} to={`/HomePage/${this.props.classes[index].class}`}>
+          return <NavLink key={key} style={{textDecoration: 'none'}}
+                          to={`/HomePage/${this.props.classes[index].class}`}>
             <p className="classSide">{this.props.classes[index].class}</p>
           </NavLink>
         })}
 
-        <NavLink style={{textDecoration: 'none'}} to={`/settings`}>
-          <img className="settingsLogo"
-               src={"https://firebasestorage.googleapis.com/v0/b/scribescholars-ad86f.appspot.com/o/userImage.jpg?alt=media&token=c3319c17-22b0-46de-9fcc-ca7bde927d9d"}
-               alt="userIcon"/>
-        </NavLink>
+        {this.state.userImage
+          ?
+          <NavLink style={{textDecoration: 'none'}} to={`/settings`}>
+            <img className="settingsLogo"
+                 src={this.state.userImage}
+                 alt="userIcon"/>
+          </NavLink>
+          :
+          <NavLink style={{textDecoration: 'none'}} to={`/settings`}>
+            <img className="settingsLogo"
+                 src={defaultUser}
+                 alt="userIcon"/>
+          </NavLink>
+        }
 
-      </div>
-    )
+        </div>
+      )
+    }
   }
-};
 
-export default Sidebar
+
+export default Side

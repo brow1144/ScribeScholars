@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Button, Container, Row, Col, Form, FormGroup, Label, Input, FormText, Modal, ModalHeader, ModalFooter, ModalBody} from 'reactstrap';
 
-import {firestore} from "../base";
+import { firestore , storageRef } from "../base";
 import firebase from '../base.js';
 
 import './SetPersonal.css';
@@ -41,7 +41,7 @@ class SetPersonal extends Component {
             });
     };
 
-    onFormSubmit = (ev) => {
+  onFormSubmit = (ev) => {
         ev.preventDefault();
         let self = this;
         let user = firestore.collection("users").doc(this.state.uid);
@@ -63,10 +63,49 @@ class SetPersonal extends Component {
         window.location.reload();
     };
 
-    handlePicture = (ev) => {
-        ev.preventDefault();
 
-        console.log(ev.target);
+  /**
+   *
+   * Method to handle retrieving users file -> uploading it to
+   * firebase storage -> save it in firestore database.
+   *
+   * 1. Prevent default handling of files because
+   *    I need to save files to firebase after selection
+   * 2. Save File to firebase under user ID
+   * 3. Save imageURL to users database.
+   *
+   * @param ev Event to retreive the file picker
+   */
+  handlePicture = (ev) => {
+      ev.preventDefault();
+      let self = this;
+      let reader = new FileReader();
+
+      let file = ev.target.files[0];
+
+      reader.onloadend = () => {
+        self.setState({
+          file: file,
+        });
+      };
+
+      let imageUrl = null;
+      let userImageRef = storageRef.ref().child(`${this.state.uid}`);
+
+      userImageRef.put(file).then(function(snapshot) {
+        imageUrl = snapshot.metadata.downloadURLs[0];
+        console.log('Uploaded a blob or file!');
+      }).then(() => {
+
+        let user = firestore.collection("users").doc(self.state.uid);
+
+        user.update({
+          'userImage': imageUrl,
+        }).then(function() {
+          console.log("Document Updated.")
+        });
+
+      })
     };
 
 
@@ -104,10 +143,10 @@ class SetPersonal extends Component {
                                     <Input bsSize="lg" type="textarea" name="descriptText" id="exampleText" defaultValue={this.state.descript} />
                                 </Col>
                             </FormGroup>
-                            <FormGroup onClick={this.handlePicture} row>
+                            <FormGroup row>
                                 <Label size="lg" for="exampleFile" sm={2}>Profile Picture:</Label>
                                 <Col sm={10}>
-                                    <Input bsSize="lg" type="file" name="file" id="exampleFile" />
+                                    <Input onChange={this.handlePicture} bsSize="lg" type="file" name="file" id="exampleFile" />
                                     <FormText size="lg" color="muted">
                                         Please only upload an image for your picture.
                                     </FormText>

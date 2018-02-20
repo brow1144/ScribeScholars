@@ -264,7 +264,7 @@ class HomePage extends Component {
   render() {
 
 
-    let sidebarContent = <Side classes={this.state.classes} />;
+    let sidebarContent = <Side uid={this.state.uid} classes={this.state.classes} />;
 
     const sidebarStyles = {
       sidebar: {
@@ -306,7 +306,7 @@ class HomePage extends Component {
             <Col md="3"/>
           </Row>
 
-          <hr />
+          <hr className="divider" />
           <b className="annTest">Announcements</b>
 
             <div className="announcementsDiv">
@@ -326,7 +326,7 @@ class HomePage extends Component {
 
           <HomeNav expand={this.dockSideBar} width={this.state.width}/>
 
-          <hr />
+          <hr className="divider" />
           <b>Announcements</b>
 
           <div className="announcementsDiv">
