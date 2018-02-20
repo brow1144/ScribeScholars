@@ -4,24 +4,34 @@ import { Row, Col } from 'reactstrap';
 import AboutBar from './AboutBar';
 
 import logo from './Pictures/logo.svg';
+import intro from './Pictures/paperWood.jpg';
 import student from './Pictures/Students.jpg';
+import teacher from './Pictures/Teachers.jpeg';
+import admin from "./Pictures/Admin.jpeg"
+import parent from "./Pictures/Parents.jpeg"
+
 import './AboutPage.css';
 
 class AboutPage extends Component {
     render() {
         return (
             <div>
-                <div>
+                <div className="page-wrapper">
                     <div className={"page-section"}>
-                        <Row className="bar">
-                            <AboutBar/>
+                        <div className={"titlePic"}>
+                            <img src={intro} alt=""/>
+                        </div>
+                        <Row className={"bar"}>
+                            <Col className={"bar"}>
+                                <AboutBar/>
+                            </Col>
                         </Row>
-                        <Row className="row title">
+                        <Row className="title">
                             <Col className="about">
                                 <p>About Scribe Scholars</p>
                             </Col>
                         </Row>
-                        <Row className="row scribe">
+                        <Row className="scribe">
                             <Col className="colA text scribe">
                                 <h1>Scribe Scholars' Mission</h1>
                                 <p>We are dedicated to making a better in-class experience for teachers and students.</p>
@@ -29,9 +39,12 @@ class AboutPage extends Component {
                                 that make Scribe Scholars the premier learning experience</p>
                             </Col>
                         </Row>
-                        <Row className="row stu">
+                        <Row className="stu">
                             <a name="headline1"></a>
-                            <Col className="colA student stu">
+                            <Col className="colA stu">
+                                <div >
+                                    <img src={student} className="student"/>
+                                </div>
                             </Col>
                             <Col lg="6" className="colA text stu" >
                                 <h1 className="">Students</h1>
@@ -41,7 +54,7 @@ class AboutPage extends Component {
 
                             </Col>
                         </Row>
-                        <Row className="row teach">
+                        <Row className="teach">
                             <a name="headline2"></a>
                             <Col className="colA text teach">
                                 <h1>Teachers</h1>
@@ -49,12 +62,16 @@ class AboutPage extends Component {
                                 engaged and interested in learning.  Grades are simple to update to allow students to track their progress.  Teachers can
                                 monitor class progress and identify where the class can most improve.</p>
                             </Col>
-                           <Col className="colA teacher">
+                           <Col className="colA teach">
+                               <div>
+                                   <img src={teacher} className={"student"}/>
+                               </div>
                            </Col>
                         </Row>
-                        <Row className="row admin">
+                        <Row className="admin">
                             <a name="headline3"></a>
-                            <Col className="colA administrator">
+                            <Col className="colA admin">
+                                <img src={admin} className={"administrator"}/>
                             </Col>
                             <Col className="colA text admin">
                                 <h1>Administrators</h1>

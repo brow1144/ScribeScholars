@@ -8,26 +8,10 @@ import logo from '../logo.svg';
 
 class AboutBar extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.toggle = this.toggle.bind(this);
-        this.state = {
-            activeTab: '1'
-        };
-    }
-
-    toggle(tab) {
-        if (this.state.activeTab !== tab) {
-            this.setState({
-                activeTab: tab
-            });
-        }
-    }
     render() {
         return (
             <div className={"container"}>
-                <Nav tabs>
+                <Nav>
                     <NavItem>
                         <NavLink className="link" href="#headline1" ><h2>Students</h2></NavLink>
                     </NavItem>

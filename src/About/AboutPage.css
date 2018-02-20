@@ -10,7 +10,12 @@ p {
 }
 
 .bar {
-    height: 5em;
+    height: 4em;
+    background-color: black;
+}
+
+.page-wrapper {
+
 }
 
 .page-section {
@@ -18,23 +23,25 @@ p {
     align-content: center;
     display: grid;
     font-family: "Times New Roman";
-
+    min-width: 40%;
+    min-height: 40%;
 }
-
 
 .colA {
     //border: solid 2px green;
     align-content: center;
+    height: 60vh;
 }
 
-.text {
-    padding-top: 6em;
+.rowA {
+
+}
+
+.title {
+    height: 100vh;
 }
 
 .about {
-    background-image: url("./Pictures/paperWood.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
     height: 100vh;
 }
 
@@ -45,32 +52,49 @@ p {
     font-family: "Baskerville Old Face";
 }
 
+/*Background picture*/
+.titlePic {
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+}
+
+.titlePic img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    min-width: 50%;
+    min-height: 50%;
+}
+
+
+.text {
+    padding-top: 6em;
+}
+
+/*Pictures adjusted here*/
 .student {
-    background-image: url("./Pictures/Students.jpg");
-    background-repeat: no-repeat;
-    background-size: contain;
     align-content: center;
-    overflow: hidden;
+    width: 60%;
+    height: auto;
 }
 
 .teacher {
-    background-image: url("./Pictures/Teachers.jpeg");
-    background-repeat: no-repeat;
-    background-size: contain;
+
     align-content: center;
-    overflow: hidden;
+    //overflow: hidden;
 }
 
 .administrator {
-    background-image: url("./Pictures/Admin.jpeg");
-    background-repeat: no-repeat;
-    background-size: contain;
+    width: 60%;
+    height: auto;
     align-content: center;
-    overflow: hidden;
-}
-
-.title {
-    height: 100vh;
+    //overflow: hidden;
 }
 
 .scribe {
@@ -78,9 +102,10 @@ p {
     background-color: #ecf7fb;
 }
 
+/*Background colors*/
 .stu {
     background-color: #c9e8f4;
-    height: 40vh;
+
 }
 
 .stu p {
@@ -88,11 +113,11 @@ p {
 }
 
 .teach {
-    height: 40vh;
+
     background-color: #ecf7fb;
 }
 
 .admin {
-    height: 40vh;
+
     background-color: #c9e8f4;
 }
