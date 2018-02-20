@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Button, Container, Row, Col, Form, FormGroup, Label, Input, FormText, Modal, ModalHeader, ModalFooter, ModalBody} from 'reactstrap';
 
-import {firestore} from "../base";
+import { firestore , storageRef } from "../base";
 import firebase from '../base.js';
 
 import './SetPersonal.css';
@@ -64,9 +64,35 @@ class SetPersonal extends Component {
     };
 
     handlePicture = (ev) => {
-        ev.preventDefault();
+      ev.preventDefault();
+      let self = this;
+      let reader = new FileReader();
 
-        console.log(ev.target);
+      let file = ev.target.files[0];
+
+      reader.onloadend = () => {
+        self.setState({
+          file: file,
+        });
+      };
+
+      let imageUrl = null;
+      let userImageRef = storageRef.ref().child(`${this.state.uid}`);
+
+      userImageRef.put(file).then(function(snapshot) {
+        imageUrl = snapshot.metadata.downloadURLs[0];
+        console.log('Uploaded a blob or file!');
+      }.then(function(ev) {
+
+        let user = firestore.collection("users").doc(self.state.uid);
+
+        user.update({
+          'userImage': imageUrl,
+        }).then(function() {
+          console.log("Document Updated.")
+        });
+
+      });
     };
 
 
@@ -104,10 +130,10 @@ class SetPersonal extends Component {
                                     <Input bsSize="lg" type="textarea" name="descriptText" id="exampleText" defaultValue={this.state.descript} />
                                 </Col>
                             </FormGroup>
-                            <FormGroup onClick={this.handlePicture} row>
+                            <FormGroup row>
                                 <Label size="lg" for="exampleFile" sm={2}>Profile Picture:</Label>
                                 <Col sm={10}>
-                                    <Input bsSize="lg" type="file" name="file" id="exampleFile" />
+                                    <Input onChange={this.handlePicture} bsSize="lg" type="file" name="file" id="exampleFile" />
                                     <FormText size="lg" color="muted">
                                         Please only upload an image for your picture.
                                     </FormText>

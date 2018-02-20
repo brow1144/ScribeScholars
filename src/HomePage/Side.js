@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 
 import { NavLink } from 'react-router-dom'
 
+import { firestore } from "../base";
+
 import logo from '../logo.svg';
 
 import './Side.css'
@@ -12,11 +14,27 @@ class Side extends Component {
 
     this.state = ({
       uid: props.uid,
+      userImage: null,
     });
   }
 
   componentWillMount() {
     // Add Firebase Code to get image.
+    let docRef = firestore.collection("users").doc(this.state.uid);
+    let self = this;
+
+    docRef.get().then(function(doc) {
+      if (doc.exists) {
+        self.setState({
+          userImage: doc.data().userImage,
+        });
+
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function(error) {
+      console.log("Error getting document:", error);
+    })
   }
 
   render() {
@@ -35,7 +53,7 @@ class Side extends Component {
 
         <NavLink style={{textDecoration: 'none'}} to={`/settings`}>
           <img className="settingsLogo"
-               src={"https://firebasestorage.googleapis.com/v0/b/scribescholars-ad86f.appspot.com/o/userImage.jpg?alt=media&token=c3319c17-22b0-46de-9fcc-ca7bde927d9d"}
+               src={this.state.userImage}
                alt="userIcon"/>
           </NavLink>
         </div>

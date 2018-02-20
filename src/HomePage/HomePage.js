@@ -306,7 +306,7 @@ class HomePage extends Component {
             <Col md="3"/>
           </Row>
 
-          <hr />
+          <hr className="divider" />
           <b className="annTest">Announcements</b>
 
             <div className="announcementsDiv">
@@ -326,7 +326,7 @@ class HomePage extends Component {
 
           <HomeNav expand={this.dockSideBar} width={this.state.width}/>
 
-          <hr />
+          <hr className="divider" />
           <b>Announcements</b>
 
           <div className="announcementsDiv">
