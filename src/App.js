@@ -89,12 +89,6 @@ class App extends Component {
             : <Redirect to="/sign-in" />
         )} />
 
-        <Route path='/settings/personal' render={() => (
-          this.signedIn()
-            ? <SetPersonal uid={this.state.uid} />
-            : <Redirect to="/sign-in" />
-        )} />
-
         <Route exact path='/reset-password' render={() => (
           <ResetPassword />
           )} />
