@@ -43,6 +43,9 @@ class HomePage extends Component {
     this.state = {
       uid: props.uid,
 
+      firstName: null,
+      lastName: null,
+
       classes: [{
         class: null,
         teacher: null,
@@ -122,12 +125,17 @@ class HomePage extends Component {
 
     docRef.get().then(function(doc) {
       if (doc.exists) {
-        if (doc.data().classes != null) {
+        if (doc.data().classes !== null) {
           self.setState({
             classes: doc.data().classes,
           });
-
           self.getDeadlines();
+        }
+        if (doc.data().firstName !== null && doc.data().lastName) {
+          self.setState({
+            firstName: doc.data().firstName,
+            lastName: doc.data().lastName,
+          });
         }
       } else {
         console.log("No such document!");
@@ -296,7 +304,7 @@ class HomePage extends Component {
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
 
-          <HomeNav expand={this.dockSideBar} width={this.state.width}/>
+          <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} expand={this.dockSideBar} width={this.state.width}/>
           <Row>
 
             <Col md="1"/>
@@ -329,7 +337,7 @@ class HomePage extends Component {
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
 
-          <HomeNav expand={this.dockSideBar} width={this.state.width}/>
+          <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} expand={this.dockSideBar} width={this.state.width}/>
 
           <hr className="divider" />
           <b>Announcements</b>
