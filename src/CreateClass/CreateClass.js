@@ -16,7 +16,7 @@ class CreateClass extends Component {
     this.state = {
       uid: props.uid,
       code: '',
-      password: '',
+      className: '',
       codeValid: false,
       passwordValid: false,
       formValid: false,
@@ -66,7 +66,7 @@ class CreateClass extends Component {
   };
 
   handleInput = (e) => {
-    const name = e.target.name;
+    const className = e.target.name;
     const value = e.target.value;
     this.setState({[name]: value},
       () => {this.validateField(name, value)});
@@ -142,7 +142,7 @@ class CreateClass extends Component {
             <img src={logo} alt="" width="100" height="100"/>
             <h3 className = "h3 font-weight-normal">Create New Class</h3>
             <div className="form-group">
-              <Input name="code" type="text" placeholder="Enter 6 digit class code"
+              <Input name="className" type="text" placeholder="Enter class name"
                 value={this.state.code}
                 onChange={this.handleInput}
               />
