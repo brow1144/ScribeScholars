@@ -9,33 +9,22 @@ p {
     font-size: large;
 }
 
-.bar {
-    height: 5em;
-    position: sticky;
-}
-
 .page-section {
     text-align: center;
     align-content: center;
-    display: grid;
     font-family: "Times New Roman";
-    overflow: hidden;
 }
 
-
-.colA {
-    //border: solid 2px green;
-    align-content: center;
+.bar {
+    background-color: black;
 }
 
-.text {
-    padding-top: 6em;
+.title {
+    height: 100vh;
 }
 
 .about {
-    background-image: url("./Pictures/paperWood.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
+    //position: absolute;
     height: 100vh;
 }
 
@@ -46,54 +35,46 @@ p {
     font-family: "Baskerville Old Face";
 }
 
-.student {
-    background-image: url("./Pictures/Students.jpg");
-    background-repeat: no-repeat;
-    background-size: contain;
-    align-content: center;
-    overflow: hidden;
+/*Background picture*/
+.titlePic {
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
 }
 
-.teacher {
-    background-image: url("./Pictures/Teachers.jpeg");
-    background-repeat: no-repeat;
-    background-size: contain;
-    align-content: center;
-    overflow: hidden;
+.titlePic img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    min-width: 50%;
+    min-height: 50%;
 }
 
-.administrator {
-    background-image: url("./Pictures/Admin.jpeg");
-    background-repeat: no-repeat;
-    background-size: contain;
-    align-content: center;
-    overflow: hidden;
+/*Set padding for text columns*/
+.text {
+    padding: 5rem;;
 }
 
-.title {
-    height: 100vh;
+/*Pictures adjusted here*/
+.picture {
+    width: 100%;
+    height: auto;
 }
 
-.scribe {
-    height: 40vh;
+/*Background colors*/
+.bgOne {
     background-color: #ecf7fb;
 }
 
-.stu {
+.bgTwo {
     background-color: #c9e8f4;
-    height: 40vh;
 }
 
-.stu p {
-    text-align: center;
-}
-
-.teach {
-    height: 40vh;
-    background-color: #ecf7fb;
-}
-
-.admin {
-    height: 40vh;
-    background-color: #c9e8f4;
+.contact {
+    width: 100%;
 }
