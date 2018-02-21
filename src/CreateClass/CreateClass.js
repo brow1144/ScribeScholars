@@ -52,7 +52,7 @@ class CreateClass extends Component {
         self.generateCode();
       } else {
         docRef.set({
-          name: className,
+          name: this.className,
           teacher: this.uid
         }).then(function() {
           console.log("successfully written!");
@@ -68,8 +68,8 @@ class CreateClass extends Component {
   handleInput = (e) => {
     const className = e.target.name;
     const value = e.target.value;
-    this.setState({[name]: value},
-      () => {this.validateField(name, value)});
+    this.setState({[className]: value},
+      () => {this.validateField(className, value)});
   };
 
   validateField(fieldName){
