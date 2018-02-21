@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Jumbotron, Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
+import {   Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
 
 
 import logo from '../logo.svg';
