@@ -103,46 +103,44 @@ export default class CreateAnn extends React.Component {
                     :
                     <br/>
                 }
-                {/*
-                <SetPersonal/>
-*/}
+
             <div>
-                <div className={"container"}>
-                    <div className={"about"}>
-                        <Row className={"row"}>
-                            <Col className={"col"}>
+                <div className={"headerPic"}>
+                    <div className={"annouce"}>
+                        <Row className={"rowt"}>
+                            <Col className={"colt"}>
                                 <img className="logo" alt="logo" src={logo}/>
                             </Col>
                         </Row>
-                        <Row className={"row"}>
-                            <Col className={"col"}>
+                        <Row className={"rowt"}>
                                 <p className={"title"}>Make an Announcement</p>
-                            </Col>
+                        </Row>
+                        <Row>
+
                         </Row>
                     </div>
                 </div>
 
-
-                <Alert color="success" isOpen={this.state.visible} toggle={this.onDismiss}>
-                    {this.state.errorCode} Note that not all fields are required, but recommended.
-                </Alert>
-
-
                 <div>
+                    <Alert color="success" isOpen={this.state.visible} toggle={this.onDismiss}>
+                        {this.state.errorCode} Note that not all fields are required, but recommended.
+                    </Alert>
+                </div>
+
+
                     <Form className={"form"}>
 
                         <FormGroup row className={"formpad"}>
-                            <Label className={"labelSize"}for="exampleText" sm={2}>Announcement Title</Label>
+                            <Label className={"labelSize"} for="exampleText" sm={2}>Announcement Title</Label>
                             <Col sm={10}>
                                 <Input type="textarea" name="text" id="exampleText" />
                             </Col>
                         </FormGroup>
 
 
-                        <FormGroup tag="fieldset" row className={"formpad"}>
-                            <legend className={"labelSize"} className="col-form-label col-sm-2">Announcement Type</legend>
-                            <Col sm={10}>
-                                <FormGroup check>
+                        <FormGroup className={"formpad"}>
+                            <legend className={"labelSize"}>Announcement Type</legend>
+                                <FormGroup check className={"formpad"}>
                                     <Label check>
                                         <Input type="radio" name="radio2" />{' '}
                                         Homework
@@ -169,8 +167,6 @@ export default class CreateAnn extends React.Component {
                                         Miscellaneous
                                     </Label>
                                 </FormGroup>
-
-                            </Col>
                         </FormGroup>
 
                         <FormGroup row className={"formpad"}>
@@ -198,7 +194,7 @@ export default class CreateAnn extends React.Component {
                         </FormGroup>
                     </Form>
                 </div>
-            </div>
+
             </Sidebar>
         );
     }

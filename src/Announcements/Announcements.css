@@ -1,6 +1,9 @@
-h1 {
+.rileyP {
     text-align: center;
     padding-bottom: 20px;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: bolder;
 }
 
 .container {
@@ -9,9 +12,8 @@ h1 {
 }
 
 .rowt {
-
-//border: solid 1px lawngreen;
     \\border: solid 1px lawngreen;
+    \\padding: 10px;
 
     font-family: "Times New Roman";
     font-weight: bold;
@@ -19,7 +21,7 @@ h1 {
 
 .colt {
 
-//border: solid 1px red;
+    \\border: solid 1px red;
 }
 
 .intro {
@@ -35,8 +37,14 @@ h1 {
 .title {
     text-align: center;
     font-size: 60px;
-    font-weight: bold;
+
     font-style: italic;
+
+
+    padding-bottom: 20px;
+
+
+    font-weight: bolder;
 }
 
 .beSure {
@@ -61,11 +69,11 @@ h1 {
 }
 
 .announce {
-    \\border: solid 3px #21CE99;
-    \\background-image: url('pics/whiteboard.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
+    \\background-image: url('../About/Pictures/paperWood.jpg');
+    \\background-size: cover;
+    \\background-repeat: no-repeat;
     width: 100%;
+    height: 100%;
 
 }
 

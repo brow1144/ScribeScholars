@@ -23,7 +23,7 @@ const SettingsSide = () => {
             </NavLink>
 
 
-            <NavLink style={{ textDecoration: 'none' }} to={`/settings/classroom`}>
+            <NavLink style={{ textDecoration: 'none' }} to={`/setRoomPicture`}>
                 <p className="classOne" >Set Classroom Picture</p>
             </NavLink>
 

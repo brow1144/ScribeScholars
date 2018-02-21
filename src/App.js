@@ -11,10 +11,12 @@ import About from './About/AboutPage';
 import CreateAccount from './CreateAccount/CreateAccount';
 import CreateClass from './CreateClass/CreateClass';
 import ClassInformation from './CreateClass/ClassInformation';
-
-import './App.css';
 import Announcements from "./Announcements/Announcements";
 import CreateAnn from "./Announcements/CreateAnn";
+import SetRoomPicture from "./Announcements/SetRoomPicture";
+
+import './App.css';
+
 
 class App extends Component {
 
@@ -85,6 +87,10 @@ class App extends Component {
 
           <Route path='/CreateAnnouncements' render={() => (
               <CreateAnn/>
+          )} />
+          /setRoomPicture
+          <Route path='/setRoomPicture' render={() => (
+              <SetRoomPicture/>
           )} />
 
         <Route exact path='/create-account' render={() => (
