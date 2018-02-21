@@ -16,25 +16,21 @@ class AboutPage extends Component {
         return (
             <div>
                 <Container className={"page-section"}>
-
                     <Row>
                         <div className={"titlePic"}>
                             <img src={intro} alt=""/>
                         </div>
                     </Row>
-
-                    <Row className={"bar"}>
-                        <Col className={"bar"}>
+                    <Row>
+                        <Col>
                             <AboutBar/>
                         </Col>
                     </Row>
-
                     <Row>
                         <Col className="about">
                             <p className={"about"}>About Scribe Scholars</p>
                         </Col>
                     </Row>
-
                     <Row className="bgOne">
                         <Col xs={12} className="text bgOne">
                             <h1 className={"sectionTitle"}>Scribe Scholars' Mission</h1>
@@ -67,7 +63,7 @@ class AboutPage extends Component {
                     </Row>
                     <Row className="bgTwo">
                         <Col xs={12} lg={6} className="bgTwo">
-                            <a name="headline2"><img src={admin} className={"picture"} alt={""}/></a>
+                            <a name="headline3"><img src={admin} className={"picture"} alt={""}/></a>
                         </Col>
                         <Col xs={12} lg={6} className="text bgTwo">
                             <h1 className={"sectionTitle"}>Administrators</h1>
@@ -87,7 +83,7 @@ class AboutPage extends Component {
                     <Row className="bgTwo">
                         <Col xs={12} className={"contact bgTwo text"}>
                             <a name="headline5"><h1 className={"sectionTitle"}>Contact Us</h1></a>
-                            <p className="para">Message the scribe scholars team at scribescholars@gmail.com</p>
+                            <p className="para">For any questions or concerns message the Scribe Scholars team at scribescholars@gmail.com</p>
                         </Col>
                     </Row>
                 </Container>
