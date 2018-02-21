@@ -1,5 +1,5 @@
 import React from 'react'
-
+import {Badge} from 'reactstrap';
 import { NavLink } from 'react-router-dom'
 
 
@@ -15,7 +15,7 @@ const SettingsSide = () => {
             </NavLink>
 
             <NavLink style={{ textDecoration: 'none' }} to={`/Announcements`}>
-                <p className="classOne" >Announcements</p>
+                <p className="classOne" >Announcements<Badge color='secondary'>100</Badge></p>
             </NavLink>
 
             <NavLink style={{ textDecoration: 'none' }} to={`/createAnnouncements`}>
