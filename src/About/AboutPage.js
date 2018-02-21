@@ -80,6 +80,8 @@ class AboutPage extends Component {
                             <img src={parent} className={"picture"} alt={""}/>
                         </Col>
                     </Row>
+                </Container>
+                <Container fluid className="page-section">
                     <Row className="bgTwo">
                         <Col xs={12} className={"contact bgTwo text"}>
                             <a name="Contact-Us"><h1 className={"sectionTitle"}>Contact Us</h1></a>
