@@ -39,7 +39,7 @@ class AboutPage extends Component {
                     </Row>
                     <Row className="bgTwo">
                         <Col xs={12} lg={6} className="bgTwo">
-                            <a name="headline1"><img src={student} className="picture" alt=""/></a>
+                            <a name="Students"><img src={student} className="picture" alt=""/></a>
                         </Col>
                         <Col xs={12} lg={6} className="text bgTwo">
                             <h1 className={"sectionTitle"}>Students</h1>
@@ -52,7 +52,7 @@ class AboutPage extends Component {
                     <Row className="bgOne">
 
                         <Col xs={12} lg={6} className="text bgOne">
-                            <a name="headline2"><h1 className={"sectionTitle"}>Teachers</h1></a>
+                            <a name="Teachers"><h1 className={"sectionTitle"}>Teachers</h1></a>
                             <p className="para">There are a wide variety of features available to teachers for use in the class room.  In-class activities keep students
                                 engaged and interested in learning.  Grades are simple to update to allow students to track their progress.  Teachers can
                                 monitor class progress and identify where the class can most improve.</p>
@@ -63,7 +63,7 @@ class AboutPage extends Component {
                     </Row>
                     <Row className="bgTwo">
                         <Col xs={12} lg={6} className="bgTwo">
-                            <a name="headline3"><img src={admin} className={"picture"} alt={""}/></a>
+                            <a name="Administrators"><img src={admin} className={"picture"} alt={""}/></a>
                         </Col>
                         <Col xs={12} lg={6} className="text bgTwo">
                             <h1 className={"sectionTitle"}>Administrators</h1>
@@ -73,7 +73,7 @@ class AboutPage extends Component {
                     </Row>
                     <Row className="bgOne">
                         <Col xs={12} lg={6} className="text bgOne">
-                            <a name="headline4"><h1 className={"sectionTitle"}>Parents</h1></a>
+                            <a name="Parents"><h1 className={"sectionTitle"}>Parents</h1></a>
                             <p className="para">Add parents stuff here</p>
                         </Col>
                         <Col xs={12} lg={6} className="bgOne">
@@ -82,7 +82,7 @@ class AboutPage extends Component {
                     </Row>
                     <Row className="bgTwo">
                         <Col xs={12} className={"contact bgTwo text"}>
-                            <a name="headline5"><h1 className={"sectionTitle"}>Contact Us</h1></a>
+                            <a name="Contact-Us"><h1 className={"sectionTitle"}>Contact Us</h1></a>
                             <p className="para">For any questions or concerns message the Scribe Scholars team at scribescholars@gmail.com</p>
                         </Col>
                     </Row>
