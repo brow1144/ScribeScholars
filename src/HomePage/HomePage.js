@@ -58,6 +58,12 @@ class HomePage extends Component {
         end: null,
       }],
 
+      announcements: [{
+        title: null,
+        subtitle: null,
+        message: null,
+      }],
+
       width: window.innerWidth,
 
       mql: mql,
@@ -131,6 +137,7 @@ class HomePage extends Component {
             classes: doc.data().classes,
           });
           self.getDeadlines();
+          self.getAnnouncements();
         }
         if (doc.data().firstName !== null && doc.data().lastName) {
           self.setState({
@@ -191,34 +198,6 @@ class HomePage extends Component {
       }).catch(function (error) {
         console.log("Error getting document:", error);
       });
-
-
-      // let docRef = firestore.collection("users").doc(self.state.classes[j].teacher);
-      // let dateRef = docRef.collection(self.state.classes[j].class).doc("deadlines");
-      //
-      //
-      // dateRef.get().then(function (doc) {
-      //   if (doc.exists) {
-      //     let data = doc.data();
-      //     for (let i in data.array) {
-      //       if (data.array.hasOwnProperty(i)) {
-      //         object.unshift({
-      //           title: data.array[i].title,
-      //           start: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
-      //           end: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
-      //         });
-      //         self.setState({
-      //           dates: object,
-      //         })
-      //       }
-      //     }
-      //
-      //   } else {
-      //     console.log("No such document!");
-      //   }
-      // }).catch(function (error) {
-      //   console.log("Error getting document:", error);
-      // });
     }
     object.pop();
 
@@ -226,6 +205,47 @@ class HomePage extends Component {
       dates: object
     });
   };
+
+  getAnnouncements = () => {
+
+    let object = [{}];
+
+    let self = this;
+
+    for(let j in self.state.classes) {
+
+      let docRef = firestore.collection("classes").doc(self.state.classes[j].code);
+
+      docRef.get().then(function (doc) {
+        if (doc.exists) {
+          let data = doc.data();
+          for (let i in data.Announcements) {
+            if (data.Announcements.hasOwnProperty(i)) {
+              object.unshift({
+                title: data.Announcements[i].title,
+                subtitle: data.Announcements[i].subtitle,
+                message: data.Announcements[i].message,
+              });
+              self.setState({
+                announcements: object,
+              })
+            }
+          }
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(function (error) {
+        console.log("Error getting document:", error);
+      });
+    }
+    object.pop();
+
+    self.setState({
+      announcements: object
+    });
+
+  };
+
 
   /**
    *
@@ -349,7 +369,7 @@ class HomePage extends Component {
           <b className="annTest">Announcements</b>
 
             <div className="announcementsDiv">
-              <Cards />
+              <Cards announcements={this.state.announcements}/>
             </div>
 
         </Sidebar>
@@ -369,7 +389,7 @@ class HomePage extends Component {
           <b>Announcements</b>
 
           <div className="announcementsDiv">
-            <Cards />
+            <Cards announcements={this.state.announcements}/>
           </div>
 
         </Sidebar>
