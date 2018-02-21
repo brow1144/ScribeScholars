@@ -10,7 +10,6 @@ import Settings from './Settings/Settings';
 import About from './About/AboutPage';
 import CreateAccount from './CreateAccount/CreateAccount';
 
-import ResetPassword from './CreateAccount/ResetPassword';
 import CreateClass from './CreateClass/CreateClass';
 import ClassInformation from './CreateClass/ClassInformation';
 
@@ -111,10 +110,6 @@ class App extends Component {
             ? <Settings uid={this.state.uid}/>
             : <Redirect to="/sign-in" />
         )} />
-
-        <Route exact path='/reset-password' render={() => (
-          <ResetPassword />
-          )} />
 
         <Route render={() => <Redirect to="/HomePage" />} />
 
