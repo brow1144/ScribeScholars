@@ -19,6 +19,7 @@ class SetClassroom extends Component {
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
                     <Col xs={"12"}>
+
                         <Form>
                             <FormGroup row>
                                 <Label size={"lg"} for="exampleSelectMulti" sm={2}>Enrolled Courses:</Label>
