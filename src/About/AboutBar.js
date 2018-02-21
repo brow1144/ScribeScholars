@@ -27,6 +27,9 @@ class AboutBar extends Component {
                     <NavItem>
                         <NavLink className="link" href="#headline5" ><h2>Contact Us</h2></NavLink>
                     </NavItem>
+                    <NavItem>
+                        <NavLink className="link" href="#" ><h2>Sign in</h2></NavLink>
+                    </NavItem>
                 </Nav>
             </div>
                 /*

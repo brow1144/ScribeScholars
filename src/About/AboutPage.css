@@ -9,32 +9,14 @@ p {
     font-size: large;
 }
 
-.bar {
-    height: 4em;
-    background-color: black;
-}
-
-.page-wrapper {
-
-}
-
 .page-section {
     text-align: center;
     align-content: center;
-    display: grid;
     font-family: "Times New Roman";
-    min-width: 40%;
-    min-height: 40%;
 }
 
-.colA {
-    //border: solid 2px green;
-    align-content: center;
-    height: 60vh;
-}
-
-.rowA {
-
+.bar {
+    background-color: black;
 }
 
 .title {
@@ -42,6 +24,7 @@ p {
 }
 
 .about {
+    //position: absolute;
     height: 100vh;
 }
 
@@ -72,52 +55,26 @@ p {
     min-height: 50%;
 }
 
-
+/*Set padding for text columns*/
 .text {
-    padding-top: 6em;
+    padding: 5rem;;
 }
 
 /*Pictures adjusted here*/
-.student {
-    align-content: center;
-    width: 60%;
+.picture {
+    width: 100%;
     height: auto;
-}
-
-.teacher {
-
-    align-content: center;
-    //overflow: hidden;
-}
-
-.administrator {
-    width: 60%;
-    height: auto;
-    align-content: center;
-    //overflow: hidden;
-}
-
-.scribe {
-    height: 40vh;
-    background-color: #ecf7fb;
 }
 
 /*Background colors*/
-.stu {
-    background-color: #c9e8f4;
-
-}
-
-.stu p {
-    text-align: center;
-}
-
-.teach {
-
+.bgOne {
     background-color: #ecf7fb;
 }
 
-.admin {
-
+.bgTwo {
     background-color: #c9e8f4;
+}
+
+.contact {
+    width: 100%;
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 
 import AboutBar from './AboutBar';
 
@@ -16,71 +16,87 @@ class AboutPage extends Component {
     render() {
         return (
             <div>
-                <div className="page-wrapper">
-                    <div className={"page-section"}>
+                <Container className={"page-section"}>
+
+                    <Row>
                         <div className={"titlePic"}>
                             <img src={intro} alt=""/>
                         </div>
-                        <Row className={"bar"}>
-                            <Col className={"bar"}>
-                                <AboutBar/>
-                            </Col>
-                        </Row>
-                        <Row className="title">
-                            <Col className="about">
-                                <p>About Scribe Scholars</p>
-                            </Col>
-                        </Row>
-                        <Row className="scribe">
-                            <Col className="colA text scribe">
-                                <h1>Scribe Scholars' Mission</h1>
-                                <p>We are dedicated to making a better in-class experience for teachers and students.</p>
-                                <p>Interactive assignments, grades, and in website chat board are just some of the features
-                                that make Scribe Scholars the premier learning experience</p>
-                            </Col>
-                        </Row>
-                        <Row className="stu">
-                            <a name="headline1"></a>
-                            <Col className="colA stu">
-                                <div >
-                                    <img src={student} className="student"/>
-                                </div>
-                            </Col>
-                            <Col lg="6" className="colA text stu" >
-                                <h1 className="">Students</h1>
-                                <p>Students will have full access to their grades at a momments notice.  In-class activities can be set up by teachers
-                                to make the classroom engaging and fun.  Adding classes is easy to do and all located within our website.  The message
-                                board provides an environment for students to interact with each other and their teachers</p>
+                    </Row>
 
-                            </Col>
-                        </Row>
-                        <Row className="teach">
-                            <a name="headline2"></a>
-                            <Col className="colA text teach">
-                                <h1>Teachers</h1>
-                                <p>There are a wide variety of features available to teachers for use in the class room.  In-class activities keep students
+                    <Row className={"bar"}>
+                        <Col className={"bar"}>
+                            <AboutBar/>
+                        </Col>
+                    </Row>
+
+                    <Row>
+                        <Col className="about">
+                            <p>About Scribe Scholars</p>
+                        </Col>
+                    </Row>
+
+                    <Row className="bgOne">
+                        <Col xs={12} className="text bgOne">
+                            <h1>Scribe Scholars' Mission</h1>
+                            <p>We are dedicated to making a better in-class experience for teachers and students.</p>
+                            <p>Interactive assignments, grades, and in website chat board are just some of the features that make Scribe Scholars the premier learning experience</p>
+                        </Col>
+                    </Row>
+                    <Row className="bgTwo">
+                        <a name="headline1"></a>
+                        <Col xs={12} lg={6} className="bgTwo">
+                            <img src={student} className="picture"/>
+                        </Col>
+                        <Col xs={12} lg={6} className="text bgTwo">
+                            <h1 className="">Students</h1>
+                            <p>Students will have full access to their grades at a momments notice.  In-class activities can be set up by teachers
+                                to make the classroom engaging and fun.  Adding classes is easy to do and all located within our website.  The message
+                                board provides an environment for students to interact with each other and their teachers
+                            </p>
+                        </Col>
+                    </Row>
+                    <Row className="bgOne">
+                        <a name="headline2"></a>
+                        <Col xs={12} lg={6} className="text bgOne">
+                            <h1>Teachers</h1>
+                            <p>There are a wide variety of features available to teachers for use in the class room.  In-class activities keep students
                                 engaged and interested in learning.  Grades are simple to update to allow students to track their progress.  Teachers can
                                 monitor class progress and identify where the class can most improve.</p>
-                            </Col>
-                           <Col className="colA teach">
-                               <div>
-                                   <img src={teacher} className={"student"}/>
-                               </div>
-                           </Col>
-                        </Row>
-                        <Row className="admin">
-                            <a name="headline3"></a>
-                            <Col className="colA admin">
-                                <img src={admin} className={"administrator"}/>
-                            </Col>
-                            <Col className="colA text admin">
-                                <h1>Administrators</h1>
-                                <p>Managing has never been simplier.  Administrators can easily manage classrooms and teachers with our straight-forward
+                        </Col>
+                        <Col xs={12} lg={6} className="bgOne">
+                            <img src={teacher} className={"picture"}/>
+                        </Col>
+                    </Row>
+                    <Row className="bgTwo">
+                        <a name="headline3"></a>
+                        <Col xs={12} lg={6} className="bgTwo">
+                            <img src={admin} className={"picture"}/>
+                        </Col>
+                        <Col xs={12} lg={6} className="text bgTwo">
+                            <h1>Administrators</h1>
+                            <p>Managing has never been simplier.  Administrators can easily manage classrooms and teachers with our straight-forward
                                 process for setting up classes.  </p>
-                            </Col>
-                        </Row>
-                    </div>
-                </div>
+                        </Col>
+                    </Row>
+                    <Row className="bgOne">
+                        <a name="headline4"></a>
+                        <Col xs={12} lg={6} className="text bgOne">
+                            <h1>Parents</h1>
+                            <p>Add parents stuff here</p>
+                        </Col>
+                        <Col xs={12} lg={6} className="bgOne">
+                            <img src={parent} className={"picture"}/>
+                        </Col>
+                    </Row>
+                    <Row className="bgTwo">
+                        <a name="headline5"></a>
+                        <Col xs={12} className={"contact bgTwo text"}>
+                            <h1>Contact Us</h1>
+                            <p>Message the scribe scholars team at scribescholars@gmail.com</p>
+                        </Col>
+                    </Row>
+                </Container>
             </div>
         )
     }
