@@ -108,7 +108,7 @@ class Settings extends Component {
         docRef.get().then(function(doc) {
             if (doc.exists) {
                 self.setState({
-                    name: doc.data().name,
+                    name: doc.data().firstName,
                 });
             } else {
                 console.log("No such document!");

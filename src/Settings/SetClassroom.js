@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 
-import { Button, Container, Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Container, Row, Col, Form, FormGroup, Input } from 'reactstrap';
+import {
+    Accordion,
+    AccordionItem,
+    AccordionItemTitle,
+    AccordionItemBody,
+} from 'react-accessible-accordion';
 
 import './SetClassroom.css';
+import 'react-accessible-accordion/dist/react-accessible-accordion.css';
 
 class SetClassroom extends Component {
     render()
@@ -19,6 +26,37 @@ class SetClassroom extends Component {
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
                     <Col xs={"12"}>
+                        <Accordion>
+                        {Object.keys(this.props.classes).map((key, index) => {
+                            return<AccordionItem key={key}>
+                                    <AccordionItemTitle>
+                                        <h3>
+                                            {this.props.classes[index].class}
+                                        </h3>
+                                    </AccordionItemTitle>
+                                    <AccordionItemBody>
+                                        <Button color={"info"} size={"lg"}>Specific Class Options</Button>
+                                        <Button color="danger" size={"lg"}>Delete Selected Class</Button>
+                                    </AccordionItemBody>
+                                </AccordionItem>
+
+
+                        })}
+                        </Accordion>
+
+                        {/*<Accordion>
+                            <AccordionItem>
+                                <AccordionItemTitle>
+                                    <h3>
+                                        Accessible Accordion
+                                    </h3>
+                                </AccordionItemTitle>
+                                <AccordionItemBody>
+                                    <p>Hello World</p>
+                                </AccordionItemBody>
+                            </AccordionItem>
+                        </Accordion>
+                        */}{/*
                         <Form>
                             <FormGroup row>
                                 <Label size={"lg"} for="exampleSelectMulti" sm={2}>Enrolled Courses:</Label>
@@ -40,7 +78,10 @@ class SetClassroom extends Component {
                             <Row className={"Filler"}> </Row>
                             <Row className={"Filler"}> </Row>
                         </Form>
+*/}
 
+                        <Row className={"Filler"}> </Row>
+                        <Row className={"Filler"}> </Row>
                         <Form>
                             <FormGroup row check>
                                 <Col sm={{ size: 2, offset: 2}}>
