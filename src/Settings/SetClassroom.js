@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { firestore } from '../base.js';
+
 import { Button, Container, Row, Col, Form, FormGroup, Input } from 'reactstrap';
 import {
     Accordion,
@@ -27,7 +29,7 @@ class SetClassroom extends Component {
                 <Row className={"BoxForm"}>
                     <Col xs={"12"}>
                         <Accordion>
-                        {Object.keys(this.props.classes).map((key, index) => {
+                        {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
                             return<AccordionItem key={key}>
                                     <AccordionItemTitle>
                                         <h3>
@@ -85,9 +87,9 @@ class SetClassroom extends Component {
                         <Form>
                             <FormGroup row check>
                                 <Col sm={{ size: 2, offset: 2}}>
-                                    <Input bsSize="lg" type="username" name="className" id="classToAdd" placeholder="Class Name" />
+                                    <Input bsSize="lg" type="username" name="className" id="classToAdd" placeholder="Class Code" />
                                     <Row className={"Filler"}> </Row>
-                                    <Button size={"lg"}>Add This Class</Button>
+                                    <Button size={"lg"}>Join This Class</Button>
 
                                 </Col>
                             </FormGroup>
