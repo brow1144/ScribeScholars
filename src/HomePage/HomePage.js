@@ -185,8 +185,8 @@ class HomePage extends Component {
             if (data.deadlines.hasOwnProperty(i)) {
               object.unshift({
                 title: data.deadlines[i].title,
-                start: new Date(data.deadlines[i].year, data.deadlines[i].month, data.deadlines[i].day),
-                end: new Date(data.deadlines[i].year, data.deadlines[i].month, data.deadlines[i].day),
+                start: new Date(data.deadlines[i].startYear, data.deadlines[i].startMonth, data.deadlines[i].startDay, data.deadlines[i].startHour, data.deadlines[i].startMinute, 0),
+                end: new Date(data.deadlines[i].endYear, data.deadlines[i].endMonth, data.deadlines[i].endDay, data.deadlines[i].endHour, data.deadlines[i].endMinute, 0),
               });
               self.setState({
                 dates: object,
