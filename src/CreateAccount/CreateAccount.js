@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { firestore, fireauth, googleProvider } from '../base.js';
+import { firestore, fireauth } from '../base.js';
 
 import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import './CreateAccount.css';
@@ -25,38 +25,21 @@ class CreateAccount extends Component {
         let lastName = ev.target.lastName.value;
         let email = ev.target.email.value;
 
-      fireauth.createUserAndRetrieveDataWithEmailAndPassword(email,  ev.target.password.value)
-            .then( (credential) => {
-
+        fireauth.createUserAndRetrieveDataWithEmailAndPassword(email,  ev.target.password.value)
+            .then( () => {
                 self.addInfo(email, firstName, lastName);
-
             })
             .catch(function(err) {
-                // Handle errors
-                //console.log(err.message);
-                //let errCode = err.code;
-                //let errMessage = err.message;
-                /*if (errCode !== 'auth/weak-password') {
-                    alert(errMessage);
-                } else {
-                    alert('The password is too weak.');
-                }*/
-                //console.log(err);
-
                 self.setState({
                     errorCode: err.message,
                     visible: true,
                 })
             });
-
-        //this.getUserFromLocalStorage();
-
     };
 
     addInfo = (email, firstName, lastName) => {
         fireauth.onAuthStateChanged( (user) => {
           if (user) {
-            // finished signing in
             this.setFirebase(user, email, firstName, lastName)
           } else {
             // finished signing out
@@ -75,12 +58,8 @@ class CreateAccount extends Component {
       }).then(function() {
         console.log("successfully written!");
       }).catch(function(error) {
-        console.log("error");
+        console.log(error);
       });
-    };
-
-    handleGoogle = () => {
-        fireauth.auth().signInWithPopup(googleProvider);
     };
 
     onDismiss = () => {
@@ -118,7 +97,6 @@ class CreateAccount extends Component {
                         </FormGroup>
                     </Form>
                     <hr />
-                    <Button onClick={ this.handleGoogle } className="google-button"> <i className="fab fa-google"></i>  Sign in with Google!</Button>
                 </div>
             </div>
         );
