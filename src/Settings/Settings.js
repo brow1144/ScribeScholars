@@ -11,6 +11,7 @@ import SetPersonal from './SetPersonal';
 import './Settings.css'
 import {firestore} from "../base";
 
+
 const mql = window.matchMedia(`(min-width: 800px)`);
 
 
@@ -20,6 +21,7 @@ class Settings extends Component {
 
         this.state = {
             uid: props.uid,
+
             personalPage: true,
             name: null,
             email: null,
@@ -232,6 +234,7 @@ class Settings extends Component {
                     :
                     <br/>
                 }
+
                 {this.state.personalPage
                         ?
                         <SetPersonal
@@ -252,6 +255,7 @@ class Settings extends Component {
                             classes={this.state.classes}
                         />
                 }
+
             </Sidebar>
         );
     }
