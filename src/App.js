@@ -96,9 +96,9 @@ class App extends Component {
         )} />
 
         <Route exact path='/create-class' render={() => (
-          //!this.signedIn()
-          /*? */<CreateClass />
-          //:<Redirect to="/HomePage" />
+          this.signedIn()
+            ? <CreateClass uid={this.state.uid}/>
+            : <Redirect to="/sign-in" />
         )} />
 
         <Route exact path='/class-information' render={() => (
