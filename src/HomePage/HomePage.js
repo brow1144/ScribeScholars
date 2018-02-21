@@ -207,6 +207,20 @@ class HomePage extends Component {
     });
   };
 
+  /**
+   *
+   * Now that we have the class code and the students
+   * array of classes,
+   *
+   * 1. We go to the class code and find her classes
+   *
+   * 2. We then find the classes that correlate with the
+   *    student and the teacher
+   *
+   * 3. Then we get the announcements from the central classroom data
+   *    and set state to update the calendar
+   *
+   */
   getAnnouncements = () => {
 
     let object = [{}];
