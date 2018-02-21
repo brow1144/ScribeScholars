@@ -49,6 +49,7 @@ class HomePage extends Component {
       classes: [{
         class: null,
         teacher: null,
+        code: null,
       }],
 
       dates: [{
@@ -167,32 +168,57 @@ class HomePage extends Component {
 
     for(let j in self.state.classes) {
 
-      let docRef = firestore.collection("users").doc(self.state.classes[j].teacher);
-      let dateRef = docRef.collection(self.state.classes[j].class).doc("deadlines");
+      let docRef = firestore.collection("classes").doc(self.state.classes[j].code);
 
-
-      dateRef.get().then(function (doc) {
+      docRef.get().then(function (doc) {
         if (doc.exists) {
           let data = doc.data();
-          for (let i in data.array) {
-            if (data.array.hasOwnProperty(i)) {
+          for (let i in data.deadlines) {
+            if (data.deadlines.hasOwnProperty(i)) {
               object.unshift({
-                title: data.array[i].title,
-                start: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
-                end: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
+                title: data.deadlines[i].title,
+                start: new Date(data.deadlines[i].year, data.deadlines[i].month, data.deadlines[i].day),
+                end: new Date(data.deadlines[i].year, data.deadlines[i].month, data.deadlines[i].day),
               });
               self.setState({
                 dates: object,
               })
             }
           }
-
         } else {
           console.log("No such document!");
         }
       }).catch(function (error) {
         console.log("Error getting document:", error);
       });
+
+
+      // let docRef = firestore.collection("users").doc(self.state.classes[j].teacher);
+      // let dateRef = docRef.collection(self.state.classes[j].class).doc("deadlines");
+      //
+      //
+      // dateRef.get().then(function (doc) {
+      //   if (doc.exists) {
+      //     let data = doc.data();
+      //     for (let i in data.array) {
+      //       if (data.array.hasOwnProperty(i)) {
+      //         object.unshift({
+      //           title: data.array[i].title,
+      //           start: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
+      //           end: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
+      //         });
+      //         self.setState({
+      //           dates: object,
+      //         })
+      //       }
+      //     }
+      //
+      //   } else {
+      //     console.log("No such document!");
+      //   }
+      // }).catch(function (error) {
+      //   console.log("Error getting document:", error);
+      // });
     }
     object.pop();
 
