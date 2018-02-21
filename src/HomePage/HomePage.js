@@ -77,7 +77,7 @@ class HomePage extends Component {
   componentWillMount() {
     this.getClasses();
     mql.addListener(this.mediaQueryChanged);
-    window.addEventListener('resize', this.handleWindowChange)
+    window.addEventListener('resize', this.handleWindowChange);
     this.setState({
       mql: mql,
       sidebarDocked: mql.matches,
@@ -122,10 +122,13 @@ class HomePage extends Component {
 
     docRef.get().then(function(doc) {
       if (doc.exists) {
-        self.setState({
-          classes: doc.data().classes,
-        });
-        self.getDeadlines();
+        if (doc.data().classes != null) {
+          self.setState({
+            classes: doc.data().classes,
+          });
+
+          self.getDeadlines();
+        }
       } else {
         console.log("No such document!");
       }
@@ -164,14 +167,16 @@ class HomePage extends Component {
         if (doc.exists) {
           let data = doc.data();
           for (let i in data.array) {
-            object.unshift( {
-              title: data.array[i].title,
-              start: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
-              end: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
-            });
-            self.setState({
-              dates: object,
-            })
+            if (data.array.hasOwnProperty(i)) {
+              object.unshift({
+                title: data.array[i].title,
+                start: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
+                end: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
+              });
+              self.setState({
+                dates: object,
+              })
+            }
           }
 
         } else {

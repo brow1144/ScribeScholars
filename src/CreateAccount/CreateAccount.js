@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { firestore, fireauth } from '../base.js';
+import { fireauth, firestore } from '../base.js';
 
 import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
 import './CreateAccount.css';
