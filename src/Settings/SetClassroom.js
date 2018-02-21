@@ -4,8 +4,7 @@ import { Button, Container, Row, Col, Form, FormGroup, Label, Input } from 'reac
 
 import './SetClassroom.css';
 
-class SetClassroom extends Component
-{
+class SetClassroom extends Component {
     render()
     {
         return(
@@ -13,7 +12,7 @@ class SetClassroom extends Component
                 <Row className={"Filler"}> </Row>
                 <Row className={"BannerRow"}>
                     <Col xs={"12"} sm={"12"} md={"12"} lg={"12"} xl={"12"} className={"BannerCol"}>
-                        <h1>Walter Jacquette's Classroom Settings:</h1>
+                        <h1>{this.props.name}'s Classroom Settings:</h1>
                     </Col>
                 </Row>
                 <Row className={"Filler"}> </Row>
@@ -25,11 +24,9 @@ class SetClassroom extends Component
                                 <Label size={"lg"} for="exampleSelectMulti" sm={2}>Enrolled Courses:</Label>
                                 <Col sm={5}>
                                     <Input className="ClassSelection" bsSize="lg" type="select" name="selectMulti" id="exampleSelectMulti" multiple>
-                                        <option>AP CompSci</option>
-                                        <option>Chemistry</option>
-                                        <option>AP Calculus</option>
-                                        <option>Literature</option>
-                                        <option>Band</option>
+                                        {Object.keys(this.props.classes).map((key, index) => {
+                                            return <option key={key}>{this.props.classes[index].class}</option>
+                                        })}
                                     </Input>
                                 </Col>
                             </FormGroup>
@@ -47,7 +44,7 @@ class SetClassroom extends Component
                         <Form>
                             <FormGroup row check>
                                 <Col sm={{ size: 2, offset: 2}}>
-                                    <Input bsSize="lg" type="username" name="classCode" id="classToAdd" placeholder="ClassCode" />
+                                    <Input bsSize="lg" type="username" name="className" id="classToAdd" placeholder="Class Name" />
                                     <Row className={"Filler"}> </Row>
                                     <Button size={"lg"}>Add This Class</Button>
 

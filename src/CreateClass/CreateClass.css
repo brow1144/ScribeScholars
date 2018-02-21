@@ -1,4 +1,4 @@
-.createAccountButton {
+.createClassButton {
     background-color: #21CE99 !important;
     border-color: #21CE99 !important;
 }
@@ -12,7 +12,6 @@
     margin: auto;
     position: absolute;
     top: 0; left: 0; bottom: 0; right: 0;
-    background: #f5f5f5 !important;
 }
 
 .Absolute-Center.is-Responsive {

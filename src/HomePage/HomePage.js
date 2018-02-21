@@ -9,6 +9,7 @@ import moment from 'moment';
 
 import Side from './Side';
 import HomeNav from './HomeNav'
+import Cards from './Cards'
 
 import './HomePage.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -167,7 +168,7 @@ class HomePage extends Component {
               title: data.array[i].title,
               start: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
               end: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
-            })
+            });
             self.setState({
               dates: object,
             })
@@ -263,11 +264,11 @@ class HomePage extends Component {
   render() {
 
 
-    let sidebarContent = <Side classes={this.state.classes} />;
+    let sidebarContent = <Side uid={this.state.uid} classes={this.state.classes} />;
 
     const sidebarStyles = {
       sidebar: {
-        backgroundColor: 'f3f3f3',
+        backgroundColor: '##f2f2f2',
         width: '8em',
         textAlign: 'center',
       },
@@ -277,7 +278,7 @@ class HomePage extends Component {
     };
 
     const calendarStyles = {
-      height: "55rem",
+      height: "60em",
     };
 
     // If Screen is Big
@@ -289,6 +290,7 @@ class HomePage extends Component {
                  open={this.state.sidebarOpen}
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
+
           <HomeNav expand={this.dockSideBar} width={this.state.width}/>
           <Row>
 
@@ -303,6 +305,14 @@ class HomePage extends Component {
             </Col>
             <Col md="3"/>
           </Row>
+
+          <hr className="divider" />
+          <b className="annTest">Announcements</b>
+
+            <div className="announcementsDiv">
+              <Cards />
+            </div>
+
         </Sidebar>
       );
       // If Screen is Small
@@ -315,6 +325,13 @@ class HomePage extends Component {
                  onSetOpen={this.onSetSidebarOpen}>
 
           <HomeNav expand={this.dockSideBar} width={this.state.width}/>
+
+          <hr className="divider" />
+          <b>Announcements</b>
+
+          <div className="announcementsDiv">
+            <Cards />
+          </div>
 
         </Sidebar>
       );
