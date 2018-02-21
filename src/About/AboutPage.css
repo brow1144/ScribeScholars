@@ -1,9 +1,3 @@
-h1 {
-    text-align: center;
-    //font-weight: bold;
-    padding-bottom: 1em;
-}
-
 .page-section {
     text-align: center;
     align-content: center;
@@ -11,8 +5,13 @@ h1 {
 }
 
 .para {
-    font-size: small;
+    font-size: medium;
     font-weight: normal;
+}
+
+.sectionTitle {
+    text-align: center;
+    padding-bottom: 1em;
 }
 
 .bar {
@@ -26,11 +25,14 @@ h1 {
 .about {
     //position: absolute;
     height: 100vh;
+    text-align: center;
+    vertical-align: center;
+
 }
 
 .about p {
-    padding-top: 3em;
-    font-size: 10em;
+    padding-top: 2em;
+    font-size: 6em;
     font-style: italic;
     font-family: "Baskerville Old Face";
 }
