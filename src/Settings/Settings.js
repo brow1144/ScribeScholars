@@ -44,9 +44,9 @@ class Settings extends Component {
         this.getName();
     }
 
-    /*componentDidUpdate() {
-        console.log("Forcing State Update")
-    }*/
+    componentDidUpdate() {
+
+    }
 
 
     dockSideBar = () => {
