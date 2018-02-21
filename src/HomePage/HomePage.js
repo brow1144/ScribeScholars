@@ -62,6 +62,7 @@ class HomePage extends Component {
         title: null,
         subtitle: null,
         message: null,
+        class: null,
       }],
 
       width: window.innerWidth,
@@ -222,6 +223,7 @@ class HomePage extends Component {
           for (let i in data.Announcements) {
             if (data.Announcements.hasOwnProperty(i)) {
               object.unshift({
+                class: self.state.classes[j].class,
                 title: data.Announcements[i].title,
                 subtitle: data.Announcements[i].subtitle,
                 message: data.Announcements[i].message,
