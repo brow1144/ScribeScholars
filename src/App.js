@@ -8,14 +8,22 @@ import SignIn from './Sigin/SignIn';
 import HomePage from './HomePage/HomePage';
 import Settings from './Settings/Settings';
 import About from './About/AboutPage';
+import CreateAccount from './CreateAccount/CreateAccount';
+
+import ResetPassword from './CreateAccount/ResetPassword';
+import CreateClass from './CreateClass/CreateClass';
+import ClassInformation from './CreateClass/ClassInformation';
 
 import './App.css';
+import Announcements from "./Announcements/Announcements";
+import CreateAnn from "./Announcements/CreateAnn";
+
 
 class App extends Component {
 
   constructor() {
     super();
-    
+
 
     this.state = {
       uid: null,
@@ -74,12 +82,39 @@ class App extends Component {
               <About />
           )} />
 
+          <Route path='/Announcements' render={() => (
+              <Announcements />
+          )} />
+
+          <Route path='/CreateAnnouncements' render={() => (
+              <CreateAnn/>
+          )} />
+
+        <Route exact path='/create-account' render={() => (
+            !this.signedIn()
+                ? <CreateAccount />
+                :<Redirect to="/HomePage" />
+        )} />
+
+        <Route exact path='/create-class' render={() => (
+          //!this.signedIn()
+          /*? */<CreateClass />
+          //:<Redirect to="/HomePage" />
+        )} />
+
+        <Route exact path='/class-information' render={() => (
+          <ClassInformation />
+        )} />
 
         <Route path='/settings' render={() => (
           this.signedIn()
-            ? <Settings />
+            ? <Settings uid={this.state.uid}/>
             : <Redirect to="/sign-in" />
         )} />
+
+        <Route exact path='/reset-password' render={() => (
+          <ResetPassword />
+          )} />
 
         <Route render={() => <Redirect to="/HomePage" />} />
 
