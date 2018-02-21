@@ -3,7 +3,6 @@ import { Container, Row, Col } from 'reactstrap';
 
 import AboutBar from './AboutBar';
 
-import logo from './Pictures/logo.svg';
 import intro from './Pictures/paperWood.jpg';
 import student from './Pictures/Students.jpg';
 import teacher from './Pictures/Teachers.jpeg';
@@ -39,14 +38,12 @@ class AboutPage extends Component {
                     <Row className="bgOne">
                         <Col xs={12} className="text bgOne">
                             <h1>Scribe Scholars' Mission</h1>
-                            <p>We are dedicated to making a better in-class experience for teachers and students.</p>
-                            <p>Interactive assignments, grades, and in website chat board are just some of the features that make Scribe Scholars the premier learning experience</p>
+                            <p>We are dedicated to making a better in-class experience for teachers and students.  Interactive assignments, grades, and in website chat board are just some of the features that make Scribe Scholars the premier learning experience</p>
                         </Col>
                     </Row>
                     <Row className="bgTwo">
-                        <a name="headline1"></a>
                         <Col xs={12} lg={6} className="bgTwo">
-                            <img src={student} className="picture"/>
+                            <a name="headline1"><img src={student} className="picture" alt=""/></a>
                         </Col>
                         <Col xs={12} lg={6} className="text bgTwo">
                             <h1 className="">Students</h1>
@@ -57,21 +54,20 @@ class AboutPage extends Component {
                         </Col>
                     </Row>
                     <Row className="bgOne">
-                        <a name="headline2"></a>
+
                         <Col xs={12} lg={6} className="text bgOne">
-                            <h1>Teachers</h1>
+                            <a name="headline2"><h1>Teachers</h1></a>
                             <p>There are a wide variety of features available to teachers for use in the class room.  In-class activities keep students
                                 engaged and interested in learning.  Grades are simple to update to allow students to track their progress.  Teachers can
                                 monitor class progress and identify where the class can most improve.</p>
                         </Col>
                         <Col xs={12} lg={6} className="bgOne">
-                            <img src={teacher} className={"picture"}/>
+                            <img src={teacher} className={"picture"} alt={""}/>
                         </Col>
                     </Row>
                     <Row className="bgTwo">
-                        <a name="headline3"></a>
                         <Col xs={12} lg={6} className="bgTwo">
-                            <img src={admin} className={"picture"}/>
+                            <a name="headline2"><img src={admin} className={"picture"} alt={""}/></a>
                         </Col>
                         <Col xs={12} lg={6} className="text bgTwo">
                             <h1>Administrators</h1>
@@ -80,19 +76,17 @@ class AboutPage extends Component {
                         </Col>
                     </Row>
                     <Row className="bgOne">
-                        <a name="headline4"></a>
                         <Col xs={12} lg={6} className="text bgOne">
-                            <h1>Parents</h1>
+                            <a name="headline4"><h1>Parents</h1></a>
                             <p>Add parents stuff here</p>
                         </Col>
                         <Col xs={12} lg={6} className="bgOne">
-                            <img src={parent} className={"picture"}/>
+                            <img src={parent} className={"picture"} alt={""}/>
                         </Col>
                     </Row>
                     <Row className="bgTwo">
-                        <a name="headline5"></a>
                         <Col xs={12} className={"contact bgTwo text"}>
-                            <h1>Contact Us</h1>
+                            <a name="headline5"><h1>Contact Us</h1></a>
                             <p>Message the scribe scholars team at scribescholars@gmail.com</p>
                         </Col>
                     </Row>
@@ -100,6 +94,6 @@ class AboutPage extends Component {
             </div>
         )
     }
-};
+}
 
 export default AboutPage
