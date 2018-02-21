@@ -140,7 +140,7 @@ class HomePage extends Component {
           self.getDeadlines();
           self.getAnnouncements();
         }
-        if (doc.data().firstName !== null && doc.data().lastName) {
+        if (doc.data().firstName !== null && doc.data().lastName !== null) {
           self.setState({
             firstName: doc.data().firstName,
             lastName: doc.data().lastName,
