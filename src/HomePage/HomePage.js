@@ -167,7 +167,7 @@ class HomePage extends Component {
         if (doc.exists) {
           let data = doc.data();
           for (let i in data.array) {
-            //if (data.array.hasOwnProperty(i)) {
+            if (data.array.hasOwnProperty(i)) {
               object.unshift({
                 title: data.array[i].title,
                 start: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
@@ -176,7 +176,7 @@ class HomePage extends Component {
               self.setState({
                 dates: object,
               })
-            //}
+            }
           }
 
         } else {
