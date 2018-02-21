@@ -1,18 +1,18 @@
 h1 {
     text-align: center;
-    font-weight: bold;
+    //font-weight: bold;
     padding-bottom: 1em;
-    font-weight: bold;
-}
-
-p {
-    font-size: large;
 }
 
 .page-section {
     text-align: center;
     align-content: center;
     font-family: "Times New Roman";
+}
+
+.para {
+    font-size: small;
+    font-weight: normal;
 }
 
 .bar {
