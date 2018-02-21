@@ -54,7 +54,8 @@ class CreateAccount extends Component {
       docRef.set({
         firstName: firstName,
         lastName: lastName,
-        email: email
+        email: email,
+        classes: null
       }).then(function() {
         console.log("successfully written!");
       }).catch(function(error) {

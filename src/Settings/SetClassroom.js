@@ -24,7 +24,7 @@ class SetClassroom extends Component {
                                 <Label size={"lg"} for="exampleSelectMulti" sm={2}>Enrolled Courses:</Label>
                                 <Col sm={5}>
                                     <Input className="ClassSelection" bsSize="lg" type="select" name="selectMulti" id="exampleSelectMulti" multiple>
-                                        {Object.keys(this.props.classes).map((key, index) => {
+                                        {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
                                             return <option key={key}>{this.props.classes[index].class}</option>
                                         })}
                                     </Input>
