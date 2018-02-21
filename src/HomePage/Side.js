@@ -53,7 +53,7 @@ class Side extends Component {
           <img className="logo" src={logo} alt="Logo"/>
         </NavLink>
 
-        {Object.keys(this.props.classes).map((key, index) => {
+        {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
           return <NavLink key={key} style={{textDecoration: 'none'}}
                           to={`/HomePage/${this.props.classes[index].class}`}>
             <p className="classSide">{this.props.classes[index].class}</p>
