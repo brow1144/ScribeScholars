@@ -76,7 +76,11 @@ class AboutPage extends Component {
                     <Row className="bgOne">
                         <Col xs={12} lg={6} className="text bgOne">
                             <a name="Parents"><h1 className={"sectionTitle"}>Parents</h1></a>
-                            <p className="para">Add parents stuff here</p>
+                            <p className="para">Scribe Scholars was designed to create a simple and easy-to-use system for parents to monitor
+                                their child’s performance in the classroom from a safe distance. Once linked to your child’s account, a parent
+                                has the access to see everything that the child can see. This includes the ability to see all currently enrolled
+                                classes, assigned homeworks, student's current grades, and dynamically calculated GPA.
+                            </p>
                         </Col>
                         <Col xs={12} lg={6} className="bgOne">
                             <img src={parent} className={"picture"} alt={""}/>
