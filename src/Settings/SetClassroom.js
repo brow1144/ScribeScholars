@@ -32,9 +32,10 @@ class SetClassroom extends Component {
       ev.preventDefault();
       let self = this;
 
-      //let code = ev.target.classCode.value;
+      let code = ev.target.classCode.value;
 
-      //let docRef = firestore.collection("classes").doc(code);
+      let docRef = firestore.collection("classes").doc(code);
+
     };
 
     render()
