@@ -9,11 +9,9 @@ import {
     AccordionItemTitle,
     AccordionItemBody,
 } from 'react-accessible-accordion';
-//import Switch from 'react-toggle-switch';
 
 import './SetClassroom.css';
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
-import 'react-toggle-switch/dist/css/switch.min.css';
 
 class SetClassroom extends Component {
     constructor(props) {

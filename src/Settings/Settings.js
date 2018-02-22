@@ -9,7 +9,7 @@ import SetPersonal from './SetPersonal';
 
 
 import './Settings.css'
-import {firestore} from "../base";
+import { firestore } from "../base";
 
 
 const mql = window.matchMedia(`(min-width: 800px)`);
