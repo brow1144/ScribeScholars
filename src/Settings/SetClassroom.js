@@ -131,6 +131,7 @@ class SetClassroom extends Component {
 
     render()
     {
+
         return(
             <Container fluid className={"ContainerRules"}>
                 <Row className={"Filler"}> </Row>
@@ -143,31 +144,38 @@ class SetClassroom extends Component {
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
                     <Col xs={"6"}>
-                        <Accordion>
-                        {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
-                            return<AccordionItem key={key}>
-                                    <AccordionItemTitle>
-                                        <h3>
-                                            {this.props.classes[index].class}
-                                        </h3>
-                                    </AccordionItemTitle>
-                                    <AccordionItemBody className={"accordBody"}>
-                                        <div>
-                                            <br/>
-                                            <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable Notifications</Button>
-                                            <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable Announcements</Button>
+                        { this.props.classes !== null
+                            ?
+                            <Accordion>
+                                {this.props.classes !== null && Object.keys(this.props.classes).map((key, index) => {
+                                    return <AccordionItem key={key}>
+                                        <AccordionItemTitle>
+                                            <h3>
+                                                {this.props.classes[index].class}
+                                            </h3>
+                                        </AccordionItemTitle>
+                                        <AccordionItemBody className={"accordBody"}>
+                                            <div>
+                                                <br/>
+                                                <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable
+                                                    Notifications</Button>
+                                                <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable
+                                                    Announcements</Button>
 
-                                            <span onClick={this.handleDeleteClick} className={"clickableIcon float-right"}>
-                                                <i onClick={this.handleDeleteClick} className="fas fa-trash-alt deleteIcon float-right"/>
+                                                <span onClick={this.handleDeleteClick}
+                                                      className={"clickableIcon float-right"}>
+                                                <i onClick={this.handleDeleteClick}
+                                                   className="fas fa-trash-alt deleteIcon float-right"/>
                                             </span>
 
-                                        </div>
-                                    </AccordionItemBody>
-                                </AccordionItem>
-
-
-                        })}
-                        </Accordion>
+                                            </div>
+                                        </AccordionItemBody>
+                                    </AccordionItem>
+                                })}
+                            </Accordion>
+                            :
+                            null
+                        }
 
                         <Row className={"Filler"}> </Row>
                         <Row className={"Filler"}> </Row>
