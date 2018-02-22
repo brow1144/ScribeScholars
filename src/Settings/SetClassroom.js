@@ -43,11 +43,13 @@ class SetClassroom extends Component {
       let studentRef = firestore.collection("users").doc(self.state.uid);
       studentRef.get().then(function(doc) {
         if (doc.exists) {
-          self.setState({
-            classes: doc.data().classes,
-          });
+          if (doc.data().classes != null) {
+            self.setState({
+              classes: doc.data().classes,
+            });
+          }
 
-          self.joinClass();
+          self.joinClass(studentRef);
         } else {
           console.log("user not found");
         }
@@ -56,14 +58,16 @@ class SetClassroom extends Component {
       });
     };
 
-    joinClass = () => {
+    joinClass = (studentRef) => {
       let self = this;
 
       // check if student is already in class
-      for(let i in self.state.classes) {
-        if (self.state.classes[i].code === self.state.newClassCode) {
-          alert("already in class");
-          return;
+      if (self.state.classes != null) {
+        for (let i in self.state.classes) {
+          if (self.state.classes[i].code === self.state.newClassCode) {
+            alert("already in class");
+            return;
+          }
         }
       }
 
@@ -75,23 +79,48 @@ class SetClassroom extends Component {
       }];
 
       // add temporary class to classes
-      let tmpClasses = self.state.classes.slice();
-      tmpClasses.concat(tmpNewClass);
-      self.setState({
-        classes: tmpClasses,
+      if (self.state.classes != null) {
+        self.setState({
+          classes: self.state.classes.concat(tmpNewClass),
+        });
+      } else {
+        self.setState({
+          classes: tmpNewClass,
+        });
+      }
+
+      console.log(self.state.classes);
+      studentRef.update({
+        classes: self.state.classes,
+      }).then(function() {
+        console.log("Successfully updated classes list");
+      }).catch(function(error) {
+        console.log("Error updating document: ", error);
       });
 
       // add student to class roster
       let docRef = firestore.collection("classes").doc(self.state.newClassCode);
       docRef.get().then(function(doc) {
         if (doc.exists) {
-          let tmpStudents = self.state.students.slice();
-          tmpStudents.concat(self.state.uid);
-          self.setState({
-            students: tmpStudents,
+          if (self.state.students != null) {
+            self.setState({
+              students: self.state.students.concat(self.state.uid),
+            });
+          } else {
+            self.setState({
+              students: self.state.uid,
+            });
+          }
+
+          docRef.update({
+            students: self.state.students,
+          }).then(function() {
+            console.log("Successfully updated students list");
+          }).catch(function(error) {
+            console.log("Error updating document: ", error);
           });
         } else {
-          console.log("class not found");
+          console.log("Class not found");
         }
       }).catch(function(error) {
         console.log("Error getting document: ", error);
@@ -144,10 +173,10 @@ class SetClassroom extends Component {
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
                     <Col xs={"6"}>
-                        { this.props.classes !== null
+                        { this.props.classes != null
                             ?
                             <Accordion>
-                                {this.props.classes !== null && Object.keys(this.props.classes).map((key, index) => {
+                                {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
                                     return <AccordionItem key={key}>
                                         <AccordionItemTitle>
                                             <h3>
