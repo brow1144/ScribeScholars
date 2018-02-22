@@ -21,7 +21,7 @@ class CreateClass extends Component {
       uid: "eric",
       className: '',
       email: '',
-      tabs: ['annoucements', 'course-content', 'discussion-board', 'my-grades'],
+      tabs: ['annoucements', 'assignments-and-documents', 'course-discussion', 'grades'],
       nameVailid: false,
       formValid: false,
       errorVisible: false,
@@ -35,7 +35,7 @@ class CreateClass extends Component {
       //console.log("Success!");
       this.setState({
         className: this.state.className,
-      }, this.setNewDoc);
+      }, this.setNewDoc );
 
     } else {
       console.log("Error: Class name needs to be at least 6 characters");
@@ -54,17 +54,19 @@ class CreateClass extends Component {
     //TODO Add check for repeated code
 
     let classData = {
+      class: self.state.className,
       teacher: self.state.uid,
-      code: code,
-      className: self.state.className,
-      email: self.state.email,
+      teacher_email: self.state.email,
+      announcements: [],
+      deadlines: [],
+      students: [],
       tabs: self.state.tabs
     };
 
     let classRef = firestore.collection("classes").doc(code);
     classRef.set(classData).then(function () {
-      console.log("Success!");
-      self.readDoc(code);
+      //console.log("Success!");
+      //self.readDoc(code);
     }); //TODO Error catching
 
   };
@@ -168,11 +170,11 @@ class CreateClass extends Component {
                              onChange={this.handleTabBoxInput}>
                 <Label> <Checkbox value="annoucements" name="annoucements" onChange={this.handleTabBoxInput} checked="checked"/> Annoucements </Label>
                 <div/>
-                <Label> <Checkbox value="course-content" name="course-content" onChange={this.handleTabBoxInput} checked="checked"/> Course Content </Label>
+                <Label> <Checkbox value="assignments-and-documents" name="assignments-and-documents" onChange={this.handleTabBoxInput} checked="checked"/> Assignments and Documents </Label>
                 <div/>
-                <Label> <Checkbox value="discussion-board" name="discussion-board" onChange={this.handleTabBoxInput} checked="checked"/> Discussion Board </Label>
+                <Label> <Checkbox value="course-discussion" name="course-discussion" onChange={this.handleTabBoxInput} checked="checked"/> Course Discussion </Label>
                 <div/>
-                <Label> <Checkbox value="my-grades" name="my-grades" onChange={this.handleTabBoxInput} checked="checked"/> My Grades </Label>
+                <Label> <Checkbox value="grades" name="grades" onChange={this.handleTabBoxInput} checked="checked"/> Grades </Label>
               </CheckboxGroup>
             </div>
 
