@@ -17,8 +17,10 @@ class CreateClass extends Component {
     this.handleTabBoxInput = this.handleTabBoxInput.bind(this);
 
     this.state = {
-      uid: props.uid,
+      //uid: props.uid,
+      uid: "eric",
       className: '',
+      email: '',
       tabs: ['annoucements', 'course-content', 'discussion-board', 'my-grades'],
       nameVailid: false,
       formValid: false,
@@ -31,14 +33,12 @@ class CreateClass extends Component {
     ev.preventDefault();
     if(this.state.formValid){
       //console.log("Success!");
-
       this.setState({
         className: this.state.className,
-      });
-      this.generateCode();
+      }, this.setNewDoc);
 
     } else {
-      //console.log("Error: Form Submit Failure");
+      console.log("Error: Class name needs to be at least 6 characters");
 
       this.setState({
         errorVisible: true
@@ -46,38 +46,51 @@ class CreateClass extends Component {
     }
   };
 
-  generateCode = () => {
+  setNewDoc = () => {
+
     let self = this;
 
-    let code = "";
+    var code = this.getCode();
+    //console.log("Code is " + code);
+    /*while(allClasses.where("code", "==", code)){
+      code = this.getCode();
+    }*/
 
+    let classRef = firestore.collection("classes").doc(code);
+    //console.log("ClassRef is " + classRef);
+
+    classRef.get().then(function(doc) {
+      if(doc.exists){
+        doc.({
+          teacher: self.state.uid,
+          code: self.state.code,
+          className: self.state.className,
+          email: self.state.email,
+          tabs: self.state.tabs
+        }).then(function() {
+          console.log("Doc written successsfully");
+        }).catch(function (err) {
+          console.error("Error writing doc: " + err)
+        });
+        console.log("Doc: " + doc.data().code);
+      } else {
+        console.log("Error: doc exists!");
+      }
+    }).catch(function(error){
+      console.log('Error getting document:' + error);
+    });
+
+  };
+
+  getCode() {
+    let code = "";
     for (let i = 0; i < 6; i++) {
       code += Math.floor(Math.random()*10);
     }
+    return code;
+  }
 
-    let docRef = firestore.collection("classes").doc(code);
-    docRef.get().then(function(doc) {
-
-      // /If the code already exists, generate a new one
-      if (doc.exists) {
-        self.generateCode();
-
-      } else {
-        docRef.set({
-          name: self.className,
-          teacher: self.uid,
-          classCode: code
-        }).then(function() {
-          console.log("successfully written!");
-        }).catch(function(error) {
-          console.log(error);
-        });
-      }
-    }).catch(function(error) {
-      console.log("Error getting document: ", error);
-    });
-  };
-
+  //Sets this.state.tabs to checkboxes that are currently selected
   handleTabBoxInput = (e) => {
     this.setState({
       tabs: e
@@ -98,14 +111,11 @@ class CreateClass extends Component {
       case 'className':
 
         if(this.state.className.length >= this.MIN_NAME_LENGTH){
-          this.setState({nameValid: true}, function() {
-            this.validateForm();
-          });
+          this.setState({nameValid: true}, this.validateForm
+          );
         }
         else {
-          this.setState({nameValid: false}, function() {
-            this.validateForm();
-          });
+          this.setState({nameValid: false}, this.validateForm);
         }
         return;
 
