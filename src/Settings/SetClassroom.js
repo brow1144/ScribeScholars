@@ -131,6 +131,7 @@ class SetClassroom extends Component {
 
     render()
     {
+
         return(
             <Container fluid className={"ContainerRules"}>
                 <Row className={"Filler"}> </Row>
@@ -142,71 +143,45 @@ class SetClassroom extends Component {
                 <Row className={"Filler"}> </Row>
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
-                    <Col xs={"8"}>
-                        <Accordion>
-                        {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
-                            return<AccordionItem key={key}>
-                                    <AccordionItemTitle>
-                                        <h3>
-                                            {this.props.classes[index].class}
-                                        </h3>
-                                    </AccordionItemTitle>
-                                    <AccordionItemBody className={"accordBody"}>
-                                        <div>
-                                            <Button color={"info"} size={"lg"}>Specific Class Options</Button>
-                                            <span onClick={this.handleDeleteClick} className={"clickableIcon float-right"}>
-                                                <i onClick={this.handleDeleteClick} className="fas fa-trash-alt deleteIcon float-right"/>
+                    <Col xs={"6"}>
+                        { this.props.classes !== null
+                            ?
+                            <Accordion>
+                                {this.props.classes !== null && Object.keys(this.props.classes).map((key, index) => {
+                                    return <AccordionItem key={key}>
+                                        <AccordionItemTitle>
+                                            <h3>
+                                                {this.props.classes[index].class}
+                                            </h3>
+                                        </AccordionItemTitle>
+                                        <AccordionItemBody className={"accordBody"}>
+                                            <div>
+                                                <br/>
+                                                <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable
+                                                    Notifications</Button>
+                                                <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable
+                                                    Announcements</Button>
+
+                                                <span onClick={this.handleDeleteClick}
+                                                      className={"clickableIcon float-right"}>
+                                                <i onClick={this.handleDeleteClick}
+                                                   className="fas fa-trash-alt deleteIcon float-right"/>
                                             </span>
 
-                                        </div>
-                                    </AccordionItemBody>
-                                </AccordionItem>
-
-
-                        })}
-                        </Accordion>
-
-                        {/*<Accordion>
-                            <AccordionItem>
-                                <AccordionItemTitle>
-                                    <h3>
-                                        Accessible Accordion
-                                    </h3>
-                                </AccordionItemTitle>
-                                <AccordionItemBody>
-                                    <p>Hello World</p>
-                                </AccordionItemBody>
-                            </AccordionItem>
-                        </Accordion>
-                        */}{/*
-                        <Form>
-                            <FormGroup row>
-                                <Label size={"lg"} for="exampleSelectMulti" sm={2}>Enrolled Courses:</Label>
-                                <Col sm={5}>
-                                    <Input className="ClassSelection" bsSize="lg" type="select" name="selectMulti" id="exampleSelectMulti" multiple>
-                                        {Object.keys(this.props.classes).map((key, index) => {
-                                            return <option key={key}>{this.props.classes[index].class}</option>
-                                        })}
-                                    </Input>
-                                </Col>
-                            </FormGroup>
-                            <FormGroup check row>
-                                <Col sm={{ size: 10, offset: 2 }}>
-                                    <Button color={"info"} size={"lg"}>Specific Class Options</Button>
-                                    <Row className={"Filler"}> </Row>
-                                    <Button color="danger" size={"lg"}>Delete Selected Class</Button>
-                                </Col>
-                            </FormGroup>
-                            <Row className={"Filler"}> </Row>
-                            <Row className={"Filler"}> </Row>
-                        </Form>
-*/}
+                                            </div>
+                                        </AccordionItemBody>
+                                    </AccordionItem>
+                                })}
+                            </Accordion>
+                            :
+                            null
+                        }
 
                         <Row className={"Filler"}> </Row>
                         <Row className={"Filler"}> </Row>
                         <Form onSubmit={this.onFormSubmit}>
                             <FormGroup row check>
-                                <Col sm={{ size: 2, offset: 2}}>
+                                <Col sm={{ size: 3, offset: 2}}>
                                     <Input bsSize="lg" type="classCode" name="classCode" id="classToAdd" placeholder="Class Code"/>
                                     <Row className={"Filler"}> </Row>
                                     <Button size={"lg"}>Join This Class</Button>
