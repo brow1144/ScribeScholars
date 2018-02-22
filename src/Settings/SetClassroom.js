@@ -19,13 +19,95 @@ class SetClassroom extends Component {
 
       this.state = {
         uid: props.uid,
+        newClassCode: null,
 
+        classes: [{
+          class: null,
+          code: null,
+          teacher: null,
+        }],
+
+        students: null,
       };
     }
 
-    /*joinClass() {
+    checkClasses = () => {
+      let self = this;
 
-    }*/
+      let studentRef = firestore.collection("users").doc(self.state.uid);
+      studentRef.get().then(function(doc) {
+        if (doc.exists) {
+          self.setState({
+            classes: doc.data().classes,
+          });
+
+          self.joinClass(studentRef);
+        } else {
+          console.log("user not found");
+        }
+      }).catch(function(error) {
+        console.log("Error getting document: ", error);
+      });
+    };
+
+    joinClass = (studentRef) => {
+      /*let object = [{}];
+
+      let self = this;
+
+      for(let i in self.state.classes) {
+        let classRef = studentRef.collection(self.state.classes[i].code).doc(self.state.newClassCode);
+
+      }
+
+      classRef.get().then(function(doc) {
+        if (doc.exists) {
+          console.log("User already in class");
+        } else {
+          for(let i in self.state.classes) {
+            if (self.state.classes.hasOwnProperty()) {
+              //let docRef = firestore.collection("users").doc(self.state.classes[i].teacher);
+              //let dateRef = docRef.collection(self.state.classes[i].class).doc("deadlines");
+              let classRef = studentRef.collection(self.state.classes[i].class).doc(self.state.newClassCode);
+
+
+
+              dateRef.get().then(function (doc) {
+                if (doc.exists) {
+                  let data = doc.data();
+                  for (let j in data.array) {
+                    if (data.array.hasOwnProperty()) {
+                      object.unshift({
+                        title: data.array[j].title,
+                        start: new Date(data.array[j].year, data.array[j].month, data.array[j].day),
+                        end: new Date(data.array[j].year, data.array[j].month, data.array[j].day),
+                      });
+                      self.setState({
+                        dates: object,
+                      })
+                    }
+                  }
+
+                } else {
+                  console.log("No such document!");
+                }
+              }).catch(function (error) {
+                console.log("Error getting document:", error);
+              });
+            }
+            object.pop();
+          }
+
+          self.setState({
+            dates: object
+          });
+        }
+      }).catch(function(error) {
+        console.log("Error getting document: ", error);
+      });
+
+*/
+    };
 
 
     onFormSubmit = (ev) => {
@@ -35,7 +117,19 @@ class SetClassroom extends Component {
       let code = ev.target.classCode.value;
 
       let docRef = firestore.collection("classes").doc(code);
+      docRef.get().then(function(doc) {
+        if (doc.exists) {
+          self.setState({
+            newClassCode: code,
+          });
 
+          self.checkClasses();
+        } else {
+          console.log("class not found");
+        }
+      }).catch(function(error) {
+        console.log("Error getting document: ", error);
+      });
     };
 
     render()
