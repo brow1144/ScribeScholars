@@ -41,6 +41,7 @@ option
     text-align-all: end;
     margin-top: 4rem;
     margin-right: 0.5rem;
+    cursor: pointer;
 }
 .classroomButton
 {
