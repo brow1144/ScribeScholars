@@ -67,7 +67,7 @@ class App extends Component {
 
         <Route path='/HomePage' render={() => (
           this.signedIn()
-            ? <HomePage uid={this.state.uid}/>
+            ? <HomePage page={"home"} uid={this.state.uid}/>
             : <Redirect to="/sign-in" />
         )} />
 
@@ -109,7 +109,7 @@ class App extends Component {
 
         <Route path='/settings' render={() => (
           this.signedIn()
-            ? <Settings uid={this.state.uid}/>
+            ? <HomePage page={"settings"} uid={this.state.uid}/>
             : <Redirect to="/sign-in" />
         )} />
 

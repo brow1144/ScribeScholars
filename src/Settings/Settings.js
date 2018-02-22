@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import { Button } from 'reactstrap';
-
-import Sidebar from 'react-sidebar';
 import SettingsSide from './SettingsSide';
 
 import SetClassroom from './SetClassroom';
@@ -221,20 +218,7 @@ class Settings extends Component {
             return false;
         
         return (
-            <Sidebar styles={sidebarStyles}
-                     sidebar={sidebarContent}
-                     open={this.state.sidebarOpen}
-                     docked={this.state.sidebarDocked}
-                     onSetOpen={this.onSetSidebarOpen}>
-
-                {this.state.sideButtonVisibility
-                    ?
-                    <Button outline onClick={this.dockSideBar}>
-                        <i className="fas fa-bars"/>
-                    </Button>
-                    :
-                    <br/>
-                }
+            <div>
 
                 {this.state.personalPage
                         ?
@@ -257,7 +241,7 @@ class Settings extends Component {
                         />
                 }
 
-            </Sidebar>
+            </div>
         );
     }
 }
