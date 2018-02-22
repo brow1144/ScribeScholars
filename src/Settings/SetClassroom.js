@@ -111,7 +111,6 @@ class SetClassroom extends Component {
               students: self.state.uid,
             })
           }
-            ;
           docRef.update({
             students: self.state.students,
           }).then(function() {
