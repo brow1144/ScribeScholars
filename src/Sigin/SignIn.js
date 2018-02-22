@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { fireauth, googleProvider } from '../base.js';
+import { fireauth } from '../base.js';
 
 import { NavLink } from 'react-router-dom';
 import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap';
@@ -33,10 +33,6 @@ class SignIn extends Component {
       });
   };
 
-  handleGoogle = () => {
-    fireauth.signInWithPopup(googleProvider);
-  };
-
 onDismiss = () => {
   this.setState({ visible: false });
 };
@@ -50,7 +46,7 @@ onDismiss = () => {
               <img src={logo} alt="" width="100" height="100"/>
             </FormGroup>
             <FormGroup>
-              <Label mb="3" className="h3 font-weight-normal" for="exampleEmail">Please Sign In</Label>
+              <Label  className="h3 font-weight-normal" for="exampleEmail">Please Sign In</Label>
             </FormGroup>
             <FormGroup>
               <Input type="email" name="email" id="exampleEmail" placeholder="Email" />
@@ -65,11 +61,10 @@ onDismiss = () => {
               <Button className="signInButton" size="lg" block>Sign In!</Button>
             </FormGroup>
           </Form>
+          <hr />
           <NavLink style={{ textDecoration: 'none' }} to="/create-account">
             <Button className="createAccountButton" size="lg" block>Sign Up!</Button>
           </NavLink>
-          <hr />
-          <Button onClick={ this.handleGoogle } className="google-button"> <i className="fab fa-google"></i>  Sign in with Google!</Button>
         </div>
       </div>
     );
