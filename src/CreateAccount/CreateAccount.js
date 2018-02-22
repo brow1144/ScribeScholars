@@ -65,7 +65,7 @@ class CreateAccount extends Component {
         firstName: firstName,
         lastName: lastName,
         email: email,
-        role: self.state.role,
+        role: this.state.role,
       }).then(function() {
         console.log("successfully written!");
       }).catch(function(error) {
@@ -83,9 +83,9 @@ class CreateAccount extends Component {
       })
     }
 
-    selectRole(className) {
+    selectRole(name) {
       this.setState({
-        role: className,
+        role: name,
       })
     }
 
@@ -118,10 +118,10 @@ class CreateAccount extends Component {
                                     Account Type
                                 </DropdownToggle>
                                 <DropdownMenu>
-                                    <DropdownItem className="student" onClick={this.selectRole(className)}>
+                                    <DropdownItem onClick={() => this.selectRole("student")}>
                                         Student
                                     </DropdownItem>
-                                    <DropdownItem className="teacher" onClick={this.selectRole(className)}>
+                                    <DropdownItem onClick={() => this.selectRole("teacher")}>
                                         Teacher
                                     </DropdownItem>
                                 </DropdownMenu>
