@@ -51,62 +51,60 @@ class SetClassroom extends Component {
     };
 
     joinClass = (studentRef) => {
-      /*let object = [{}];
+      let object = [{}];
 
       let self = this;
 
       for(let i in self.state.classes) {
-        let classRef = studentRef.collection(self.state.classes[i].code).doc(self.state.newClassCode);
-
+        if (self.state.classes[i].code === self.state.newClassCode) {
+          alert("already in class");
+          return;
+        }
       }
 
-      classRef.get().then(function(doc) {
-        if (doc.exists) {
-          console.log("User already in class");
-        } else {
-          for(let i in self.state.classes) {
-            if (self.state.classes.hasOwnProperty()) {
-              //let docRef = firestore.collection("users").doc(self.state.classes[i].teacher);
-              //let dateRef = docRef.collection(self.state.classes[i].class).doc("deadlines");
-              let classRef = studentRef.collection(self.state.classes[i].class).doc(self.state.newClassCode);
+      let newclass = [{
+        class: "CS 4214",
+        code: 263444,
+        teacher: "1423sdg6981asdg246",
+      }];
 
-
-
-              dateRef.get().then(function (doc) {
-                if (doc.exists) {
-                  let data = doc.data();
-                  for (let j in data.array) {
-                    if (data.array.hasOwnProperty()) {
-                      object.unshift({
-                        title: data.array[j].title,
-                        start: new Date(data.array[j].year, data.array[j].month, data.array[j].day),
-                        end: new Date(data.array[j].year, data.array[j].month, data.array[j].day),
-                      });
-                      self.setState({
-                        dates: object,
-                      })
-                    }
-                  }
-
-                } else {
-                  console.log("No such document!");
-                }
-              }).catch(function (error) {
-                console.log("Error getting document:", error);
-              });
-            }
-            object.pop();
-          }
-
-          self.setState({
-            dates: object
-          });
-        }
-      }).catch(function(error) {
-        console.log("Error getting document: ", error);
+      let tmpClasses = self.state.classes.slice();
+      tmpClasses.concat(newclass);
+      self.setState({
+        classes: tmpClasses,
       });
 
-*/
+
+      for(let j in self.state.classes) {
+        let docRef = studentRef.collection("classes").doc(self.state.classes[j].code);
+
+        docRef.get().then(function (doc) {
+          if (doc.exists) {
+            let data = doc.data();
+            for (let i in data.deadlines) {
+              if (data.deadlines.hasOwnProperty(i)) {
+                object.unshift({
+                  title: data.deadlines[i].title,
+                  start: new Date(data.deadlines[i].startYear, data.deadlines[i].startMonth, data.deadlines[i].startDay, data.deadlines[i].startHour, data.deadlines[i].startMinute, 0),
+                  end: new Date(data.deadlines[i].endYear, data.deadlines[i].endMonth, data.deadlines[i].endDay, data.deadlines[i].endHour, data.deadlines[i].endMinute, 0),
+                });
+                self.setState({
+                  dates: object,
+                })
+              }
+            }
+          } else {
+            console.log("No such document!");
+          }
+        }).catch(function (error) {
+          console.log("Error getting document:", error);
+        });
+      }
+      object.pop();
+
+      self.setState({
+        dates: object
+      });
     };
 
 
