@@ -9,9 +9,11 @@ import {
     AccordionItemTitle,
     AccordionItemBody,
 } from 'react-accessible-accordion';
+import Switch from 'react-toggle-switch';
 
 import './SetClassroom.css';
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
+import 'react-toggle-switch/dist/css/switch.min.css';
 
 class SetClassroom extends Component {
     constructor(props) {
@@ -122,6 +124,11 @@ class SetClassroom extends Component {
       });
     };
 
+    handleDeleteClick = () => {
+        console.log("this was clicked")
+
+    };
+
     render()
     {
         return(
@@ -135,7 +142,7 @@ class SetClassroom extends Component {
                 <Row className={"Filler"}> </Row>
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
-                    <Col xs={"12"}>
+                    <Col xs={"8"}>
                         <Accordion>
                         {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
                             return<AccordionItem key={key}>
@@ -144,9 +151,14 @@ class SetClassroom extends Component {
                                             {this.props.classes[index].class}
                                         </h3>
                                     </AccordionItemTitle>
-                                    <AccordionItemBody>
-                                        <Button color={"info"} size={"lg"}>Specific Class Options</Button>
-                                        <Button color="danger" size={"lg"}>Delete Selected Class</Button>
+                                    <AccordionItemBody className={"accordBody"}>
+                                        <div>
+                                            <Button color={"info"} size={"lg"}>Specific Class Options</Button>
+                                            <span onClick={this.handleDeleteClick} className={"clickableIcon float-right"}>
+                                                <i onClick={this.handleDeleteClick} className="fas fa-trash-alt deleteIcon float-right"/>
+                                            </span>
+
+                                        </div>
                                     </AccordionItemBody>
                                 </AccordionItem>
 
