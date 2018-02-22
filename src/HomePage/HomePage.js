@@ -43,15 +43,26 @@ class HomePage extends Component {
     this.state = {
       uid: props.uid,
 
+      firstName: null,
+      lastName: null,
+
       classes: [{
         class: null,
         teacher: null,
+        code: null,
       }],
 
       dates: [{
         title: null,
         start: null,
         end: null,
+      }],
+
+      announcements: [{
+        title: null,
+        subtitle: null,
+        message: null,
+        class: null,
       }],
 
       width: window.innerWidth,
@@ -77,7 +88,7 @@ class HomePage extends Component {
   componentWillMount() {
     this.getClasses();
     mql.addListener(this.mediaQueryChanged);
-    window.addEventListener('resize', this.handleWindowChange)
+    window.addEventListener('resize', this.handleWindowChange);
     this.setState({
       mql: mql,
       sidebarDocked: mql.matches,
@@ -122,10 +133,19 @@ class HomePage extends Component {
 
     docRef.get().then(function(doc) {
       if (doc.exists) {
-        self.setState({
-          classes: doc.data().classes,
-        });
-        self.getDeadlines();
+        if (doc.data().classes !== null) {
+          self.setState({
+            classes: doc.data().classes,
+          });
+          self.getDeadlines();
+          self.getAnnouncements();
+        }
+        if (doc.data().firstName !== null && doc.data().lastName !== null) {
+          self.setState({
+            firstName: doc.data().firstName,
+            lastName: doc.data().lastName,
+          });
+        }
       } else {
         console.log("No such document!");
       }
@@ -156,24 +176,23 @@ class HomePage extends Component {
 
     for(let j in self.state.classes) {
 
-      let docRef = firestore.collection("users").doc(self.state.classes[j].teacher);
-      let dateRef = docRef.collection(self.state.classes[j].class).doc("deadlines");
+      let docRef = firestore.collection("classes").doc(self.state.classes[j].code);
 
-
-      dateRef.get().then(function (doc) {
+      docRef.get().then(function (doc) {
         if (doc.exists) {
           let data = doc.data();
-          for (let i in data.array) {
-            object.unshift( {
-              title: data.array[i].title,
-              start: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
-              end: new Date(data.array[i].year, data.array[i].month, data.array[i].day),
-            });
-            self.setState({
-              dates: object,
-            })
+          for (let i in data.deadlines) {
+            if (data.deadlines.hasOwnProperty(i)) {
+              object.unshift({
+                title: data.deadlines[i].title,
+                start: new Date(data.deadlines[i].startYear, data.deadlines[i].startMonth, data.deadlines[i].startDay, data.deadlines[i].startHour, data.deadlines[i].startMinute, 0),
+                end: new Date(data.deadlines[i].endYear, data.deadlines[i].endMonth, data.deadlines[i].endDay, data.deadlines[i].endHour, data.deadlines[i].endMinute, 0),
+              });
+              self.setState({
+                dates: object,
+              })
+            }
           }
-
         } else {
           console.log("No such document!");
         }
@@ -187,6 +206,62 @@ class HomePage extends Component {
       dates: object
     });
   };
+
+  /**
+   *
+   * Now that we have the class code and the students
+   * array of classes,
+   *
+   * 1. We go to the class code and find her classes
+   *
+   * 2. We then find the classes that correlate with the
+   *    student and the teacher
+   *
+   * 3. Then we get the announcements from the central classroom data
+   *    and set state to update the calendar
+   *
+   */
+  getAnnouncements = () => {
+
+    let object = [{}];
+
+    let self = this;
+
+    for(let j in self.state.classes) {
+
+      let docRef = firestore.collection("classes").doc(self.state.classes[j].code);
+
+      docRef.get().then(function (doc) {
+        if (doc.exists) {
+          let data = doc.data();
+          for (let i in data.Announcements) {
+            if (data.Announcements.hasOwnProperty(i)) {
+              object.unshift({
+                class: self.state.classes[j].class,
+                title: data.Announcements[i].title,
+                subtitle: data.Announcements[i].subtitle,
+                message: data.Announcements[i].message,
+              });
+              self.setState({
+                announcements: object,
+              })
+            }
+          }
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(function (error) {
+        console.log("Error getting document:", error);
+      });
+    }
+    object.pop();
+
+    self.setState({
+      announcements: object
+    });
+
+  };
+
 
   /**
    *
@@ -291,7 +366,7 @@ class HomePage extends Component {
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
 
-          <HomeNav expand={this.dockSideBar} width={this.state.width}/>
+          <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} expand={this.dockSideBar} width={this.state.width}/>
           <Row>
 
             <Col md="1"/>
@@ -310,7 +385,7 @@ class HomePage extends Component {
           <b className="annTest">Announcements</b>
 
             <div className="announcementsDiv">
-              <Cards />
+              <Cards announcements={this.state.announcements}/>
             </div>
 
         </Sidebar>
@@ -324,13 +399,13 @@ class HomePage extends Component {
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
 
-          <HomeNav expand={this.dockSideBar} width={this.state.width}/>
+          <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} expand={this.dockSideBar} width={this.state.width}/>
 
           <hr className="divider" />
           <b>Announcements</b>
 
           <div className="announcementsDiv">
-            <Cards />
+            <Cards announcements={this.state.announcements}/>
           </div>
 
         </Sidebar>

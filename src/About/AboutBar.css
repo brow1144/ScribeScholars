@@ -5,12 +5,13 @@
 
 .link {
     text-decoration: none;
-    color: black;
+    color: white;
     align-content: space-between;
     text-align: center;
+    font-color: white;
 }
 
 .link:hover {
-    color: whitesmoke;
+    color: darkgray;
     text-decoration: none;
 }

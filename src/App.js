@@ -9,12 +9,14 @@ import HomePage from './HomePage/HomePage';
 import Settings from './Settings/Settings';
 import About from './About/AboutPage';
 import CreateAccount from './CreateAccount/CreateAccount';
+
 import CreateClass from './CreateClass/CreateClass';
 import ClassInformation from './CreateClass/ClassInformation';
 
 import './App.css';
 import Announcements from "./Announcements/Announcements";
 import CreateAnn from "./Announcements/CreateAnn";
+
 
 class App extends Component {
 
@@ -94,9 +96,9 @@ class App extends Component {
         )} />
 
         <Route exact path='/create-class' render={() => (
-          //!this.signedIn()
-          /*? */<CreateClass />
-          //:<Redirect to="/HomePage" />
+          this.signedIn()
+            ? <CreateClass uid={this.state.uid}/>
+            : <Redirect to="/sign-in" />
         )} />
 
         <Route exact path='/class-information' render={() => (

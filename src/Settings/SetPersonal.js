@@ -46,6 +46,7 @@ class SetPersonal extends Component {
         let self = this;
         let user = firestore.collection("users").doc(this.state.uid);
 
+
         user.update({
             "email": ev.target.email.value,
             "phone": ev.target.number.value,

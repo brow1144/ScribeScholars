@@ -1,38 +1,30 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-import {Card, CardTitle, CardText, CardDeck, CardSubtitle, CardBody } from 'reactstrap';
+import {Card, CardHeader, CardTitle, CardText, CardDeck, CardSubtitle, CardBody, Row, Col } from 'reactstrap';
 
-class Cards extends Component {
+const Cards = (props) => {
 
-  render() {
-    return (
-      <div>
-        <CardDeck>
-          <Card>
-            <CardBody>
-              <CardTitle>Chapter 3 due tomorrow</CardTitle>
-              <CardSubtitle>Homework</CardSubtitle>
-              <CardText>Don't forget that chapter 3 is due by tomorrow morning!</CardText>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardBody>
-              <CardTitle>Chapter 2 due tomorrow</CardTitle>
-              <CardSubtitle>Homework</CardSubtitle>
-              <CardText>Don't forget that chapter 2 is due by tomorrow morning!</CardText>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardBody>
-              <CardTitle>Chapter 1 due tomorrow</CardTitle>
-              <CardSubtitle>Homework</CardSubtitle>
-              <CardText>Don't forget that chapter 1 is due by tomorrow morning!</CardText>
-            </CardBody>
-          </Card>
-        </CardDeck>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <Row>
+        <Col sm={{ size: 'auto', offset: 1 }}>
+          <CardDeck>
+            {Object.keys(props.announcements).map((key, index) => {
+              return <Card key={key}>
+                        <CardHeader>{props.announcements[index].class}</CardHeader>
+                        <CardBody>
+                            <CardTitle>{props.announcements[index].title}</CardTitle>
+                            <CardSubtitle>{props.announcements[index].subtitle}</CardSubtitle>
+                            <CardText>{props.announcements[index].message}</CardText>
+                          </CardBody>
+                     </Card>
+            })}
+          </CardDeck>
+        </Col>
+      </Row>
+
+    </div>
+  )
 };
 
 export default Cards

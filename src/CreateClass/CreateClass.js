@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import { firestore } from '../base.js';
 
 import { Form, Input, Button } from 'reactstrap';
 import './CreateClass.css'
@@ -7,15 +8,15 @@ import logo from '../logo.svg'
   
 class CreateClass extends Component {
 
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
 
     this.handleInput = this.handleInput.bind(this);
 
     this.state = {
-      uid: '',
+      uid: props.uid,
       code: '',
-      password: '',
+      className: '',
       codeValid: false,
       passwordValid: false,
       formValid: false,
@@ -25,6 +26,7 @@ class CreateClass extends Component {
 
   onFormSubmit = (ev) => {
     ev.preventDefault();
+    this.generateCode();
     if(this.state.formValid){
       console.log("Success!");
 
@@ -34,16 +36,43 @@ class CreateClass extends Component {
       this.setState({ errorVisible: true });
       //console.log("Error: Form Submit Failure");
     }
-  }
+  };
+
+  generateCode = () => {
+    let self = this;
+
+    let code = "";
+    for (let i = 0; i < 6; i++) {
+      code += Math.floor(Math.random()*10);
+    }
+
+    let docRef = firestore.collection("classes").doc(code);
+    docRef.get().then(function(doc) {
+      if (doc.exists) {
+        self.generateCode();
+      } else {
+        docRef.set({
+          name: this.className,
+          teacher: this.uid
+        }).then(function() {
+          console.log("successfully written!");
+        }).catch(function(error) {
+          console.log(error);
+        });
+      }
+    }).catch(function(error) {
+      console.log("Error getting document: ", error);
+    });
+  };
 
   handleInput = (e) => {
-    const name = e.target.name;
+    const className = e.target.name;
     const value = e.target.value;
-    this.setState({[name]: value},
-      () => {this.validateField(name, value)});
-  }
+    this.setState({[className]: value},
+      () => {this.validateField(className, value)});
+  };
 
-  validateField(fieldName, value){
+  validateField(fieldName){
 
     switch(fieldName){
 
@@ -96,7 +125,7 @@ class CreateClass extends Component {
       this.printForm();
     });
 
-  }
+  };
 
   printForm(){
     //console.log("formValid: " + this.state.formValid);
@@ -113,7 +142,7 @@ class CreateClass extends Component {
             <img src={logo} alt="" width="100" height="100"/>
             <h3 className = "h3 font-weight-normal">Create New Class</h3>
             <div className="form-group">
-              <Input name="code" type="text" placeholder="Enter 6 digit class code"
+              <Input name="className" type="text" placeholder="Enter class name"
                 value={this.state.code}
                 onChange={this.handleInput}
               />
