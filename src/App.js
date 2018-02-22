@@ -11,7 +11,7 @@ import About from './About/AboutPage';
 import CreateAccount from './CreateAccount/CreateAccount';
 
 import CreateClass from './CreateClass/CreateClass';
-import ClassInformation from './CreateClass/ClassInformation';
+import ClassSuccess from './CreateClass/ClassSuccess';
 
 import './App.css';
 import Announcements from "./Announcements/Announcements";
@@ -101,8 +101,10 @@ class App extends Component {
             : <Redirect to="/sign-in" />
         )} />
 
-        <Route exact path='/class-information' render={() => (
-          <ClassInformation />
+        <Route exact path='/create-class-success' render={() => (
+          this.signedIn()
+            ? <ClassSuccess uid={this.state.uid}/>
+            : <Redirect to="/sign-in" />
         )} />
 
         <Route path='/settings' render={() => (
