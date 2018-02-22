@@ -9,7 +9,7 @@ import {
     AccordionItemTitle,
     AccordionItemBody,
 } from 'react-accessible-accordion';
-import Switch from 'react-toggle-switch';
+//import Switch from 'react-toggle-switch';
 
 import './SetClassroom.css';
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
