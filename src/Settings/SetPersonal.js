@@ -60,7 +60,6 @@ class SetPersonal extends Component {
             phone: ev.target.number.value,
             descript: ev.target.descriptText.value,
         });
-        window.location.reload();
     };
 
 
