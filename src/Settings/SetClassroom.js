@@ -152,7 +152,7 @@ class SetClassroom extends Component {
                 <Row className={"Filler"}> </Row>
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
-                    <Col xs={"8"}>
+                    <Col xs={"6"}>
                         <Accordion>
                         {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
                             return<AccordionItem key={key}>
@@ -163,7 +163,10 @@ class SetClassroom extends Component {
                                     </AccordionItemTitle>
                                     <AccordionItemBody className={"accordBody"}>
                                         <div>
-                                            <Button color={"info"} size={"lg"}>Specific Class Options</Button>
+                                            <br/>
+                                            <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable Notifications</Button>
+                                            <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable Announcements</Button>
+
                                             <span onClick={this.handleDeleteClick} className={"clickableIcon float-right"}>
                                                 <i onClick={this.handleDeleteClick} className="fas fa-trash-alt deleteIcon float-right"/>
                                             </span>
@@ -175,42 +178,6 @@ class SetClassroom extends Component {
 
                         })}
                         </Accordion>
-
-                        {/*<Accordion>
-                            <AccordionItem>
-                                <AccordionItemTitle>
-                                    <h3>
-                                        Accessible Accordion
-                                    </h3>
-                                </AccordionItemTitle>
-                                <AccordionItemBody>
-                                    <p>Hello World</p>
-                                </AccordionItemBody>
-                            </AccordionItem>
-                        </Accordion>
-                        */}{/*
-                        <Form>
-                            <FormGroup row>
-                                <Label size={"lg"} for="exampleSelectMulti" sm={2}>Enrolled Courses:</Label>
-                                <Col sm={5}>
-                                    <Input className="ClassSelection" bsSize="lg" type="select" name="selectMulti" id="exampleSelectMulti" multiple>
-                                        {Object.keys(this.props.classes).map((key, index) => {
-                                            return <option key={key}>{this.props.classes[index].class}</option>
-                                        })}
-                                    </Input>
-                                </Col>
-                            </FormGroup>
-                            <FormGroup check row>
-                                <Col sm={{ size: 10, offset: 2 }}>
-                                    <Button color={"info"} size={"lg"}>Specific Class Options</Button>
-                                    <Row className={"Filler"}> </Row>
-                                    <Button color="danger" size={"lg"}>Delete Selected Class</Button>
-                                </Col>
-                            </FormGroup>
-                            <Row className={"Filler"}> </Row>
-                            <Row className={"Filler"}> </Row>
-                        </Form>
-*/}
 
                         <Row className={"Filler"}> </Row>
                         <Row className={"Filler"}> </Row>
