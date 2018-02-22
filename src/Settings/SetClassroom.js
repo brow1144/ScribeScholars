@@ -181,7 +181,7 @@ class SetClassroom extends Component {
                         <Row className={"Filler"}> </Row>
                         <Form onSubmit={this.onFormSubmit}>
                             <FormGroup row check>
-                                <Col sm={{ size: 2, offset: 2}}>
+                                <Col sm={{ size: 3, offset: 2}}>
                                     <Input bsSize="lg" type="classCode" name="classCode" id="classToAdd" placeholder="Class Code"/>
                                     <Row className={"Filler"}> </Row>
                                     <Button size={"lg"}>Join This Class</Button>
