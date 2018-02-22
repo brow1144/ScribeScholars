@@ -2,39 +2,47 @@ import React, { Component } from 'react';
 
 import { firestore } from '../base.js';
 
-import { Form, Input, Button } from 'reactstrap';
+import { Form, Input, Button, Label } from 'reactstrap';
+import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import './CreateClass.css'
-import logo from '../logo.svg'
   
 class CreateClass extends Component {
 
   constructor(props){
     super(props);
 
+    this.MIN_NAME_LENGTH = 6;
+
     this.handleInput = this.handleInput.bind(this);
+    this.handleTabBoxInput = this.handleTabBoxInput.bind(this);
 
     this.state = {
       uid: props.uid,
-      code: '',
       className: '',
-      codeValid: false,
-      passwordValid: false,
+      tabs: ['annoucements', 'course-content', 'discussion-board', 'my-grades'],
+      nameVailid: false,
       formValid: false,
       errorVisible: false,
     };
+
   }
 
   onFormSubmit = (ev) => {
     ev.preventDefault();
-    this.generateCode();
     if(this.state.formValid){
-      console.log("Success!");
+      //console.log("Success!");
 
-      //TODO Add submit logic
+      this.setState({
+        className: this.state.className,
+      });
+      this.generateCode();
 
     } else {
-      this.setState({ errorVisible: true });
       //console.log("Error: Form Submit Failure");
+
+      this.setState({
+        errorVisible: true
+      });
     }
   };
 
@@ -42,18 +50,23 @@ class CreateClass extends Component {
     let self = this;
 
     let code = "";
+
     for (let i = 0; i < 6; i++) {
       code += Math.floor(Math.random()*10);
     }
 
     let docRef = firestore.collection("classes").doc(code);
     docRef.get().then(function(doc) {
+
+      // /If the code already exists, generate a new one
       if (doc.exists) {
         self.generateCode();
+
       } else {
         docRef.set({
-          name: this.className,
-          teacher: this.uid
+          name: self.className,
+          teacher: self.uid,
+          classCode: code
         }).then(function() {
           console.log("successfully written!");
         }).catch(function(error) {
@@ -64,6 +77,12 @@ class CreateClass extends Component {
       console.log("Error getting document: ", error);
     });
   };
+
+  handleTabBoxInput = (e) => {
+    this.setState({
+      tabs: e
+    });
+  }
 
   handleInput = (e) => {
     const className = e.target.name;
@@ -76,42 +95,21 @@ class CreateClass extends Component {
 
     switch(fieldName){
 
-      case 'code':
+      case 'className':
 
-        //console.log("Code length: " + this.state.code.length);
-
-        if(this.state.code.length === 6){
-          this.setState({codeValid: true}, function() {
+        if(this.state.className.length >= this.MIN_NAME_LENGTH){
+          this.setState({nameValid: true}, function() {
             this.validateForm();
           });
-          //console.log("Code Valid!")
         }
         else {
-          this.setState({codeValid: false}, function() {
+          this.setState({nameValid: false}, function() {
             this.validateForm();
           });
-          //console.log("Code Invalid!")
         }
-        //console.log("Code Valid " + this.state.codeValid)
         return;
 
-      case 'password':
-
-        //console.log("Password length: " + this.state.password.length);
-
-        if(this.state.password.length >= 6){
-          this.setState({passwordValid: true}, function() {
-            this.validateForm();
-          });
-          //console.log("Password Valid!")
-        }
-        else {
-          this.setState({passwordValid: false}, function() {
-            this.validateForm();
-          });
-          //console.log("Password Invalid!")
-        }
-        //console.log("Password Valid " + this.state.passwordValid);
+      case 'email':
         return;
 
       default:
@@ -120,42 +118,59 @@ class CreateClass extends Component {
     }
   }
 
-  validateForm = () =>{
-    this.setState({formValid: this.state.codeValid && this.state.passwordValid}, function() {
-      this.printForm();
-    });
-
+  validateForm = () => {
+    this.setState({formValid: this.state.nameValid});
   };
 
-  printForm(){
-    //console.log("formValid: " + this.state.formValid);
-  }
-
-
-  //TODO Add input labels
   render() {
 
     return (
-      <div className="text-center">
-        <div className ="Absolute-Center is-Responsive">
+      <div className="quarter">
           <Form onSubmit={this.onFormSubmit}>
-            <img src={logo} alt="" width="100" height="100"/>
-            <h3 className = "h3 font-weight-normal">Create New Class</h3>
-            <div className="form-group">
-              <Input name="className" type="text" placeholder="Enter class name"
-                value={this.state.code}
-                onChange={this.handleInput}
-              />
-            </div>
+
             <div className = "form-group">
-              <Input name="password" type="password" placeholder="Enter your password"
-                value={this.state.password}
+              <h3 className = "h3 font-weight-bold">Create A New Classroom</h3>
+            </div>
+
+            <div className = "titleField" />
+
+            <div className="form-group">
+              <Label className="inputLabel">Class Name: </Label>
+              <Input name="className" className="inputField" type="text" placeholder="Enter the class name"
                 onChange={this.handleInput}
               />
             </div>
+
+            <div className="form-group">
+              <Label className="inputLabel">Email: (Students will see this as your public email) </Label>
+              <Input name="email" className="inputField" type="text" placeholder="Enter your email"
+                     onChange={this.handleInput}/>
+            </div>
+
+            <div className="form-group">
+              <Label>Choose which tabs you would like included in your classroom:</Label>
+              <div/>
+
+              <CheckboxGroup name="tabs"
+                             value={this.state.tabs}
+                             checkboxDepth={2}
+                             onChange={this.handleTabBoxInput}>
+                <Label> <Checkbox value="annoucements" name="annoucements" onChange={this.handleTabBoxInput} checked="checked"/> Annoucements </Label>
+                <div/>
+                <Label> <Checkbox value="course-content" name="course-content" onChange={this.handleTabBoxInput} checked="checked"/> Course Content </Label>
+                <div/>
+                <Label> <Checkbox value="discussion-board" name="discussion-board" onChange={this.handleTabBoxInput} checked="checked"/> Discussion Board </Label>
+                <div/>
+                <Label> <Checkbox value="my-grades" name="my-grades" onChange={this.handleTabBoxInput} checked="checked"/> My Grades </Label>
+              </CheckboxGroup>
+            </div>
+
+
+            <div className = "titleField" />
+
             <Button type="submit" className="createClassButton" size ="lg" block>Create Class!</Button>
+
           </Form>
-        </div>
       </div>
     );
   }
