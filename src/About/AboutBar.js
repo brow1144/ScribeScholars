@@ -22,7 +22,7 @@ class AboutBar extends Component {
     render() {
         return (
             <div className={"container"}>
-                <Navbar expand={"md"}>
+                <Navbar expand={"sm"}>
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>
