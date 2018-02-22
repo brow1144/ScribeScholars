@@ -50,39 +50,40 @@ class CreateClass extends Component {
 
     let self = this;
 
-    var code = this.getCode();
-    //console.log("Code is " + code);
-    /*while(allClasses.where("code", "==", code)){
-      code = this.getCode();
-    }*/
+    let code = CreateClass.getCode();
+    //TODO Add check for repeated code
+
+    let classData = {
+      teacher: self.state.uid,
+      code: code,
+      className: self.state.className,
+      email: self.state.email,
+      tabs: self.state.tabs
+    };
 
     let classRef = firestore.collection("classes").doc(code);
-    //console.log("ClassRef is " + classRef);
-
-    classRef.get().then(function(doc) {
-      if(doc.exists){
-        doc.({
-          teacher: self.state.uid,
-          code: self.state.code,
-          className: self.state.className,
-          email: self.state.email,
-          tabs: self.state.tabs
-        }).then(function() {
-          console.log("Doc written successsfully");
-        }).catch(function (err) {
-          console.error("Error writing doc: " + err)
-        });
-        console.log("Doc: " + doc.data().code);
-      } else {
-        console.log("Error: doc exists!");
-      }
-    }).catch(function(error){
-      console.log('Error getting document:' + error);
-    });
+    classRef.set(classData).then(function () {
+      console.log("Success!");
+      self.readDoc(code);
+    }); //TODO Error catching
 
   };
 
-  getCode() {
+  readDoc(code) {
+    let classRef = firestore.collection("classes").doc(code);
+    let getDoc = classRef.get()
+      .then(doc => {
+        if (!doc.exists) {
+          console.log('No such document!');
+        } else {
+          console.log('Document data:', doc.data());
+        }})
+      .catch(err => {
+        console.log('Error getting document', err);
+      });
+  }
+
+  static getCode() {
     let code = "";
     for (let i = 0; i < 6; i++) {
       code += Math.floor(Math.random()*10);
