@@ -21,7 +21,10 @@ class SetClassroom extends Component {
 
       this.state = {
         uid: props.uid,
+
+        newClass: null,
         newClassCode: null,
+        newClassTeacher: null,
 
         classes: [{
           class: null,
@@ -36,6 +39,7 @@ class SetClassroom extends Component {
     checkClasses = () => {
       let self = this;
 
+      // get student's classes
       let studentRef = firestore.collection("users").doc(self.state.uid);
       studentRef.get().then(function(doc) {
         if (doc.exists) {
@@ -43,7 +47,7 @@ class SetClassroom extends Component {
             classes: doc.data().classes,
           });
 
-          self.joinClass(studentRef);
+          self.joinClass();
         } else {
           console.log("user not found");
         }
@@ -52,65 +56,47 @@ class SetClassroom extends Component {
       });
     };
 
-    joinClass = (studentRef) => {
-      /*let object = [{}];
-
+    joinClass = () => {
       let self = this;
 
+      // check if student is already in class
       for(let i in self.state.classes) {
-        let classRef = studentRef.collection(self.state.classes[i].code).doc(self.state.newClassCode);
-
+        if (self.state.classes[i].code === self.state.newClassCode) {
+          alert("already in class");
+          return;
+        }
       }
 
-      classRef.get().then(function(doc) {
+      // create new temporary class
+      let tmpNewClass = [{
+        class: self.state.newClass,
+        code: self.state.newClassCode,
+        teacher: self.state.newClassTeacher,
+      }];
+
+      // add temporary class to classes
+      let tmpClasses = self.state.classes.slice();
+      tmpClasses.concat(tmpNewClass);
+      self.setState({
+        classes: tmpClasses,
+      });
+
+      // add student to class roster
+      let docRef = firestore.collection("classes").doc(self.state.newClassCode);
+      docRef.get().then(function(doc) {
         if (doc.exists) {
-          console.log("User already in class");
-        } else {
-          for(let i in self.state.classes) {
-            if (self.state.classes.hasOwnProperty()) {
-              //let docRef = firestore.collection("users").doc(self.state.classes[i].teacher);
-              //let dateRef = docRef.collection(self.state.classes[i].class).doc("deadlines");
-              let classRef = studentRef.collection(self.state.classes[i].class).doc(self.state.newClassCode);
-
-
-
-              dateRef.get().then(function (doc) {
-                if (doc.exists) {
-                  let data = doc.data();
-                  for (let j in data.array) {
-                    if (data.array.hasOwnProperty()) {
-                      object.unshift({
-                        title: data.array[j].title,
-                        start: new Date(data.array[j].year, data.array[j].month, data.array[j].day),
-                        end: new Date(data.array[j].year, data.array[j].month, data.array[j].day),
-                      });
-                      self.setState({
-                        dates: object,
-                      })
-                    }
-                  }
-
-                } else {
-                  console.log("No such document!");
-                }
-              }).catch(function (error) {
-                console.log("Error getting document:", error);
-              });
-            }
-            object.pop();
-          }
-
+          let tmpStudents = self.state.students.slice();
+          tmpStudents.concat(self.state.uid);
           self.setState({
-            dates: object
+            students: tmpStudents,
           });
+        } else {
+          console.log("class not found");
         }
       }).catch(function(error) {
         console.log("Error getting document: ", error);
       });
-
-*/
     };
-
 
     onFormSubmit = (ev) => {
       ev.preventDefault();
@@ -121,8 +107,12 @@ class SetClassroom extends Component {
       let docRef = firestore.collection("classes").doc(code);
       docRef.get().then(function(doc) {
         if (doc.exists) {
+          let data = doc.data();
           self.setState({
+            newClass: data.class,
             newClassCode: code,
+            newClassTeacher: data.teacher,
+            students: data.students,
           });
 
           self.checkClasses();
