@@ -35,6 +35,7 @@ class Settings extends Component {
             classes: [{
                 class: null,
                 teacher: null,
+                code:null,
             }],
         };
         this.getEmail();
@@ -183,6 +184,8 @@ class Settings extends Component {
             if (doc.exists) {
                 self.setState({
                     classes: doc.data().classes,
+                    teacher: doc.data().teacher,
+                    code: doc.data().code,
                 });
             } else {
                 console.log("No such document!");

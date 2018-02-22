@@ -21,16 +21,21 @@ class SetClassroom extends Component {
 
       this.state = {
         uid: props.uid,
+        deletionCode: null,
 
         newClass: null,
         newClassCode: null,
         newClassTeacher: null,
 
-        classes: [{
+        tempStudents: [],
+        tempClassList: [],
+
+        classes: props.classes,
+        /*classes: [{
           class: null,
           code: null,
           teacher: null,
-        }],
+        }],*/
 
         students: null,
       };
@@ -111,7 +116,6 @@ class SetClassroom extends Component {
               students: self.state.uid,
             })
           }
-            ;
           docRef.update({
             students: self.state.students,
           }).then(function() {
@@ -131,7 +135,7 @@ class SetClassroom extends Component {
       ev.preventDefault();
       let self = this;
 
-      let code = ev.target.classCode.value;
+        let code = ev.target.classCode.value;
 
       let docRef = firestore.collection("classes").doc(code);
       docRef.get().then(function(doc) {
@@ -154,8 +158,42 @@ class SetClassroom extends Component {
     };
 
     handleDeleteClick = () => {
-        console.log("this was clicked")
+        let self = this;
 
+        let classRef = firestore.collection("classes").doc(self.state.deletionCode);
+        let studentRef = firestore.collection("users").doc(self.state.uid);
+
+
+        classRef.get().then(function(doc) {
+            self.setState({
+                tempStudents: doc.data().students
+            });
+            let i = self.state.tempStudents.indexOf(self.state.uid);
+            self.state.tempStudents.splice(i,1);
+            classRef.update({
+                students: self.state.tempStudents
+            }).then(function() {
+                console.log("Student list updated")
+            })
+
+        });
+
+        studentRef.get().then(function(doc) {
+            self.setState({
+                tempClassList: doc.data().classes
+            });
+            let i = self.state.tempClassList.indexOf(self.state.deletionCode);
+            self.state.tempClassList.splice(i,1);
+            studentRef.update({
+                classes: self.state.tempClassList,
+            }).then(function() {
+                self.setState({
+                    classes: self.state.tempClassList,
+                });
+                console.log("Class list updated")
+            })
+
+        });
     };
 
     render()
@@ -173,14 +211,14 @@ class SetClassroom extends Component {
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
                     <Col xs={"6"}>
-                        { this.props.classes != null
+                        { this.state.classes != null
                             ?
                             <Accordion>
-                                {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
-                                    return <AccordionItem key={key}>
+                                {this.state.classes != null && Object.keys(this.state.classes).map((key, index) => {
+                                    return <AccordionItem onClick={this.state.deletionCode = this.state.classes[index].code} key={key}>
                                         <AccordionItemTitle>
                                             <h3>
-                                                {this.props.classes[index].class}
+                                                {this.state.classes[index].class}
                                             </h3>
                                         </AccordionItemTitle>
                                         <AccordionItemBody className={"accordBody"}>
@@ -190,12 +228,9 @@ class SetClassroom extends Component {
                                                     Notifications</Button>
                                                 <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable
                                                     Announcements</Button>
-
-                                                <span onClick={this.handleDeleteClick}
-                                                      className={"clickableIcon float-right"}>
-                                                <i onClick={this.handleDeleteClick}
-                                                   className="fas fa-trash-alt deleteIcon float-right"/>
-                                            </span>
+                                                <span onClick={this.handleDeleteClick} className={"clickableIcon float-right"}>
+                                                    <i className="fas fa-trash-alt deleteIcon float-right"/>
+                                                </span>
 
                                             </div>
                                         </AccordionItemBody>
