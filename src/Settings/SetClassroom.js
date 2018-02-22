@@ -14,6 +14,29 @@ import './SetClassroom.css';
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
 
 class SetClassroom extends Component {
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        uid: props.uid,
+
+      };
+    }
+
+    /*joinClass() {
+
+    }*/
+
+
+    onFormSubmit = (ev) => {
+      ev.preventDefault();
+      let self = this;
+
+      //let code = ev.target.classCode.value;
+
+      //let docRef = firestore.collection("classes").doc(code);
+    };
+
     render()
     {
         return(
@@ -84,13 +107,12 @@ class SetClassroom extends Component {
 
                         <Row className={"Filler"}> </Row>
                         <Row className={"Filler"}> </Row>
-                        <Form>
+                        <Form onSubmit={this.onFormSubmit}>
                             <FormGroup row check>
                                 <Col sm={{ size: 2, offset: 2}}>
-                                    <Input bsSize="lg" type="username" name="className" id="classToAdd" placeholder="Class Code" />
+                                    <Input bsSize="lg" type="classCode" name="classCode" id="classToAdd" placeholder="Class Code"/>
                                     <Row className={"Filler"}> </Row>
                                     <Button size={"lg"}>Join This Class</Button>
-
                                 </Col>
                             </FormGroup>
                         </Form>
