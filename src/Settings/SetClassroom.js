@@ -177,10 +177,10 @@ class SetClassroom extends Component {
       }
     };
 
-    handleDeleteClick = () => {
+    handleDeleteClick = (classCode) => {
         let self = this;
-
-        let classRef = firestore.collection("classes").doc(self.state.deletionCode);
+        
+        let classRef = firestore.collection("classes").doc(classCode);
         let studentRef = firestore.collection("users").doc(self.state.uid);
 
 
@@ -202,7 +202,7 @@ class SetClassroom extends Component {
             self.setState({
                 tempClassList: doc.data().classes
             });
-            let i = self.state.tempClassList.indexOf(self.state.deletionCode);
+            let i = self.state.tempClassList.indexOf(classCode);
             self.state.tempClassList.splice(i,1);
             studentRef.update({
                 classes: self.state.tempClassList,
@@ -240,7 +240,7 @@ class SetClassroom extends Component {
                             ?
                             <Accordion>
                                 {this.state.classes != null && Object.keys(this.state.classes).map((key, index) => {
-                                    return <AccordionItem onClick={this.state.deletionCode = this.state.classes[index].code} key={key}>
+                                    return <AccordionItem key={key}>
                                         <AccordionItemTitle>
                                             <h3>
                                                 {this.state.classes[index].class}
@@ -253,7 +253,7 @@ class SetClassroom extends Component {
                                                     Notifications</Button>
                                                 <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable
                                                     Announcements</Button>
-                                                <span onClick={this.handleDeleteClick} className={"clickableIcon float-right"}>
+                                                <span onClick={ () => this.handleDeleteClick(this.state.classes[index].code)} className={"clickableIcon float-right"}>
                                                     <i className="fas fa-trash-alt deleteIcon float-right"/>
                                                 </span>
 
