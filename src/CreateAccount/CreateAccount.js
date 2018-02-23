@@ -7,11 +7,11 @@ import './CreateAccount.css';
 import logo from '../logo.svg';
 
 class CreateAccount extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
-            uid: null,
+            uid: this.props.uid,
 
             tmpFirstName: null,
             tmpLastName: null,
