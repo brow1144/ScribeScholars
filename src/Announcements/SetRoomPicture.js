@@ -108,9 +108,7 @@ export default class CreateAnn extends React.Component {
                     <div className={"headerPic"}>
                         <div className={"annouce"}>
                             <Row className={"rowt"}>
-                                <Col className={"colt"}>
-                                    <img className="logo" alt="logo" src={logo}/>
-                                </Col>
+
                             </Row>
                             <Row className={"rowt"}>
                                 <p className={"title"}>Set Room Picture</p>

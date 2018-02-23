@@ -1,35 +1,48 @@
-
-
 .formpad {
-    padding: 10px;
-    \\alignment: center;
-
+    alignment: center;
 }
 
-div {
-    \\border: solid 1px blue;
+.container {
+    display: grid;
+    justify-items: center;
+}
 
+.rowt {
+    justify-items: left;
+}
+
+.rowSubmit {
+    justify-items: center;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.colt {
+
+    \\border: solid 1px red;
+}
+
+.titleRR {
+    text-align: center;
+    font-size: 2em;
+
+    font-style: italic;
+
+
+    font-weight: bolder;
 }
 
 .form {
-    position: center;
-    padding: auto;
-    top: 50%;
-    left: 50%;
-    margin-top: 50px;
-    margin-left: 50px;
     width: 100%;
     height: 100%;
 }
 
 .labelSize {
     font-weight: bold;
-    font-size: 10px;
+    font-size: 1em;
     font-family: "Times New Roman";
-    alignment: center;
-    padding: 5px;
-    margin: auto;
-    position: center;
+    justify-items: center;
 }
 
 .headerPic {
@@ -41,4 +54,5 @@ div {
     justify-items: center;
     position: relative;
 }
+
 

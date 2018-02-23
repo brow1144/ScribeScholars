@@ -106,9 +106,6 @@ class Announcements extends Component {
                 <div className={"headerPic"}>
                     <div className={"announce"}>
                         <Row className={"rowt"}>
-                            <Col className={"colt"}>
-                                <img className="logo" alt="logo" src={logo}/>
-                            </Col>
                         </Row>
                         <Row className={"rowt"}>
                             <Col className={"colt"}>

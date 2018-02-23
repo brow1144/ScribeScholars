@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
+import { Container, Alert, Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
 
 
 import logo from '../logo.svg';
@@ -28,6 +28,11 @@ export default class CreateAnn extends React.Component {
     onDismiss = () => {
         this.setState({ visible: false });
     };
+
+    handleSubmit(event) {
+        alert('A name was submitted: ' + this.state.value);
+        event.preventDefault();
+    }
 
     dockSideBar = () => {
         if (this.state.sidebarDocked)
@@ -87,8 +92,6 @@ export default class CreateAnn extends React.Component {
         };
         return (
 
-
-
             <Sidebar styles={sidebarStyles}
                      sidebar={sidebarContent}
                      open={this.state.sidebarOpen}
@@ -103,89 +106,121 @@ export default class CreateAnn extends React.Component {
                     :
                     <br/>
                 }
-
-            <div>
-                <div className={"headerPic"}>
-                    <div className={"annouce"}>
+            <Container fluid className={"container"}>
                         <Row className={"rowt"}>
-                            <Col className={"colt"}>
-                                <img className="logo" alt="logo" src={logo}/>
+                            <Col>
+                                <p className={"titleRR"}>Make an Announcement</p>
+                            </Col>
+                        </Row>
+
+
+                <Row className={"rowt"}>
+                    <Col>
+                        <Alert color="success" isOpen={this.state.visible} toggle={this.onDismiss}>
+                            {this.state.errorCode} Note that not all fields are required, but recommended.
+                        </Alert>
+                    </Col>
+                </Row>
+
+                <Form className={"form"} onSubmit={this.handleSubmit}>
+
+                    <FormGroup className={"formpad"}>
+                        <Row className={"rowt"}>
+                            <Col>
+                                <Label className={"labelSize"} for="exampleText">Announcement Title</Label>
                             </Col>
                         </Row>
                         <Row className={"rowt"}>
-                                <p className={"title"}>Make an Announcement</p>
-                        </Row>
-                        <Row>
-
-                        </Row>
-                    </div>
-                </div>
-
-                <div>
-                    <Alert color="success" isOpen={this.state.visible} toggle={this.onDismiss}>
-                        {this.state.errorCode} Note that not all fields are required, but recommended.
-                    </Alert>
-                </div>
-
-
-                    <Form className={"form"}>
-
-                        <FormGroup row className={"formpad"}>
-                            <Label className={"labelSize"} for="exampleText" sm={2}>Announcement Title</Label>
-                            <Col sm={10}>
+                            <Col>
                                 <Input type="textarea" name="text" id="exampleText" />
                             </Col>
-                        </FormGroup>
+                        </Row>
+                    </FormGroup>
 
 
-                        <FormGroup className={"formpad"}>
-                            <legend className={"labelSize"}>Announcement Type</legend>
+
+                    <FormGroup className={"formpad"}>
+                        <Row className={"rowt"}>
+                            <Col>
+                            <Label className={"labelSize"}>Announcement Type</Label>
+                            </Col>
+                        </Row>
+                        <Row className={"rowt"}>
+
+                            <Col xs={3}>
                                 <FormGroup check className={"formpad"}>
                                     <Label check>
                                         <Input type="radio" name="radio2" />{' '}
                                         Homework
                                     </Label>
                                 </FormGroup>
-
+                            </Col>
+                        </Row>
+                            <Row className={"rowt"}>
+                            <Col xs={3}>
                                 <FormGroup check className={"formpad"}>
                                     <Label check>
                                         <Input type="radio" name="radio2" />{' '}
                                         Quiz
                                     </Label>
                                 </FormGroup>
-
+                            </Col>
+                            </Row>
+                        <Row className={"rowt"}>
+                            <Col xs={3}>
                                 <FormGroup check className={"formpad"}>
                                     <Label check>
                                         <Input type="radio" name="radio2" />{' '}
                                         Test
                                     </Label>
                                 </FormGroup>
-
+                            </Col>
+                        </Row>
+                        <Row className={"rowt"}>
+                            <Col xs={3}>
                                 <FormGroup check className={"formpad"}>
                                     <Label check>
                                         <Input type="radio" name="radio2" />{' '}
                                         Miscellaneous
                                     </Label>
                                 </FormGroup>
-                        </FormGroup>
+                            </Col>
+                        </Row>
+                    </FormGroup>
 
-                        <FormGroup row className={"formpad"}>
-                            <Label className={"labelSize"} for="exampleText" sm={2}>Announcement Message</Label>
-                            <Col sm={10}>
+
+                    <FormGroup className={"formpad"}>
+                        <Row className={"rowt"}>
+                            <Col>
+                                <Label className={"labelSize"} for="exampleText">Announcement Message</Label>
+                            </Col>
+                        </Row>
+                        <Row className={"rowt"}>
+                            <Col>
                                 <Input type="textarea" name="text" id="exampleText" />
                             </Col>
-                        </FormGroup>
+                        </Row>
+                    </FormGroup>
 
 
-                        <FormGroup check row className={"formpad"}>
-                            <Col sm={{ size: 10, offset: 2}}>
-                                <Button color="success">Submit</Button>
+                    <FormGroup className={"formpad"}>
+                        <Row  className={"rowSubmit"}>
+                            <Col/>
+                            <Col className={"rowSubmit"}>
+                                <Button className={"rowSubmit"} color="success">Submit</Button>
                             </Col>
-                        </FormGroup>
-                    </Form>
-                </div>
+                            <Col/>
+                        </Row>
+                    </FormGroup>
+                </Form>
+
+
+
+
+            </Container>
 
             </Sidebar>
+
         );
     }
 }
