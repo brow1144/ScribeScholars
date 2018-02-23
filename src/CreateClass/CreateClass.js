@@ -62,7 +62,7 @@ class CreateClass extends Component {
       class: self.state.className,
       teacher: self.state.uid,
       teacher_email: self.state.email,
-      announcements: [],
+      Announcements: [],
       deadlines: [],
       students: [],
       tabs: self.state.tabs

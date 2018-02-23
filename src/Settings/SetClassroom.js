@@ -288,7 +288,7 @@ class SetClassroom extends Component {
                         </Form>
                         :
                         <NavLink style={{ textDecoration: 'none' }} to={`/create-class`}>
-                          <p>Create a Classroom</p>
+                          <Button type="submit" className="createClassButton" size ="lg" block>Create Class!</Button>
                         </NavLink>
                       }
 
