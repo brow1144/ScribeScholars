@@ -1,17 +1,21 @@
 .main {
-    justify-content: center;
-    align-content: center;
+    position: sticky;
+    padding: 0em;
+    width: 100%;
 }
 
 .link {
     text-decoration: none;
-    color: white;
     align-content: space-between;
-    text-align: center;
-    font-color: white;
+    font-size: 2em;
 }
 
 .link:hover {
     color: darkgray;
     text-decoration: none;
+}
+
+.navT {
+    position: fixed;
+    z-index: 10;
 }

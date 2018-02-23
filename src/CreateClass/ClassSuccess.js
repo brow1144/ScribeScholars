@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import './ClassSuccess.css'
 import { NavLink } from 'react-router-dom'
-import { Button } from 'reactstrap'
+import { Button, Row, Col } from 'reactstrap'
 
 import logo from '../logo.svg'
 
@@ -26,11 +26,13 @@ class ClassSuccess extends Component {
         <div className="title">
           <h2 className = "h2 font-weight-normal">Successfully created {this.state.className}!</h2>
 
-          <NavLink style={{ textDecoration: 'none' }} to="/create-account">
-            <div className="center">
-              <Button type="submit" className="homeButton" size="lg" block>Return Home!</Button>
-            </div>
-          </NavLink>
+          <Row>
+            <Col sm={{ size: 4, offset: 4 }}>
+                <NavLink style={{ textDecoration: 'none' }} to="/create-account">
+                  <Button type="submit" className="homeButton" size="md" block>Return Home!</Button>
+                </NavLink>
+            </Col>
+          </Row>
 
         </div>
 

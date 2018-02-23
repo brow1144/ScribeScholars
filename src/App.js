@@ -6,7 +6,6 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 
 import SignIn from './Sigin/SignIn';
 import HomePage from './HomePage/HomePage';
-import Settings from './Settings/Settings';
 import About from './About/AboutPage';
 import CreateAccount from './CreateAccount/CreateAccount';
 
@@ -67,7 +66,7 @@ class App extends Component {
 
         <Route path='/HomePage' render={() => (
           this.signedIn()
-            ? <HomePage uid={this.state.uid}/>
+            ? <HomePage page={"home"} uid={this.state.uid}/>
             : <Redirect to="/sign-in" />
         )} />
 
@@ -82,11 +81,15 @@ class App extends Component {
           )} />
 
           <Route path='/Announcements' render={() => (
-              <Announcements />
+              this.signedIn()
+                  ? <Announcements />
+                  : <Redirect to="/About" />
           )} />
 
           <Route path='/CreateAnnouncements' render={() => (
-              <CreateAnn/>
+              this.signedIn()
+                  ? <CreateAnn/>
+                  : <Redirect to="/About" />
           )} />
 
         <Route exact path='/create-account' render={() => (
@@ -98,18 +101,19 @@ class App extends Component {
         <Route exact path='/create-class' render={() => (
           this.signedIn()
             ? <CreateClass uid={this.state.uid}/>
-            : <Redirect to="/sign-in" />
+            : <Redirect to="/About" />
         )} />
-
+          
+                                                       
         <Route exact path='/create-class-success' render={() => (
           this.signedIn()
             ? <ClassSuccess uid={this.state.uid}/>
-            : <Redirect to="/sign-in" />
+            : <Redirect to="/About" />
         )} />
 
         <Route path='/settings' render={() => (
           this.signedIn()
-            ? <Settings uid={this.state.uid}/>
+            ? <HomePage page={"settings"} uid={this.state.uid}/>
             : <Redirect to="/sign-in" />
         )} />
 

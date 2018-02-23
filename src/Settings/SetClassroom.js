@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import { firestore } from '../base.js';
 
+import { NavLink } from 'react-router-dom'
+
 import { Button, Container, Row, Col, Form, FormGroup, Alert, Input } from 'reactstrap';
 import {
     Accordion,
@@ -9,11 +11,9 @@ import {
     AccordionItemTitle,
     AccordionItemBody,
 } from 'react-accessible-accordion';
-//import Switch from 'react-toggle-switch';
 
 import './SetClassroom.css';
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
-import 'react-toggle-switch/dist/css/switch.min.css';
 
 class SetClassroom extends Component {
     constructor(props) {
@@ -21,16 +21,23 @@ class SetClassroom extends Component {
 
       this.state = {
         uid: props.uid,
+        deletionCode: null,
+
+        role: this.props.role,
 
         newClass: null,
         newClassCode: null,
         newClassTeacher: null,
 
-        classes: [{
+        tempStudents: [],
+        tempClassList: [],
+
+        classes: props.classes,
+        /*classes: [{
           class: null,
           code: null,
           teacher: null,
-        }],
+        }],*/
 
         students: null,
 
@@ -170,9 +177,43 @@ class SetClassroom extends Component {
       }
     };
 
-    handleDeleteClick = () => {
-        console.log("this was clicked")
+    handleDeleteClick = (classCode) => {
+        let self = this;
+        
+        let classRef = firestore.collection("classes").doc(classCode);
+        let studentRef = firestore.collection("users").doc(self.state.uid);
 
+
+        classRef.get().then(function(doc) {
+            self.setState({
+                tempStudents: doc.data().students
+            });
+            let i = self.state.tempStudents.indexOf(self.state.uid);
+            self.state.tempStudents.splice(i,1);
+            classRef.update({
+                students: self.state.tempStudents
+            }).then(function() {
+                console.log("Student list updated")
+            })
+
+        });
+
+        studentRef.get().then(function(doc) {
+            self.setState({
+                tempClassList: doc.data().classes
+            });
+            let i = self.state.tempClassList.indexOf(classCode);
+            self.state.tempClassList.splice(i,1);
+            studentRef.update({
+                classes: self.state.tempClassList,
+            }).then(function() {
+                self.setState({
+                    classes: self.state.tempClassList,
+                });
+                console.log("Class list updated")
+            })
+
+        });
     };
 
     onDismiss = () => {
@@ -181,8 +222,7 @@ class SetClassroom extends Component {
       });
     };
 
-    render()
-    {
+    render() {
 
         return(
             <Container fluid className={"ContainerRules"}>
@@ -196,14 +236,14 @@ class SetClassroom extends Component {
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
                     <Col xs={"6"}>
-                        { this.props.classes != null
+                        { this.state.classes != null
                             ?
                             <Accordion>
-                                {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
+                                {this.state.classes != null && Object.keys(this.state.classes).map((key, index) => {
                                     return <AccordionItem key={key}>
                                         <AccordionItemTitle>
                                             <h3>
-                                                {this.props.classes[index].class}
+                                                {this.state.classes[index].class}
                                             </h3>
                                         </AccordionItemTitle>
                                         <AccordionItemBody className={"accordBody"}>
@@ -213,12 +253,9 @@ class SetClassroom extends Component {
                                                     Notifications</Button>
                                                 <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable
                                                     Announcements</Button>
-
-                                                <span onClick={this.handleDeleteClick}
-                                                      className={"clickableIcon float-right"}>
-                                                <i onClick={this.handleDeleteClick}
-                                                   className="fas fa-trash-alt deleteIcon float-right"/>
-                                            </span>
+                                                <span onClick={ () => this.handleDeleteClick(this.state.classes[index].code)} className={"clickableIcon float-right"}>
+                                                    <i className="fas fa-trash-alt deleteIcon float-right"/>
+                                                </span>
 
                                             </div>
                                         </AccordionItemBody>
@@ -231,6 +268,8 @@ class SetClassroom extends Component {
 
                         <Row className={"Filler"}> </Row>
                         <Row className={"Filler"}> </Row>
+
+                      {this.state.role === "student" ?
                         <Form onSubmit={this.onFormSubmit}>
                             <FormGroup row check>
                                 <Col sm={{ size: 3, offset: 2}}>
@@ -247,7 +286,17 @@ class SetClassroom extends Component {
                                 </Col>
                             </FormGroup>
                         </Form>
-                    </Col>
+                        :
+                        <Col >
+                          <Row>
+                            <NavLink style={{ textDecoration: 'none' }} to={`/create-class`}>
+                              <Button type="submit" className="createClassButton" size ="lg" block>Create Class!</Button>
+                            </NavLink>
+                          </Row>
+                        </Col>
+                      }
+
+                        </Col>
                 </Row>
             </Container>
         );
