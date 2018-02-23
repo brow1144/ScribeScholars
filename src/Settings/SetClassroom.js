@@ -2,18 +2,16 @@ import React, { Component } from 'react';
 
 import { firestore } from '../base.js';
 
-import { Button, Container, Row, Col, Form, FormGroup, Input } from 'reactstrap';
+import { Button, Container, Row, Col, Form, FormGroup, Alert, Input } from 'reactstrap';
 import {
     Accordion,
     AccordionItem,
     AccordionItemTitle,
     AccordionItemBody,
 } from 'react-accessible-accordion';
-//import Switch from 'react-toggle-switch';
 
 import './SetClassroom.css';
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
-import 'react-toggle-switch/dist/css/switch.min.css';
 
 class SetClassroom extends Component {
     constructor(props) {
@@ -38,6 +36,9 @@ class SetClassroom extends Component {
         }],*/
 
         students: null,
+
+        errorCode: "",
+        visible: false,
       };
     }
 
@@ -70,7 +71,10 @@ class SetClassroom extends Component {
       if (self.state.classes != null) {
         for (let i in self.state.classes) {
           if (self.state.classes[i].code === self.state.newClassCode) {
-            alert("already in class");
+            self.setState({
+              errorCode: "Already enrolled in this class",
+              visible: true,
+            });
             return;
           }
         }
@@ -124,7 +128,10 @@ class SetClassroom extends Component {
             console.log("Error updating document: ", error);
           });
         } else {
-          console.log("Class not found");
+          self.setState({
+            errorCode: "Class not found",
+            visible: true,
+          });
         }
       }).catch(function(error) {
         console.log("Error getting document: ", error);
@@ -135,26 +142,35 @@ class SetClassroom extends Component {
       ev.preventDefault();
       let self = this;
 
-        let code = ev.target.classCode.value;
+      let code = ev.target.classCode.value;
+      if (code !== "") {
+        let docRef = firestore.collection("classes").doc(code);
+        docRef.get().then(function (doc) {
+          if (doc.exists) {
+            let data = doc.data();
+            self.setState({
+              newClass: data.class,
+              newClassCode: code,
+              newClassTeacher: data.teacher,
+              students: data.students,
+            });
 
-      let docRef = firestore.collection("classes").doc(code);
-      docRef.get().then(function(doc) {
-        if (doc.exists) {
-          let data = doc.data();
-          self.setState({
-            newClass: data.class,
-            newClassCode: code,
-            newClassTeacher: data.teacher,
-            students: data.students,
-          });
-
-          self.checkClasses();
-        } else {
-          console.log("class not found");
-        }
-      }).catch(function(error) {
-        console.log("Error getting document: ", error);
-      });
+            self.checkClasses();
+          } else {
+            self.setState({
+              errorCode: "Class not found",
+              visible: true,
+            });
+          }
+        }).catch(function (error) {
+          console.log("Error getting document: ", error);
+        });
+      } else {
+        self.setState({
+          errorCode: "Please enter a 6-digit code",
+          visible: true,
+        });
+      }
     };
 
     handleDeleteClick = () => {
@@ -194,6 +210,12 @@ class SetClassroom extends Component {
             })
 
         });
+    };
+
+    onDismiss = () => {
+      this.setState({
+        visible: false,
+      });
     };
 
     render()
@@ -248,7 +270,14 @@ class SetClassroom extends Component {
                                 <Col sm={{ size: 3, offset: 2}}>
                                     <Input bsSize="lg" type="classCode" name="classCode" id="classToAdd" placeholder="Class Code"/>
                                     <Row className={"Filler"}> </Row>
-                                    <Button size={"lg"}>Join This Class</Button>
+                                </Col>
+                                <Col sm={{ size: 5, offset: 2}}>
+                                  <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
+                                    {this.state.errorCode}
+                                  </Alert>
+                                </Col>
+                                <Col sm={{ size: 3, offset: 2}}>
+                                  <Button size={"lg"}>Join This Class</Button>
                                 </Col>
                             </FormGroup>
                         </Form>
