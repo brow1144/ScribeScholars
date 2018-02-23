@@ -16,6 +16,7 @@ import ClassSuccess from './CreateClass/ClassSuccess';
 import './App.css';
 import Announcements from "./Announcements/Announcements";
 import CreateAnn from "./Announcements/CreateAnn";
+import SetRoomPic from "./Announcements/SetRoomPicture";
 
 
 class App extends Component {
@@ -238,6 +239,12 @@ class App extends Component {
                   : <Redirect to="/About" />
           )} />
 
+          <Route path='/SetRoomPicture' render={() => (
+              this.signedIn()
+                  ? <SetRoomPic/>
+                  : <Redirect to="/About" />
+          )} />
+
         <Route exact path='/create-account' render={() => (
             !this.signedIn()
                 ? <CreateAccount />
@@ -249,12 +256,12 @@ class App extends Component {
             ? <CreateClass uid={this.state.uid}/>
             : <Redirect to="/About" />
         )} />
-          
                                                        
         <Route exact path='/create-class-success' render={() => (
           this.signedIn()
             ? <ClassSuccess uid={this.state.uid}/>
             : <Redirect to="/About" />
+
         )} />
 
         <Route path='/settings' render={() => (

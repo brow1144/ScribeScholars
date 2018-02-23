@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
+import { Container, Alert, Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
 
 
 import logo from '../logo.svg';
@@ -7,6 +7,7 @@ import './Announcements.css';
 import './CreateAnn.css';
 import Sidebar from 'react-sidebar';
 import AnnSide from "./AnnSide";
+import {fireauth, firestore} from "../base";
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
@@ -22,12 +23,27 @@ export default class CreateAnn extends React.Component {
             docked: props.docked,
             open: props.open,
             sideButtonVisibility: !props.docked,
+
+            newMessage: null,
+            newTitle: null,
+            newSubtitle: null,
+
+            Announcements: [{
+                message: null,
+                subtitle: null,
+                title: null,
+            }],
         };
     }
 
     onDismiss = () => {
         this.setState({ visible: false });
     };
+
+    handleSubmit(event) {
+        alert('A name was submitted: ' + this.state.value);
+        event.preventDefault();
+    }
 
     dockSideBar = () => {
         if (this.state.sidebarDocked)
@@ -71,6 +87,74 @@ export default class CreateAnn extends React.Component {
     };
 
 
+    onFormSubmit = (ev) => {
+        ev.preventDefault();
+        let self = this;
+
+        let title = ev.target.title.value;
+        let subtitle = ev.target.subtitle.value;
+        let message = ev.target.message.value;
+        let classCode = ev.target.classCode.value;
+
+        let classRef = firestore.collection("classes").doc(classCode);
+
+
+        classRef.get().then(function(doc) {
+            if (doc.exists) {
+                if (doc.data().Announcements != null) {
+                    self.setState({
+                        Announcements: doc.data().Announcements,
+                        newTitle: title,
+                        newSubtitle: subtitle,
+                        newMessage: message,
+                    });
+                    self.addAnnouncement(classRef);
+
+
+                }
+            } else {
+                console.log("user not found");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document: ", error);
+        });
+
+
+    };
+
+    addAnnouncement = (classRef) => {
+        let self = this;
+        let tmpNewAnnouncement = [{
+            message: self.state.newMessage,
+            subtitle: self.state.newSubtitle,
+            title: self.state.newTitle,
+        }];
+
+        // add temporary class to classes
+        if (self.state.Announcements != null) {
+            self.setState({
+                Announcements: self.state.Announcements.concat(tmpNewAnnouncement),
+            });
+        } else {
+            self.setState({
+                Announcements: tmpNewAnnouncement,
+            });
+        }
+
+        classRef.update({
+            Announcements: self.state.Announcements,
+        }).then(function() {
+            console.log("Successfully updated classes list");
+        }).catch(function(error) {
+            console.log("Error updating document: ", error);
+        });
+    };
+
+
+
+
+
+
     render() {
 
         let sidebarContent = <AnnSide />;
@@ -87,8 +171,6 @@ export default class CreateAnn extends React.Component {
         };
         return (
 
-
-
             <Sidebar styles={sidebarStyles}
                      sidebar={sidebarContent}
                      open={this.state.sidebarOpen}
@@ -103,103 +185,104 @@ export default class CreateAnn extends React.Component {
                     :
                     <br/>
                 }
-                {/*
-                <SetPersonal/>
-*/}
-            <div>
-                <div className={"container"}>
-                    <div className={"about"}>
-                        <Row className={"row"}>
-                            <Col className={"col"}>
-                                <img className="logo" alt="logo" src={logo}/>
+            <Container fluid className={"container"}>
+                        <Row className={"rowt"}>
+                            <Col>
+                                <p className={"titleRR"}>Make an Announcement</p>
                             </Col>
                         </Row>
-                        <Row className={"row"}>
-                            <Col className={"col"}>
-                                <p className={"title"}>Make an Announcement</p>
+
+
+                <Row className={"rowt"}>
+                    <Col>
+                        <Alert color="success" isOpen={this.state.visible} toggle={this.onDismiss}>
+                            {this.state.errorCode} Note that not all fields are required, but recommended.
+                        </Alert>
+                    </Col>
+                </Row>
+
+                <Form className={"form"}  onSubmit={ (ev) => this.onFormSubmit(ev) }>
+
+                    <FormGroup className={"formpad"}>
+                        <Row className={"rowt"}>
+                            <Col>
+                                <Label className={"labelSize"} for="exampleText">Announcement Title</Label>
                             </Col>
                         </Row>
-                    </div>
-                </div>
-
-
-                <Alert color="success" isOpen={this.state.visible} toggle={this.onDismiss}>
-                    {this.state.errorCode} Note that not all fields are required, but recommended.
-                </Alert>
-
-
-                <div>
-                    <Form className={"form"}>
-
-                        <FormGroup row className={"formpad"}>
-                            <Label className={"labelSize"}for="exampleText" sm={2}>Announcement Title</Label>
-                            <Col sm={10}>
-                                <Input type="textarea" name="text" id="exampleText" />
+                        <Row className={"rowt"}>
+                            <Col>
+                                <Input name="title" id="exampleTitle" />
                             </Col>
-                        </FormGroup>
+                        </Row>
+                    </FormGroup>
 
 
-                        <FormGroup tag="fieldset" row className={"formpad"}>
-                            <legend className="col-form-label col-sm-2 labelSize">Announcement Type</legend>
-                            <Col sm={10}>
-                                <FormGroup check>
-                                    <Label check>
-                                        <Input type="radio" name="radio2" />{' '}
-                                        Homework
-                                    </Label>
-                                </FormGroup>
 
-                                <FormGroup check className={"formpad"}>
-                                    <Label check>
-                                        <Input type="radio" name="radio2" />{' '}
-                                        Quiz
-                                    </Label>
-                                </FormGroup>
-
-                                <FormGroup check className={"formpad"}>
-                                    <Label check>
-                                        <Input type="radio" name="radio2" />{' '}
-                                        Test
-                                    </Label>
-                                </FormGroup>
-
-                                <FormGroup check className={"formpad"}>
-                                    <Label check>
-                                        <Input type="radio" name="radio2" />{' '}
-                                        Miscellaneous
-                                    </Label>
-                                </FormGroup>
-
+                    <FormGroup className={"formpad"}>
+                        <Row className={"rowt"}>
+                            <Col>
+                                <Label className={"labelSize"} for="exampleText">Announcement Type</Label>
                             </Col>
-                        </FormGroup>
-
-                        <FormGroup row className={"formpad"}>
-                            <Label className={"labelSize"} for="exampleText" sm={2}>Announcement Message</Label>
-                            <Col sm={10}>
-                                <Input type="textarea" name="text" id="exampleText" />
+                        </Row>
+                        <Row className={"rowt"}>
+                            <Col>
+                                <Label check>
+                                    <Input type="select" name="subtitle">
+                                        <option>Test</option>
+                                        <option>Quiz</option>
+                                        <option>Homework</option>
+                                        <option>Misc.</option>
+                                    </Input>
+                                </Label>
                             </Col>
-                        </FormGroup>
+                        </Row>
+                    </FormGroup>
 
-                        <FormGroup row className={"formpad"}>
-                            <Label className={"labelSize"} for="exampleFile" sm={2}>Attachment</Label>
-                            <Col sm={10}>
-                                <Input type="file" name="file" id="exampleFile" />
-                                <FormText color="muted">
-                                    Select a file to be displayed alongside your announcement.
-                                </FormText>
+                    <FormGroup className={"formpad"}>
+                        <Row className={"rowt"}>
+                            <Col>
+                                <Label className={"labelSize"} for="exampleText">Announcement Message</Label>
                             </Col>
-                        </FormGroup>
-
-
-                        <FormGroup check row className={"formpad"}>
-                            <Col sm={{ size: 10, offset: 2}}>
-                                <Button color="success">Submit</Button>
+                        </Row>
+                        <Row className={"rowt"}>
+                            <Col>
+                                <Input type="textarea" name="message" id="exampleMessage" />
                             </Col>
-                        </FormGroup>
-                    </Form>
-                </div>
-            </div>
+                        </Row>
+                    </FormGroup>
+
+                    <FormGroup className={"formpad"}>
+                        <Row className={"rowt"}>
+                            <Col>
+                                <Label className={"labelSize"} for="exampleText">Class Code</Label>
+                            </Col>
+                        </Row>
+                        <Row className={"rowt"}>
+                            <Col>
+                                <Input name="classCode" id="exampleClassCode" />
+                            </Col>
+                        </Row>
+                    </FormGroup>
+
+
+                    <FormGroup className={"formpad"}>
+                        <Row  className={"rowSubmit"}>
+                            <Col/>
+                            <Col className={"rowSubmit"}>
+                                <Button className={"rowSubmit"} color="success">Submit</Button>
+                            </Col>
+                            <Col/>
+                        </Row>
+                    </FormGroup>
+                </Form>
+
+
+
+
+            </Container>
+
             </Sidebar>
+
         );
     }
 }

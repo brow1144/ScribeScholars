@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {Card, CardTitle, CardText, CardDeck, CardSubtitle, CardBody } from 'reactstrap';
+import {Card, CardTitle, CardText, CardDeck,
+    CardSubtitle, CardBody } from 'reactstrap';
 
 class AnnAcc extends Component {
     constructor(props) {
