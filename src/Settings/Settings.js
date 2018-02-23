@@ -14,12 +14,13 @@ class Settings extends Component {
         this.state = {
             uid: props.uid,
 
+            role: this.props.role,
+
             personalPage: true,
             name: null,
             email: null,
             phoneN: null,
             descript: null,
-
 
             classes: [{
                 class: null,
@@ -160,6 +161,7 @@ class Settings extends Component {
                         />
                         :
                         <SetClassroom
+                            role={this.state.role}
                             uid={this.state.uid}
                             name={this.state.name}
                             email={this.state.email}

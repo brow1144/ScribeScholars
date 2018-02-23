@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import { firestore } from '../base.js';
 
+import { NavLink } from 'react-router-dom'
+
 import { Button, Container, Row, Col, Form, FormGroup, Alert, Input } from 'reactstrap';
 import {
     Accordion,
@@ -20,6 +22,8 @@ class SetClassroom extends Component {
       this.state = {
         uid: props.uid,
         deletionCode: null,
+
+        role: this.props.role,
 
         newClass: null,
         newClassCode: null,
@@ -218,8 +222,7 @@ class SetClassroom extends Component {
       });
     };
 
-    render()
-    {
+    render() {
 
         return(
             <Container fluid className={"ContainerRules"}>
@@ -265,6 +268,8 @@ class SetClassroom extends Component {
 
                         <Row className={"Filler"}> </Row>
                         <Row className={"Filler"}> </Row>
+
+                      {this.state.role === "student" ?
                         <Form onSubmit={this.onFormSubmit}>
                             <FormGroup row check>
                                 <Col sm={{ size: 3, offset: 2}}>
@@ -281,7 +286,17 @@ class SetClassroom extends Component {
                                 </Col>
                             </FormGroup>
                         </Form>
-                    </Col>
+                        :
+                        <Col >
+                          <Row>
+                            <NavLink style={{ textDecoration: 'none' }} to={`/create-class`}>
+                              <Button type="submit" className="createClassButton" size ="lg" block>Create Class!</Button>
+                            </NavLink>
+                          </Row>
+                        </Col>
+                      }
+
+                        </Col>
                 </Row>
             </Container>
         );
