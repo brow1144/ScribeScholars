@@ -31,6 +31,7 @@ class SetPersonal extends Component {
     }
 
     resetPass = () => {
+        this.toggle();
         firebase.auth().sendPasswordResetEmail(
             this.state.email)
             .then(function () {
@@ -164,7 +165,7 @@ class SetPersonal extends Component {
                                             Are you sure you want to reset your password? (An email will be sent to your account)
                                         </ModalBody>
                                         <ModalFooter>
-                                            <Button size={"lg"} color="info" onClick={this.resetPass}>Send Reset Email</Button>
+                                            <Button size={"lg"} color="info" onClick={(this.resetPass)}>Send Reset Email</Button>
                                             <Button size={"lg"} color="secondary" onClick={this.toggle}>Close</Button>
                                         </ModalFooter>
                                     </Modal>
