@@ -45,28 +45,7 @@ class CreateClass extends Component {
   setNewDoc = () => {
     let self = this;
     let code = CreateClass.getCode();
-
-    //TODO Add check for repeated code
-
-    let classData = [{
-      class: self.state.className,
-      teacher: self.state.uid,
-      teacher_email: self.state.email,
-      announcements: [],
-      deadlines: [],
-      students: [],
-      tabs: self.state.tabs,
-    }];
-
-
-    /*let classRef = firestore.collection("classes").doc(code);
-    classRef.set(classData).then(function () {
-      self.setState({
-        done: false,
-      });
-    }); //TODO Error catching
-
-    let classRef = firestore.collection("classes").doc(code);*/
+    //TODO check for repeated code
 
     //Create new document in "classes" collection
     let classRef = firestore.collection("classes").doc(code);
@@ -98,30 +77,33 @@ class CreateClass extends Component {
 
 
     //Update user document based on uid with newly generated class information
-    /*let teacherRef = firestore.collection("users").doc(this.state.uid);
-    firestore.runTransaction(t => {
-      return t.get(teacherRef)
-        .then(doc => {
+    let teacherRef = firestore.collection("users").doc(this.state.uid);
+    teacherRef.get().then(function (doc) {
+      if(doc.exists) {
 
-          let classArray = doc.data().classes;
-          let newData = {
-            class: self.state.className,
-            code: code,
-            teacher: self.state.uid
-          };
-          classArray.push(newData);
+        let classArray = doc.data().classes;
+        classArray.push({
+          class: self.state.className,
+          code: code,
+          teacher: self.state.uid
+        });
 
-          t.update( teacherRef, { classes: classArray } );
+        teacherRef.update({
+          classes: classArray,
+        }).then(function () {
 
         });
-    }).then(result => {
+      }
+    }).then(() => {
       self.setState({
         done: true,
       });
     }).catch(err => {
       console.log('Transaction failure:', err);
-    });*/
-    console.log("here " + self.state.classes);
+    });
+
+
+    /*console.log("here " + self.state.classes);
     if (self.state.classes != null) {
       self.setState({
         classes: self.state.classes.concat(classData),
@@ -132,9 +114,9 @@ class CreateClass extends Component {
       });
       console.log(classData);
       console.log(self.state.classes);
-    }
+    }*/
 
-    let teacherRef = firestore.collection("users").doc(this.state.uid);
+    /*let teacherRef = firestore.collection("users").doc(this.state.uid);
     teacherRef.update({
       classes: self.state.classes,
     }).then(function() {
@@ -143,8 +125,8 @@ class CreateClass extends Component {
         done: true,
       });
     }).catch(function(error) {
-      console.log("Error updating document: ", error);
-    });
+      console.log("Error updating doc: ", error);
+    });*/
   };
 
   //Generate class code
@@ -187,7 +169,7 @@ class CreateClass extends Component {
         return;
 
       default:
-        console.log("Error: incorrect fieldName");
+        //console.log("Error: incorrect fieldName");
         return;
     }
   }
