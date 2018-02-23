@@ -3,7 +3,6 @@ import { Row, Col, Button } from 'reactstrap';
 
 import '../Settings/Settings.css'
 import Sidebar from 'react-sidebar';
-import logo from '../logo.svg';
 import './Announcements.css';
 import AnnAcc from "./AnnAcc";
 import AnnSide from "./AnnSide";

@@ -1,13 +1,10 @@
 import React from 'react';
 import {   Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
 
-
-import logo from '../logo.svg';
 import './Announcements.css';
 import './CreateAnn.css';
 import Sidebar from 'react-sidebar';
 import AnnSide from "./AnnSide";
-import {firestore} from "../base";
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
@@ -73,7 +70,6 @@ export default class CreateAnn extends React.Component {
 
     submitPicture = (ev) => {
         ev.preventDefault();
-        let self = this;
 
     };
 
