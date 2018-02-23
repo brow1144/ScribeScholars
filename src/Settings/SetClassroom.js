@@ -276,7 +276,7 @@ class SetClassroom extends Component {
                       {this.state.role === "student" ?
                         <Form onSubmit={this.onFormSubmit}>
                             <FormGroup row check>
-                                <Col sm={{ size: 3, offset: 2}}>
+                                <Col xs={{ size: 10, offset: 0}} sm={{ size: 5, offset: 2}} md={{ size: 5, offset: 2}} lg={{ size: 4, offset: 2}}>
                                     <Input bsSize="lg" type="classCode" name="classCode" id="classToAdd" placeholder="Class Code"/>
                                     <Row className={"Filler"}> </Row>
                                 </Col>
