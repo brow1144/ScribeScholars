@@ -71,6 +71,8 @@ class CreateAccount extends Component {
     };
 
     addInfo = () => {
+        let self = this;
+
         fireauth.onAuthStateChanged( (user) => {
           if (user) {
             let docRef = firestore.collection("users").doc(user.uid);
@@ -89,7 +91,7 @@ class CreateAccount extends Component {
             });
           } else {
             // finished signing out
-            this.setState({ uid: null })
+            self.setState({ uid: null })
           }
         }
       );
