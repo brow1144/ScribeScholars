@@ -7,7 +7,7 @@ const Cards = (props) => {
   return (
     <div>
       <Row>
-        <Col sm={{ size: 'auto', offset: 1 }}>
+        <Col xs={{ size: '10', offset: 1 }}>
           <CardDeck>
             {Object.keys(props.announcements).map((key, index) => {
               return <Card key={key}>
