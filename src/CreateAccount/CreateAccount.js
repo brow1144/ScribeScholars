@@ -17,6 +17,7 @@ class CreateAccount extends Component {
             visible: false,
             dropdownOpen: false,
             role: null,
+            selected: "Account Type",
             uid: null,
         };
     }
@@ -84,8 +85,15 @@ class CreateAccount extends Component {
     }
 
     selectRole(name) {
+      let display = name;
+      if (name === "student")
+        display = "Student";
+      else if (name === "teacher")
+        display = "Teacher";
+
       this.setState({
         role: name,
+        selected: display,
       })
     }
 
@@ -115,9 +123,11 @@ class CreateAccount extends Component {
                         <FormGroup>
                             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                                 <DropdownToggle caret color="secondary">
-                                    Account Type
+                                  {this.state.selected}
                                 </DropdownToggle>
                                 <DropdownMenu>
+                                    <DropdownItem header>Account Type</DropdownItem>
+                                    <DropdownItem divider />
                                     <DropdownItem onClick={() => this.selectRole("student")}>
                                         Student
                                     </DropdownItem>
