@@ -15,6 +15,8 @@ class Main extends Component {
 
       uid: this.props.uid,
 
+      userImage: null,
+
       role: null,
 
       classes: [{
@@ -146,7 +148,6 @@ class Main extends Component {
     self.setState({
       announcements: object
     });
-
   };
 
   updateClasses = (classes) => {
@@ -175,6 +176,12 @@ class Main extends Component {
     })
   };
 
+  updateUserImage = (userImage) => {
+    this.setState({
+      userImage: userImage,
+    })
+  };
+
   render() {
     return (
       <HomePage
@@ -187,6 +194,8 @@ class Main extends Component {
         updateDates={ this.updateDates }
         updateRole={ this.updateRole }
         updateAnnouncements={ this.updateAnnouncements }
+        userImage={ this.state.userImage }
+        updateUserImage={ this.updateUserImage }
         />
     )
   }

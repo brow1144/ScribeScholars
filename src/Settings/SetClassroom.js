@@ -265,7 +265,9 @@ class SetClassroom extends Component {
                                         </AccordionItemTitle>
                                         <AccordionItemBody className={"accordBody"}>
                                             <div>
-                                                <br/>
+                                                <h5 className={"codeText"}>
+                                                    Class Code: {this.state.classes[index].code}
+                                                </h5>
                                                 <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable
                                                     Notifications</Button>
                                                 <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable

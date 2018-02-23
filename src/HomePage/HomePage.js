@@ -50,6 +50,8 @@ class HomePage extends Component {
 
       uid: props.uid,
 
+      userImage: this.props.userImage,
+
       role: this.props.role,
 
       classes: [{
@@ -149,6 +151,7 @@ class HomePage extends Component {
           self.setState({
             classes: doc.data().classes,
           });
+          self.getUserImage();
           self.getDeadlines();
           self.getAnnouncements();
         }
@@ -168,7 +171,25 @@ class HomePage extends Component {
       console.log("Error getting document:", error);
     });
 
+  };
 
+  getUserImage = () => {
+    let docRef = firestore.collection("users").doc(this.state.uid);
+    let self = this;
+
+    docRef.get().then(function(doc) {
+      if (doc.exists) {
+        self.setState({
+          userImage: doc.data().userImage,
+        });
+
+      } else {
+        console.log("No such document!");
+      }
+      self.props.updateUserImage(doc.data().userImage);
+    }).catch(function(error) {
+      console.log("Error getting document:", error);
+    })
   };
 
   /**
@@ -373,7 +394,7 @@ class HomePage extends Component {
   render() {
 
 
-    let sidebarContent = <Side flipClass={this.flipToClass.bind(this)} flipPersonal={this.flipToPersonal.bind(this)}
+    let sidebarContent = <Side userImage={ this.props.userImage } updateUserImage={ this.props.updateUserImage } flipClass={this.flipToClass.bind(this)} flipPersonal={this.flipToPersonal.bind(this)}
                                 page={this.props.page} uid={this.state.uid} classes={this.props.classes} />;
 
     const sidebarStyles = {
@@ -463,7 +484,7 @@ class HomePage extends Component {
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <Settings updateClasses={ this.props.updateClasses } role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid} />
+          <Settings userImage={ this.state.userImage } updateUserImage={ this.props.updateUserImage } updateClasses={ this.props.updateClasses } role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid} />
         </Sidebar>
       );
 

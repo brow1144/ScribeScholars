@@ -31,6 +31,9 @@ class AboutPage extends Component {
                             <p>About Scribe Scholars</p>
                         </Col>
                     </Row>
+                    <Row>
+                        <a name="Mission"><Col className={"fillerCol"} xs={12}></Col></a>
+                    </Row>
                     <Row className="bgOne">
                         <Col xs={12} className="text bgOne">
                             <h1 className={"sectionTitle"}>Scribe Scholars' Mission</h1>
@@ -39,9 +42,12 @@ class AboutPage extends Component {
                                 the premier learning experience</p>
                         </Col>
                     </Row>
+                    <Row>
+                        <a name="Students"><Col className={"fillerCol"} xs={12}></Col></a>
+                    </Row>
                     <Row className="bgTwo">
                         <Col xs={12} lg={6} className="bgTwo">
-                            <a name="Students"><img src={student} className="picture" alt=""/></a>
+                            <img src={student} className="picture" alt=""/>
                         </Col>
                         <Col xs={12} lg={6} className="text bgTwo">
                             <h1 className={"sectionTitle"}>Students</h1>
@@ -52,9 +58,12 @@ class AboutPage extends Component {
                             </p>
                         </Col>
                     </Row>
+                    <Row>
+                        <a name="Teachers"><Col className={"fillerCol"} xs={12}></Col></a>
+                    </Row>
                     <Row className="bgOne">
                         <Col xs={12} lg={6} className="text bgOne">
-                            <a name="Teachers"><h1 className={"sectionTitle"}>Teachers</h1></a>
+                            <h1 className={"sectionTitle"}>Teachers</h1>
                             <p className="para">There are a wide variety of features available to aid teachers.  Create in-class activities to keep students
                                 engaged and interested in learning.  Grades are simple to update to allow students to track their progress.  Teachers can
                                 monitor class progress and identify where the class can most improve.  Adding classes is easy to do and all located within our website.</p>
@@ -63,9 +72,12 @@ class AboutPage extends Component {
                             <img src={teacher} className={"picture"} alt={""}/>
                         </Col>
                     </Row>
+                    <Row>
+                        <a name="Administrators"><Col className={"fillerCol"} xs={12}></Col></a>
+                    </Row>
                     <Row className="bgTwo">
                         <Col xs={12} lg={6} className="bgTwo">
-                            <a name="Administrators"><img src={admin} className={"picture"} alt={""}/></a>
+                            <img src={admin} className={"picture"} alt={""}/>
                         </Col>
                         <Col xs={12} lg={6} className="text bgTwo">
                             <h1 className={"sectionTitle"}>Administrators</h1>
@@ -73,9 +85,12 @@ class AboutPage extends Component {
                                 process for setting up classes.  </p>
                         </Col>
                     </Row>
+                    <Row>
+                        <a name="Parents"><Col className={"fillerCol"} xs={12}></Col></a>
+                    </Row>
                     <Row className="bgOne">
                         <Col xs={12} lg={6} className="text bgOne">
-                            <a name="Parents"><h1 className={"sectionTitle"}>Parents</h1></a>
+                            <h1 className={"sectionTitle"}>Parents</h1>
                             <p className="para">Scribe Scholars was designed to create a simple and easy-to-use system for parents to monitor
                                 their child’s performance in the classroom from a safe distance. Once linked to your child’s account, a parent
                                 has the access to see everything that the child can see. This includes the ability to see all currently enrolled
