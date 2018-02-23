@@ -1,5 +1,4 @@
 import React from 'react'
-import {Badge} from 'reactstrap';
 import { NavLink } from 'react-router-dom'
 
 
@@ -16,16 +15,12 @@ const SettingsSide = () => {
                 <img src={logo} alt="Logo" />
             </NavLink>
 
-            <NavLink style={{ textDecoration: 'none' }} to={`/Announcements`}>
-                <p className="classOne" >Announcements<Badge color='secondary'>3</Badge></p>
-            </NavLink>
-
-            <NavLink style={{ textDecoration: 'none' }} to={`/createAnnouncements`}>
+            <NavLink style={{ textDecoration: 'none', color: 'black' }} to={`/createAnnouncements`}>
                 <p className="classOne" >Make Announcement</p>
             </NavLink>
 
 
-            <NavLink style={{ textDecoration: 'none' }} to={`/setRoomPicture`}>
+            <NavLink style={{ textDecoration: 'none' , color: 'black' }} to={`/setRoomPicture`}>
                 <p className="classOne" >Set Classroom Picture</p>
             </NavLink>
 
@@ -35,3 +30,4 @@ const SettingsSide = () => {
 };
 
 export default SettingsSide
+
