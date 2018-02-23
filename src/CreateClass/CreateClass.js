@@ -17,6 +17,7 @@ class CreateClass extends Component {
 
     this.state = {
       uid: props.uid,
+      classes: props.classes,
       className: '',
       email: '',
       tabs: ['annoucements', 'assignments-and-documents', 'course-discussion', 'grades'],
@@ -44,6 +45,7 @@ class CreateClass extends Component {
   setNewDoc = () => {
     let self = this;
     let code = CreateClass.getCode();
+    //TODO check for repeated code
 
     //Create new document in "classes" collection
     let classRef = firestore.collection("classes").doc(code);
