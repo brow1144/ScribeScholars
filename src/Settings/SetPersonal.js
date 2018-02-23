@@ -46,6 +46,10 @@ class SetPersonal extends Component {
         let self = this;
         let user = firestore.collection("users").doc(this.state.uid);
 
+        let userEmail = firebase.auth().currentUser;
+        userEmail.updateEmail(ev.target.email.value).then(function () {
+           console.log("Email Reset")
+        }).catch(function() {console.log("Email Error Occurred")});
 
         user.update({
             "email": ev.target.email.value,
