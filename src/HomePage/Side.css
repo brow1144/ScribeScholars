@@ -28,6 +28,17 @@
     height: 5em;
 }
 
+.singOutIcon
+{
+    font-size: 2.5rem;
+    color: grey;
+    position: absolute;
+    bottom: 2.5rem;
+    left: 3rem;
+    text-align: center;
+    vertical-align: bottom;
+}
+
 .settingsLogo {
     margin-top: 2rem;
     margin-bottom: 5rem;
