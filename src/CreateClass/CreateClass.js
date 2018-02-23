@@ -24,6 +24,7 @@ class CreateClass extends Component {
       nameValid: false,
       formValid: false,
       done: false,
+      code: null,
     };
 
   }
@@ -45,13 +46,12 @@ class CreateClass extends Component {
   setNewDoc = () => {
     let self = this;
     let code = CreateClass.getCode();
-    //TODO check for repeated code
 
     //Create new document in "classes" collection
     let classRef = firestore.collection("classes").doc(code);
     classRef.get().then(function(doc) {
       if (doc.exists) {
-        //code = getCode();
+        self.setNewDoc();
       } else {
         classRef.set({
           class: self.state.className,
@@ -66,9 +66,10 @@ class CreateClass extends Component {
 
           self.setState({
             done: false,
+            code: code,
           });
 
-          self.updateTeacher(code);
+          self.getClasses();
         }).catch(function(error) {
           console.log(error);
         });
@@ -76,104 +77,57 @@ class CreateClass extends Component {
     }).catch(function(error) {
       console.log("Error getting document: ", error);
     });
-
-
-    //Update user document based on uid with newly generated class information
-    /*let teacherRef = firestore.collection("users").doc(this.state.uid);
-    teacherRef.get().then(function (doc) {
-      if(doc.exists) {
-
-        let classArray = doc.data().classes;
-        classArray.push({
-          class: self.state.className,
-          code: code,
-          teacher: self.state.uid
-        });
-
-        teacherRef.update({
-          classes: classArray,
-        }).then(function () {
-
-        });
-
-        self.setState({
-          done: true,
-        });
-      }
-    }).catch(err => {
-      console.log('Transaction failure:', err);
-    });*/
-
   };
 
-  updateTeacher(code) {
+  getClasses() {
     let self = this;
 
     let teacherRef = firestore.collection("users").doc(this.state.uid);
-    teacherRef.get().then(function(doc) {
+    teacherRef.get().then(function (doc) {
       if (doc.exists) {
         if (doc.data().classes != null) {
           self.setState({
             classes: doc.data().classes,
           });
         }
+
+        self.updateTeacher(teacherRef);
       } else {
         console.log("user not found");
       }
-    }).catch(function(error) {
+    }).catch(function (error) {
       console.log("Error getting document: ", error);
     });
+  }
 
-    /*let tmpNewClass = [{
-      class: self.state.newClass,
-      code: code,
-      teacher: self.state.newClassTeacher,
-    }];
+  updateTeacher(teacherRef) {
+    let self = this;
 
-    // add temporary class to classes
-    if (self.state.classes != null) {
-      self.setState({
-        classes: self.state.classes.concat(tmpNewClass),
-      });
-    } else {
-      self.setState({
-        classes: tmpNewClass,
-      });
-    }
-*/
     let newClass = [{
-      class: self.state.className,
-      code: code,
-      teacher_email: self.state.email,
-      announcements: [],
-      deadlines: [],
-      students: [],
-      tabs: self.state.tabs,
+      class: this.state.className,
+      code: this.state.code,
     }];
 
-    //console.log("here " + self.state.classes);
-    if (self.state.classes != null) {
-      self.setState({
-        classes: self.state.classes.concat(newClass),
+    if (this.state.classes != null) {
+      this.setState({
+        classes: this.state.classes.concat(newClass),
       });
     } else {
-      self.setState({
+      this.setState({
         classes: newClass,
       });
     }
-
-    console.log(newClass);
-    console.log(self.state.classes);
 
     teacherRef.update({
       classes: self.state.classes,
     }).then(function() {
       console.log("Successfully updated classes list");
+
       self.setState({
         done: true,
       });
     }).catch(function(error) {
-      console.log("Error updating doc: ", error);
+      console.log("Error updating document: ", error);
     });
   }
 
