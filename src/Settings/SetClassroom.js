@@ -4,7 +4,7 @@ import { firestore } from '../base.js';
 
 import { NavLink } from 'react-router-dom'
 
-import { Button, Container, Row, Col, Form, FormGroup, Alert, Input } from 'reactstrap';
+import { Button, Container, Row, Col, Form, FormGroup, Alert, Input, ModalBody, ModalFooter, ModalHeader, Modal } from 'reactstrap';
 import {
     Accordion,
     AccordionItem,
@@ -22,6 +22,7 @@ class SetClassroom extends Component {
       this.state = {
         uid: props.uid,
         deletionCode: null,
+        modal: false,
 
         role: this.props.role,
 
@@ -175,6 +176,8 @@ class SetClassroom extends Component {
 
     handleDeleteClick = (classCode) => {
         let self = this;
+
+        self.setState({modal: false,});
         let classRef = firestore.collection("classes").doc(classCode);
         let studentRef = firestore.collection("users").doc(self.state.uid);
 
@@ -214,7 +217,7 @@ class SetClassroom extends Component {
                 self.setState({
                     classes: self.state.tempClassList,
                 });
-                console.log("Class list updated")
+                console.log("Class list updated");
                 self.props.updateClasses(self.state.classes);
             })
 
@@ -227,7 +230,15 @@ class SetClassroom extends Component {
       });
     };
 
+    toggle = (codeToDelete) => {
+        this.setState({
+            deletionCode: codeToDelete,
+            modal: !this.state.modal,
+        });
+    };
+
     render() {
+        let codeToDelete = "";
        return(
             <Container fluid className={"ContainerRules"}>
                 <Row className={"Filler"}> </Row>
@@ -240,6 +251,7 @@ class SetClassroom extends Component {
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
                     <Col xs={"6"}>
+                        <div>
                         { this.state.classes != null && this.state.classes.length !== 0
                             ?
                             <Accordion>
@@ -257,7 +269,7 @@ class SetClassroom extends Component {
                                                     Notifications</Button>
                                                 <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable
                                                     Announcements</Button>
-                                                <span onClick={ () => this.handleDeleteClick(this.state.classes[index].code)} className={"clickableIcon float-right"}>
+                                                <span onClick={ () => this.toggle(this.state.classes[index].code)} className={"clickableIcon float-right"}>
                                                     <i className="fas fa-trash-alt deleteIcon float-right"/>
                                                 </span>
 
@@ -269,6 +281,17 @@ class SetClassroom extends Component {
                             :
                             null
                         }
+                            <Modal size={"lg"} isOpen={this.state.modal} toggle={this.toggle}>
+                                <ModalHeader toggle={this.toggle}>Leave Course</ModalHeader>
+                                <ModalBody className={"ModalFonts"}>
+                                    Are you sure you want to leave this class? (You can rejoin!)
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button size={"lg"} color="info" onClick={() => this.handleDeleteClick(this.state.deletionCode)}>Leave Class</Button>
+                                    <Button size={"lg"} color="secondary" onClick={this.toggle}>Cancel</Button>
+                                </ModalFooter>
+                            </Modal>
+                        </div>
 
                         <Row className={"Filler"}> </Row>
                         <Row className={"Filler"}> </Row>
