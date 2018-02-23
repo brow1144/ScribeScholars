@@ -22,7 +22,7 @@ class CreateClass extends Component {
 
     this.state = {
       //uid: props.uid,
-      uid: "eric",
+      uid: props.uid,
       className: '',
       email: '',
       tabs: ['annoucements', 'assignments-and-documents', 'course-discussion', 'grades'],
