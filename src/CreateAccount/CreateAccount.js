@@ -13,11 +13,18 @@ class CreateAccount extends Component {
         this.toggle = this.toggle.bind(this);
 
         this.state = {
+            uid: null,
+
+            tmpFirstName: null,
+            tmpLastName: null,
+            tmpEmail: null,
+
+
             errorCode: "",
             visible: false,
+
             dropdownOpen: false,
-            role: null,
-            uid: null,
+            selected: "Account Type",
         };
     }
 
@@ -29,7 +36,17 @@ class CreateAccount extends Component {
         let lastName = ev.target.lastName.value;
         let email = ev.target.email.value;
 
-        if (self.state.role === null) {
+        if (firstName === "") {
+          self.setState({
+            errorCode: "Please enter your first name",
+            visible: true,
+          });
+        } else if (lastName === "") {
+          self.setState({
+            errorCode: "Please enter your last name",
+            visible: true,
+          });
+        } else if (self.state.role === null) {
           self.setState({
             errorCode: "Please select an account type",
             visible: true,
@@ -37,7 +54,13 @@ class CreateAccount extends Component {
         } else {
           fireauth.createUserAndRetrieveDataWithEmailAndPassword(email, ev.target.password.value)
             .then(() => {
-              self.addInfo(email, firstName, lastName);
+              self.setState({
+                tmpEmail: email,
+                tmpFirstName: firstName,
+                tmpLastName: lastName,
+              });
+
+              self.addInfo();
             }).catch(function(err) {
               self.setState({
                 errorCode: err.message,
@@ -47,30 +70,31 @@ class CreateAccount extends Component {
         }
     };
 
-    addInfo = (email, firstName, lastName) => {
+    addInfo = () => {
+        let self = this;
+
         fireauth.onAuthStateChanged( (user) => {
           if (user) {
-            this.setFirebase(user, email, firstName, lastName)
+            let docRef = firestore.collection("users").doc(user.uid);
+            docRef.set({
+              firstName: this.state.tmpFirstName,
+              lastName: this.state.tmpLastName,
+              email: this.state.email,
+              role: this.state.role,
+            }).then(function() {
+              console.log("successfully written!");
+            }).catch(function(error) {
+              self.setState({
+                errorCode: error.message,
+                visible: true,
+              });
+            });
           } else {
             // finished signing out
-            this.setState({ uid: null })
+            self.setState({ uid: null })
           }
         }
       );
-    };
-
-    setFirebase = (user, email, firstName, lastName) => {
-      let docRef = firestore.collection("users").doc(user.uid);
-      docRef.set({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        role: this.state.role,
-      }).then(function() {
-        console.log("successfully written!");
-      }).catch(function(error) {
-        console.log(error);
-      });
     };
 
     onDismiss = () => {
@@ -84,8 +108,15 @@ class CreateAccount extends Component {
     }
 
     selectRole(name) {
+      let display = name;
+      if (name === "student")
+        display = "Student";
+      else if (name === "teacher")
+        display = "Teacher";
+
       this.setState({
         role: name,
+        selected: display,
       })
     }
 
@@ -98,7 +129,7 @@ class CreateAccount extends Component {
                             <img src={logo} alt="" width="100" height="100"/>
                         </FormGroup>
                         <FormGroup>
-                            <Label mb="3" className="h3 font-weight-normal" for="exampleFirstName">Create a New Account</Label>
+                            <Label className="h3 font-weight-normal" for="exampleFirstName">Create a New Account</Label>
                         </FormGroup>
                         <FormGroup>
                             <Input type="firstName" name="firstName" id="exampleFirstName" placeholder="First Name" />
@@ -115,9 +146,11 @@ class CreateAccount extends Component {
                         <FormGroup>
                             <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
                                 <DropdownToggle caret color="secondary">
-                                    Account Type
+                                  {this.state.selected}
                                 </DropdownToggle>
                                 <DropdownMenu>
+                                    <DropdownItem header>Account Type</DropdownItem>
+                                    <DropdownItem divider />
                                     <DropdownItem onClick={() => this.selectRole("student")}>
                                         Student
                                     </DropdownItem>
