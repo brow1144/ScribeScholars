@@ -7,6 +7,8 @@ import logo from '../logo.svg';
 
 import '../HomePage/Side.css'
 
+
+
 const SettingsSide = () => {
     return (
         <div>
@@ -15,7 +17,7 @@ const SettingsSide = () => {
             </NavLink>
 
             <NavLink style={{ textDecoration: 'none' }} to={`/Announcements`}>
-                <p className="classOne" >Announcements<Badge color='secondary'>100</Badge></p>
+                <p className="classOne" >Announcements<Badge color='secondary'>3</Badge></p>
             </NavLink>
 
             <NavLink style={{ textDecoration: 'none' }} to={`/createAnnouncements`}>
