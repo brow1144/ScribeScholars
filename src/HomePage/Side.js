@@ -9,6 +9,8 @@ import defaultUser from './defUser.png'
 
 import './Side.css'
 import '../Settings/SettingsSide.css'
+import base, { fireauth } from '../base'
+
 
 class Side extends Component {
   constructor(props) {
@@ -47,6 +49,18 @@ class Side extends Component {
       console.log("Error getting document:", error);
     })
   }
+
+  firebaseOut = () => {
+      fireauth.signOut().then(() => {
+          console.log("User Signed out")
+      })
+  };
+
+  handleSignOut = () => {
+      localStorage.removeItem('uid');
+      this.setState({ uid: null, });
+      this.firebaseOut();
+  };
 
   render() {
     if (this.props.page === "home") {
@@ -95,20 +109,9 @@ class Side extends Component {
             <p className="settingsSide" >Classroom</p>
           </NavLink>
 
-          {this.state.userImage
-            ?
-            <NavLink style={{textDecoration: 'none'}} to={`/settings`}>
-              <img className="settingsLogo"
-                   src={this.state.userImage}
-                   alt="userIcon"/>
+            <NavLink onClick={this.handleSignOut} style={{textDecoration: 'none'}} to={`/sign-in`}>
+                <i className="fas fa-sign-out-alt singOutIcon"/>
             </NavLink>
-            :
-            <NavLink style={{textDecoration: 'none'}} to={`/settings`}>
-              <img className="settingsLogo"
-                   src={defaultUser}
-                   alt="userIcon"/>
-            </NavLink>
-          }
 
         </div>
       )
