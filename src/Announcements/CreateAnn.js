@@ -1,13 +1,12 @@
 import React from 'react';
-import { Container, Alert, Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
+import { Container, Alert, Col, Button, Form, FormGroup, Label, Input, Row} from 'reactstrap';
 
 
-import logo from '../logo.svg';
 import './Announcements.css';
 import './CreateAnn.css';
 import Sidebar from 'react-sidebar';
 import AnnSide from "./AnnSide";
-import {fireauth, firestore} from "../base";
+import { firestore} from "../base";
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 

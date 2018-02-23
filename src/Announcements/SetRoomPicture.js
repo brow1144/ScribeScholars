@@ -6,7 +6,7 @@ import './Announcements.css';
 import './CreateAnn.css';
 import Sidebar from 'react-sidebar';
 import AnnSide from "./AnnSide";
-import {firestore, storageRef} from "../base";
+import {storageRef} from "../base";
 import './SetRoomPicture.css';
 
 const mql = window.matchMedia(`(min-width: 800px)`);
@@ -83,7 +83,6 @@ export default class CreateAnn extends React.Component {
         console.log(ev.target)
         let reader = new FileReader();
         let classCode = ev.target.classCode.value;
-        console.log(classCode);
         let file = ev.target.file.files[0];
 
         reader.onloadend = () => {
@@ -92,10 +91,8 @@ export default class CreateAnn extends React.Component {
             });
         };
 
-        let imageUrl = null;
         let userImageRef = storageRef.ref().child(`${classCode}`);
         userImageRef.put(file).then(function(snapshot) {
-            imageUrl = snapshot.metadata.downloadURLs[0];
             console.log('Uploaded a blob or file!');
         }).then(() => {
 
