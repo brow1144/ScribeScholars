@@ -7,6 +7,7 @@ import './Announcements.css';
 import './CreateAnn.css';
 import Sidebar from 'react-sidebar';
 import AnnSide from "./AnnSide";
+import {fireauth, firestore} from "../base";
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
@@ -22,6 +23,16 @@ export default class CreateAnn extends React.Component {
             docked: props.docked,
             open: props.open,
             sideButtonVisibility: !props.docked,
+
+            newMessage: null,
+            newTitle: null,
+            newSubtitle: null,
+
+            Announcements: [{
+                message: null,
+                subtitle: null,
+                title: null,
+            }],
         };
     }
 
@@ -76,6 +87,74 @@ export default class CreateAnn extends React.Component {
     };
 
 
+    onFormSubmit = (ev) => {
+        ev.preventDefault();
+        let self = this;
+
+        let title = ev.target.title.value;
+        let subtitle = ev.target.subtitle.value;
+        let message = ev.target.message.value;
+        let classCode = ev.target.classCode.value;
+
+        let classRef = firestore.collection("classes").doc(classCode);
+
+
+        classRef.get().then(function(doc) {
+            if (doc.exists) {
+                if (doc.data().Announcements != null) {
+                    self.setState({
+                        Announcements: doc.data().Announcements,
+                        newTitle: title,
+                        newSubtitle: subtitle,
+                        newMessage: message,
+                    });
+                    self.addAnnouncement(classRef);
+
+
+                }
+            } else {
+                console.log("user not found");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document: ", error);
+        });
+
+
+    };
+
+    addAnnouncement = (classRef) => {
+        let self = this;
+        let tmpNewAnnouncement = [{
+            message: self.state.newMessage,
+            subtitle: self.state.newSubtitle,
+            title: self.state.newTitle,
+        }];
+
+        // add temporary class to classes
+        if (self.state.Announcements != null) {
+            self.setState({
+                Announcements: self.state.Announcements.concat(tmpNewAnnouncement),
+            });
+        } else {
+            self.setState({
+                Announcements: tmpNewAnnouncement,
+            });
+        }
+
+        classRef.update({
+            Announcements: self.state.Announcements,
+        }).then(function() {
+            console.log("Successfully updated classes list");
+        }).catch(function(error) {
+            console.log("Error updating document: ", error);
+        });
+    };
+
+
+
+
+
+
     render() {
 
         let sidebarContent = <AnnSide />;
@@ -122,7 +201,7 @@ export default class CreateAnn extends React.Component {
                     </Col>
                 </Row>
 
-                <Form className={"form"} onSubmit={this.handleSubmit}>
+                <Form className={"form"}  onSubmit={ (ev) => this.onFormSubmit(ev) }>
 
                     <FormGroup className={"formpad"}>
                         <Row className={"rowt"}>
@@ -132,7 +211,7 @@ export default class CreateAnn extends React.Component {
                         </Row>
                         <Row className={"rowt"}>
                             <Col>
-                                <Input type="textarea" name="text" id="exampleText" />
+                                <Input name="title" id="exampleTitle" />
                             </Col>
                         </Row>
                     </FormGroup>
@@ -142,52 +221,22 @@ export default class CreateAnn extends React.Component {
                     <FormGroup className={"formpad"}>
                         <Row className={"rowt"}>
                             <Col>
-                            <Label className={"labelSize"}>Announcement Type</Label>
+                                <Label className={"labelSize"} for="exampleText">Announcement Type</Label>
                             </Col>
                         </Row>
                         <Row className={"rowt"}>
-
-                            <Col xs={3}>
-                                <FormGroup check className={"formpad"}>
-                                    <Label check>
-                                        <Input type="radio" name="radio2" />{' '}
-                                        Homework
-                                    </Label>
-                                </FormGroup>
-                            </Col>
-                        </Row>
-                            <Row className={"rowt"}>
-                            <Col xs={3}>
-                                <FormGroup check className={"formpad"}>
-                                    <Label check>
-                                        <Input type="radio" name="radio2" />{' '}
-                                        Quiz
-                                    </Label>
-                                </FormGroup>
-                            </Col>
-                            </Row>
-                        <Row className={"rowt"}>
-                            <Col xs={3}>
-                                <FormGroup check className={"formpad"}>
-                                    <Label check>
-                                        <Input type="radio" name="radio2" />{' '}
-                                        Test
-                                    </Label>
-                                </FormGroup>
-                            </Col>
-                        </Row>
-                        <Row className={"rowt"}>
-                            <Col xs={3}>
-                                <FormGroup check className={"formpad"}>
-                                    <Label check>
-                                        <Input type="radio" name="radio2" />{' '}
-                                        Miscellaneous
-                                    </Label>
-                                </FormGroup>
+                            <Col>
+                                <Label check>
+                                    <Input type="select" name="subtitle">
+                                        <option>Test</option>
+                                        <option>Quiz</option>
+                                        <option>Homework</option>
+                                        <option>Misc.</option>
+                                    </Input>
+                                </Label>
                             </Col>
                         </Row>
                     </FormGroup>
-
 
                     <FormGroup className={"formpad"}>
                         <Row className={"rowt"}>
@@ -197,7 +246,20 @@ export default class CreateAnn extends React.Component {
                         </Row>
                         <Row className={"rowt"}>
                             <Col>
-                                <Input type="textarea" name="text" id="exampleText" />
+                                <Input type="textarea" name="message" id="exampleMessage" />
+                            </Col>
+                        </Row>
+                    </FormGroup>
+
+                    <FormGroup className={"formpad"}>
+                        <Row className={"rowt"}>
+                            <Col>
+                                <Label className={"labelSize"} for="exampleText">Class Code</Label>
+                            </Col>
+                        </Row>
+                        <Row className={"rowt"}>
+                            <Col>
+                                <Input name="classCode" id="exampleClassCode" />
                             </Col>
                         </Row>
                     </FormGroup>
