@@ -74,6 +74,11 @@ class CreateAccount extends Component {
         } */else {
           fireauth.createUserAndRetrieveDataWithEmailAndPassword(email, ev.target.password.value)
             .then(() => {
+              if (role === "Student")
+                role = "student";
+              else if (role === "Teacher")
+                role = "teacher";
+
               self.setState({
                 tmpFirstName: firstName,
                 tmpLastName: lastName,
