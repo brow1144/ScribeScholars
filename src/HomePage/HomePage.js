@@ -50,7 +50,7 @@ class HomePage extends Component {
 
       uid: props.uid,
 
-      role: null,
+      role: this.props.role,
 
       classes: [{
         class: null,
@@ -162,7 +162,9 @@ class HomePage extends Component {
       } else {
         console.log("No such document!");
       }
-      self.props.updateClasses(self.state.classes)
+      self.props.updateClasses(self.state.classes);
+      console.log(self.props.role);
+      self.props.updateRole(self.props.role);
     }).catch(function(error) {
       console.log("Error getting document:", error);
     });
@@ -457,7 +459,7 @@ class HomePage extends Component {
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
 
-          <Settings updateClasses={ this.props.updateClasses } role={this.state.role} personalPage={this.state.personalPage} uid={this.state.uid} />
+          <Settings updateClasses={ this.props.updateClasses } role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid} />
         </Sidebar>
       );
 

@@ -169,6 +169,12 @@ class Main extends Component {
     })
   };
 
+  updateRole = (role) => {
+    this.setState({
+      role: role,
+    })
+  };
+
   render() {
     return (
       <HomePage
@@ -179,6 +185,7 @@ class Main extends Component {
         announcements={this.state.announcements}
         updateClasses={ this.updateClasses }
         updateDates={ this.updateDates }
+        updateRole={ this.updateRole }
         updateAnnouncements={ this.updateAnnouncements }
         />
     )
