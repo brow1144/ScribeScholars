@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-
 import { firestore } from '../base.js';
-
 import { Form, Input, Button, Label } from 'reactstrap';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
-
-
 import ClassSuccess from './ClassSuccess';
-
 import './CreateClass.css'
   
 class CreateClass extends Component {
@@ -27,7 +22,6 @@ class CreateClass extends Component {
       tabs: ['annoucements', 'assignments-and-documents', 'course-discussion', 'grades'],
       nameValid: false,
       formValid: false,
-      errorVisible: false,
       done: false,
     };
 
@@ -36,25 +30,21 @@ class CreateClass extends Component {
   onFormSubmit = (ev) => {
     ev.preventDefault();
     if(this.state.formValid){
-      //console.log("Success!");
+
       this.setState({
         className: this.state.className,
       }, this.setNewDoc );
 
     } else {
       console.log("Error: Class name needs to be at least 6 characters");
-
-      this.setState({
-        errorVisible: true
-      });
     }
   };
 
+  //Update Firestore database
   setNewDoc = () => {
-
     let self = this;
-
     let code = CreateClass.getCode();
+
     //TODO Add check for repeated code
 
     let classData = {
@@ -76,9 +66,14 @@ class CreateClass extends Component {
     }); //TODO Error catching*/
 
     /*let classRef = firestore.collection("classes").doc(code);
+=======
+
+    //Create new document in "classes" collection
+    let classRef = firestore.collection("classes").doc(code);
+>>>>>>> a10497ec2cf31980bc6bd89365aa86107583e209
     classRef.get().then(function(doc) {
       if (doc.exists) {
-        //code = getCode(); // TODO move block to own function
+        //code = getCode();
       } else {
         classRef.set({
           class: self.state.className,
@@ -99,29 +94,24 @@ class CreateClass extends Component {
     });*/
 
 
-    let teacherData = {
-      class: self.state.className,
-    };
-
+    //Update user document based on uid with newly generated class information
     let teacherRef = firestore.collection("users").doc(this.state.uid);
-
-    let transaction = firestore.runTransaction(t => {
+    firestore.runTransaction(t => {
       return t.get(teacherRef)
         .then(doc => {
-          let classArray = doc.data().classes;
 
+          let classArray = doc.data().classes;
           let newData = {
             class: self.state.className,
             code: code,
             teacher: self.state.uid
           };
-
           classArray.push(newData);
 
           t.update( teacherRef, { classes: classArray } );
+
         });
     }).then(result => {
-      //console.log('Transaction success!');
       self.setState({
         done: true,
       });
@@ -130,20 +120,7 @@ class CreateClass extends Component {
     });
   };
 
-  /*readDoc(code) {
-    let classRef = firestore.collection("classes").doc(code);
-    classRef.get()
-      .then(doc => {
-        if (!doc.exists) {
-          console.log('No such document!');
-        } else {
-          console.log('Document data:', doc.data());
-        }})
-      .catch(err => {
-        console.log('Error getting document', err);
-      });
-  }*/
-
+  //Generate class code
   static getCode() {
     let code = "";
     for (let i = 0; i < 6; i++) {
@@ -159,6 +136,7 @@ class CreateClass extends Component {
     });
   };
 
+  //Handle text field input
   handleInput = (e) => {
     const className = e.target.name;
     const value = e.target.value;
@@ -179,9 +157,6 @@ class CreateClass extends Component {
         else {
           this.setState({nameValid: false}, this.validateForm);
         }
-        return;
-
-      case 'email':
         return;
 
       default:
