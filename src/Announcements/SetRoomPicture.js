@@ -1,5 +1,5 @@
 import React from 'react';
-import {   Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
+import {   Container, Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
 
 
 import logo from '../logo.svg';
@@ -8,6 +8,7 @@ import './CreateAnn.css';
 import Sidebar from 'react-sidebar';
 import AnnSide from "./AnnSide";
 import {firestore} from "../base";
+import './SetRoomPicture.css';
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
@@ -110,26 +111,27 @@ export default class CreateAnn extends React.Component {
                     <br/>
                 }
 
-                <div>
-                    <div className={"headerPic"}>
-                        <div className={"annouce"}>
-                            <Row className={"rowt"}>
+                <Container>
+                    <Row className={"rowRoomPic"}>
+                        <Col>
+                            <p>Set Room Picture</p>
+                        </Col>
+                    </Row>
+                    <Row/>
 
-                            </Row>
-                            <Row className={"rowt"}>
-                                <p className={"title"}>Set Room Picture</p>
-                            </Row>
-                            <Row/>
-                        </div>
-                    </div>
 
 
 
                     <Form className={"form"} onSubmit={ this.submitPicture }>
 
-                        <FormGroup row className={"formpad"}>
-                            <Label className={"labelSize"} for="exampleFile" sm={2}>Attachment</Label>
-                            <Col sm={10}>
+                        <Row className={"roomPicPad"}>
+                            <Col>
+                                <Label className={"labelSize attachSize"} for="exampleFile">Attachment</Label>
+                            </Col>
+                        </Row>
+                        <FormGroup row className={"formpad roomPicPad"}>
+
+                            <Col>
                                 <Input type="file" name="file" id="exampleFile" />
                                 <FormText color="muted">
                                     Select a file to be displayed alongside your announcement.
@@ -137,13 +139,13 @@ export default class CreateAnn extends React.Component {
                             </Col>
                         </FormGroup>
 
-                        <FormGroup check row className={"formpad"}>
-                            <Col sm={{ size: 10, offset: 2}}>
+                        <FormGroup row className={"formpad roomPicPad"}>
+                            <Col>
                                 <Button color="success">Submit</Button>
                             </Col>
                         </FormGroup>
                     </Form>
-                </div>
+                </Container>
 
             </Sidebar>
         );
