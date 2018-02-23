@@ -459,6 +459,9 @@ class HomePage extends Component {
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
 
+          <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
           <Settings updateClasses={ this.props.updateClasses } role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid} />
         </Sidebar>
       );
