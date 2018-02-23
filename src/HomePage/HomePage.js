@@ -449,7 +449,7 @@ class HomePage extends Component {
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
 
-          <Settings personalPage={this.state.personalPage} uid={this.state.uid} />
+          <Settings role={this.state.role} personalPage={this.state.personalPage} uid={this.state.uid} />
         </Sidebar>
       );
 
