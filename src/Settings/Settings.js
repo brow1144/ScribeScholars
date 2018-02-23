@@ -28,6 +28,7 @@ class Settings extends Component {
                 code:null,
             }],
         };
+        this.getRole();
         this.getEmail();
         this.getPhone();
         this.getDescript();
@@ -38,6 +39,24 @@ class Settings extends Component {
     componentDidUpdate() {
 
     }
+
+  getRole = () => {
+    let docRef = firestore.collection("users").doc(this.state.uid);
+    let self = this;
+
+    docRef.get().then(function(doc) {
+      if (doc.exists) {
+        self.setState({
+          role: doc.data().role,
+        });
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function(error) {
+      console.log("Error getting document:", error);
+    });
+
+  };
 
     getName = () => {
         let docRef = firestore.collection("users").doc(this.state.uid);

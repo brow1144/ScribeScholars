@@ -1,13 +1,13 @@
 import React from 'react';
 import {   Container, Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
 
-
 import './Announcements.css';
 import './CreateAnn.css';
 import Sidebar from 'react-sidebar';
 import AnnSide from "./AnnSide";
 import {storageRef} from "../base";
 import './SetRoomPicture.css';
+
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
@@ -79,6 +79,7 @@ export default class CreateAnn extends React.Component {
 
     handlePicture = (ev) => {
         ev.preventDefault();
+
         let self = this;
         console.log(ev.target)
         let reader = new FileReader();

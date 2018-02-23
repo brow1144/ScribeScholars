@@ -4,7 +4,7 @@ import { firestore } from '../base.js';
 
 import { NavLink } from 'react-router-dom'
 
-import { Button, Container, Row, Col, Form, FormGroup, Alert, Input } from 'reactstrap';
+import { Button, Container, Row, Col, Form, FormGroup, Alert, Input, ModalBody, ModalFooter, ModalHeader, Modal } from 'reactstrap';
 import {
     Accordion,
     AccordionItem,
@@ -22,6 +22,7 @@ class SetClassroom extends Component {
       this.state = {
         uid: props.uid,
         deletionCode: null,
+        modal: false,
 
         role: this.props.role,
 
@@ -175,13 +176,13 @@ class SetClassroom extends Component {
 
     handleDeleteClick = (classCode) => {
         let self = this;
-        console.log(classCode);
+
+        self.setState({modal: false,});
         let classRef = firestore.collection("classes").doc(classCode);
         let studentRef = firestore.collection("users").doc(self.state.uid);
 
 
         classRef.get().then(function(doc) {
-            console.log(doc.data());
             self.setState({
                 tempStudents: doc.data().students
             });
@@ -196,7 +197,6 @@ class SetClassroom extends Component {
         });
 
         studentRef.get().then(function(doc) {
-            console.log(doc.data());
             self.setState({
                 tempClassList: doc.data().classes
             });
@@ -210,7 +210,6 @@ class SetClassroom extends Component {
                     break;
                 }
             }
-            console.log(i);
             self.state.tempClassList.splice(i,1);
             studentRef.update({
                 classes: self.state.tempClassList,
@@ -218,7 +217,7 @@ class SetClassroom extends Component {
                 self.setState({
                     classes: self.state.tempClassList,
                 });
-                console.log("Class list updated")
+                console.log("Class list updated");
                 self.props.updateClasses(self.state.classes);
             })
 
@@ -231,10 +230,15 @@ class SetClassroom extends Component {
       });
     };
 
-    render() {
-        console.log(this.state.role);
+    toggle = (codeToDelete) => {
+        this.setState({
+            deletionCode: codeToDelete,
+            modal: !this.state.modal,
+        });
+    };
 
-        return(
+    render() {
+       return(
             <Container fluid className={"ContainerRules"}>
                 <Row className={"Filler"}> </Row>
                 <Row className={"BannerRow"}>
@@ -246,7 +250,8 @@ class SetClassroom extends Component {
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
                     <Col xs={"6"}>
-                        { this.state.classes != null
+                        <div>
+                        { this.state.classes != null && this.state.classes.length !== 0
                             ?
                             <Accordion>
                                 {this.state.classes != null && Object.keys(this.state.classes).map((key, index) => {
@@ -263,7 +268,7 @@ class SetClassroom extends Component {
                                                     Notifications</Button>
                                                 <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable
                                                     Announcements</Button>
-                                                <span onClick={ () => this.handleDeleteClick(this.state.classes[index].code)} className={"clickableIcon float-right"}>
+                                                <span onClick={ () => this.toggle(this.state.classes[index].code)} className={"clickableIcon float-right"}>
                                                     <i className="fas fa-trash-alt deleteIcon float-right"/>
                                                 </span>
 
@@ -275,6 +280,17 @@ class SetClassroom extends Component {
                             :
                             null
                         }
+                            <Modal size={"lg"} isOpen={this.state.modal} toggle={this.toggle}>
+                                <ModalHeader toggle={this.toggle}>Leave Course</ModalHeader>
+                                <ModalBody className={"ModalFonts"}>
+                                    Are you sure you want to leave this class? (You can rejoin!)
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button size={"lg"} color="info" onClick={() => this.handleDeleteClick(this.state.deletionCode)}>Leave Class</Button>
+                                    <Button size={"lg"} color="secondary" onClick={this.toggle}>Cancel</Button>
+                                </ModalFooter>
+                            </Modal>
+                        </div>
 
                         <Row className={"Filler"}> </Row>
                         <Row className={"Filler"}> </Row>
@@ -282,7 +298,7 @@ class SetClassroom extends Component {
                       {this.state.role === "student" ?
                         <Form onSubmit={this.onFormSubmit}>
                             <FormGroup row check>
-                                <Col sm={{ size: 3, offset: 2}}>
+                                <Col xs={{ size: 10, offset: 0}} sm={{ size: 5, offset: 2}} md={{ size: 5, offset: 2}} lg={{ size: 4, offset: 2}}>
                                     <Input bsSize="lg" type="classCode" name="classCode" id="classToAdd" placeholder="Class Code"/>
                                     <Row className={"Filler"}> </Row>
                                 </Col>

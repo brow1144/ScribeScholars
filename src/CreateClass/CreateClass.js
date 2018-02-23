@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-
 import { firestore } from '../base.js';
-
 import { Form, Input, Button, Label } from 'reactstrap';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
-
-
 import ClassSuccess from './ClassSuccess';
-
 import './CreateClass.css'
   
 class CreateClass extends Component {
@@ -21,15 +16,15 @@ class CreateClass extends Component {
     this.handleTabBoxInput = this.handleTabBoxInput.bind(this);
 
     this.state = {
-      //uid: props.uid,
       uid: props.uid,
+      classes: null,
       className: '',
       email: '',
       tabs: ['annoucements', 'assignments-and-documents', 'course-discussion', 'grades'],
       nameValid: false,
       formValid: false,
-      errorVisible: false,
       done: false,
+      code: null,
     };
 
   }
@@ -37,73 +32,106 @@ class CreateClass extends Component {
   onFormSubmit = (ev) => {
     ev.preventDefault();
     if(this.state.formValid){
-      //console.log("Success!");
+
       this.setState({
         className: this.state.className,
       }, this.setNewDoc );
 
     } else {
       console.log("Error: Class name needs to be at least 6 characters");
-
-      this.setState({
-        errorVisible: true
-      });
     }
   };
 
+  //Update Firestore database
   setNewDoc = () => {
+    let self = this;
+    let code = CreateClass.getCode();
 
+    //Create new document in "classes" collection
+    let classRef = firestore.collection("classes").doc(code);
+    classRef.get().then(function(doc) {
+      if (doc.exists) {
+        self.setNewDoc();
+      } else {
+        classRef.set({
+          class: self.state.className,
+          teacher: self.state.uid,
+          teacher_email: self.state.email,
+          announcements: [],
+          deadlines: [],
+          students: [],
+          tabs: self.state.tabs,
+        }).then(function() {
+          console.log("successfully written!");
+
+          self.setState({
+            done: false,
+            code: code,
+          });
+
+          self.getClasses();
+        }).catch(function(error) {
+          console.log(error);
+        });
+      }
+    }).catch(function(error) {
+      console.log("Error getting document: ", error);
+    });
+  };
+
+  getClasses() {
     let self = this;
 
-    let code = CreateClass.getCode();
-    //TODO Add check for repeated code
+    let teacherRef = firestore.collection("users").doc(this.state.uid);
+    teacherRef.get().then(function (doc) {
+      if (doc.exists) {
+        if (doc.data().classes != null) {
+          self.setState({
+            classes: doc.data().classes,
+          });
+        }
 
-    let classData = {
-      class: self.state.className,
-      teacher: self.state.uid,
-      teacher_email: self.state.email,
-      Announcements: [],
-      deadlines: [],
-      students: [],
-      tabs: self.state.tabs
-    };
+        self.updateTeacher(teacherRef);
+      } else {
+        console.log("user not found");
+      }
+    }).catch(function (error) {
+      console.log("Error getting document: ", error);
+    });
+  }
 
+  updateTeacher(teacherRef) {
+    let self = this;
 
-    let classRef = firestore.collection("classes").doc(code);
-    classRef.set(classData).then(function () {
-      self.setState({
-        done: false,
+    let newClass = [{
+      class: this.state.className,
+      code: this.state.code,
+    }];
+
+    if (this.state.classes != null) {
+      this.setState({
+        classes: this.state.classes.concat(newClass),
       });
-    }); //TODO Error catching
-
-    let teacherData = {
-      class: self.state.className,
+    } else {
+      this.setState({
+        classes: newClass,
+      });
     }
 
-    let teacherRef = firestore.collection("users").doc(this.state.uid)
+    teacherRef.update({
+      classes: self.state.classes,
+    }).then(function() {
+      console.log("Successfully updated classes list");
 
-    teacherRef.set(teacherData).then(function () {
       self.setState({
         done: true,
       });
-    }); //TODO Error catching
-
-  };
-
-  readDoc(code) {
-    let classRef = firestore.collection("classes").doc(code);
-    classRef.get()
-      .then(doc => {
-        if (!doc.exists) {
-          console.log('No such document!');
-        } else {
-          console.log('Document data:', doc.data());
-        }})
-      .catch(err => {
-        console.log('Error getting document', err);
-      });
+    }).catch(function(error) {
+      console.log("Error updating document: ", error);
+    });
   }
 
+  //Generate class code
   static getCode() {
     let code = "";
     for (let i = 0; i < 6; i++) {
@@ -117,8 +145,9 @@ class CreateClass extends Component {
     this.setState({
       tabs: e
     });
-  }
+  };
 
+  //Handle text field input
   handleInput = (e) => {
     const className = e.target.name;
     const value = e.target.value;
@@ -141,11 +170,8 @@ class CreateClass extends Component {
         }
         return;
 
-      case 'email':
-        return;
-
       default:
-        console.log("Error: incorrect fieldName");
+        //console.log("Error: incorrect fieldName");
         return;
     }
   }
