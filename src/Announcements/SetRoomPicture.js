@@ -2,12 +2,11 @@ import React from 'react';
 import {   Container, Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
 
 
-import logo from '../logo.svg';
 import './Announcements.css';
 import './CreateAnn.css';
 import Sidebar from 'react-sidebar';
 import AnnSide from "./AnnSide";
-import {firestore} from "../base";
+import {firestore, storageRef} from "../base";
 import './SetRoomPicture.css';
 
 const mql = window.matchMedia(`(min-width: 800px)`);
@@ -18,6 +17,7 @@ export default class CreateAnn extends React.Component {
         super(props);
 
         this.state = {
+            classCode: props.classCode,
             errorCode: "",
             visible: true,
             mql: mql,
@@ -25,7 +25,11 @@ export default class CreateAnn extends React.Component {
             open: props.open,
             sideButtonVisibility: !props.docked,
         };
+
     }
+
+
+
 
     onDismiss = () => {
         this.setState({ visible: false });
@@ -72,11 +76,33 @@ export default class CreateAnn extends React.Component {
         });
     };
 
-    submitPicture = (ev) => {
+
+    handlePicture = (ev) => {
         ev.preventDefault();
         let self = this;
+        console.log(ev.target)
+        let reader = new FileReader();
+        let classCode = ev.target.classCode.value;
+        console.log(classCode);
+        let file = ev.target.file.files[0];
 
+        reader.onloadend = () => {
+            self.setState({
+                file: file,
+            });
+        };
+
+        let imageUrl = null;
+        let userImageRef = storageRef.ref().child(`${classCode}`);
+        userImageRef.put(file).then(function(snapshot) {
+            imageUrl = snapshot.metadata.downloadURLs[0];
+            console.log('Uploaded a blob or file!');
+        }).then(() => {
+
+
+        })
     };
+
 
     render() {
 
@@ -122,7 +148,20 @@ export default class CreateAnn extends React.Component {
 
 
 
-                    <Form className={"form"} onSubmit={ this.submitPicture }>
+                    <Form className={"form"} onSubmit={this.handlePicture}>
+
+                        <FormGroup className={"formpad"}>
+                            <Row className={"rowt"}>
+                                <Col>
+                                    <Label className={"labelSize"} for="exampleText">Class Code</Label>
+                                </Col>
+                            </Row>
+                            <Row className={"rowt"}>
+                                <Col>
+                                    <Input name="classCode" id="exampleClassCode" />
+                                </Col>
+                            </Row>
+                        </FormGroup>
 
                         <Row className={"roomPicPad"}>
                             <Col>
@@ -132,16 +171,16 @@ export default class CreateAnn extends React.Component {
                         <FormGroup row className={"formpad roomPicPad"}>
 
                             <Col>
-                                <Input type="file" name="file" id="exampleFile" />
+                                <Input  type="file" name="file" id="exampleFile" />
                                 <FormText color="muted">
                                     Select a file to be displayed alongside your announcement.
                                 </FormText>
                             </Col>
                         </FormGroup>
 
-                        <FormGroup row className={"formpad roomPicPad"}>
+                        <FormGroup check row className={"formpad roomPicPad"}>
                             <Col>
-                                <Button color="success">Submit</Button>
+                                <Button  color="success">Submit</Button>
                             </Col>
                         </FormGroup>
                     </Form>
