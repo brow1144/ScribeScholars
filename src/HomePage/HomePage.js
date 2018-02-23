@@ -163,7 +163,6 @@ class HomePage extends Component {
         console.log("No such document!");
       }
       self.props.updateClasses(self.state.classes);
-      console.log(self.props.role);
       self.props.updateRole(self.props.role);
     }).catch(function(error) {
       console.log("Error getting document:", error);
@@ -254,13 +253,13 @@ class HomePage extends Component {
       docRef.get().then(function (doc) {
         if (doc.exists) {
           let data = doc.data();
-          for (let i in data.Announcements) {
-            if (data.Announcements.hasOwnProperty(i)) {
+          for (let i in data.announcements) {
+            if (data.announcements.hasOwnProperty(i)) {
               object.unshift({
-                class: self.state.classes[j].class,
-                title: data.Announcements[i].title,
-                subtitle: data.Announcements[i].subtitle,
-                message: data.Announcements[i].message,
+                class: data.announcements[i].class,
+                title: data.announcements[i].title,
+                subtitle: data.announcements[i].subtitle,
+                message: data.announcements[i].message,
               });
               self.setState({
                 announcements: object,
@@ -270,6 +269,7 @@ class HomePage extends Component {
         } else {
           console.log("No such document!");
         }
+        console.log(self.state.announcements);
         self.props.updateAnnouncements(self.state.announcements);
       }).catch(function (error) {
         console.log("Error getting document:", error);

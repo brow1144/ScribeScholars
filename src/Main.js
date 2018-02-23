@@ -80,7 +80,7 @@ class Main extends Component {
         } else {
           console.log("No such document!");
         }
-        //self.props.updateDates(self.state.dates);
+        self.updateDates(self.state.dates);
       }).catch(function (error) {
         console.log("Error getting document:", error);
       });
@@ -120,13 +120,13 @@ class Main extends Component {
       docRef.get().then(function (doc) {
         if (doc.exists) {
           let data = doc.data();
-          for (let i in data.Announcements) {
-            if (data.Announcements.hasOwnProperty(i)) {
+          for (let i in data.announcements) {
+            if (data.announcements.hasOwnProperty(i)) {
               object.unshift({
-                class: self.state.classes[j].class,
-                title: data.Announcements[i].title,
-                subtitle: data.Announcements[i].subtitle,
-                message: data.Announcements[i].message,
+                class: data.announcements[i].class,
+                title: data.announcements[i].title,
+                subtitle: data.announcements[i].subtitle,
+                message: data.announcements[i].message,
               });
               self.setState({
                 announcements: object,
@@ -136,7 +136,7 @@ class Main extends Component {
         } else {
           console.log("No such document!");
         }
-        //elf.props.updateAnnouncements(self.state.announcements);
+        self.updateAnnouncements(self.state.announcements);
       }).catch(function (error) {
         console.log("Error getting document:", error);
       });

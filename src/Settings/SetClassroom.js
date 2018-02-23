@@ -238,7 +238,6 @@ class SetClassroom extends Component {
     };
 
     render() {
-        let codeToDelete = "";
        return(
             <Container fluid className={"ContainerRules"}>
                 <Row className={"Filler"}> </Row>

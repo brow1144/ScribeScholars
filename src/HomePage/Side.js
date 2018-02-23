@@ -9,7 +9,7 @@ import defaultUser from './defUser.png'
 
 import './Side.css'
 import '../Settings/SettingsSide.css'
-import base, { fireauth } from '../base'
+import { fireauth } from '../base'
 
 
 class Side extends Component {
