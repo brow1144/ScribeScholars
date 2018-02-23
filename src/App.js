@@ -121,7 +121,7 @@ class App extends Component {
         <Route path='/settings' render={() => (
           this.signedIn()
             ? <Main page={"settings"} uid={this.state.uid}/>
-            : <Redirect to="/About" />
+            : <Redirect to="/sign-in" />
         )} />
 
         <Route render={() => <Redirect to="/HomePage" />} />
