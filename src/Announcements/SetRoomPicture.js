@@ -1,5 +1,5 @@
 import React from 'react';
-import {   Container, Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
+import {  UncontrolledAlert, Container, Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
 
 import './Announcements.css';
 import './CreateAnn.css';
@@ -17,6 +17,7 @@ export default class CreateAnn extends React.Component {
         super(props);
 
         this.state = {
+            success: false,
             classCode: props.classCode,
             errorCode: "",
             visible: true,
@@ -99,7 +100,18 @@ export default class CreateAnn extends React.Component {
 
 
         })
+
+        ev.target.reset();
+        this.successMessage();
     };
+    
+successMessage = () => {
+    let self = this;
+
+    self.setState( {
+        success: true,
+    })
+};
 
 
     render() {
@@ -175,6 +187,14 @@ export default class CreateAnn extends React.Component {
                                 </FormText>
                             </Col>
                         </FormGroup>
+
+                        <Row className={"rowt"}>
+                            <Col>
+                                <UncontrolledAlert color="success" isOpen={this.state.success}>
+                                    You have successfully added your announcement.
+                                </UncontrolledAlert>
+                            </Col>
+                        </Row>
 
                         <FormGroup check row className={"formpad roomPicPad"}>
                             <Col>
