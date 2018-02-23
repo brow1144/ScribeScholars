@@ -269,7 +269,6 @@ class HomePage extends Component {
         } else {
           console.log("No such document!");
         }
-        console.log(self.state.announcements);
         self.props.updateAnnouncements(self.state.announcements);
       }).catch(function (error) {
         console.log("Error getting document:", error);
