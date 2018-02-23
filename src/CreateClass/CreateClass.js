@@ -17,6 +17,7 @@ class CreateClass extends Component {
 
     this.state = {
       uid: props.uid,
+      classes: props.classes,
       className: '',
       email: '',
       tabs: ['annoucements', 'assignments-and-documents', 'course-discussion', 'grades'],
@@ -47,30 +48,28 @@ class CreateClass extends Component {
 
     //TODO Add check for repeated code
 
-    let classData = {
+    let classData = [{
       class: self.state.className,
       teacher: self.state.uid,
       teacher_email: self.state.email,
-      Announcements: [],
+      announcements: [],
       deadlines: [],
       students: [],
-      tabs: self.state.tabs
-    };
+      tabs: self.state.tabs,
+    }];
 
 
-    let classRef = firestore.collection("classes").doc(code);
+    /*let classRef = firestore.collection("classes").doc(code);
     classRef.set(classData).then(function () {
       self.setState({
         done: false,
       });
-    }); //TODO Error catching*/
+    }); //TODO Error catching
 
-    /*let classRef = firestore.collection("classes").doc(code);
-=======
+    let classRef = firestore.collection("classes").doc(code);*/
 
     //Create new document in "classes" collection
     let classRef = firestore.collection("classes").doc(code);
->>>>>>> a10497ec2cf31980bc6bd89365aa86107583e209
     classRef.get().then(function(doc) {
       if (doc.exists) {
         //code = getCode();
@@ -85,17 +84,20 @@ class CreateClass extends Component {
           tabs: self.state.tabs,
         }).then(function() {
           console.log("successfully written!");
+          self.setState({
+            done: false,
+          });
         }).catch(function(error) {
           console.log(error);
         });
       }
     }).catch(function(error) {
       console.log("Error getting document: ", error);
-    });*/
+    });
 
 
     //Update user document based on uid with newly generated class information
-    let teacherRef = firestore.collection("users").doc(this.state.uid);
+    /*let teacherRef = firestore.collection("users").doc(this.state.uid);
     firestore.runTransaction(t => {
       return t.get(teacherRef)
         .then(doc => {
@@ -117,6 +119,23 @@ class CreateClass extends Component {
       });
     }).catch(err => {
       console.log('Transaction failure:', err);
+    });*/
+
+    if (self.state.classes != null) {
+      self.setState({
+        classes: self.state.classes.concat(classData),
+      });
+    } else {
+      self.setState({
+        classes: classData,
+      });
+    }
+
+    let teacherRef = firestore.collection("users").doc(this.state.uid);
+    teacherRef.get().then(function(doc) {
+
+    }).catch(function(error) {
+      console.log("Error getting document: ", error);
     });
   };
 
