@@ -33,11 +33,6 @@ class SetClassroom extends Component {
         tempClassList: [],
 
         classes: props.classes,
-        /*classes: [{
-          class: null,
-          code: null,
-          teacher: null,
-        }],*/
 
         students: null,
 
@@ -110,6 +105,8 @@ class SetClassroom extends Component {
       }).catch(function(error) {
         console.log("Error updating document: ", error);
       });
+
+      self.props.updateClasses(self.state.classes);
 
       // add student to class roster
       let docRef = firestore.collection("classes").doc(self.state.newClassCode);
@@ -223,6 +220,7 @@ class SetClassroom extends Component {
                     classes: self.state.tempClassList,
                 });
                 console.log("Class list updated")
+                self.props.updateClasses(self.state.classes);
             })
 
         });
