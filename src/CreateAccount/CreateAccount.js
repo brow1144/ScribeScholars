@@ -55,7 +55,6 @@ class CreateAccount extends Component {
         firstName: firstName,
         lastName: lastName,
         email: email,
-        classes: null
       }).then(function() {
         console.log("successfully written!");
       }).catch(function(error) {

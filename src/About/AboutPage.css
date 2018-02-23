@@ -1,8 +1,5 @@
-h1 {
-    text-align: center;
-    //font-weight: bold;
-    padding-bottom: 1em;
-}
+
+@import url('https://fonts.googleapis.com/css?family=Barlow+Condensed|Indie+Flower');
 
 .page-section {
     text-align: center;
@@ -11,28 +8,38 @@ h1 {
 }
 
 .para {
-    font-size: small;
+    font-size: large;
     font-weight: normal;
+    font-family: 'Barlow Condensed', sans-serif;
+    width: 100%;
 }
 
-.bar {
-    background-color: black;
+.sectionTitle {
+    text-align: center;
+    padding-bottom: 1em;
+    font-family: 'Indie Flower', cursive;
 }
+
 
 .title {
     height: 100vh;
 }
 
+
 .about {
     //position: absolute;
     height: 100vh;
+    text-align: center;
+    vertical-align: center;
+
 }
 
 .about p {
-    padding-top: 3em;
-    font-size: 10em;
-    font-style: italic;
-    font-family: "Baskerville Old Face";
+    padding-top: 2em;
+    font-size: 6em;
+    //font-style: italic;
+    //font-family: "Baskerville Old Face";
+    font-family: 'Indie Flower', cursive;
 }
 
 /*Background picture*/
