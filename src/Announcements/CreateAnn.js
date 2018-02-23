@@ -176,16 +176,6 @@ export default class CreateAnn extends React.Component {
                             </Col>
                         </FormGroup>
 
-                        <FormGroup row className={"formpad"}>
-                            <Label className={"labelSize"} for="exampleFile" sm={2}>Attachment</Label>
-                            <Col sm={10}>
-                                <Input type="file" name="file" id="exampleFile" />
-                                <FormText color="muted">
-                                    Select a file to be displayed alongside your announcement.
-                                </FormText>
-                            </Col>
-                        </FormGroup>
-
 
                         <FormGroup check row className={"formpad"}>
                             <Col sm={{ size: 10, offset: 2}}>
