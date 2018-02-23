@@ -9,6 +9,7 @@
 
 .rowt {
     justify-items: left;
+    font-weight: bolder;
 }
 
 .rowSubmit {
@@ -25,7 +26,7 @@
 
 .titleRR {
     text-align: center;
-    font-size: 2em;
+    font-size: 6em;
 
     font-style: italic;
 

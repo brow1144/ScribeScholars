@@ -1,10 +1,13 @@
 import React from 'react';
-import {   Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
+import {   Container, Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
 
 import './Announcements.css';
 import './CreateAnn.css';
 import Sidebar from 'react-sidebar';
 import AnnSide from "./AnnSide";
+import {storageRef} from "../base";
+import './SetRoomPicture.css';
+
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
@@ -14,6 +17,7 @@ export default class CreateAnn extends React.Component {
         super(props);
 
         this.state = {
+            classCode: props.classCode,
             errorCode: "",
             visible: true,
             mql: mql,
@@ -21,7 +25,11 @@ export default class CreateAnn extends React.Component {
             open: props.open,
             sideButtonVisibility: !props.docked,
         };
+
     }
+
+
+
 
     onDismiss = () => {
         this.setState({ visible: false });
@@ -68,10 +76,31 @@ export default class CreateAnn extends React.Component {
         });
     };
 
-    submitPicture = (ev) => {
+
+    handlePicture = (ev) => {
         ev.preventDefault();
 
+        let self = this;
+        console.log(ev.target)
+        let reader = new FileReader();
+        let classCode = ev.target.classCode.value;
+        let file = ev.target.file.files[0];
+
+        reader.onloadend = () => {
+            self.setState({
+                file: file,
+            });
+        };
+
+        let userImageRef = storageRef.ref().child(`${classCode}`);
+        userImageRef.put(file).then(function(snapshot) {
+            console.log('Uploaded a blob or file!');
+        }).then(() => {
+
+
+        })
     };
+
 
     render() {
 
@@ -106,40 +135,54 @@ export default class CreateAnn extends React.Component {
                     <br/>
                 }
 
-                <div>
-                    <div className={"headerPic"}>
-                        <div className={"annouce"}>
-                            <Row className={"rowt"}>
+                <Container>
+                    <Row className={"rowRoomPic"}>
+                        <Col>
+                            <p>Set Room Picture</p>
+                        </Col>
+                    </Row>
+                    <Row/>
 
+
+
+
+                    <Form className={"form"} onSubmit={this.handlePicture}>
+
+                        <FormGroup className={"formpad"}>
+                            <Row className={"rowt"}>
+                                <Col>
+                                    <Label className={"labelSize"} for="exampleText">Class Code</Label>
+                                </Col>
                             </Row>
                             <Row className={"rowt"}>
-                                <p className={"title"}>Set Room Picture</p>
+                                <Col>
+                                    <Input name="classCode" id="exampleClassCode" />
+                                </Col>
                             </Row>
-                            <Row/>
-                        </div>
-                    </div>
+                        </FormGroup>
 
+                        <Row className={"roomPicPad"}>
+                            <Col>
+                                <Label className={"labelSize attachSize"} for="exampleFile">Attachment</Label>
+                            </Col>
+                        </Row>
+                        <FormGroup row className={"formpad roomPicPad"}>
 
-
-                    <Form className={"form"} onSubmit={ this.submitPicture }>
-
-                        <FormGroup row className={"formpad"}>
-                            <Label className={"labelSize"} for="exampleFile" sm={2}>Attachment</Label>
-                            <Col sm={10}>
-                                <Input type="file" name="file" id="exampleFile" />
+                            <Col>
+                                <Input  type="file" name="file" id="exampleFile" />
                                 <FormText color="muted">
                                     Select a file to be displayed alongside your announcement.
                                 </FormText>
                             </Col>
                         </FormGroup>
 
-                        <FormGroup check row className={"formpad"}>
-                            <Col sm={{ size: 10, offset: 2}}>
-                                <Button color="success">Submit</Button>
+                        <FormGroup check row className={"formpad roomPicPad"}>
+                            <Col>
+                                <Button  color="success">Submit</Button>
                             </Col>
                         </FormGroup>
                     </Form>
-                </div>
+                </Container>
 
             </Sidebar>
         );
