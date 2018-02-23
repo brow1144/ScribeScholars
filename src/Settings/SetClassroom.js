@@ -102,7 +102,6 @@ class SetClassroom extends Component {
         });
       }
 
-      console.log(self.state.classes);
       studentRef.update({
         classes: self.state.classes,
       }).then(function() {

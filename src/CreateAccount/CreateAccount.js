@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { fireauth, firestore } from '../base.js';
 
-import { Form, FormGroup, Label, Input, Button, Alert, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Container, Col } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, Alert, Container, Col } from 'reactstrap';
 import './CreateAccount.css';
 import logo from '../logo.svg';
 
@@ -104,8 +104,8 @@ class CreateAccount extends Component {
               lastName: this.state.tmpLastName,
               dob: this.state.tmpDob,
               phone: this.state.tmpPhone,
-              email: this.state.email,
-              role: this.state.role,
+              email: this.state.tmpEmail,
+              role: this.state.tmpRole,
             }).then(function() {
               console.log("successfully written!");
             }).catch(function(error) {
