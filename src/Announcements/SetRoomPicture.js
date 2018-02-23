@@ -7,6 +7,7 @@ import './Announcements.css';
 import './CreateAnn.css';
 import Sidebar from 'react-sidebar';
 import AnnSide from "./AnnSide";
+import {firestore} from "../base";
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
@@ -70,6 +71,11 @@ export default class CreateAnn extends React.Component {
         });
     };
 
+    submitPicture = (ev) => {
+        ev.preventDefault();
+        let self = this;
+
+    };
 
     render() {
 
@@ -113,15 +119,13 @@ export default class CreateAnn extends React.Component {
                             <Row className={"rowt"}>
                                 <p className={"title"}>Set Room Picture</p>
                             </Row>
-                            <Row>
-
-                            </Row>
+                            <Row/>
                         </div>
                     </div>
 
 
 
-                    <Form className={"form"}>
+                    <Form className={"form"} onSubmit={ this.submitPicture }>
 
                         <FormGroup row className={"formpad"}>
                             <Label className={"labelSize"} for="exampleFile" sm={2}>Attachment</Label>
