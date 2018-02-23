@@ -53,6 +53,14 @@ option
     margin-bottom: 4rem;
 }
 
+.codeText
+{
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+    text-align: right;
+    color: grey;
+}
+
 .accordion {
     border: 3px solid rgba(0, 0, 0, .1);
     border-radius: 10px;
