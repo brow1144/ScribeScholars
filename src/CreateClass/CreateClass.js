@@ -73,7 +73,7 @@ class CreateClass extends Component {
 
   readDoc(code) {
     let classRef = firestore.collection("classes").doc(code);
-    let getDoc = classRef.get()
+    classRef.get()
       .then(doc => {
         if (!doc.exists) {
           console.log('No such document!');
