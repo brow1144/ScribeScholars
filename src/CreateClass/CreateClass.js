@@ -22,7 +22,7 @@ class CreateClass extends Component {
 
     this.state = {
       //uid: props.uid,
-      uid: "eric",
+      uid: "DsVH29TSz4OZpLFGWmKOmHPetaA2",
       className: '',
       email: '',
       tabs: ['annoucements', 'assignments-and-documents', 'course-discussion', 'grades'],
@@ -81,23 +81,27 @@ class CreateClass extends Component {
     }
 
     let teacherRef = firestore.collection("users").doc(this.state.uid);
+
     let transaction = firestore.runTransaction(t => {
       return t.get(teacherRef)
         .then(doc => {
           let classArray = doc.data().classes;
+
           let newData = {
             class: self.state.className,
-            code: self.state.code,
+            code: code,
             teacher: self.state.uid
           };
+
           classArray.push(newData);
-          t.update(teacherRef, {classes: classArray});
-          self.setState({
-            done: true,
-          });
+
+          t.update( teacherRef, { classes: classArray } );
         });
     }).then(result => {
-      console.log('Transaction success!');
+      //console.log('Transaction success!');
+      self.setState({
+        done: true,
+      });
     }).catch(err => {
       console.log('Transaction failure:', err);
     });
