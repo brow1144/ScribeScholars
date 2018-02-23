@@ -10,8 +10,6 @@ class CreateAccount extends Component {
     constructor() {
         super();
 
-        this.toggle = this.toggle.bind(this);
-
         this.state = {
             uid: null,
 
@@ -24,8 +22,6 @@ class CreateAccount extends Component {
 
             errorCode: "",
             visible: false,
-
-            dropdownOpen: false,
         };
     }
 
@@ -124,12 +120,6 @@ class CreateAccount extends Component {
     onDismiss = () => {
         this.setState({ visible: false });
     };
-
-    toggle() {
-      this.setState({
-        dropdownOpen: !this.state.dropdownOpen,
-      })
-    }
 
     render() {
         return (
