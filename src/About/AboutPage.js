@@ -15,20 +15,20 @@ class AboutPage extends Component {
     render() {
         return (
             <div>
-                <Container className={"page-section"}>
+                <Container fluid className="topBar">
                     <Row>
                         <div className={"titlePic"}>
                             <img src={intro} alt=""/>
                         </div>
                     </Row>
-                    <Row>
-                        <Col>
-                            <AboutBar/>
-                        </Col>
-                    </Row>
+                </Container>
+                <div className="topBar">
+                    <AboutBar/>
+                </div>
+                <Container className={"page-section"}>
                     <Row>
                         <Col className="about">
-                            <p className={"about"}>About Scribe Scholars</p>
+                            <p>About Scribe Scholars</p>
                         </Col>
                     </Row>
                     <Row className="bgOne">
