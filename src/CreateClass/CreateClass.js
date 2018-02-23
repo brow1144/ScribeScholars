@@ -80,14 +80,27 @@ class CreateClass extends Component {
       class: self.state.className,
     }
 
-    let teacherRef = firestore.collection("users").doc(this.state.uid)
-
-    teacherRef.set(teacherData).then(function () {
-      self.setState({
-        done: true,
-      });
-    }); //TODO Error catching
-
+    let teacherRef = firestore.collection("users").doc(this.state.uid);
+    let transaction = firestore.runTransaction(t => {
+      return t.get(teacherRef)
+        .then(doc => {
+          let classArray = doc.data().classes;
+          let newData = {
+            class: self.state.className,
+            code: self.state.code,
+            teacher: self.state.uid
+          };
+          classArray.push(newData);
+          t.update(teacherRef, {classes: classArray});
+          self.setState({
+            done: true,
+          });
+        });
+    }).then(result => {
+      console.log('Transaction success!');
+    }).catch(err => {
+      console.log('Transaction failure:', err);
+    });
   };
 
   readDoc(code) {
