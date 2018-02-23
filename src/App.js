@@ -105,17 +105,12 @@ class App extends Component {
             : <Redirect to="/About" />
         )} />
 
-<<<<<<< HEAD
-        <Route exact path='/class-information' render={() => (
-            this.signedIn()
-                ? <ClassInformation />
-                : <Redirect to="/About" />
-=======
+                                                       
         <Route exact path='/create-class-success' render={() => (
           this.signedIn()
             ? <ClassSuccess uid={this.state.uid}/>
-            : <Redirect to="/sign-in" />
->>>>>>> master
+            : <Redirect to="/About" />
+
         )} />
 
         <Route path='/settings' render={() => (
