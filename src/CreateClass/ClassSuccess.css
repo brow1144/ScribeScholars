@@ -1,6 +1,21 @@
+.center {
+    text-align: center;
+    align-self: center;
+    vertical-align: middle;
+    margin-top: 75px;
+    line-height: 90px;
+}
+
 .title {
     text-align: center;
-    font-size: 60px;
+    font-size: 120px;
     font-weight: bold;
-    font-style: italic;
+}
+
+.homeButton {
+    background-color: #21CE99 !important;
+    border-color: #21CE99 !important;
+    /*max-width: 400px;*/
+    /*align-self: center;*/
+    /*margin-left: 670px;*/
 }
