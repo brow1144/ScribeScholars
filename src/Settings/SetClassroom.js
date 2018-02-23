@@ -1,12 +1,187 @@
 import React, { Component } from 'react';
 
-import { Button, Container, Row, Col, Form, FormGroup, Label, Input } from 'reactstrap';
+import { firestore } from '../base.js';
+
+import { Button, Container, Row, Col, Form, FormGroup, Alert, Input } from 'reactstrap';
+import {
+    Accordion,
+    AccordionItem,
+    AccordionItemTitle,
+    AccordionItemBody,
+} from 'react-accessible-accordion';
 
 import './SetClassroom.css';
+import 'react-accessible-accordion/dist/react-accessible-accordion.css';
 
 class SetClassroom extends Component {
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        uid: props.uid,
+
+        newClass: null,
+        newClassCode: null,
+        newClassTeacher: null,
+
+        classes: [{
+          class: null,
+          code: null,
+          teacher: null,
+        }],
+
+        students: null,
+
+        errorCode: "",
+        visible: false,
+      };
+    }
+
+    checkClasses = () => {
+      let self = this;
+
+      // get student's classes
+      let studentRef = firestore.collection("users").doc(self.state.uid);
+      studentRef.get().then(function(doc) {
+        if (doc.exists) {
+          if (doc.data().classes != null) {
+            self.setState({
+              classes: doc.data().classes,
+            });
+          }
+
+          self.joinClass(studentRef);
+        } else {
+          console.log("user not found");
+        }
+      }).catch(function(error) {
+        console.log("Error getting document: ", error);
+      });
+    };
+
+    joinClass = (studentRef) => {
+      let self = this;
+
+      // check if student is already in class
+      if (self.state.classes != null) {
+        for (let i in self.state.classes) {
+          if (self.state.classes[i].code === self.state.newClassCode) {
+            self.setState({
+              errorCode: "Already enrolled in this class",
+              visible: true,
+            });
+            return;
+          }
+        }
+      }
+
+      // create new temporary class
+      let tmpNewClass = [{
+        class: self.state.newClass,
+        code: self.state.newClassCode,
+        teacher: self.state.newClassTeacher,
+      }];
+
+      // add temporary class to classes
+      if (self.state.classes != null) {
+        self.setState({
+          classes: self.state.classes.concat(tmpNewClass),
+        });
+      } else {
+        self.setState({
+          classes: tmpNewClass,
+        });
+      }
+
+      console.log(self.state.classes);
+      studentRef.update({
+        classes: self.state.classes,
+      }).then(function() {
+        console.log("Successfully updated classes list");
+      }).catch(function(error) {
+        console.log("Error updating document: ", error);
+      });
+
+      // add student to class roster
+      let docRef = firestore.collection("classes").doc(self.state.newClassCode);
+      docRef.get().then(function(doc) {
+        if (doc.exists) {
+          if (self.state.students != null) {
+            self.setState({
+              students: self.state.students.concat(self.state.uid),
+            });
+          } else {
+            self.setState({
+              students: self.state.uid,
+            })
+          }
+          docRef.update({
+            students: self.state.students,
+          }).then(function() {
+            console.log("Successfully updated students list");
+          }).catch(function(error) {
+            console.log("Error updating document: ", error);
+          });
+        } else {
+          self.setState({
+            errorCode: "Class not found",
+            visible: true,
+          });
+        }
+      }).catch(function(error) {
+        console.log("Error getting document: ", error);
+      });
+    };
+
+    onFormSubmit = (ev) => {
+      ev.preventDefault();
+      let self = this;
+
+      let code = ev.target.classCode.value;
+      if (code !== "") {
+        let docRef = firestore.collection("classes").doc(code);
+        docRef.get().then(function (doc) {
+          if (doc.exists) {
+            let data = doc.data();
+            self.setState({
+              newClass: data.class,
+              newClassCode: code,
+              newClassTeacher: data.teacher,
+              students: data.students,
+            });
+
+            self.checkClasses();
+          } else {
+            self.setState({
+              errorCode: "Class not found",
+              visible: true,
+            });
+          }
+        }).catch(function (error) {
+          console.log("Error getting document: ", error);
+        });
+      } else {
+        self.setState({
+          errorCode: "Please enter a 6-digit code",
+          visible: true,
+        });
+      }
+    };
+
+    handleDeleteClick = () => {
+        console.log("this was clicked")
+
+    };
+
+    onDismiss = () => {
+      this.setState({
+        visible: false,
+      });
+    };
+
     render()
     {
+
         return(
             <Container fluid className={"ContainerRules"}>
                 <Row className={"Filler"}> </Row>
@@ -18,37 +193,55 @@ class SetClassroom extends Component {
                 <Row className={"Filler"}> </Row>
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
-                    <Col xs={"12"}>
+                    <Col xs={"6"}>
+                        { this.props.classes != null
+                            ?
+                            <Accordion>
+                                {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
+                                    return <AccordionItem key={key}>
+                                        <AccordionItemTitle>
+                                            <h3>
+                                                {this.props.classes[index].class}
+                                            </h3>
+                                        </AccordionItemTitle>
+                                        <AccordionItemBody className={"accordBody"}>
+                                            <div>
+                                                <br/>
+                                                <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable
+                                                    Notifications</Button>
+                                                <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable
+                                                    Announcements</Button>
 
-                        <Form>
-                            <FormGroup row>
-                                <Label size={"lg"} for="exampleSelectMulti" sm={2}>Enrolled Courses:</Label>
-                                <Col sm={5}>
-                                    <Input className="ClassSelection" bsSize="lg" type="select" name="selectMulti" id="exampleSelectMulti" multiple>
-                                        {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
-                                            return <option key={key}>{this.props.classes[index].class}</option>
-                                        })}
-                                    </Input>
-                                </Col>
-                            </FormGroup>
-                            <FormGroup check row>
-                                <Col sm={{ size: 10, offset: 2 }}>
-                                    <Button color={"info"} size={"lg"}>Specific Class Options</Button>
-                                    <Row className={"Filler"}> </Row>
-                                    <Button color="danger" size={"lg"}>Delete Selected Class</Button>
-                                </Col>
-                            </FormGroup>
-                            <Row className={"Filler"}> </Row>
-                            <Row className={"Filler"}> </Row>
-                        </Form>
+                                                <span onClick={this.handleDeleteClick}
+                                                      className={"clickableIcon float-right"}>
+                                                <i onClick={this.handleDeleteClick}
+                                                   className="fas fa-trash-alt deleteIcon float-right"/>
+                                            </span>
 
-                        <Form>
+                                            </div>
+                                        </AccordionItemBody>
+                                    </AccordionItem>
+                                })}
+                            </Accordion>
+                            :
+                            null
+                        }
+
+                        <Row className={"Filler"}> </Row>
+                        <Row className={"Filler"}> </Row>
+                        <Form onSubmit={this.onFormSubmit}>
                             <FormGroup row check>
-                                <Col sm={{ size: 2, offset: 2}}>
-                                    <Input bsSize="lg" type="username" name="className" id="classToAdd" placeholder="Class Name" />
+                                <Col sm={{ size: 3, offset: 2}}>
+                                    <Input bsSize="lg" type="classCode" name="classCode" id="classToAdd" placeholder="Class Code"/>
                                     <Row className={"Filler"}> </Row>
-                                    <Button size={"lg"}>Add This Class</Button>
-
+                                </Col>
+                                <Col sm={{ size: 5, offset: 2}}>
+                                  <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
+                                    {this.state.errorCode}
+                                  </Alert>
+                                </Col>
+                                <Col sm={{ size: 3, offset: 2}}>
+                                  <Button size={"lg"}>Join This Class</Button>
                                 </Col>
                             </FormGroup>
                         </Form>

@@ -2,68 +2,103 @@ import React, { Component } from 'react';
 
 import { firestore } from '../base.js';
 
-import { Form, Input, Button } from 'reactstrap';
+import { Form, Input, Button, Label } from 'reactstrap';
+import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import './CreateClass.css'
-import logo from '../logo.svg'
   
 class CreateClass extends Component {
 
   constructor(props){
     super(props);
 
+    this.MIN_NAME_LENGTH = 6;
+
     this.handleInput = this.handleInput.bind(this);
+    this.handleTabBoxInput = this.handleTabBoxInput.bind(this);
 
     this.state = {
-      uid: props.uid,
-      code: '',
+      //uid: props.uid,
+      uid: "eric",
       className: '',
-      codeValid: false,
-      passwordValid: false,
+      email: '',
+      tabs: ['annoucements', 'assignments-and-documents', 'course-discussion', 'grades'],
+      nameVailid: false,
       formValid: false,
       errorVisible: false,
     };
+
   }
 
   onFormSubmit = (ev) => {
     ev.preventDefault();
-    this.generateCode();
     if(this.state.formValid){
-      console.log("Success!");
-
-      //TODO Add submit logic
+      //console.log("Success!");
+      this.setState({
+        className: this.state.className,
+      }, this.setNewDoc );
 
     } else {
-      this.setState({ errorVisible: true });
-      //console.log("Error: Form Submit Failure");
+      console.log("Error: Class name needs to be at least 6 characters");
+
+      this.setState({
+        errorVisible: true
+      });
     }
   };
 
-  generateCode = () => {
+  setNewDoc = () => {
+
     let self = this;
 
+    let code = CreateClass.getCode();
+    //TODO Add check for repeated code
+
+    let classData = {
+      class: self.state.className,
+      teacher: self.state.uid,
+      teacher_email: self.state.email,
+      announcements: [],
+      deadlines: [],
+      students: [],
+      tabs: self.state.tabs
+    };
+
+    let classRef = firestore.collection("classes").doc(code);
+    classRef.set(classData).then(function () {
+      //console.log("Success!");
+      //self.readDoc(code);
+    }); //TODO Error catching
+
+  };
+
+  readDoc(code) {
+    let classRef = firestore.collection("classes").doc(code);
+    let getDoc = classRef.get()
+      .then(doc => {
+        if (!doc.exists) {
+          console.log('No such document!');
+        } else {
+          console.log('Document data:', doc.data());
+        }})
+      .catch(err => {
+        console.log('Error getting document', err);
+      });
+  }
+
+  static getCode() {
     let code = "";
     for (let i = 0; i < 6; i++) {
       code += Math.floor(Math.random()*10);
     }
+    return code;
+  }
 
-    let docRef = firestore.collection("classes").doc(code);
-    docRef.get().then(function(doc) {
-      if (doc.exists) {
-        self.generateCode();
-      } else {
-        docRef.set({
-          name: this.className,
-          teacher: this.uid
-        }).then(function() {
-          console.log("successfully written!");
-        }).catch(function(error) {
-          console.log(error);
-        });
-      }
-    }).catch(function(error) {
-      console.log("Error getting document: ", error);
+  //Sets this.state.tabs to checkboxes that are currently selected
+  handleTabBoxInput = (e) => {
+    this.setState({
+      tabs: e
     });
-  };
+  }
 
   handleInput = (e) => {
     const className = e.target.name;
@@ -76,42 +111,18 @@ class CreateClass extends Component {
 
     switch(fieldName){
 
-      case 'code':
+      case 'className':
 
-        //console.log("Code length: " + this.state.code.length);
-
-        if(this.state.code.length === 6){
-          this.setState({codeValid: true}, function() {
-            this.validateForm();
-          });
-          //console.log("Code Valid!")
+        if(this.state.className.length >= this.MIN_NAME_LENGTH){
+          this.setState({nameValid: true}, this.validateForm
+          );
         }
         else {
-          this.setState({codeValid: false}, function() {
-            this.validateForm();
-          });
-          //console.log("Code Invalid!")
+          this.setState({nameValid: false}, this.validateForm);
         }
-        //console.log("Code Valid " + this.state.codeValid)
         return;
 
-      case 'password':
-
-        //console.log("Password length: " + this.state.password.length);
-
-        if(this.state.password.length >= 6){
-          this.setState({passwordValid: true}, function() {
-            this.validateForm();
-          });
-          //console.log("Password Valid!")
-        }
-        else {
-          this.setState({passwordValid: false}, function() {
-            this.validateForm();
-          });
-          //console.log("Password Invalid!")
-        }
-        //console.log("Password Valid " + this.state.passwordValid);
+      case 'email':
         return;
 
       default:
@@ -120,42 +131,59 @@ class CreateClass extends Component {
     }
   }
 
-  validateForm = () =>{
-    this.setState({formValid: this.state.codeValid && this.state.passwordValid}, function() {
-      this.printForm();
-    });
-
+  validateForm = () => {
+    this.setState({formValid: this.state.nameValid});
   };
 
-  printForm(){
-    //console.log("formValid: " + this.state.formValid);
-  }
-
-
-  //TODO Add input labels
   render() {
 
     return (
-      <div className="text-center">
-        <div className ="Absolute-Center is-Responsive">
+      <div className="quarter">
           <Form onSubmit={this.onFormSubmit}>
-            <img src={logo} alt="" width="100" height="100"/>
-            <h3 className = "h3 font-weight-normal">Create New Class</h3>
-            <div className="form-group">
-              <Input name="className" type="text" placeholder="Enter class name"
-                value={this.state.code}
-                onChange={this.handleInput}
-              />
-            </div>
+
             <div className = "form-group">
-              <Input name="password" type="password" placeholder="Enter your password"
-                value={this.state.password}
+              <h3 className = "h3 font-weight-bold">Create A New Classroom</h3>
+            </div>
+
+            <div className = "titleField" />
+
+            <div className="form-group">
+              <Label className="inputLabel">Class Name: </Label>
+              <Input name="className" className="inputField" type="text" placeholder="Enter the class name"
                 onChange={this.handleInput}
               />
             </div>
+
+            <div className="form-group">
+              <Label className="inputLabel">Email: (Students will see this as your public email) </Label>
+              <Input name="email" className="inputField" type="text" placeholder="Enter your email"
+                     onChange={this.handleInput}/>
+            </div>
+
+            <div className="form-group">
+              <Label>Choose which tabs you would like included in your classroom:</Label>
+              <div/>
+
+              <CheckboxGroup name="tabs"
+                             value={this.state.tabs}
+                             checkboxDepth={2}
+                             onChange={this.handleTabBoxInput}>
+                <Label> <Checkbox value="annoucements" name="annoucements" onChange={this.handleTabBoxInput} checked="checked"/> Annoucements </Label>
+                <div/>
+                <Label> <Checkbox value="assignments-and-documents" name="assignments-and-documents" onChange={this.handleTabBoxInput} checked="checked"/> Assignments and Documents </Label>
+                <div/>
+                <Label> <Checkbox value="course-discussion" name="course-discussion" onChange={this.handleTabBoxInput} checked="checked"/> Course Discussion </Label>
+                <div/>
+                <Label> <Checkbox value="grades" name="grades" onChange={this.handleTabBoxInput} checked="checked"/> Grades </Label>
+              </CheckboxGroup>
+            </div>
+
+
+            <div className = "titleField" />
+
             <Button type="submit" className="createClassButton" size ="lg" block>Create Class!</Button>
+
           </Form>
-        </div>
       </div>
     );
   }

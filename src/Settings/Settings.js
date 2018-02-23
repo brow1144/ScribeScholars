@@ -9,7 +9,7 @@ import SetPersonal from './SetPersonal';
 
 
 import './Settings.css'
-import {firestore} from "../base";
+import { firestore } from "../base";
 
 
 const mql = window.matchMedia(`(min-width: 800px)`);
@@ -110,7 +110,7 @@ class Settings extends Component {
         docRef.get().then(function(doc) {
             if (doc.exists) {
                 self.setState({
-                    name: doc.data().name,
+                    name: doc.data().firstName,
                 });
             } else {
                 console.log("No such document!");
