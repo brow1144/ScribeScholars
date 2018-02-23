@@ -15,6 +15,7 @@ import ClassSuccess from './CreateClass/ClassSuccess';
 import './App.css';
 import Announcements from "./Announcements/Announcements";
 import CreateAnn from "./Announcements/CreateAnn";
+import SetRoomPic from "./Announcements/SetRoomPicture";
 
 
 class App extends Component {
@@ -89,6 +90,12 @@ class App extends Component {
           <Route path='/CreateAnnouncements' render={() => (
               this.signedIn()
                   ? <CreateAnn/>
+                  : <Redirect to="/About" />
+          )} />
+
+          <Route path='/SetRoomPicture' render={() => (
+              this.signedIn()
+                  ? <SetRoomPic/>
                   : <Redirect to="/About" />
           )} />
 
