@@ -26,7 +26,6 @@ class CreateAccount extends Component {
             visible: false,
 
             dropdownOpen: false,
-            selected: "Account Type",
         };
     }
 
@@ -66,12 +65,7 @@ class CreateAccount extends Component {
             errorCode: "Please choose an account type",
             visible: true,
           });
-        }/*else if (self.state.role === null) {
-          self.setState({
-            errorCode: "Please select an account type",
-            visible: true,
-          });
-        } */else {
+        } else {
           fireauth.createUserAndRetrieveDataWithEmailAndPassword(email, ev.target.password.value)
             .then(() => {
               if (role === "Student")
@@ -137,19 +131,6 @@ class CreateAccount extends Component {
       })
     }
 
-    /*selectRole(name) {
-      let display = name;
-      if (name === "student")
-        display = "Student";
-      else if (name === "teacher")
-        display = "Teacher";
-
-      this.setState({
-        role: name,
-        selected: display,
-      })
-    }*/
-
     render() {
         return (
           <Container>
@@ -206,24 +187,6 @@ class CreateAccount extends Component {
           </Container>
         );
     }
-
-  /* <FormGroup>
-                          <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                              <DropdownToggle caret color="secondary">
-                                {this.state.selected}
-                              </DropdownToggle>
-                              <DropdownMenu>
-                                  <DropdownItem header>Account Type</DropdownItem>
-                                  <DropdownItem divider />
-                                  <DropdownItem onClick={() => this.selectRole("student")}>
-                                      Student
-                                  </DropdownItem>
-                                  <DropdownItem onClick={() => this.selectRole("teacher")}>
-                                      Teacher
-                                  </DropdownItem>
-                              </DropdownMenu>
-                          </Dropdown>
-                      </FormGroup> */
 }
 
 export default CreateAccount;
