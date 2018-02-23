@@ -60,7 +60,6 @@ class Side extends Component {
       localStorage.removeItem('uid');
       this.setState({ uid: null, });
       this.firebaseOut();
-      window.location.reload();
   };
 
   render() {
