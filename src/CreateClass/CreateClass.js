@@ -4,6 +4,10 @@ import { firestore } from '../base.js';
 
 import { Form, Input, Button, Label } from 'reactstrap';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
+
+
+import ClassSuccess from './ClassSuccess';
+
 import './CreateClass.css'
   
 class CreateClass extends Component {
@@ -22,9 +26,10 @@ class CreateClass extends Component {
       className: '',
       email: '',
       tabs: ['annoucements', 'assignments-and-documents', 'course-discussion', 'grades'],
-      nameVailid: false,
+      nameValid: false,
       formValid: false,
       errorVisible: false,
+      done: false,
     };
 
   }
@@ -63,10 +68,24 @@ class CreateClass extends Component {
       tabs: self.state.tabs
     };
 
+
     let classRef = firestore.collection("classes").doc(code);
     classRef.set(classData).then(function () {
-      //console.log("Success!");
-      //self.readDoc(code);
+      self.setState({
+        done: false,
+      });
+    }); //TODO Error catching
+
+    let teacherData = {
+      class: self.state.className,
+    }
+
+    let teacherRef = firestore.collection("users").doc(this.state.uid)
+
+    teacherRef.set(teacherData).then(function () {
+      self.setState({
+        done: true,
+      });
     }); //TODO Error catching
 
   };
@@ -137,20 +156,22 @@ class CreateClass extends Component {
 
   render() {
 
-    return (
-      <div className="quarter">
+    if (!this.state.done) {
+
+      return (
+        <div className="quarter">
           <Form onSubmit={this.onFormSubmit}>
 
-            <div className = "form-group">
-              <h3 className = "h3 font-weight-bold">Create A New Classroom</h3>
+            <div className="form-group">
+              <h3 className="h3 font-weight-bold">Create A New Classroom</h3>
             </div>
 
-            <div className = "titleField" />
+            <div className="titleField"/>
 
             <div className="form-group">
               <Label className="inputLabel">Class Name: </Label>
               <Input name="className" className="inputField" type="text" placeholder="Enter the class name"
-                onChange={this.handleInput}
+                     onChange={this.handleInput}
               />
             </div>
 
@@ -168,24 +189,34 @@ class CreateClass extends Component {
                              value={this.state.tabs}
                              checkboxDepth={2}
                              onChange={this.handleTabBoxInput}>
-                <Label> <Checkbox value="annoucements" name="annoucements" onChange={this.handleTabBoxInput} checked="checked"/> Annoucements </Label>
+                <Label> <Checkbox value="annoucements" name="annoucements" onChange={this.handleTabBoxInput}
+                                  checked="checked"/> Annoucements </Label>
                 <div/>
-                <Label> <Checkbox value="assignments-and-documents" name="assignments-and-documents" onChange={this.handleTabBoxInput} checked="checked"/> Assignments and Documents </Label>
+                <Label> <Checkbox value="assignments-and-documents" name="assignments-and-documents"
+                                  onChange={this.handleTabBoxInput} checked="checked"/> Assignments and Documents
+                </Label>
                 <div/>
-                <Label> <Checkbox value="course-discussion" name="course-discussion" onChange={this.handleTabBoxInput} checked="checked"/> Course Discussion </Label>
+                <Label> <Checkbox value="course-discussion" name="course-discussion" onChange={this.handleTabBoxInput}
+                                  checked="checked"/> Course Discussion </Label>
                 <div/>
-                <Label> <Checkbox value="grades" name="grades" onChange={this.handleTabBoxInput} checked="checked"/> Grades </Label>
+                <Label> <Checkbox value="grades" name="grades" onChange={this.handleTabBoxInput}
+                                  checked="checked"/> Grades </Label>
               </CheckboxGroup>
             </div>
 
 
-            <div className = "titleField" />
+            <div className="titleField"/>
 
-            <Button type="submit" className="createClassButton" size ="lg" block>Create Class!</Button>
+            <Button type="submit" className="createClassButton" size="lg" block>Create Class!</Button>
 
           </Form>
-      </div>
-    );
+        </div>
+      );
+    } else {
+      return(
+          <ClassSuccess uid={this.state.uid} className={this.state.className}/>
+      );
+    }
   }
 }
 
