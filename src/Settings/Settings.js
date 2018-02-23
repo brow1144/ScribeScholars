@@ -161,6 +161,7 @@ class Settings extends Component {
                         />
                         :
                         <SetClassroom
+                            updateClasses={ this.props.updateClasses }
                             role={this.state.role}
                             uid={this.state.uid}
                             name={this.state.name}

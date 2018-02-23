@@ -21,8 +21,7 @@ class CreateClass extends Component {
     this.handleTabBoxInput = this.handleTabBoxInput.bind(this);
 
     this.state = {
-      //uid: props.uid,
-      uid: "DsVH29TSz4OZpLFGWmKOmHPetaA2",
+      uid: props.uid,
       className: '',
       email: '',
       tabs: ['annoucements', 'assignments-and-documents', 'course-discussion', 'grades'],

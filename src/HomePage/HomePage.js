@@ -45,10 +45,10 @@ class HomePage extends Component {
     this.state = {
       page: this.props.page,
 
-      uid: props.uid,
-
       firstName: null,
       lastName: null,
+
+      uid: props.uid,
 
       role: null,
 
@@ -96,9 +96,9 @@ class HomePage extends Component {
    *
    */
   componentWillMount() {
-    if (this.props.page === "home") {
+     // if (this.props.page === "home") {
       this.getClasses();
-    }
+     // }
     mql.addListener(this.mediaQueryChanged);
     window.addEventListener('resize', this.handleWindowChange);
     this.setState({
@@ -162,9 +162,12 @@ class HomePage extends Component {
       } else {
         console.log("No such document!");
       }
+      self.props.updateClasses(self.state.classes)
     }).catch(function(error) {
       console.log("Error getting document:", error);
-    })
+    });
+
+
   };
 
   /**
@@ -209,6 +212,7 @@ class HomePage extends Component {
         } else {
           console.log("No such document!");
         }
+        self.props.updateDates(self.state.dates);
       }).catch(function (error) {
         console.log("Error getting document:", error);
       });
@@ -218,6 +222,7 @@ class HomePage extends Component {
     self.setState({
       dates: object
     });
+
   };
 
   /**
@@ -263,6 +268,7 @@ class HomePage extends Component {
         } else {
           console.log("No such document!");
         }
+        self.props.updateAnnouncements(self.state.announcements);
       }).catch(function (error) {
         console.log("Error getting document:", error);
       });
@@ -365,11 +371,11 @@ class HomePage extends Component {
 
 
     let sidebarContent = <Side flipClass={this.flipToClass.bind(this)} flipPersonal={this.flipToPersonal.bind(this)}
-                                page={this.props.page} uid={this.state.uid} classes={this.state.classes} />;
+                                page={this.props.page} uid={this.state.uid} classes={this.props.classes} />;
 
     const sidebarStyles = {
       sidebar: {
-        backgroundColor: '##f2f2f2',
+        backgroundColor: '#f2f2f2',
         width: '8em',
         textAlign: 'center',
       },
@@ -400,7 +406,7 @@ class HomePage extends Component {
               <Col md="1"/>
               <Col md="8">
                 <BigCalendar
-                  events={this.state.dates}
+                  events={this.props.dates}
                   style={calendarStyles}
                   defaultDate={new Date()}
                   eventPropGetter={(this.eventStyleGetter)}
@@ -413,7 +419,7 @@ class HomePage extends Component {
             <b className="annTest">Announcements</b>
 
             <div className="announcementsDiv">
-              <Cards announcements={this.state.announcements}/>
+              <Cards announcements={this.props.announcements}/>
             </div>
 
           </Sidebar>
@@ -451,7 +457,7 @@ class HomePage extends Component {
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
 
-          <Settings role={this.state.role} personalPage={this.state.personalPage} uid={this.state.uid} />
+          <Settings updateClasses={ this.props.updateClasses } role={this.state.role} personalPage={this.state.personalPage} uid={this.state.uid} />
         </Sidebar>
       );
 
