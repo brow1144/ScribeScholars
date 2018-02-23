@@ -17,7 +17,7 @@ class CreateClass extends Component {
 
     this.state = {
       uid: props.uid,
-      classes: props.classes,
+      classes: null,
       className: '',
       email: '',
       tabs: ['annoucements', 'assignments-and-documents', 'course-discussion', 'grades'],
@@ -84,6 +84,7 @@ class CreateClass extends Component {
           tabs: self.state.tabs,
         }).then(function() {
           console.log("successfully written!");
+
           self.setState({
             done: false,
           });
@@ -120,7 +121,7 @@ class CreateClass extends Component {
     }).catch(err => {
       console.log('Transaction failure:', err);
     });*/
-
+    console.log("here " + self.state.classes);
     if (self.state.classes != null) {
       self.setState({
         classes: self.state.classes.concat(classData),
@@ -129,13 +130,20 @@ class CreateClass extends Component {
       self.setState({
         classes: classData,
       });
+      console.log(classData);
+      console.log(self.state.classes);
     }
 
     let teacherRef = firestore.collection("users").doc(this.state.uid);
-    teacherRef.get().then(function(doc) {
-
+    teacherRef.update({
+      classes: self.state.classes,
+    }).then(function() {
+      console.log("Successfully updated classes list");
+      self.setState({
+        done: true,
+      });
     }).catch(function(error) {
-      console.log("Error getting document: ", error);
+      console.log("Error updating document: ", error);
     });
   };
 
