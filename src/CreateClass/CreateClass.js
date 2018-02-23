@@ -57,7 +57,7 @@ class CreateClass extends Component {
     let code = CreateClass.getCode();
     //TODO Add check for repeated code
 
-    let classData = {
+    /*let classData = {
       class: self.state.className,
       teacher: self.state.uid,
       teacher_email: self.state.email,
@@ -65,19 +65,43 @@ class CreateClass extends Component {
       deadlines: [],
       students: [],
       tabs: self.state.tabs
-    };
+    };*/
 
 
-    let classRef = firestore.collection("classes").doc(code);
+    /*let classRef = firestore.collection("classes").doc(code);
     classRef.set(classData).then(function () {
       self.setState({
         done: false,
       });
-    }); //TODO Error catching
+    }); //TODO Error catching*/
+
+    let classRef = firestore.collection("classes").doc(code);
+    classRef.get().then(function(doc) {
+      if (doc.exists) {
+        //code = getCode(); // TODO move block to own function
+      } else {
+        classRef.set({
+          class: self.state.className,
+          teacher: self.state.uid,
+          teacher_email: self.state.email,
+          announcements: [],
+          deadlines: [],
+          students: [],
+          tabs: self.state.tabs,
+        }).then(function() {
+          console.log("successfully written!");
+        }).catch(function(error) {
+          console.log(error);
+        });
+      }
+    }).catch(function(error) {
+      console.log("Error getting document: ", error);
+    });
+
 
     let teacherData = {
       class: self.state.className,
-    }
+    };
 
     let teacherRef = firestore.collection("users").doc(this.state.uid);
 
@@ -106,7 +130,7 @@ class CreateClass extends Component {
     });
   };
 
-  readDoc(code) {
+  /*readDoc(code) {
     let classRef = firestore.collection("classes").doc(code);
     classRef.get()
       .then(doc => {
@@ -118,7 +142,7 @@ class CreateClass extends Component {
       .catch(err => {
         console.log('Error getting document', err);
       });
-  }
+  }*/
 
   static getCode() {
     let code = "";
@@ -133,7 +157,7 @@ class CreateClass extends Component {
     this.setState({
       tabs: e
     });
-  }
+  };
 
   handleInput = (e) => {
     const className = e.target.name;
