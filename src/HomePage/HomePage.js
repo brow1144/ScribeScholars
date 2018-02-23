@@ -71,6 +71,8 @@ class HomePage extends Component {
         class: null,
       }],
 
+      personalPage: true,
+
       width: window.innerWidth,
 
       mql: mql,
@@ -92,7 +94,9 @@ class HomePage extends Component {
    *
    */
   componentWillMount() {
-    this.getClasses();
+    if (this.props.page === "home") {
+      this.getClasses();
+    }
     mql.addListener(this.mediaQueryChanged);
     window.addEventListener('resize', this.handleWindowChange);
     this.setState({
@@ -324,6 +328,20 @@ class HomePage extends Component {
     };
   };
 
+  flipToClass = () => {
+    console.log("flipToClass");
+    this.setState({
+      personalPage: false,
+    });
+  };
+
+  flipToPersonal = () => {
+    console.log("flipToPersonal");
+    this.setState({
+      personalPage: true,
+    });
+  };
+
   /**
    *
    * Method called to add components to the webpage
@@ -346,7 +364,8 @@ class HomePage extends Component {
   render() {
 
 
-    let sidebarContent = <Side uid={this.state.uid} classes={this.state.classes} />;
+    let sidebarContent = <Side flipClass={this.flipToClass.bind(this)} flipPersonal={this.flipToPersonal.bind(this)}
+                                page={this.props.page} uid={this.state.uid} classes={this.state.classes} />;
 
     const sidebarStyles = {
       sidebar: {
@@ -432,7 +451,7 @@ class HomePage extends Component {
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
 
-          <Settings uid={this.state.uid} />
+          <Settings personalPage={this.state.personalPage} uid={this.state.uid} />
         </Sidebar>
       );
 

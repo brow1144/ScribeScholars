@@ -6,7 +6,6 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 
 import SignIn from './Sigin/SignIn';
 import HomePage from './HomePage/HomePage';
-import Settings from './Settings/Settings';
 import About from './About/AboutPage';
 import CreateAccount from './CreateAccount/CreateAccount';
 
