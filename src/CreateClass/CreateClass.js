@@ -21,8 +21,7 @@ class CreateClass extends Component {
     this.handleTabBoxInput = this.handleTabBoxInput.bind(this);
 
     this.state = {
-      //uid: props.uid,
-      uid: "eric",
+      uid: props.uid,
       className: '',
       email: '',
       tabs: ['annoucements', 'assignments-and-documents', 'course-discussion', 'grades'],
@@ -80,14 +79,31 @@ class CreateClass extends Component {
       class: self.state.className,
     }
 
-    let teacherRef = firestore.collection("users").doc(this.state.uid)
+    let teacherRef = firestore.collection("users").doc(this.state.uid);
 
-    teacherRef.set(teacherData).then(function () {
+    let transaction = firestore.runTransaction(t => {
+      return t.get(teacherRef)
+        .then(doc => {
+          let classArray = doc.data().classes;
+
+          let newData = {
+            class: self.state.className,
+            code: code,
+            teacher: self.state.uid
+          };
+
+          classArray.push(newData);
+
+          t.update( teacherRef, { classes: classArray } );
+        });
+    }).then(result => {
+      //console.log('Transaction success!');
       self.setState({
         done: true,
       });
-    }); //TODO Error catching
-
+    }).catch(err => {
+      console.log('Transaction failure:', err);
+    });
   };
 
   readDoc(code) {

@@ -33,11 +33,6 @@ class SetClassroom extends Component {
         tempClassList: [],
 
         classes: props.classes,
-        /*classes: [{
-          class: null,
-          code: null,
-          teacher: null,
-        }],*/
 
         students: null,
 
@@ -102,7 +97,6 @@ class SetClassroom extends Component {
         });
       }
 
-      console.log(self.state.classes);
       studentRef.update({
         classes: self.state.classes,
       }).then(function() {
@@ -110,6 +104,8 @@ class SetClassroom extends Component {
       }).catch(function(error) {
         console.log("Error updating document: ", error);
       });
+
+      self.props.updateClasses(self.state.classes);
 
       // add student to class roster
       let docRef = firestore.collection("classes").doc(self.state.newClassCode);
@@ -179,13 +175,11 @@ class SetClassroom extends Component {
 
     handleDeleteClick = (classCode) => {
         let self = this;
-        console.log(classCode);
         let classRef = firestore.collection("classes").doc(classCode);
         let studentRef = firestore.collection("users").doc(self.state.uid);
 
 
         classRef.get().then(function(doc) {
-            console.log(doc.data());
             self.setState({
                 tempStudents: doc.data().students
             });
@@ -200,7 +194,6 @@ class SetClassroom extends Component {
         });
 
         studentRef.get().then(function(doc) {
-            console.log(doc.data());
             self.setState({
                 tempClassList: doc.data().classes
             });
@@ -214,7 +207,6 @@ class SetClassroom extends Component {
                     break;
                 }
             }
-            console.log(i);
             self.state.tempClassList.splice(i,1);
             studentRef.update({
                 classes: self.state.tempClassList,
@@ -223,6 +215,7 @@ class SetClassroom extends Component {
                     classes: self.state.tempClassList,
                 });
                 console.log("Class list updated")
+                self.props.updateClasses(self.state.classes);
             })
 
         });
@@ -235,9 +228,7 @@ class SetClassroom extends Component {
     };
 
     render() {
-        console.log(this.state.role);
-
-        return(
+       return(
             <Container fluid className={"ContainerRules"}>
                 <Row className={"Filler"}> </Row>
                 <Row className={"BannerRow"}>

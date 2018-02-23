@@ -1,8 +1,6 @@
 import React from 'react';
 import {   Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
 
-
-import logo from '../logo.svg';
 import './Announcements.css';
 import './CreateAnn.css';
 import Sidebar from 'react-sidebar';
@@ -70,6 +68,10 @@ export default class CreateAnn extends React.Component {
         });
     };
 
+    submitPicture = (ev) => {
+        ev.preventDefault();
+
+    };
 
     render() {
 
@@ -113,15 +115,13 @@ export default class CreateAnn extends React.Component {
                             <Row className={"rowt"}>
                                 <p className={"title"}>Set Room Picture</p>
                             </Row>
-                            <Row>
-
-                            </Row>
+                            <Row/>
                         </div>
                     </div>
 
 
 
-                    <Form className={"form"}>
+                    <Form className={"form"} onSubmit={ this.submitPicture }>
 
                         <FormGroup row className={"formpad"}>
                             <Label className={"labelSize"} for="exampleFile" sm={2}>Attachment</Label>

@@ -131,8 +131,7 @@ class SetPersonal extends Component {
                             <FormGroup row>
                                 <Label size="lg" for="exampleEmail" sm={2}>Email:</Label>
                                 <Col sm={6}>
-                                    <Input bsSize="lg" type="email" name="email" id="exampleEmail" defaultValue={this.state.email}
-                                    />
+                                    <Input bsSize="lg" type="email" name="email" id="exampleEmail" defaultValue={this.state.email}/>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
