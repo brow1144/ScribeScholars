@@ -33,6 +33,9 @@ class AboutBar extends Component {
                     <Collapse isOpen={!this.state.collapsed} navbar>
                         <Nav navbar>
                             <NavItem>
+                                <NavLink className="link" href="#Mission" ><h2>Mission</h2></NavLink>
+                            </NavItem>
+                            <NavItem>
                                 <NavLink className="link" href="#Students" ><h2>Students</h2></NavLink>
                             </NavItem>
                             <NavItem>
