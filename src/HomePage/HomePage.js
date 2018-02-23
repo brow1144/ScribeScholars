@@ -11,6 +11,8 @@ import Side from './Side';
 import HomeNav from './HomeNav'
 import Cards from './Cards'
 
+import Settings from '../Settings/Settings';
+
 import './HomePage.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
@@ -41,10 +43,14 @@ class HomePage extends Component {
      *
      **/
     this.state = {
+      page: this.props.page,
+
       uid: props.uid,
 
       firstName: null,
       lastName: null,
+
+      role: null,
 
       classes: [{
         class: null,
@@ -64,6 +70,8 @@ class HomePage extends Component {
         message: null,
         class: null,
       }],
+
+      personalPage: true,
 
       width: window.innerWidth,
 
@@ -86,7 +94,9 @@ class HomePage extends Component {
    *
    */
   componentWillMount() {
-    this.getClasses();
+    if (this.props.page === "home") {
+      this.getClasses();
+    }
     mql.addListener(this.mediaQueryChanged);
     window.addEventListener('resize', this.handleWindowChange);
     this.setState({
@@ -140,10 +150,11 @@ class HomePage extends Component {
           self.getDeadlines();
           self.getAnnouncements();
         }
-        if (doc.data().firstName !== null && doc.data().lastName !== null) {
+        if (doc.data().firstName !== null && doc.data().lastName !== null && doc.data().role !== null) {
           self.setState({
             firstName: doc.data().firstName,
             lastName: doc.data().lastName,
+            role: doc.data().role,
           });
         }
       } else {
@@ -317,6 +328,18 @@ class HomePage extends Component {
     };
   };
 
+  flipToClass = () => {
+    this.setState({
+      personalPage: false,
+    });
+  };
+
+  flipToPersonal = () => {
+    this.setState({
+      personalPage: true,
+    });
+  };
+
   /**
    *
    * Method called to add components to the webpage
@@ -339,7 +362,8 @@ class HomePage extends Component {
   render() {
 
 
-    let sidebarContent = <Side uid={this.state.uid} classes={this.state.classes} />;
+    let sidebarContent = <Side flipClass={this.flipToClass.bind(this)} flipPersonal={this.flipToPersonal.bind(this)}
+                                page={this.props.page} uid={this.state.uid} classes={this.state.classes} />;
 
     const sidebarStyles = {
       sidebar: {
@@ -356,42 +380,68 @@ class HomePage extends Component {
       height: "60em",
     };
 
-    // If Screen is Big
-    if (this.state.width > 600) {
-      return (
+    if (this.props.page === "home") {
+      // If Screen is Big
+      if (this.state.width > 600) {
 
-        <Sidebar styles={sidebarStyles}
-                 sidebar={sidebarContent}
-                 open={this.state.sidebarOpen}
-                 docked={this.state.sidebarDocked}
-                 onSetOpen={this.onSetSidebarOpen}>
+        return (
+          <Sidebar styles={sidebarStyles}
+                   sidebar={sidebarContent}
+                   open={this.state.sidebarOpen}
+                   docked={this.state.sidebarDocked}
+                   onSetOpen={this.onSetSidebarOpen}>
 
-          <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} expand={this.dockSideBar} width={this.state.width}/>
-          <Row>
+            <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} expand={this.dockSideBar}
+                     width={this.state.width}/>
+            <Row>
 
-            <Col md="1"/>
-            <Col md="8">
-              <BigCalendar
-                events={this.state.dates}
-                style={calendarStyles}
-                defaultDate={new Date()}
-                eventPropGetter={(this.eventStyleGetter)}
-              />
-            </Col>
-            <Col md="3"/>
-          </Row>
+              <Col md="1"/>
+              <Col md="8">
+                <BigCalendar
+                  events={this.state.dates}
+                  style={calendarStyles}
+                  defaultDate={new Date()}
+                  eventPropGetter={(this.eventStyleGetter)}
+                />
+              </Col>
+              <Col md="3"/>
+            </Row>
 
-          <hr className="divider" />
-          <b className="annTest">Announcements</b>
+            <hr className="divider"/>
+            <b className="annTest">Announcements</b>
 
             <div className="announcementsDiv">
               <Cards announcements={this.state.announcements}/>
             </div>
 
-        </Sidebar>
-      );
-      // If Screen is Small
-    } else {
+          </Sidebar>
+        );
+
+
+        // If Screen is Small
+      } else {
+        return (
+          <Sidebar styles={sidebarStyles}
+                   sidebar={sidebarContent}
+                   open={this.state.sidebarOpen}
+                   docked={this.state.sidebarDocked}
+                   onSetOpen={this.onSetSidebarOpen}>
+
+            <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} expand={this.dockSideBar}
+                     width={this.state.width}/>
+
+            <hr className="divider"/>
+            <b>Announcements</b>
+
+            <div className="announcementsDiv">
+              <Cards announcements={this.state.announcements}/>
+            </div>
+
+          </Sidebar>
+        );
+      }
+    } else if (this.props.page === "settings") {
+
       return (
         <Sidebar styles={sidebarStyles}
                  sidebar={sidebarContent}
@@ -399,17 +449,10 @@ class HomePage extends Component {
                  docked={this.state.sidebarDocked}
                  onSetOpen={this.onSetSidebarOpen}>
 
-          <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} expand={this.dockSideBar} width={this.state.width}/>
-
-          <hr className="divider" />
-          <b>Announcements</b>
-
-          <div className="announcementsDiv">
-            <Cards announcements={this.state.announcements}/>
-          </div>
-
+          <Settings personalPage={this.state.personalPage} uid={this.state.uid} />
         </Sidebar>
       );
+
     }
   }
 }

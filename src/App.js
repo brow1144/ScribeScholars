@@ -6,7 +6,6 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 
 import SignIn from './Sigin/SignIn';
 import HomePage from './HomePage/HomePage';
-import Settings from './Settings/Settings';
 import About from './About/AboutPage';
 import CreateAccount from './CreateAccount/CreateAccount';
 
@@ -67,8 +66,8 @@ class App extends Component {
 
         <Route path='/HomePage' render={() => (
           this.signedIn()
-            ? <HomePage uid={this.state.uid}/>
-            : <Redirect to="/About" />
+            ? <HomePage page={"home"} uid={this.state.uid}/>
+            : <Redirect to="/sign-in" />
         )} />
 
         <Route exact path='/sign-in' render={() => (
@@ -114,8 +113,8 @@ class App extends Component {
 
         <Route path='/settings' render={() => (
           this.signedIn()
-            ? <Settings uid={this.state.uid}/>
-            : <Redirect to="/About" />
+            ? <HomePage page={"settings"} uid={this.state.uid}/>
+            : <Redirect to="/sign-in" />
         )} />
 
         <Route render={() => <Redirect to="/HomePage" />} />
