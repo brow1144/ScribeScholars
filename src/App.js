@@ -104,12 +104,7 @@ class App extends Component {
             ? <CreateClass uid={this.state.uid}/>
             : <Redirect to="/About" />
         )} />
-
-        <Route exact path='/class-information' render={() => (
-            this.signedIn()
-                ? <ClassInformation />
-                : <Redirect to="/About" />
-         )} />
+          
                                                        
         <Route exact path='/create-class-success' render={() => (
           this.signedIn()
