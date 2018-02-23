@@ -287,9 +287,13 @@ class SetClassroom extends Component {
                             </FormGroup>
                         </Form>
                         :
-                        <NavLink style={{ textDecoration: 'none' }} to={`/create-class`}>
-                          <Button type="submit" className="createClassButton" size ="lg" block>Create Class!</Button>
-                        </NavLink>
+                        <Col >
+                          <Row>
+                            <NavLink style={{ textDecoration: 'none' }} to={`/create-class`}>
+                              <Button type="submit" className="createClassButton" size ="lg" block>Create Class!</Button>
+                            </NavLink>
+                          </Row>
+                        </Col>
                       }
 
                         </Col>
