@@ -67,6 +67,8 @@ class CreateClass extends Component {
           self.setState({
             done: false,
           });
+
+          self.updateTeacher(code);
         }).catch(function(error) {
           console.log(error);
         });
@@ -77,7 +79,7 @@ class CreateClass extends Component {
 
 
     //Update user document based on uid with newly generated class information
-    let teacherRef = firestore.collection("users").doc(this.state.uid);
+    /*let teacherRef = firestore.collection("users").doc(this.state.uid);
     teacherRef.get().then(function (doc) {
       if(doc.exists) {
 
@@ -93,30 +95,76 @@ class CreateClass extends Component {
         }).then(function () {
 
         });
+
+        self.setState({
+          done: true,
+        });
       }
-    }).then(() => {
-      self.setState({
-        done: true,
-      });
     }).catch(err => {
       console.log('Transaction failure:', err);
+    });*/
+
+  };
+
+  updateTeacher(code) {
+    let self = this;
+
+    let teacherRef = firestore.collection("users").doc(this.state.uid);
+    teacherRef.get().then(function(doc) {
+      if (doc.exists) {
+        if (doc.data().classes != null) {
+          self.setState({
+            classes: doc.data().classes,
+          });
+        }
+      } else {
+        console.log("user not found");
+      }
+    }).catch(function(error) {
+      console.log("Error getting document: ", error);
     });
 
+    /*let tmpNewClass = [{
+      class: self.state.newClass,
+      code: code,
+      teacher: self.state.newClassTeacher,
+    }];
 
-    /*console.log("here " + self.state.classes);
+    // add temporary class to classes
     if (self.state.classes != null) {
       self.setState({
-        classes: self.state.classes.concat(classData),
+        classes: self.state.classes.concat(tmpNewClass),
       });
     } else {
       self.setState({
-        classes: classData,
+        classes: tmpNewClass,
       });
-      console.log(classData);
-      console.log(self.state.classes);
-    }*/
+    }
+*/
+    let newClass = [{
+      class: self.state.className,
+      code: code,
+      teacher_email: self.state.email,
+      announcements: [],
+      deadlines: [],
+      students: [],
+      tabs: self.state.tabs,
+    }];
 
-    /*let teacherRef = firestore.collection("users").doc(this.state.uid);
+    //console.log("here " + self.state.classes);
+    if (self.state.classes != null) {
+      self.setState({
+        classes: self.state.classes.concat(newClass),
+      });
+    } else {
+      self.setState({
+        classes: newClass,
+      });
+    }
+
+    console.log(newClass);
+    console.log(self.state.classes);
+
     teacherRef.update({
       classes: self.state.classes,
     }).then(function() {
@@ -126,8 +174,8 @@ class CreateClass extends Component {
       });
     }).catch(function(error) {
       console.log("Error updating doc: ", error);
-    });*/
-  };
+    });
+  }
 
   //Generate class code
   static getCode() {
