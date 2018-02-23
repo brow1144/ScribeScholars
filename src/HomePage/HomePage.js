@@ -329,14 +329,12 @@ class HomePage extends Component {
   };
 
   flipToClass = () => {
-    console.log("flipToClass");
     this.setState({
       personalPage: false,
     });
   };
 
   flipToPersonal = () => {
-    console.log("flipToPersonal");
     this.setState({
       personalPage: true,
     });
