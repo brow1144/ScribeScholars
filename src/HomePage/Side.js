@@ -19,7 +19,7 @@ class Side extends Component {
     this.state = ({
       page: this.props.page,
       uid: props.uid,
-      userImage: null,
+      userImage: this.props.userImage,
     });
   }
 
@@ -41,7 +41,7 @@ class Side extends Component {
         self.setState({
           userImage: doc.data().userImage,
         });
-
+        self.props.updateUserImage(doc.data().userImage);
       } else {
         console.log("No such document!");
       }
@@ -77,11 +77,11 @@ class Side extends Component {
             </NavLink>
           })}
 
-          {this.state.userImage
+          {this.props.userImage
             ?
             <NavLink style={{textDecoration: 'none'}} to={`/settings`}>
               <img className="settingsLogo"
-                   src={this.state.userImage}
+                   src={this.props.userImage}
                    alt="userIcon"/>
             </NavLink>
             :

@@ -171,6 +171,8 @@ class Settings extends Component {
                 {this.props.personalPage
                         ?
                         <SetPersonal
+                            updateUserImage={ this.props.updateUserImage }
+                            userImage={ this.props.userImage }
                             uid={this.state.uid}
                             name={this.state.name}
                             email={this.state.email}

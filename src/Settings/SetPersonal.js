@@ -18,6 +18,8 @@ class SetPersonal extends Component {
             phoneN: props.phoneN,
             descript: props.descript,
             modal: false,
+
+            userImage: this.props.userImage,
         };
 
         this.toggle = this.toggle.bind(this);
@@ -109,6 +111,8 @@ class SetPersonal extends Component {
         }).then(function() {
           console.log("Document Updated.")
         });
+
+        self.props.updateUserImage(imageUrl);
 
       })
     };
