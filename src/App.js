@@ -67,7 +67,7 @@ class App extends Component {
         <Route path='/HomePage' render={() => (
           this.signedIn()
             ? <HomePage page={"home"} uid={this.state.uid}/>
-            : <Redirect to="/sign-in" />
+            : <Redirect to="/About" />
         )} />
 
         <Route exact path='/sign-in' render={() => (
@@ -103,11 +103,6 @@ class App extends Component {
             ? <CreateClass uid={this.state.uid}/>
             : <Redirect to="/About" />
         )} />
-<<<<<<< HEAD
-
-=======
-          
->>>>>>> master
                                                        
         <Route exact path='/create-class-success' render={() => (
           this.signedIn()
@@ -119,7 +114,7 @@ class App extends Component {
         <Route path='/settings' render={() => (
           this.signedIn()
             ? <HomePage page={"settings"} uid={this.state.uid}/>
-            : <Redirect to="/sign-in" />
+            : <Redirect to="/About" />
         )} />
 
         <Route render={() => <Redirect to="/HomePage" />} />
