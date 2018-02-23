@@ -81,6 +81,8 @@ class HomePage extends Component {
     };
   }
 
+  componentDidUpdate(){}
+
   /**
    *
    * Method called before components are loaded
