@@ -240,7 +240,7 @@ class SetClassroom extends Component {
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
                     <Col xs={"6"}>
-                        { this.state.classes != null
+                        { this.state.classes != null && this.state.classes.length !== 0
                             ?
                             <Accordion>
                                 {this.state.classes != null && Object.keys(this.state.classes).map((key, index) => {
