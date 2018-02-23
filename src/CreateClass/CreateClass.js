@@ -31,6 +31,7 @@ class CreateClass extends Component {
 
   onFormSubmit = (ev) => {
     ev.preventDefault();
+
     if(this.state.formValid){
 
       this.setState({
@@ -38,6 +39,7 @@ class CreateClass extends Component {
       }, this.setNewDoc );
 
     } else {
+      ev.target.reset();
       console.log("Error: Class name needs to be at least 6 characters");
     }
   };
@@ -240,7 +242,7 @@ class CreateClass extends Component {
       );
     } else {
       return(
-          <ClassSuccess uid={this.state.uid} className={this.state.className}/>
+          <ClassSuccess uid={this.state.uid} className={this.state.className} code={this.state.code}/>
       );
     }
   }

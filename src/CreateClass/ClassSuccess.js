@@ -14,6 +14,7 @@ class ClassSuccess extends Component {
     this.state = {
       uid: this.props.uid,
       className: this.props.className,
+      code: this.props.code,
     };
   }
 
@@ -25,6 +26,7 @@ class ClassSuccess extends Component {
 
         <div className="title">
           <h2 className = "h2 font-weight-normal">Successfully created {this.state.className}!</h2>
+          <h2 className = "h2 font-weight-normal">Class code: {this.props.code}</h2>
 
           <Row>
             <Col sm={{ size: 4, offset: 4 }}>

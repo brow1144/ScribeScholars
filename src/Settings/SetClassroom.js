@@ -144,6 +144,8 @@ class SetClassroom extends Component {
       let self = this;
 
       let code = ev.target.classCode.value;
+      ev.target.reset();
+
       if (code !== "") {
         let docRef = firestore.collection("classes").doc(code);
         docRef.get().then(function (doc) {
