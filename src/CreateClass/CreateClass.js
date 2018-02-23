@@ -72,27 +72,33 @@ class CreateClass extends Component {
 
     //Update user document based on uid with newly generated class information
     let teacherRef = firestore.collection("users").doc(this.state.uid);
-    firestore.runTransaction(t => {
-      return t.get(teacherRef)
-        .then(doc => {
+    teacherRef.get().then(function (doc) {
+      if(doc.exists) {
 
-          let classArray = doc.data().classes;
-          let newData = {
-            class: self.state.className,
-            code: code,
-            teacher: self.state.uid
-          };
-          classArray.push(newData);
-
-          t.update( teacherRef, { classes: classArray } );
-
+        let classArray = doc.data().classes;
+        classArray.push({
+          class: self.state.className,
+          code: code,
+          teacher: self.state.uid
         });
-    }).then(result => {
-      self.setState({
-        done: true,
-      });
-    }).catch(err => {
-      console.log('Transaction failure:', err);
+
+        teacherRef.update({
+          classes: classArray,
+        }).then(function() {
+
+          console.log("Successfully updated class list");
+
+          //Set done to true to load success page
+          self.setState({
+            done: true,
+          });
+
+        }).catch(function(error){
+          console.log("Error updating doc: ", error);
+        });
+      } else {
+        console.log("uid not found");
+      }
     });
   };
 
@@ -136,7 +142,7 @@ class CreateClass extends Component {
         return;
 
       default:
-        console.log("Error: incorrect fieldName");
+        //console.log("Error: incorrect fieldName");
         return;
     }
   }
