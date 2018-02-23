@@ -1,31 +1,33 @@
-import React, { Component } from 'react';
-import { Row, Col, Button } from 'reactstrap';
+import React from 'react';
+import {   Col, Button, Form, FormGroup, Label, Input, FormText, Row} from 'reactstrap';
 
-import '../Settings/Settings.css'
-import Sidebar from 'react-sidebar';
+
 import logo from '../logo.svg';
 import './Announcements.css';
-import AnnAcc from "./AnnAcc";
+import './CreateAnn.css';
+import Sidebar from 'react-sidebar';
 import AnnSide from "./AnnSide";
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
-
-
-
-class Announcements extends Component {
+export default class CreateAnn extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-
+            errorCode: "",
+            visible: true,
             mql: mql,
             docked: props.docked,
             open: props.open,
             sideButtonVisibility: !props.docked,
         };
     }
+
+    onDismiss = () => {
+        this.setState({ visible: false });
+    };
 
     dockSideBar = () => {
         if (this.state.sidebarDocked)
@@ -70,6 +72,7 @@ class Announcements extends Component {
 
 
     render() {
+
         let sidebarContent = <AnnSide />;
 
         const sidebarStyles = {
@@ -83,6 +86,8 @@ class Announcements extends Component {
             },
         };
         return (
+
+
 
             <Sidebar styles={sidebarStyles}
                      sidebar={sidebarContent}
@@ -98,32 +103,45 @@ class Announcements extends Component {
                     :
                     <br/>
                 }
-                {/*
-                <SetPersonal/>
-*/}
 
-            <div>
-                <div className={"headerPic"}>
-                    <div className={"announce"}>
-                        <Row className={"rowt"}>
-                        </Row>
-                        <Row className={"rowt"}>
-                            <Col className={"colt"}>
-                                <h1 className={"title"}>Announcements</h1>
-                            </Col>
-                        </Row>
-                        <Row>
+                <div>
+                    <div className={"headerPic"}>
+                        <div className={"annouce"}>
+                            <Row className={"rowt"}>
 
-                        </Row>
+                            </Row>
+                            <Row className={"rowt"}>
+                                <p className={"title"}>Set Room Picture</p>
+                            </Row>
+                            <Row>
+
+                            </Row>
+                        </div>
                     </div>
-                </div>
-                <div className={"cards"}>
-                    <AnnAcc/>
-                </div>
-            </div>
-            </Sidebar>
-        )
-    }
-};
 
-export default Announcements
+
+
+                    <Form className={"form"}>
+
+                        <FormGroup row className={"formpad"}>
+                            <Label className={"labelSize"} for="exampleFile" sm={2}>Attachment</Label>
+                            <Col sm={10}>
+                                <Input type="file" name="file" id="exampleFile" />
+                                <FormText color="muted">
+                                    Select a file to be displayed alongside your announcement.
+                                </FormText>
+                            </Col>
+                        </FormGroup>
+
+                        <FormGroup check row className={"formpad"}>
+                            <Col sm={{ size: 10, offset: 2}}>
+                                <Button color="success">Submit</Button>
+                            </Col>
+                        </FormGroup>
+                    </Form>
+                </div>
+
+            </Sidebar>
+        );
+    }
+}
