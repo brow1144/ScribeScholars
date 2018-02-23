@@ -40,19 +40,16 @@ class CreateClass extends Component {
     }
   };
 
+  //Update Firestore database
   setNewDoc = () => {
-
     let self = this;
-
     let code = CreateClass.getCode();
-    //TODO Add check for repeated code
-
 
     //Create new document in "classes" collection
     let classRef = firestore.collection("classes").doc(code);
     classRef.get().then(function(doc) {
       if (doc.exists) {
-        //code = getCode(); // TODO move block to own function
+        //code = getCode();
       } else {
         classRef.set({
           class: self.state.className,
@@ -122,7 +119,7 @@ class CreateClass extends Component {
     this.setState({[className]: value},
       () => {this.validateField(className, value)});
   };
-  
+
   validateField(fieldName){
 
     switch(fieldName){
