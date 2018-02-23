@@ -7,6 +7,12 @@
     font-family: "Times New Roman";
 }
 
+.topBar {
+    position: absolute;
+    text-align: left;
+    //position: sticky;
+}
+
 .para {
     font-size: large;
     font-weight: normal;
@@ -35,10 +41,8 @@
 }
 
 .about p {
-    padding-top: 2em;
+    padding-top: 4em;
     font-size: 6em;
-    //font-style: italic;
-    //font-family: "Baskerville Old Face";
     font-family: 'Indie Flower', cursive;
 }
 

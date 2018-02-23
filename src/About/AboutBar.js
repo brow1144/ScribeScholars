@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Collapse, Navbar, Nav, NavItem, NavLink } from 'reactstrap';
+import { NavbarToggler, Collapse, Navbar, Nav, NavItem, NavLink } from 'reactstrap';
 
 import './AboutBar.css';
 
@@ -8,23 +8,30 @@ class AboutBar extends Component {
     constructor(props) {
         super(props);
 
-        this.toggle = this.toggle.bind(this);
+        this.toggleNavbar = this.toggleNavbar.bind(this);
         this.state = {
-            isOpen: false
+            collapsed: true
         };
     }
-    toggle() {
+
+    toggleNavbar() {
         this.setState({
-            isOpen: !this.state.isOpen
+            collapsed: !this.state.collapsed
         });
     }
 
+    /* To do
+     * Make background image disappear on small screens
+     * Add transition effects
+     */
+
     render() {
         return (
-            <div className={"container"}>
-                <Navbar expand={"sm"}>
-                    <Collapse isOpen={this.state.isOpen} navbar>
-                        <Nav className="ml-auto" navbar>
+            <div className="main navT">
+                <Navbar className="bg-light " light  expand={"md"}>
+                    <NavbarToggler onClick={this.toggleNavbar} color={"black"} className="mr-2" />
+                    <Collapse isOpen={!this.state.collapsed} navbar>
+                        <Nav navbar>
                             <NavItem>
                                 <NavLink className="link" href="#Students" ><h2>Students</h2></NavLink>
                             </NavItem>
