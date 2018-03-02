@@ -101,7 +101,7 @@ class App extends Component {
 
         <Route exact path='/create-account' render={() => (
             !this.signedIn()
-                ? <CreateAccount uid={this.state.uid}/>
+                ? <CreateAccount />
                 :<Redirect to="/HomePage" />
         )} />
 
