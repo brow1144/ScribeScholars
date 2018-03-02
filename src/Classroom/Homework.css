@@ -1,0 +1,18 @@
+
+.homeworkTitle {
+    font-size: 3em;
+    text-align: center;
+}
+
+.makeSpace {
+    height: 6em;
+}
+
+.pText {
+    text-align: left;
+    font-size: 2em;
+}
+
+.borderC {
+    //border: solid 1px red;
+}
