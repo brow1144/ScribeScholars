@@ -8,7 +8,9 @@ import SignIn from './Sigin/SignIn';
 import About from './About/AboutPage';
 import CreateAccount from './CreateAccount/CreateAccount';
 import Main from './Main';
+
 import Homework from './Classroom/Homework';
+import InclassStudent from './Classroom/InclassStudent';
 
 import CreateClass from './CreateClass/CreateClass';
 import ClassSuccess from './CreateClass/ClassSuccess';
@@ -128,6 +130,12 @@ class App extends Component {
           <Route path='/homework' render={() => (
               this.signedIn()
                   ? <Homework/>
+                  : <Redirect to="/About" />
+          )} />
+
+          <Route path='/inclass-student' render={() => (
+              this.signedIn()
+                  ? <InclassStudent/>
                   : <Redirect to="/About" />
           )} />
 
