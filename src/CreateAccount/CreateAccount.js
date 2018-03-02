@@ -158,9 +158,9 @@ class CreateAccount extends Component {
                         <FormGroup row>
                           <Col sm={{ size: 6, offset: 3 }}>
                             <Input type="select" name="role" id="exampleSelect" placeholder="Account Type">
-                              <option>Select Account Type</option>
-                              <option>Student</option>
-                              <option>Teacher</option>
+                              <option className={"pick"}>Select Account Type</option>
+                              <option className={"pick"}>Student</option>
+                              <option className={"pick"}>Teacher</option>
                             </Input>
                           </Col>
                         </FormGroup>
