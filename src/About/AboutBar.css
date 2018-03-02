@@ -2,12 +2,14 @@
     position: sticky;
     padding: 0em;
     width: 100%;
+
 }
 
 .link {
     text-decoration: none;
     align-content: space-between;
     font-size: 2em;
+    color: white;
 }
 
 .link:hover {
