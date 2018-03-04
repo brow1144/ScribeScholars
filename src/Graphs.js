@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import { firestore } from './base.js';
 
-import { Form, FormGroup, Label, Input, Button, Alert, Container, Col } from 'reactstrap';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area } from 'recharts';
 
 import './Graphs.css';
@@ -138,8 +137,8 @@ classes={this.state.classes}
   };
 
   getAssignment = (name) => {
-    for (let i in self.state.assignments) {
-      if (self.state.assignments.hasOwnProperty(i)) {
+    for (let i in this.state.assignments) {
+      if (this.state.assignments.hasOwnProperty(i)) {
 
       }
     }
@@ -169,29 +168,6 @@ classes={this.state.classes}
 
         }).catch(function (error) {
           console.log("Error getting document: ", error);
-        });
-
-        docRef.get().then(function(doc) {
-          if (doc.exists) {
-            let data = doc.data();
-            for (let j in data.deadlines) {
-              if (data.deadlines.hasOwnProperty(j)) {
-                object.unshift({
-                  title: data.deadlines[j].title,
-                  start: new Date(data.deadlines[j].startYear, data.deadlines[j].startMonth, data.deadlines[j].startDay, data.deadlines[j].startHour, data.deadlines[j].startMinute, 0),
-                  end: new Date(data.deadlines[j].endYear, data.deadlines[j].endMonth, data.deadlines[j].endDay, data.deadlines[j].endHour, data.deadlines[j].endMinute, 0),
-                });
-                self.setState({
-                  dates: object,
-                })
-              }
-            }
-          } else {
-            console.log("No such document!");
-          }
-          self.props.updateDates(self.state.dates);
-        }).catch(function (error) {
-          console.log("Error getting document:", error);
         });
       }
     }
