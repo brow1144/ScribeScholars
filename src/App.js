@@ -127,19 +127,8 @@ class App extends Component {
             : <Redirect to="/sign-in" />
         )} />
 
-          <Route path='/homework' render={() => (
-              this.signedIn()
-                  ? <Homework/>
-                  : <Redirect to="/About" />
-          )} />
+        <Route render={() => <Redirect to='/HomePage' />} />
 
-          <Route path='/inclass-student' render={() => (
-              this.signedIn()
-                  ? <InclassStudent/>
-                  : <Redirect to="/About" />
-          )} />
-
-        <Route render={() => <Redirect to="/HomePage" />} />
 
       </Switch>
     );
