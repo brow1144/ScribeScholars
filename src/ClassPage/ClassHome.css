@@ -13,5 +13,6 @@
 }
 
 .navLinks:hover {
+    text-decoration: none;
     color: grey;
 }

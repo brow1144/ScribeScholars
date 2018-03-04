@@ -99,9 +99,7 @@ class HomePage extends Component {
    *
    */
   componentWillMount() {
-     // if (this.props.page === "home") {
-      this.getClasses();
-     // }
+    this.getClasses();
     mql.addListener(this.mediaQueryChanged);
     window.addEventListener('resize', this.handleWindowChange);
     this.setState({
