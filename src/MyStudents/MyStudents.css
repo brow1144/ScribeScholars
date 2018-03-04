@@ -1,0 +1,16 @@
+.mainPage {
+    text-align: center;
+    align-content: center;
+}
+
+.mainPage p {
+font-size: 6em;
+}
+
+.mainPage h1 {
+    font-size: 3em;
+}
+
+.assPad {
+    padding-top: 2em;
+}
