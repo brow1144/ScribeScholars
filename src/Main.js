@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 
 import { firestore } from "./base.js";
 
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import HomePage from './HomePage/HomePage';
-import SignIn from "./Sigin/SignIn";
 
 class Main extends Component {
 

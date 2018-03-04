@@ -8,8 +8,9 @@ import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 
 import Side from './Side';
-import HomeNav from './HomeNav'
-import Cards from './Cards'
+import HomeNav from './HomeNav';
+import Cards from './Cards';
+import ClassHome from '../ClassPage/ClassHome';
 
 import Settings from '../Settings/Settings';
 
@@ -489,6 +490,8 @@ class HomePage extends Component {
 
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
+
+          <ClassHome />
 
         </Sidebar>
       );
