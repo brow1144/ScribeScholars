@@ -18,7 +18,7 @@ class InclassStudent extends Component {
                         <Col className={"makeSpace"}>
                         </Col>
                     </Row>
-                    <Row className={"borderC"}>
+                    <Row>
                         <Col xs={12}>
                             <p className={"pText"}>Available Assignments</p>
                         </Col>
@@ -29,7 +29,7 @@ class InclassStudent extends Component {
                                     <th>#</th>
                                     <th>Assignment</th>
                                     <th>Available</th>
-                                    <th>Link</th>
+                                    <th>LinkS</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -37,19 +37,19 @@ class InclassStudent extends Component {
                                     <th scope="row">1</th>
                                     <td>Practice Question</td>
                                     <td>yes</td>
-                                    <td>link</td>
+                                    <td><a href={'./HomePage'}>Link</a></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">2</th>
-                                    <td>Practice question2</td>
+                                    <td>Practice Question2</td>
                                     <td>no</td>
-                                    <td>link</td>
+                                    <td><a href={'./HomePage'}>Link</a></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">3</th>
                                     <td>Practice Question3</td>
                                     <td>no</td>
-                                    <td>link</td>
+                                    <td><a href={'./HomePage'}>Link</a></td>
                                 </tr>
                                 </tbody>
                             </Table>

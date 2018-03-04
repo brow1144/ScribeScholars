@@ -31,7 +31,7 @@ class Homework extends Component {
                                     <th>#</th>
                                     <th>Assignment</th>
                                     <th>Date Due</th>
-                                    <th>Link</th>
+                                    <th>Links</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -39,19 +39,19 @@ class Homework extends Component {
                                     <th scope="row">1</th>
                                     <td>Homework 1</td>
                                     <td>3/7/18</td>
-                                    <td>link</td>
+                                    <td><a href={'./HomePage'}>Link</a></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">2</th>
                                     <td>Homework 2</td>
                                     <td>3/7/18</td>
-                                    <td>link</td>
+                                    <td><a href={'./HomePage'}>Link</a></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">3</th>
                                     <td>Homework 3</td>
                                     <td>3/7/18</td>
-                                    <td>link</td>
+                                    <td><a href={'./Settings/Settings'}>Link</a></td>
                                 </tr>
                                 </tbody>
                             </Table>
