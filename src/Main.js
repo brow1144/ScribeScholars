@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 
 import { firestore } from "./base.js";
 
+import { Route, Switch, Redirect } from 'react-router-dom';
+
 import HomePage from './HomePage/HomePage';
+import SignIn from "./Sigin/SignIn";
 
 class Main extends Component {
 
@@ -183,21 +186,49 @@ class Main extends Component {
   };
 
   render() {
+
+    const data = {
+      uid: this.state.uid,
+      classes: this.state.classes,
+      dates: this.state.dates,
+      announcements: this.state.announcements,
+      userImage: this.state.userImage,
+
+    };
+
+    const actions = {
+      updateClasses: this.updateClasses,
+      updateDates: this.updateDates,
+      updateRole: this.updateRole,
+      updateAnnouncements: this.updateAnnouncements,
+      updateUserImage: this.updateUserImage,
+    };
+
     return (
-      <HomePage
-        page={this.props.page}
-        uid={this.state.uid}
-        classes={this.state.classes}
-        dates={this.state.dates}
-        announcements={this.state.announcements}
-        updateClasses={ this.updateClasses }
-        updateDates={ this.updateDates }
-        updateRole={ this.updateRole }
-        updateAnnouncements={ this.updateAnnouncements }
-        userImage={ this.state.userImage }
-        updateUserImage={ this.updateUserImage }
-        />
-    )
+      <Switch>
+        <Route path="/homepage/:class" render={() => (
+          <HomePage
+            page="classes"
+            {...data}
+            {...actions}
+          />
+        )}/>
+        <Route path="/homepage" render={() => (
+          <HomePage
+            page={this.props.page}
+            {...data}
+            {...actions}
+          />
+        )}/>
+        <Route path="/settings" render={() => (
+          <HomePage
+            page={this.props.page}
+            {...data}
+            {...actions}
+          />
+        )}/>
+      </Switch>
+   )
   }
 }
 
