@@ -9,8 +9,6 @@ import About from './About/AboutPage';
 import CreateAccount from './CreateAccount/CreateAccount';
 import Main from './Main';
 
-import Homework from './Classroom/Homework';
-import InclassStudent from './Classroom/InclassStudent';
 
 import CreateClass from './CreateClass/CreateClass';
 import ClassSuccess from './CreateClass/ClassSuccess';
@@ -126,6 +124,7 @@ class App extends Component {
             ? <Main page={"settings"} uid={this.state.uid}/>
             : <Redirect to="/sign-in" />
         )} />
+
 
         <Route render={() => <Redirect to='/HomePage' />} />
 

@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import { Nav, NavLink } from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom'
 
-
 import Cards from '../HomePage/Cards';
 
 import './ClassHome.css';
+import Homework from './Homework';
 
 class ClassHome extends Component {
 
@@ -67,37 +67,42 @@ class ClassHome extends Component {
   };
 
   render() {
-    return (
-      <div>
-        <div className="jumbotron">
-          <h1>{this.props.className}</h1>
-          <p className="lead"> {this.props.selectedClass}</p>
-        </div>
+          return (
+              <div>
+                  <div className="jumbotron">
+                      <h1>{this.props.className}</h1>
+                      <p className="lead"> {this.props.selectedClass}</p>
+                  </div>
 
-        <Nav horizontal="center" tabs>
-          <RouterLink className="navLinks" to={`announcements`}>
-            <NavLink onClick={this.switchAnnouncement} active={this.state.announcementsActive}>Announcements</NavLink>
-          </RouterLink>
-          <RouterLink className="navLinks" to={`lessons`}>
-            <NavLink  onClick={this.switchLessons} active={this.state.lessonsActive}>In-Class Lessons</NavLink>
-          </RouterLink>
-          <RouterLink className="navLinks" to={`homework`}>
-            <NavLink  onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
-          </RouterLink>
-          <RouterLink className="navLinks" to={`discussion`}>
-            <NavLink  onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion Board</NavLink>
-          </RouterLink>
-        </Nav>
+                  <Nav horizontal="center" tabs>
+                      <RouterLink className="navLinks" to={`announcements`}>
+                          <NavLink onClick={this.switchAnnouncement}
+                                   active={this.state.announcementsActive}>Announcements</NavLink>
+                      </RouterLink>
+                      <RouterLink className="navLinks" to={`lessons`}>
+                          <NavLink onClick={this.switchLessons} active={this.state.lessonsActive}>In-Class
+                              Lessons</NavLink>
+                      </RouterLink>
+                      <RouterLink className="navLinks" to={`homework`}>
+                          <NavLink onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
+                      </RouterLink>
+                      <RouterLink className="navLinks" to={`discussion`}>
+                          <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
+                              Board</NavLink>
+                      </RouterLink>
+                  </Nav>
 
-        <b>Class Announcements</b>
+                  <b>Class Announcements</b>
 
-        <div className="announcementsDiv">
-          <Cards announcements={this.props.classAnnouncements}/>
-        </div>
+                  <div className="announcementsDiv">
+                      <Cards announcements={this.props.classAnnouncements}/>
+                  </div>
 
-      </div>
-  )
-  }
+                <Homework/>
+
+              </div>
+          )
+      }
 }
 
 export default ClassHome;

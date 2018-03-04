@@ -5,6 +5,24 @@ import './Homework.css'
 
 class Homework extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            announcements: [{
+                title: null,
+                subtitle: null,
+                message: null,
+                class: null,
+            }],
+
+            announcementsActive: true,
+            lessonsActive: false,
+            homeworkActive: false,
+            discussionActive: false,
+        };
+
+    }
 
     render() {
 
@@ -17,10 +35,6 @@ class Homework extends Component {
                         </Col>
                     </Row>
                     <Row>
-                        <Col className={"makeSpace"}>
-                        </Col>
-                    </Row>
-                    <Row className={"borderC"}>
                         <Col xs={12}>
                             <p className={"pText"}>Assignments</p>
                         </Col>
@@ -51,7 +65,7 @@ class Homework extends Component {
                                     <th scope="row">3</th>
                                     <td>Homework 3</td>
                                     <td>3/7/18</td>
-                                    <td><a href={'./Settings/Settings'}>Link</a></td>
+                                    <td><a href={'./HomePage'}>Link</a></td>
                                 </tr>
                                 </tbody>
                             </Table>
