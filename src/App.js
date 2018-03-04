@@ -17,6 +17,8 @@ import Announcements from "./Announcements/Announcements";
 import CreateAnn from "./Announcements/CreateAnn";
 import SetRoomPic from "./Announcements/SetRoomPicture";
 
+import Graphs from "./Graphs";
+
 
 class App extends Component {
 
@@ -122,6 +124,10 @@ class App extends Component {
           this.signedIn()
             ? <Main page={"settings"} uid={this.state.uid}/>
             : <Redirect to="/sign-in" />
+        )} />
+
+        <Route path='/graphs' render={() => (
+          <Graphs />
         )} />
 
         <Route render={() => <Redirect to="/HomePage" />} />
