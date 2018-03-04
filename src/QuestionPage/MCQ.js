@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Button, Container, Row, Col, Form, FormGroup, Label, Input, FormText, Modal, ModalHeader, ModalFooter, ModalBody} from 'reactstrap';
+import { Col, FormGroup, Label, Input} from 'reactstrap';
 
 import './MCQ.css';
 

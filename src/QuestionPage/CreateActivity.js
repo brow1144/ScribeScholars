@@ -33,7 +33,11 @@ class CreateActivity extends Component {
                 <Row className={"Filler"}> </Row>
                 {/*<MCQ/>*/}
                 <FRQ/>
-
+                {/*<Row>
+                    <Col sm={"8"}>
+                        <VideoActivity/>
+                    </Col>
+                </Row>*/}
             </Container>
         );
 
