@@ -104,7 +104,7 @@ export default class CreateAnn extends React.Component {
         ev.target.reset();
         this.successMessage();
     };
-    
+
 successMessage = () => {
     let self = this;
 
