@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 
-import { Button, Container, Row, Col, Form, FormGroup, Label, Input, FormText, Modal, ModalHeader, ModalFooter, ModalBody} from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 
-import { firestore , storageRef } from "../base";
-import firebase from '../base.js';
+//import { firestore , storageRef } from "../base";
+//import firebase from '../base.js';
 
 import './CreateActivity.css';
 import MCQ from './MCQ';
 import VideoActivity from './VideoActivity';
 
 import FRQ from './FRQ';
-import SMQ from './SMQ';
+//import SMQ from './SMQ';
 
 class CreateActivity extends Component {
     constructor(props) {
