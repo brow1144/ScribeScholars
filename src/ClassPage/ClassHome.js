@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
 import { Nav, NavItem, NavLink } from 'reactstrap';
+import { NavLink as RouterLink } from 'react-router-dom'
+
 
 import Cards from '../HomePage/Cards';
 
@@ -74,18 +76,18 @@ class ClassHome extends Component {
         </div>
 
         <Nav horizontal="center" tabs>
-          <NavItem>
-            <NavLink className="navLinks" href="#" onClick={this.switchAnnouncement} active={this.state.announcementsActive}>Announcements</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink className="navLinks" href="#" onClick={this.switchLessons} active={this.state.lessonsActive}>In-Class Lessons</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink className="navLinks" href="#" onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink className="navLinks" href="#" onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion Board</NavLink>
-          </NavItem>
+          <RouterLink className="navLinks" style={{textDecoration: 'none'}} to={`announcements`}>
+            <NavLink onClick={this.switchAnnouncement} active={this.state.announcementsActive}>Announcements</NavLink>
+          </RouterLink>
+          <RouterLink className="navLinks" style={{textDecoration: 'none'}} to={`lessons`}>
+            <NavLink  onClick={this.switchLessons} active={this.state.lessonsActive}>In-Class Lessons</NavLink>
+          </RouterLink>
+          <RouterLink className="navLinks" style={{textDecoration: 'none'}} to={`homework`}>
+            <NavLink  onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
+          </RouterLink>
+          <RouterLink className="navLinks" style={{textDecoration: 'none'}} to={`discussion`}>
+            <NavLink  onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion Board</NavLink>
+          </RouterLink>
         </Nav>
 
         <b>Class Announcements</b>
