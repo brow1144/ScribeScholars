@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Alert, Col, Button, Form, FormGroup, Label, Input, Row} from 'reactstrap';
+import { UncontrolledAlert, Container, Alert, Col, Button, Form, FormGroup, Label, Input, Row} from 'reactstrap';
 
 
 import './Announcements.css';
@@ -18,6 +18,7 @@ export default class CreateAnn extends React.Component {
         this.state = {
             errorCode: "",
             visible: true,
+            success: false,
             mql: mql,
             docked: props.docked,
             open: props.open,
@@ -27,7 +28,7 @@ export default class CreateAnn extends React.Component {
             newTitle: null,
             newSubtitle: null,
 
-            Announcements: [{
+            announcements: [{
                 message: null,
                 subtitle: null,
                 title: null,
@@ -87,6 +88,7 @@ export default class CreateAnn extends React.Component {
 
 
     onFormSubmit = (ev) => {
+
         ev.preventDefault();
         let self = this;
 
@@ -97,12 +99,11 @@ export default class CreateAnn extends React.Component {
 
         let classRef = firestore.collection("classes").doc(classCode);
 
-
         classRef.get().then(function(doc) {
             if (doc.exists) {
-                if (doc.data().Announcements != null) {
+                if (doc.data().announcements != null) {
                     self.setState({
-                        Announcements: doc.data().Announcements,
+                        announcements: doc.data().announcements,
                         newTitle: title,
                         newSubtitle: subtitle,
                         newMessage: message,
@@ -118,6 +119,7 @@ export default class CreateAnn extends React.Component {
             console.log("Error getting document: ", error);
         });
 
+        ev.target.reset();
 
     };
 
@@ -130,23 +132,34 @@ export default class CreateAnn extends React.Component {
         }];
 
         // add temporary class to classes
-        if (self.state.Announcements != null) {
+        if (self.state.announcements != null) {
             self.setState({
-                Announcements: self.state.Announcements.concat(tmpNewAnnouncement),
+                announcements: self.state.announcements.concat(tmpNewAnnouncement),
             });
         } else {
             self.setState({
-                Announcements: tmpNewAnnouncement,
+                announcements: tmpNewAnnouncement,
             });
         }
 
         classRef.update({
-            Announcements: self.state.Announcements,
+            announcements: self.state.announcements,
         }).then(function() {
-            console.log("Successfully updated classes list");
+            console.log("Successfully updated classes announcements");
+
         }).catch(function(error) {
             console.log("Error updating document: ", error);
         });
+
+        this.successMessage();
+    };
+
+    successMessage = () => {
+      let self = this;
+
+      self.setState( {
+          success: true,
+      })
     };
 
 
@@ -263,6 +276,13 @@ export default class CreateAnn extends React.Component {
                         </Row>
                     </FormGroup>
 
+                    <Row className={"rowt"}>
+                        <Col>
+                            <UncontrolledAlert color="success" isOpen={this.state.success}>
+                                You have successfully added your announcement.
+                            </UncontrolledAlert>
+                        </Col>
+                    </Row>
 
                     <FormGroup className={"formpad"}>
                         <Row  className={"rowSubmit"}>
@@ -273,6 +293,8 @@ export default class CreateAnn extends React.Component {
                             <Col/>
                         </Row>
                     </FormGroup>
+
+
                 </Form>
 
 

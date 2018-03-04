@@ -109,7 +109,7 @@ class Side extends Component {
             <p className="settingsSide" >Classroom</p>
           </NavLink>
 
-            <NavLink onClick={this.handleSignOut} style={{textDecoration: 'none'}} to={`/sign-in`}>
+            <NavLink onClick={this.handleSignOut} style={{textDecoration: 'none'}} to={`/settings`}>
                 <i className="fas fa-sign-out-alt singOutIcon"/>
             </NavLink>
 
