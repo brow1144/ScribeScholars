@@ -394,7 +394,7 @@ class HomePage extends Component {
    */
   render() {
 
-    let sidebarContent = <Side userImage={ this.props.userImage } updateUserImage={ this.props.updateUserImage } flipClass={this.flipToClass.bind(this)} flipPersonal={this.flipToPersonal.bind(this)}
+    let sidebarContent = <Side selectedClass={ this.props.selectedClass } selectClass={ this.props.selectClass } userImage={ this.props.userImage } updateUserImage={ this.props.updateUserImage } flipClass={this.flipToClass.bind(this)} flipPersonal={this.flipToPersonal.bind(this)}
                                 page={this.props.page} uid={this.state.uid} classes={this.props.classes} />;
 
     const sidebarStyles = {
@@ -418,6 +418,12 @@ class HomePage extends Component {
       open: this.state.sidebarOpen,
       docked: this.state.sidebarDocked,
       onSetOpen: this.onSetSidebarOpen,
+    };
+
+    const classData = {
+      code: this.props.selectedClass,
+      className: this.props.className,
+      classAnnouncements: this.props.classAnnouncements,
     };
 
     if (this.props.page === "home") {
@@ -491,7 +497,7 @@ class HomePage extends Component {
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <ClassHome />
+          <ClassHome {...classData} selectedClass={this.props.selectedClass} />
 
         </Sidebar>
       );

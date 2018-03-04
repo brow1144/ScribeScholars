@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 
 import { Nav, NavItem, NavLink } from 'reactstrap';
 
+import Cards from '../HomePage/Cards';
+
 import './ClassHome.css';
+import {firestore} from "../base";
 
 class ClassHome extends Component {
 
@@ -10,11 +13,19 @@ class ClassHome extends Component {
     super(props);
 
     this.state = {
+      announcements: [{
+        title: null,
+        subtitle: null,
+        message: null,
+        class: null,
+      }],
+
       announcementsActive: true,
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: false,
     };
+
   }
 
   switchAnnouncement = () => {
@@ -41,7 +52,8 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: true,
       discussionActive: false,
-    })
+    });
+
   };
 
   switchDiscussions = () => {
@@ -57,8 +69,8 @@ class ClassHome extends Component {
     return (
       <div>
         <div className="jumbotron">
-          <h1>CS 307</h1>
-          <p className="lead"> Jeff Turkstra</p>
+          <h1>{this.props.className}</h1>
+          <p className="lead"> {this.props.selectedClass}</p>
         </div>
 
         <Nav horizontal="center" tabs>
@@ -75,6 +87,12 @@ class ClassHome extends Component {
             <NavLink className="navLinks" href="#" onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion Board</NavLink>
           </NavItem>
         </Nav>
+
+        <b>Class Announcements</b>
+
+        <div className="announcementsDiv">
+          <Cards announcements={this.props.classAnnouncements}/>
+        </div>
 
       </div>
   )

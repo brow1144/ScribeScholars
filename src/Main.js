@@ -15,6 +15,15 @@ class Main extends Component {
 
       page: this.props.page,
 
+      selectedClass: null,
+      className: null,
+      classAnnouncements: [{
+        title: null,
+        subtitle: null,
+        message: null,
+        class: null,
+      }],
+
       uid: this.props.uid,
 
       userImage: null,
@@ -184,6 +193,54 @@ class Main extends Component {
     })
   };
 
+  selectClass = (classCode) => {
+    //console.log(classCode);
+    this.setState({
+      selectedClass: classCode,
+    });
+    this.getClassAnnouncments(classCode);
+  };
+
+  getClassAnnouncments = (classCode) => {
+
+    let object = [{}];
+
+    let self = this;
+
+    let docRef = firestore.collection("classes").doc(classCode);
+
+    docRef.get().then(function (doc) {
+      if (doc.exists) {
+        let data = doc.data();
+        self.setState({
+          className: data.class,
+        });
+        for (let i in data.announcements) {
+          if (data.announcements.hasOwnProperty(i)) {
+            object.unshift({
+              class: data.announcements[i].class,
+              title: data.announcements[i].title,
+              subtitle: data.announcements[i].subtitle,
+              message: data.announcements[i].message,
+            });
+            self.setState({
+              classAnnouncements: object,
+            })
+          }}
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+
+    object.pop();
+
+    self.setState({
+      classAnnouncements: object
+    });
+  };
+
   render() {
 
     const data = {
@@ -192,7 +249,9 @@ class Main extends Component {
       dates: this.state.dates,
       announcements: this.state.announcements,
       userImage: this.state.userImage,
-
+      selectedClass: this.state.selectedClass,
+      className: this.state.className,
+      classAnnouncements: this.state.classAnnouncements,
     };
 
     const actions = {
@@ -201,6 +260,7 @@ class Main extends Component {
       updateRole: this.updateRole,
       updateAnnouncements: this.updateAnnouncements,
       updateUserImage: this.updateUserImage,
+      selectClass: this.selectClass,
     };
 
     return (
