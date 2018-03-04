@@ -15,6 +15,7 @@ import Settings from '../Settings/Settings';
 
 import './HomePage.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import CreateActivity from "../QuestionPage/CreateActivity";
 
 const mql = window.matchMedia(`(min-width: 600px)`);
 
@@ -487,6 +488,23 @@ class HomePage extends Component {
           <Settings userImage={ this.state.userImage } updateUserImage={ this.props.updateUserImage } updateClasses={ this.props.updateClasses } role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid} />
         </Sidebar>
       );
+
+    }
+    else if (this.props.page === "create-activity") {
+
+        return (
+            <Sidebar styles={sidebarStyles}
+                     sidebar={sidebarContent}
+                     open={this.state.sidebarOpen}
+                     docked={this.state.sidebarDocked}
+                     onSetOpen={this.onSetSidebarOpen}>
+
+                <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
+                         width={this.state.width}/>
+
+                <CreateActivity userImage={ this.state.userImage } updateUserImage={ this.props.updateUserImage } updateClasses={ this.props.updateClasses } role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid} />
+            </Sidebar>
+        );
 
     }
   }

@@ -11,7 +11,7 @@ import Main from './Main';
 
 import CreateClass from './CreateClass/CreateClass';
 import ClassSuccess from './CreateClass/ClassSuccess';
-
+import CreateActivity from './QuestionPage/CreateActivity';
 import './App.css';
 import Announcements from "./Announcements/Announcements";
 import CreateAnn from "./Announcements/CreateAnn";
@@ -123,6 +123,13 @@ class App extends Component {
             ? <Main page={"settings"} uid={this.state.uid}/>
             : <Redirect to="/sign-in" />
         )} />
+
+          /* Temporary for creating form guis w/o an access to the class page */
+          <Route path='/create-activity' render={() => (
+              this.signedIn()
+                  ? <Main page={"create-activity"} uid={this.state.uid}/>
+                  :<Redirect to="/sign-in" />
+          )} />
 
         <Route render={() => <Redirect to="/HomePage" />} />
 
