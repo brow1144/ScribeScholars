@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import './ClassSuccess.css'
 import { NavLink } from 'react-router-dom'
-import { Button, Row, Col } from 'reactstrap'
+import { Button } from 'reactstrap'
 
 import logo from '../logo.svg'
 
