@@ -13,6 +13,8 @@ class Graphs extends Component {
 
     this.state = {
       uid: props.uid,
+      code: props.code,
+      assignments: null,
 
       data: [
         {name: 'HW 1', uv: 4000, pv: 2400, amt: 2400},
@@ -61,10 +63,144 @@ class Graphs extends Component {
     };
   };
 
+/* REFERENCE of props
+<SetClassroom
+updateClasses={ this.props.updateClasses }
+role={this.state.role}
+uid={this.state.uid}
+name={this.state.name}
+email={this.state.email}
+phoneN={this.state.phoneN}
+descript={this.state.descript}
+classes={this.state.classes}
+/>
+  */
+
+  getAssignments = () => {
+    let self = this;
+
+    let classRef = firestore.collection("classes").doc(self.state.code);
+    classRef.get().then(function(doc) {
+      if (doc.exists) {
+        if (doc.data().assignments != null) {
+          self.setState({
+            assignments: doc.data().assignments,
+          });
+        }
+      } else {
+        console.log("Assignments not found");
+      }
+    }).catch(function(error) {
+      console.log("Error getting document: ", error);
+    });
+  };
+
+  getStudents = () => {
+    let self = this;
+
+    let classRef = firestore.collection("classes").doc(self.state.code);
+    classRef.get().then(function(doc) {
+      if (doc.exists) {
+        if (doc.data().students != null) {
+          self.setState({
+            students: doc.data().students,
+          });
+
+          // get scores
+        }
+      } else {
+        console.log("Students not found");
+      }
+    }).catch(function(error) {
+      console.log("Error getting document: ", error);
+    });
+  };
+
+  getScores = () => {
+    let self = this;
+
+    let studentRef = firestore.collection("users").doc(self.state.uid);
+    studentRef.get().then(function(doc) {
+      if (doc.exists) {
+        if (doc.data().assignments != null) {
+          self.setState({
+            assignments: doc.data().assignments,
+          });
+
+          self.setScores();
+        }
+      } else {
+        console.log("No assignments found");
+      }
+    }).catch(function(error) {
+      console.log("Error getting document: ", error);
+    });
+  };
+
+  getAssignment = (name) => {
+    for (let i in self.state.assignments) {
+      if (self.state.assignments.hasOwnProperty(i)) {
+
+      }
+    }
+  };
+
+  // **************** meant for student uid **********
+  setScores = () => {
+    let self = this;
+
+    for(let i in self.state.classes) {
+      if (self.state.classes.hasOwnProperty(i)) {
+        let docRef = firestore.collection("classes").doc(self.state.classes[i].code);
+
+        docRef.get().then(function(doc) {
+          if (doc.exists) {
+            if (doc.data().assignments != null) {
+              for (let j in doc.data().assignments) {
+                if (doc.data().assignments.hasOwnProperty(j)) {
+                  self.getAssignment(j);
+                }
+
+              }
+            }
+          } else {
+            console.log("No such document!");
+          }
+
+        }).catch(function (error) {
+          console.log("Error getting document: ", error);
+        });
+
+        docRef.get().then(function(doc) {
+          if (doc.exists) {
+            let data = doc.data();
+            for (let j in data.deadlines) {
+              if (data.deadlines.hasOwnProperty(j)) {
+                object.unshift({
+                  title: data.deadlines[j].title,
+                  start: new Date(data.deadlines[j].startYear, data.deadlines[j].startMonth, data.deadlines[j].startDay, data.deadlines[j].startHour, data.deadlines[j].startMinute, 0),
+                  end: new Date(data.deadlines[j].endYear, data.deadlines[j].endMonth, data.deadlines[j].endDay, data.deadlines[j].endHour, data.deadlines[j].endMinute, 0),
+                });
+                self.setState({
+                  dates: object,
+                })
+              }
+            }
+          } else {
+            console.log("No such document!");
+          }
+          self.props.updateDates(self.state.dates);
+        }).catch(function (error) {
+          console.log("Error getting document:", error);
+        });
+      }
+    }
+  };
+
   compareValues(key) {
     return function(a, b) {
+      // check that input is valid
       if(!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-        // property doesn't exist on either object
         return 0;
       }
 
@@ -79,6 +215,7 @@ class Graphs extends Component {
       } else if (grade1 < grade2) {
         comparison = -1;
       }
+
       return comparison;
     };
   }
