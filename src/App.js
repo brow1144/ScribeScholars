@@ -16,6 +16,7 @@ import './App.css';
 import Announcements from "./Announcements/Announcements";
 import CreateAnn from "./Announcements/CreateAnn";
 import SetRoomPic from "./Announcements/SetRoomPicture";
+import DashboardInfo from "./Dashboard/DashboardInfo";
 
 
 class App extends Component {
@@ -79,6 +80,12 @@ class App extends Component {
 
           <Route path='/About' render={() => (
               <About />
+          )} />
+
+          <Route path='/DashboardInfo' render={() => (
+              this.signedIn()
+                  ? <DashboardInfo/>
+                  : <Redirect to="/About" />
           )} />
 
           <Route path='/Announcements' render={() => (
