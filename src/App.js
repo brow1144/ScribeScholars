@@ -124,7 +124,7 @@ class App extends Component {
             : <Redirect to="/sign-in" />
         )} />
 
-        <Route render={() => <Redirect to="/HomePage" />} />
+        <Route render={() => <Redirect to='/HomePage' />} />
 
       </Switch>
     );

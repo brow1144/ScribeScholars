@@ -63,7 +63,7 @@ class Side extends Component {
   };
 
   render() {
-    if (this.props.page === "home") {
+    if (this.props.page === "home" || this.props.page === "classes") {
       return (
         <div>
           <NavLink style={{textDecoration: 'none'}} to={`/HomePage`}>
@@ -71,10 +71,10 @@ class Side extends Component {
           </NavLink>
 
           {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
-            return <NavLink key={key} style={{textDecoration: 'none'}}
-                            to={`/HomePage/${this.props.classes[index].class}`}>
-              <p className="classSide">{this.props.classes[index].class}</p>
-            </NavLink>
+            return <NavLink onClick={() => this.props.selectClass(this.props.classes[index].code)} key={key} style={{textDecoration: 'none'}}
+                            to={`/HomePage/${this.props.classes[index].code}`}>
+                      <p className="classSide">{this.props.classes[index].class}</p>
+                   </NavLink>
           })}
 
           {this.props.userImage

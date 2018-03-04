@@ -8,8 +8,9 @@ import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 
 import Side from './Side';
-import HomeNav from './HomeNav'
-import Cards from './Cards'
+import HomeNav from './HomeNav';
+import Cards from './Cards';
+import ClassHome from '../ClassPage/ClassHome';
 
 import Settings from '../Settings/Settings';
 
@@ -393,8 +394,7 @@ class HomePage extends Component {
    */
   render() {
 
-
-    let sidebarContent = <Side userImage={ this.props.userImage } updateUserImage={ this.props.updateUserImage } flipClass={this.flipToClass.bind(this)} flipPersonal={this.flipToPersonal.bind(this)}
+    let sidebarContent = <Side selectedClass={ this.props.selectedClass } selectClass={ this.props.selectClass } userImage={ this.props.userImage } updateUserImage={ this.props.updateUserImage } flipClass={this.flipToClass.bind(this)} flipPersonal={this.flipToPersonal.bind(this)}
                                 page={this.props.page} uid={this.state.uid} classes={this.props.classes} />;
 
     const sidebarStyles = {
@@ -412,21 +412,30 @@ class HomePage extends Component {
       height: "60em",
     };
 
+    const sideData = {
+      styles: sidebarStyles,
+      sidebar: sidebarContent,
+      open: this.state.sidebarOpen,
+      docked: this.state.sidebarDocked,
+      onSetOpen: this.onSetSidebarOpen,
+    };
+
+    const classData = {
+      code: this.props.selectedClass,
+      className: this.props.className,
+      classAnnouncements: this.props.classAnnouncements,
+    };
+
     if (this.props.page === "home") {
       // If Screen is Big
       if (this.state.width > 600) {
 
         return (
-          <Sidebar styles={sidebarStyles}
-                   sidebar={sidebarContent}
-                   open={this.state.sidebarOpen}
-                   docked={this.state.sidebarDocked}
-                   onSetOpen={this.onSetSidebarOpen}>
+          <Sidebar {...sideData}>
 
             <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} expand={this.dockSideBar}
                      width={this.state.width}/>
             <Row>
-
               <Col md="1"/>
               <Col md="8">
                 <BigCalendar
@@ -445,19 +454,14 @@ class HomePage extends Component {
             <div className="announcementsDiv">
               <Cards announcements={this.props.announcements}/>
             </div>
-
           </Sidebar>
         );
 
-
         // If Screen is Small
       } else {
+
         return (
-          <Sidebar styles={sidebarStyles}
-                   sidebar={sidebarContent}
-                   open={this.state.sidebarOpen}
-                   docked={this.state.sidebarDocked}
-                   onSetOpen={this.onSetSidebarOpen}>
+          <Sidebar {...sideData}>
 
             <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} expand={this.dockSideBar}
                      width={this.state.width}/>
@@ -471,20 +475,30 @@ class HomePage extends Component {
 
           </Sidebar>
         );
+
       }
     } else if (this.props.page === "settings") {
 
       return (
-        <Sidebar styles={sidebarStyles}
-                 sidebar={sidebarContent}
-                 open={this.state.sidebarOpen}
-                 docked={this.state.sidebarDocked}
-                 onSetOpen={this.onSetSidebarOpen}>
+        <Sidebar {...sideData}>
 
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
           <Settings userImage={ this.state.userImage } updateUserImage={ this.props.updateUserImage } updateClasses={ this.props.updateClasses } role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid} />
+        </Sidebar>
+      );
+
+    } else if (this.props.page === "classes") {
+
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <ClassHome {...classData} selectedClass={this.props.selectedClass} />
+
         </Sidebar>
       );
 
