@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Button, Container, Row, Col, Form, FormGroup, Label, Input, FormText, Modal, ModalHeader, ModalFooter, ModalBody} from 'reactstrap';
 
-import './MCQ.css';
+import './FRQ.css';
 
 class FRQ extends Component {
     constructor(props) {
@@ -15,6 +15,12 @@ class FRQ extends Component {
     render() {
         return(
             <FormGroup tag={"fieldset"}>
+                <FormGroup row>
+                    <Col sm={"6"}>
+                        <Label className={"FRQTitle"} for="exampleText">Free Response Question Goes Here</Label>
+                        <Input style={{height: '20rem'}} type="textarea" name="text" id="exampleText" />
+                    </Col>
+                </FormGroup>
             </FormGroup>
 
         );
