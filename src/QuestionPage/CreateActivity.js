@@ -20,6 +20,8 @@ class CreateActivity extends Component {
             role: this.props.role,
         };
     }
+
+
     render() {
         return(
             <Container fluid className={"ContainerRules"}>
@@ -31,13 +33,14 @@ class CreateActivity extends Component {
                 </Row>
                 <Row className={"Filler"}> </Row>
                 <Row className={"Filler"}> </Row>
-                {/*<MCQ/>*/}
+                <MCQ/>
                 <FRQ/>
-                {/*<Row>
-                    <Col sm={"8"}>
-                        <VideoActivity/>
-                    </Col>
-                </Row>*/}
+                <VideoActivity/>
+
+
+                <Row className={"Filler"}> </Row>
+                <Row className={"Filler"}> </Row>
+
             </Container>
         );
 

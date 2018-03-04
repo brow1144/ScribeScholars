@@ -17,7 +17,7 @@ class FRQ extends Component {
             <FormGroup tag={"fieldset"}>
                 <FormGroup row>
                     <Col sm={"6"}>
-                        <Label className={"FRQTitle"} for="exampleText">Free Response Question Goes Here</Label>
+                        <Label className={"FRQTitle"} for="exampleText">#2 Free Response Question Goes Here</Label>
                         <Input style={{height: '20rem'}} type="textarea" name="text" id="exampleText" />
                     </Col>
                 </FormGroup>
