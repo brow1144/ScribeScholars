@@ -9,4 +9,9 @@
 .navLinks {
     font-size: 1.5em;
     text-decoration: none;
+    color: #21CE99;
+}
+
+.navLinks:hover {
+    color: grey;
 }

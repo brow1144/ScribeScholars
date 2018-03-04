@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Nav, NavItem, Dropdown, DropdownItem, DropdownToggle, DropdownMenu, NavLink } from 'reactstrap';
+import { Nav, NavItem, NavLink } from 'reactstrap';
 
 import './ClassHome.css';
 
@@ -10,12 +10,50 @@ class ClassHome extends Component {
     super(props);
 
     this.state = {
-      active: false,
+      announcementsActive: true,
+      lessonsActive: false,
+      homeworkActive: false,
+      discussionActive: false,
     };
   }
 
-  render() {
+  switchAnnouncement = () => {
+    this.setState({
+      announcementsActive: true,
+      lessonsActive: false,
+      homeworkActive: false,
+      discussionActive: false,
+    })
+  };
 
+  switchLessons = () => {
+    this.setState({
+      announcementsActive: false,
+      lessonsActive: true,
+      homeworkActive: false,
+      discussionActive: false,
+    })
+  };
+
+  switchHomework = () => {
+    this.setState({
+      announcementsActive: false,
+      lessonsActive: false,
+      homeworkActive: true,
+      discussionActive: false,
+    })
+  };
+
+  switchDiscussions = () => {
+    this.setState({
+      announcementsActive: false,
+      lessonsActive: false,
+      homeworkActive: false,
+      discussionActive: true,
+    })
+  };
+
+  render() {
     return (
       <div>
         <div className="jumbotron">
@@ -25,16 +63,16 @@ class ClassHome extends Component {
 
         <Nav horizontal="center" tabs>
           <NavItem>
-            <NavLink className="navLinks" href="#" active={this.state.active}>Announcements</NavLink>
+            <NavLink className="navLinks" href="#" onClick={this.switchAnnouncement} active={this.state.announcementsActive}>Announcements</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink className="navLinks" href="#" active={this.state.active}>In-Class Lessons</NavLink>
+            <NavLink className="navLinks" href="#" onClick={this.switchLessons} active={this.state.lessonsActive}>In-Class Lessons</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink className="navLinks" href="#" active={this.state.active}>Homework</NavLink>
+            <NavLink className="navLinks" href="#" onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink className="navLinks" href="#" active={this.state.active}>Discussion Board</NavLink>
+            <NavLink className="navLinks" href="#" onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion Board</NavLink>
           </NavItem>
         </Nav>
 
