@@ -10,6 +10,10 @@ class InclassStudent extends Component {
             <div>
                 <Container fluid>
                     <Row>
+                        <Col className={"makeSpace"}>
+                        </Col>
+                    </Row>
+                    <Row>
                         <Col>
                             <p className={"inclassTitle"}>In-class Assignments</p>
                         </Col>

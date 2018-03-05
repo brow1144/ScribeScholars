@@ -28,10 +28,18 @@ class Homework extends Component {
 
         return (
             <div className={"centerMain"}>
-                <Container fluid className={"borderC"}>
+                <Container fluid>
+                    <Row>
+                        <Col className={"makeSpace"}>
+                        </Col>
+                    </Row>
                     <Row>
                         <Col>
                             <p className={"homeworkTitle"}>Homework</p>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col className={"makeSpace"}>
                         </Col>
                     </Row>
                     <Row>

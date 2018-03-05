@@ -7,6 +7,7 @@ import Cards from '../HomePage/Cards';
 
 import './ClassHome.css';
 import Homework from './Homework';
+import Inclass from './InclassStudent';
 
 class ClassHome extends Component {
 
@@ -92,13 +93,33 @@ class ClassHome extends Component {
                       </RouterLink>
                   </Nav>
 
-                  <b>Class Announcements</b>
+                  {this.state.announcementsActive
+                      ?
+                      <div>
+                          <b>Class Announcements</b>
+                            <div className="announcementsDiv">
+                                <Cards announcements={this.props.classAnnouncements}/>
+                            </div>
+                      </div>
+                      :
+                      <div>
+                      </div>
+                  }
 
-                  <div className="announcementsDiv">
-                      <Cards announcements={this.props.classAnnouncements}/>
-                  </div>
-
-                <Homework/>
+                  {this.state.homeworkActive
+                      ?
+                    <Homework/>
+                      :
+                      <div>
+                      </div>
+                  }
+                  {this.state.lessonsActive
+                      ?
+                      <Inclass/>
+                      :
+                      <div>
+                      </div>
+                  }
 
               </div>
           )
