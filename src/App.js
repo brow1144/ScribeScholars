@@ -9,6 +9,7 @@ import About from './About/AboutPage';
 import CreateAccount from './CreateAccount/CreateAccount';
 import Main from './Main';
 
+
 import CreateClass from './CreateClass/CreateClass';
 import ClassSuccess from './CreateClass/ClassSuccess';
 
@@ -124,7 +125,9 @@ class App extends Component {
             : <Redirect to="/sign-in" />
         )} />
 
+
         <Route render={() => <Redirect to='/HomePage' />} />
+
 
       </Switch>
     );
