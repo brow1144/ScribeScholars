@@ -23,24 +23,24 @@ class MyStudents extends Component {
                             <Row className={"assPad"}>
                                 <Col>
                                     <Card body className="text-center">
-                                        <CardTitle>Homework 1</CardTitle>
-                                        <CardText>Read Chapters 1 - 3</CardText>
+                                        <CardTitle className={"assTitle"}>Homework 1</CardTitle>
+                                        <CardText className={"assText"}>Read Chapter 1</CardText>
                                     </Card>
                                 </Col>
                             </Row>
                             <Row className={"assPad"}>
                                 <Col>
                                     <Card body className="text-center assPad">
-                                        <CardTitle>Homework 1</CardTitle>
-                                        <CardText>Read Chapters 1 - 3</CardText>
+                                        <CardTitle className={"assTitle"}>Homework 2</CardTitle>
+                                        <CardText className={"assText"}>Read Chapter 2</CardText>
                                     </Card>
                                 </Col>
                             </Row>
                             <Row className={"assPad"}>
                                 <Col>
                                     <Card body className="text-center assPad">
-                                        <CardTitle>Homework 1</CardTitle>
-                                        <CardText>Read Chapters 1 - 3</CardText>
+                                        <CardTitle className={"assTitle"}>Homework 3</CardTitle>
+                                        <CardText className={"assText"}>Read Chapter 3</CardText>
                                     </Card>
                                 </Col>
                             </Row>

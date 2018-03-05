@@ -12,5 +12,14 @@ font-size: 6em;
 }
 
 .assPad {
-    padding-top: 2em;
+    padding: 2em;
 }
+
+.assTitle {
+    font-size: 2em;
+}
+
+.assText {
+    font-size: 1em !important;
+}
+
