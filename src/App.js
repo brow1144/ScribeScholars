@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import firebase from './base.js';
 
-import { Route, Switch, Redirect } from 'react-router-dom';
+import {Redirect, Route, Switch} from 'react-router-dom';
 
 import SignIn from './Sigin/SignIn';
 import About from './About/AboutPage';
@@ -10,12 +10,12 @@ import CreateAccount from './CreateAccount/CreateAccount';
 import Main from './Main';
 
 import CreateClass from './CreateClass/CreateClass';
-import ClassSuccess from './CreateClass/ClassSuccess';
 
 import './App.css';
 import Announcements from "./Announcements/Announcements";
 import CreateAnn from "./Announcements/CreateAnn";
 import SetRoomPic from "./Announcements/SetRoomPicture";
+import GradePage from "./GradePage";
 
 
 class App extends Component {
@@ -110,13 +110,12 @@ class App extends Component {
             ? <CreateClass uid={this.state.uid}/>
             : <Redirect to="/About" />
         )} />
-                                                       
-        <Route exact path='/create-class-success' render={() => (
-          this.signedIn()
-            ? <ClassSuccess uid={this.state.uid}/>
-            : <Redirect to="/About" />
 
-        )} />
+          <Route exact path='/grades' render={() => (
+              this.signedIn()
+                  ? <GradePage uid={this.state.uid}/>
+                  : <Redirect to="/About" />
+          )} />
 
         <Route path='/settings' render={() => (
           this.signedIn()
