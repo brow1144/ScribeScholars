@@ -49,7 +49,7 @@ class MyStudents extends Component {
                             <h1>Students</h1>
                             <Row>
                                 <Col>
-                                    <Table fluid striped>
+                                    <Table striped>
                                         <thead>
                                         <tr>
                                             <th>Rank</th>
