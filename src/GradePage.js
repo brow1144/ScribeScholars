@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import { firestore } from './base.js';
+import Text from 'react-native';
 
-import ReactListView from "react-list-view";
+import ReactList from 'react-list';
 import logo from './logo.svg'
 
 class GradePage extends Component {
+
     constructor(props) {
         super(props);
 
         this.state = {
             uid: props.uid,
+            studentName: null,
             assignments: [],
         }
 
@@ -25,6 +28,7 @@ class GradePage extends Component {
                 if (doc.data().assignments != null) {
                     self.setState({
                         assignments: doc.data().assignments,
+                        name: doc.data().firstName + " " + doc.data().lastName,
                     });
                 }
             } else {
@@ -33,6 +37,14 @@ class GradePage extends Component {
         }).catch(function (error) {
             console.log("Error getting document: ", error);
         });
+    }
+
+    renderAssignment = (i) => {
+        return (
+            <Text style={{fontSize: 20,  fontWeight: 'bold'}}>
+                Hi
+            </Text>
+        );
     }
 
     render() {
@@ -44,19 +56,18 @@ class GradePage extends Component {
                       <img src={logo} alt="" width="100" height="100"/>
                   </div>
 
-                  <ReactListView
-                      style={{
-                          height: 400,
-                          width: 400,
-                      }}
-                      rowCount={this.state.assignments.length}
-                      rowHeight={40}
-                      renderItem={(x, y, style) =>
-                          <div style={style}>
-                              {this.state.assignments[y].name} {this.state.assignments[y].score}/{this.state.assignments[y].maxscore}
-                          </div>
-                      }
-                  />
+                  <div className="form-group">
+                      <h3 className="h3 font-weight-normal">{this.state.name}'s Grades</h3>
+                  </div>
+
+                  <div style={{overflow: 'auto', maxHeight: 400}}>
+
+                      <ReactList
+                          itemRenderer={this.renderAssignment}
+                          length={this.state.assignments.length}
+                          type='uniform'
+                      />
+                  </div>
 
               </div>
           </div>

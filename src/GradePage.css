@@ -3,6 +3,12 @@
     border-color: #21CE99 !important;
 }
 
+.gradesText {
+    font-size: 2em;
+    text-decoration: none;
+    color: #21CE99;
+}
+
 .Absolute-Center {
     margin: auto;
     position: absolute;
