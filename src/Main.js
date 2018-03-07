@@ -17,6 +17,7 @@ class Main extends Component {
 
       selectedClass: null,
       className: null,
+
       classAnnouncements: [{
         title: null,
         subtitle: null,

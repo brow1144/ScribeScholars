@@ -5,6 +5,9 @@ import { NavLink as RouterLink } from 'react-router-dom'
 
 import Cards from '../HomePage/Cards';
 
+import { firestore } from "../base";
+
+
 import './ClassHome.css';
 import Homework from './Homework';
 import Inclass from './InclassStudent';
@@ -22,12 +25,13 @@ class ClassHome extends Component {
         class: null,
       }],
 
+      classImage: null,
+
       announcementsActive: true,
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: false,
     };
-
   }
 
   switchAnnouncement = () => {
@@ -67,10 +71,30 @@ class ClassHome extends Component {
     })
   };
 
+  getClassImage = () => {
+    let docRef = firestore.collection("classes").doc(this.props.selectedClass);
+    let self = this;
+
+    docRef.get().then(function(doc) {
+      if (doc.exists) {
+        self.setState({
+          classImage: doc.data().classImage,
+        });
+
+      } else {
+        console.log("No such document!");
+      }
+      //self.props.updateUserImage(doc.data().userImage);
+    }).catch(function(error) {
+      console.log("Error getting document:", error);
+    })
+  };
+
   render() {
+    // this.getClassImage();
 
     const jumboStyle = {
-      background: "url('http://www.purdue.edu/purdue/images/audience/about-banner.jpg') no-repeat center center",
+      background: `url(${this.state.classImage}) no-repeat center center`,
     };
 
       return (
@@ -101,7 +125,6 @@ class ClassHome extends Component {
           {this.state.announcementsActive
             ?
             <div>
-              <b>Class Announcements</b>
               <div className="announcementsDiv">
                 <Cards announcements={this.props.classAnnouncements}/>
               </div>

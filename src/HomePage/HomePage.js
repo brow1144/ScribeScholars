@@ -465,7 +465,7 @@ class HomePage extends Component {
                      width={this.state.width}/>
 
             <hr className="divider"/>
-            <b>Announcements</b>
+            <b className="annTest">Announcements</b>
 
             <div className="announcementsDiv">
               <Cards announcements={this.state.announcements}/>
