@@ -68,62 +68,66 @@ class ClassHome extends Component {
   };
 
   render() {
-          return (
-              <div>
-                  <div className="jumbotron">
-                      <h1>{this.props.className}</h1>
-                      <p className="lead"> {this.props.selectedClass}</p>
-                  </div>
 
-                  <Nav horizontal="center" tabs>
-                      <RouterLink className="navLinks" to={`announcements`}>
-                          <NavLink onClick={this.switchAnnouncement}
-                                   active={this.state.announcementsActive}>Announcements</NavLink>
-                      </RouterLink>
-                      <RouterLink className="navLinks" to={`lessons`}>
-                          <NavLink onClick={this.switchLessons} active={this.state.lessonsActive}>In-Class
-                              Lessons</NavLink>
-                      </RouterLink>
-                      <RouterLink className="navLinks" to={`homework`}>
-                          <NavLink onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
-                      </RouterLink>
-                      <RouterLink className="navLinks" to={`discussion`}>
-                          <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
-                              Board</NavLink>
-                      </RouterLink>
-                  </Nav>
+    const jumboStyle = {
+      background: "url('http://www.purdue.edu/purdue/images/audience/about-banner.jpg') no-repeat center center",
+    };
 
-                  {this.state.announcementsActive
-                      ?
-                      <div>
-                          <b>Class Announcements</b>
-                            <div className="announcementsDiv">
-                                <Cards announcements={this.props.classAnnouncements}/>
-                            </div>
-                      </div>
-                      :
-                      <div>
-                      </div>
-                  }
+      return (
+        <div>
+          <div style={jumboStyle}  className="jumbotron">
+            <h1>{this.props.className}</h1>
+            <p className="lead"> {this.props.selectedClass}</p>
+          </div>
 
-                  {this.state.homeworkActive
-                      ?
-                    <Homework/>
-                      :
-                      <div>
-                      </div>
-                  }
-                  {this.state.lessonsActive
-                      ?
-                      <Inclass/>
-                      :
-                      <div>
-                      </div>
-                  }
+          <Nav horizontal="center" tabs>
+            <RouterLink className="navLinks" to={`announcements`}>
+              <NavLink onClick={this.switchAnnouncement}
+                       active={this.state.announcementsActive}>Announcements</NavLink>
+            </RouterLink>
+            <RouterLink className="navLinks" to={`lessons`}>
+              <NavLink onClick={this.switchLessons} active={this.state.lessonsActive}>In-Class
+                       Lessons</NavLink>
+            </RouterLink>
+            <RouterLink className="navLinks" to={`homework`}>
+              <NavLink onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
+            </RouterLink>
+            <RouterLink className="navLinks" to={`discussion`}>
+              <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
+                Board</NavLink>
+            </RouterLink>
+          </Nav>
 
+          {this.state.announcementsActive
+            ?
+            <div>
+              <b>Class Announcements</b>
+              <div className="announcementsDiv">
+                <Cards announcements={this.props.classAnnouncements}/>
               </div>
-          )
-      }
+            </div>
+            :
+            <div>
+            </div>
+          }
+
+          {this.state.homeworkActive
+            ?
+            <Homework/>
+            :
+            <div>
+            </div>
+          }
+          {this.state.lessonsActive
+            ?
+            <Inclass/>
+            :
+            <div>
+            </div>
+          }
+        </div>
+      )
+  }
 }
 
 export default ClassHome;
