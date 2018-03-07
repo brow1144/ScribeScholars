@@ -1,21 +1,23 @@
-.center {
-    text-align: center;
-    align-self: center;
-    vertical-align: middle;
-    margin-top: 75px;
-    line-height: 90px;
+.Absolute-Center {
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: #f5f5f5 !important;
 }
 
-.title {
-    text-align: center;
-    font-size: 120px;
-    font-weight: bold;
+.Absolute-Center.is-Responsive {
+    width: 50%;
+    height: 50%;
+    min-width: 400px;
+    max-width: 400px;
+    padding: 10px;
 }
 
 .homeButton {
     background-color: #21CE99 !important;
     border-color: #21CE99 !important;
-    /*max-width: 400px;*/
-    /*align-self: center;*/
-    /*margin-left: 670px;*/
+}
+
+.spacing {
+    margin-bottom: 100px;
 }
