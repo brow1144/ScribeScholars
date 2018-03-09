@@ -127,17 +127,14 @@ class App extends Component {
             : <Redirect to="/sign-in" />
         )} />
 
-<<<<<<< HEAD
         <Route path='/graphs' render={() => (
           <Graphs />
         )} />
 
         <Route render={() => <Redirect to="/HomePage" />} />
-=======
 
         <Route render={() => <Redirect to='/HomePage' />} />
 
->>>>>>> master
 
       </Switch>
     );

@@ -14,6 +14,7 @@ class Graphs extends Component {
       uid: props.uid,
       code: props.code,
       assignments: null,
+      allAssignments: null,
 
       data: [
         {name: 'HW 1', uv: 4000, pv: 2400, amt: 2400},
@@ -75,10 +76,11 @@ classes={this.state.classes}
 />
   */
 
+  // get assignments for a particular class
   getAssignments = () => {
     let self = this;
 
-    let classRef = firestore.collection("classes").doc(self.state.code);
+    let classRef = firestore.collection("classes").doc(this.state.code);
     classRef.get().then(function(doc) {
       if (doc.exists) {
         if (doc.data().assignments != null) {
@@ -94,10 +96,31 @@ classes={this.state.classes}
     });
   };
 
+  // get all assignments for a student
+  getAllAssignments = () => {
+    let self = this;
+
+    let studentRef = firestore.collection("users").doc(this.state.uid);
+    studentRef.get().then(function(doc) {
+      if (doc.exists) {
+        if (doc.data().assignments != null) {
+          self.setState({
+            allAssignments: doc.data().assignments,
+          });
+        }
+      } else {
+        console.log("Assignments not found");
+      }
+    }).catch(function(error) {
+      console.log("Error getting document: ", error);
+    });
+  };
+
+  // get all students in a class
   getStudents = () => {
     let self = this;
 
-    let classRef = firestore.collection("classes").doc(self.state.code);
+    let classRef = firestore.collection("classes").doc(this.state.code);
     classRef.get().then(function(doc) {
       if (doc.exists) {
         if (doc.data().students != null) {
@@ -115,10 +138,11 @@ classes={this.state.classes}
     });
   };
 
+  /*
   getScores = () => {
     let self = this;
 
-    let studentRef = firestore.collection("users").doc(self.state.uid);
+    let studentRef = firestore.collection("users").doc(this.state.uid);
     studentRef.get().then(function(doc) {
       if (doc.exists) {
         if (doc.data().assignments != null) {
@@ -135,11 +159,19 @@ classes={this.state.classes}
       console.log("Error getting document: ", error);
     });
   };
+  */
 
-  getAssignment = (name) => {
-    for (let i in this.state.assignments) {
-      if (this.state.assignments.hasOwnProperty(i)) {
+  // calculate average score for an assignment
+  getAverageScore = () => {
 
+  };
+
+  getAssignment = (name, code) => {
+    for (let i in this.state.allAssignments) {
+      if (this.state.allAssignments.hasOwnProperty(i)) {
+        if (i.name === name && i.code === code) {
+          return i;
+        }
       }
     }
   };
@@ -150,15 +182,21 @@ classes={this.state.classes}
 
     for(let i in self.state.classes) {
       if (self.state.classes.hasOwnProperty(i)) {
-        let docRef = firestore.collection("classes").doc(self.state.classes[i].code);
 
+        let docRef = firestore.collection("classes").doc(this.state.classes[i].code);
         docRef.get().then(function(doc) {
           if (doc.exists) {
             if (doc.data().assignments != null) {
               for (let j in doc.data().assignments) {
                 if (doc.data().assignments.hasOwnProperty(j)) {
-                  self.getAssignment(j);
+                  let currentAssignment = self.getAssignment(j, self.state.classes[i].code);
+
+
+
+                  let studentRef = firestore.collection("users").doc(self.state.uid);
+
                 }
+
 
               }
             }
