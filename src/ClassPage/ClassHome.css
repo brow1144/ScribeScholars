@@ -1,0 +1,18 @@
+.jumbotron {
+    background: url('http://www.purdue.edu/purdue/images/audience/about-banner.jpg') no-repeat center center;
+    height: 350px;
+    color: white;
+    text-shadow: #444 0 1px 1px;
+    margin-bottom: 2em !important;
+}
+
+.navLinks {
+    font-size: 1.5em;
+    text-decoration: none;
+    color: #21CE99;
+}
+
+.navLinks:hover {
+    text-decoration: none;
+    color: grey;
+}
