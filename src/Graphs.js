@@ -163,11 +163,30 @@ classes={this.state.classes}
 
   // calculate GPA for a student
   calcGPA = () => {
-    for (let i in this.state.allAssignments) {
-      if (this.state.allAssignments.hasOwnProperty(i)) {
+    let grades = [];
 
+    for (let i in this.state.classes) {
+      if (this.state.classes.hasOwnProperty(i)) {
+        grades.concat(this.getGrade(i.code));
       }
     }
+  };
+
+  // get grade in a specific class
+  getGrade = (code) => {
+    let total = 0;
+    let max = 0;
+
+    for (let i in this.state.allAssignments) {
+      if (this.state.allAssignments.hasOwnProperty(i)) {
+        if (i.code === code) {
+          total += i.score;
+          max += i.maxscore;
+        }
+      }
+    }
+
+    return (total / max);
   };
 
   // calculate average score for an assignment
