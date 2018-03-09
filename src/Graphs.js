@@ -161,9 +161,43 @@ classes={this.state.classes}
   };
   */
 
-  // calculate average score for an assignment
-  getAverageScore = () => {
+  // calculate GPA for a student
+  calcGPA = () => {
+    for (let i in this.state.allAssignments) {
+      if (this.state.allAssignments.hasOwnProperty(i)) {
 
+      }
+    }
+  };
+
+  // calculate average score for an assignment
+  getAverageScore = (assignment) => {
+    let total = 0;
+    let numStudents = 0;
+
+    for (let i in this.state.students) {
+      if (this.state.students.hasOwnProperty(i)) {
+        let studentRef = firestore.collection("users").doc(this.state.students[i]);
+        studentRef.get().then(function(doc) {
+          if (doc.exists) {
+            if (doc.data().assignments != null) {
+              for (let j in doc.data().assignments) {
+                if (doc.data().assignments.hasOwnProperty(j)) {
+                  if (j.name === assignment.name && j.code === assignment.code) {
+                    total += j.score;
+                    numStudents++;
+                  }
+                }
+              }
+            }
+          }
+        }).catch(function(error) {
+          console.log("Error getting document: ", error);
+        });
+      }
+    }
+
+    return (total / numStudents) / assignment.maxScore;
   };
 
   getAssignment = (name, code) => {
