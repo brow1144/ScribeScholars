@@ -12,7 +12,9 @@ class Graphs extends Component {
 
     this.state = {
       uid: props.uid,
-      code: props.code,
+      classes: null,
+      //code: props.code,
+      code: "668273",
       assignments: null,
       allAssignments: null,
 
@@ -106,8 +108,11 @@ classes={this.state.classes}
         if (doc.data().assignments != null) {
           self.setState({
             allAssignments: doc.data().assignments,
+            classes: doc.data().classes,  // temporary TODO
           });
         }
+        console.log(self.state.allAssignments);
+        console.log(self.calcGPA());
       } else {
         console.log("Assignments not found");
       }
@@ -167,9 +172,19 @@ classes={this.state.classes}
 
     for (let i in this.state.classes) {
       if (this.state.classes.hasOwnProperty(i)) {
-        grades.concat(this.getGrade(i.code));
+        let grade = this.getGrade(this.state.classes[i].code);
+
+        if (!isNaN(grade))
+          grades.push(this.getGrade(this.state.classes[i].code));
       }
     }
+
+
+
+    //console.log(grades[0]);
+    //console.log(grades[1]);
+
+    return grades;
   };
 
   // get grade in a specific class
@@ -179,12 +194,14 @@ classes={this.state.classes}
 
     for (let i in this.state.allAssignments) {
       if (this.state.allAssignments.hasOwnProperty(i)) {
-        if (i.code === code) {
-          total += i.score;
-          max += i.maxscore;
+        if (this.state.allAssignments[i].code === code) {
+          total += this.state.allAssignments[i].score;
+          max += this.state.allAssignments[i].maxscore;
         }
       }
     }
+
+   // console.log(total / max);
 
     return (total / max);
   };
@@ -288,6 +305,8 @@ classes={this.state.classes}
   }
 
   render = () => {
+    //this.getAllAssignments();
+    //console.log(this.calcGPA());
     this.state.assignmentDist.sort(this.compareValues("grade"));
 
     return (
@@ -315,7 +334,8 @@ classes={this.state.classes}
         <Bar dataKey="med" fill="#b39eb5" />
       </BarChart>*/
       <AreaChart width={730} height={250} data={this.state.assignmentDist}
-                 margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                 margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                  onClick={this.getAllAssignments}>
         <defs>
           <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>

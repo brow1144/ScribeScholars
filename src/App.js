@@ -128,7 +128,7 @@ class App extends Component {
         )} />
 
         <Route path='/graphs' render={() => (
-          <Graphs />
+          <Graphs uid={this.state.uid}/>
         )} />
 
         <Route render={() => <Redirect to="/HomePage" />} />
