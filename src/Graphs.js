@@ -179,12 +179,39 @@ classes={this.state.classes}
       }
     }
 
+    console.log(grades);
 
+    let points = 0;
+    let maxPoints = grades.length;
 
-    //console.log(grades[0]);
-    //console.log(grades[1]);
+    for (let i in grades) {
+      if (grades[i] >= 92.5)
+        points += 4;
+      else if (89.5 <= grades[i] && grades[i] < 92.5)
+        points += 3.7;
+      else if (86.5 <= grades[i] && grades[i] < 89.5)
+        points += 3.3;
+      else if (82.5 <= grades[i] && grades[i] < 86.5)
+        points += 3;
+      else if (79.5 <= grades[i] && grades[i] < 82.5)
+        points += 2.7;
+      else if (76.5 <= grades[i] && grades[i] < 79.5)
+        points += 2.3;
+      else if (72.5 <= grades[i] && grades[i] < 76.5)
+        points += 2;
+      else if (69.5 <= grades[i] && grades[i] < 72.5)
+        points += 1.7;
+      else if (66.5 <= grades[i] && grades[i] < 69.5)
+        points += 1.3;
+      else if (62.5 <= grades[i] && grades[i] < 66.5)
+        points += 1;
+      else if (59.5 <= grades[i] && grades[i] < 62.5)
+        points += 0.7;
+      else if (grades[i] < 59.5)
+        points += 0;
+    }
 
-    return grades;
+    return (points / maxPoints);
   };
 
   // get grade in a specific class
@@ -203,7 +230,7 @@ classes={this.state.classes}
 
    // console.log(total / max);
 
-    return (total / max);
+    return (total / max) * 100;
   };
 
   // calculate average score for an assignment
