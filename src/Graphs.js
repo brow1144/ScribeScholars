@@ -111,7 +111,7 @@ classes={this.state.classes}
             classes: doc.data().classes,  // temporary TODO
           });
         }
-        console.log(self.state.allAssignments);
+
         console.log(self.calcGPA());
       } else {
         console.log("Assignments not found");
@@ -179,8 +179,6 @@ classes={this.state.classes}
       }
     }
 
-    console.log(grades);
-
     let points = 0;
     let maxPoints = grades.length;
 
@@ -221,14 +219,12 @@ classes={this.state.classes}
 
     for (let i in this.state.allAssignments) {
       if (this.state.allAssignments.hasOwnProperty(i)) {
-        if (this.state.allAssignments[i].code === code) {
+        if (this.state.allAssignments[i].code === code && this.state.allAssignments[i].maxscore != null) {
           total += this.state.allAssignments[i].score;
           max += this.state.allAssignments[i].maxscore;
         }
       }
     }
-
-   // console.log(total / max);
 
     return (total / max) * 100;
   };
