@@ -169,6 +169,7 @@ class Settings extends Component {
         updateUserImage: this.props.updateUserImage,
         selectClass: this.props.selectClass,
         updateClassPicture: this.props.updateClassPicture,
+        getClassAnnouncments: this.props.getClassAnnouncments,
       };
 
         if (this.state.name === null)

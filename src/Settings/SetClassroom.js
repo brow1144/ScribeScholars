@@ -159,6 +159,33 @@ class SetClassroom extends Component {
           console.error("Error updating document: ", error);
         });
 
+      docRef.get().then(function(doc) {
+        if (doc.exists) {
+          let data= doc.data();
+          let announcements = data.announcements;
+
+          for (let k in announcements) {
+            announcements[k].class = newName;
+          }
+
+          docRef.update({
+            announcements: announcements,
+          })
+            .then(function() {
+              console.log("Document successfully updated!");
+              self.props.getClassAnnouncments(code);
+            }).catch(function(error) {
+            // The document probably doesn't exist.
+            console.error("Error updating document: ", error);
+          });
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(function(error) {
+        console.log("Error getting document:", error);
+      });
+
+
       let tclasses = [];
       let teacherRef = firestore.collection("users").doc(self.state.uid);
       teacherRef.get().then(function(doc) {

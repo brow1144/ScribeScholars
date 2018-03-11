@@ -292,6 +292,7 @@ class Main extends Component {
       updateUserImage: this.updateUserImage,
       selectClass: this.selectClass,
       updateClassPicture: this.updateClassPicture,
+      getClassAnnouncments: this.getClassAnnouncments
     };
 
     return (
