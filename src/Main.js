@@ -266,8 +266,9 @@ class Main extends Component {
 
     return (
       <Switch>
-        <Route path="/homepage/:class" render={() => (
+        <Route path="/homepage/:class" render={(match) => (
           <HomePage
+            path={match.match.params.class}
             page="classes"
             {...data}
             {...actions}

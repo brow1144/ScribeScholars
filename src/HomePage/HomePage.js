@@ -106,6 +106,7 @@ class HomePage extends Component {
       mql: mql,
       sidebarDocked: mql.matches,
     });
+
   };
 
   /**
@@ -422,6 +423,7 @@ class HomePage extends Component {
       code: this.props.selectedClass,
       className: this.props.className,
       classAnnouncements: this.props.classAnnouncements,
+      path: this.props.path,
     };
 
     if (this.props.page === "home") {

@@ -72,7 +72,7 @@ class ClassHome extends Component {
   };
 
   getClassImage = () => {
-    let docRef = firestore.collection("classes").doc(this.props.selectedClass);
+    let docRef = firestore.collection("classes").doc(this.props.path);
     let self = this;
 
     docRef.get().then(function(doc) {
@@ -91,7 +91,7 @@ class ClassHome extends Component {
   };
 
   render() {
-    // this.getClassImage();
+    this.getClassImage();
 
     const jumboStyle = {
       background: `url(${this.state.classImage}) no-repeat center center`,
