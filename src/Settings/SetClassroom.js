@@ -4,7 +4,8 @@ import { firestore } from '../base.js';
 
 import { NavLink } from 'react-router-dom'
 
-import { Button, Container, Row, Col, Form, FormGroup, Alert, Input, ModalBody, ModalFooter, ModalHeader, Modal } from 'reactstrap';
+import { Button, Container, Row, Col, Form, FormGroup, Alert, Input, ModalBody, ModalFooter, ModalHeader, Modal, Label } from 'reactstrap';
+
 import {
     Accordion,
     AccordionItem,
@@ -33,7 +34,7 @@ class SetClassroom extends Component {
         tempStudents: [],
         tempClassList: [],
 
-        classes: props.classes,
+        classes: this.props.classes,
 
         students: null,
 
@@ -144,37 +145,159 @@ class SetClassroom extends Component {
       let self = this;
 
       let code = ev.target.classCode.value;
-      ev.target.reset();
+      let newName = ev.target.className.value;
 
-      if (code !== "") {
-        let docRef = firestore.collection("classes").doc(code);
-        docRef.get().then(function (doc) {
-          if (doc.exists) {
-            let data = doc.data();
-            self.setState({
-              newClass: data.class,
-              newClassCode: code,
-              newClassTeacher: data.teacher,
-              students: data.students,
-            });
+      let docRef = firestore.collection("classes").doc(code);
 
-            self.checkClasses();
-          } else {
-            self.setState({
-              errorCode: "Class not found",
-              visible: true,
-            });
+      docRef.update({
+        class: newName,
+      })
+        .then(function() {
+          console.log("Document successfully updated!");
+        }).catch(function(error) {
+          // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+        });
+
+      docRef.get().then(function(doc) {
+        if (doc.exists) {
+          let data= doc.data();
+          let announcements = data.announcements;
+
+          for (let k in announcements) {
+            announcements[k].class = newName;
           }
-        }).catch(function (error) {
-          console.log("Error getting document: ", error);
-        });
-      } else {
-        self.setState({
-          errorCode: "Please enter a 6-digit code",
-          visible: true,
-        });
-      }
+
+          docRef.update({
+            announcements: announcements,
+          })
+            .then(function() {
+              console.log("Document successfully updated!");
+              self.props.getClassAnnouncments(code);
+            }).catch(function(error) {
+            // The document probably doesn't exist.
+            console.error("Error updating document: ", error);
+          });
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(function(error) {
+        console.log("Error getting document:", error);
+      });
+
+
+      let tclasses = [];
+      let teacherRef = firestore.collection("users").doc(self.state.uid);
+      teacherRef.get().then(function(doc) {
+        if (doc.exists) {
+          let data = doc.data();
+          tclasses = data.classes;
+
+          for (let j in tclasses) {
+            if (tclasses[j].code === code)
+              tclasses[j].class = newName;
+          }
+
+          teacherRef.update({
+            classes: tclasses,
+          })
+            .then(function() {
+              console.log("Document successfully updated!");
+            }).catch(function(error) {
+            // The document probably doesn't exist.
+            console.error("Error updating document: ", error);
+          });
+          self.props.updateClasses(tclasses);
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(function(error) {
+        console.log("Error getting document:", error);
+      });
+
+
+      docRef.get().then(function(doc) {
+        if (doc.exists) {
+          let data= doc.data();
+          let students = data.students;
+
+          for (let i in students) {
+            let classes = [];
+
+            let studentsRef = firestore.collection("users").doc(students[i]);
+            studentsRef.get().then(function(doc) {
+              if (doc.exists) {
+                let data = doc.data();
+                classes = data.classes;
+
+                for (let j in classes) {
+                  if (classes[j].code === code)
+                    classes[j].class = newName;
+                }
+
+                studentsRef.update({
+                  classes: classes,
+                })
+                  .then(function() {
+                    console.log("Document successfully updated!");
+                  }).catch(function(error) {
+                  // The document probably doesn't exist.
+                  console.error("Error updating document: ", error);
+                });
+                //self.props.updateClasses(classes);
+              } else {
+                console.log("No such document!");
+              }
+            }).catch(function(error) {
+              console.log("Error getting document:", error);
+            });
+
+          }
+
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(function(error) {
+        console.log("Error getting document:", error);
+      });
     };
+
+  onJoinClass = (ev) => {
+    ev.preventDefault();
+    let self = this;
+
+    let code = ev.target.classCode.value;
+    ev.target.reset();
+
+    if (code !== "") {
+      let docRef = firestore.collection("classes").doc(code);
+      docRef.get().then(function (doc) {
+        if (doc.exists) {
+          let data = doc.data();
+          self.setState({
+            newClass: data.class,
+            newClassCode: code,
+            newClassTeacher: data.teacher,
+            students: data.students,
+          });
+
+          self.checkClasses();
+        } else {
+          self.setState({
+            errorCode: "Class not found",
+            visible: true,
+          });
+        }
+      }).catch(function (error) {
+        console.log("Error getting document: ", error);
+      });
+    } else {
+      self.setState({
+        errorCode: "Please enter a 6-digit code",
+        visible: true,
+      });
+    }
+  };
 
     handleDeleteClick = (classCode) => {
         let self = this;
@@ -253,26 +376,27 @@ class SetClassroom extends Component {
                 <Row className={"BoxForm"}>
                     <Col xs={"6"}>
                         <div>
-                        { this.state.classes != null && this.state.classes.length !== 0
+
+                          {this.state.role === "student" && this.props.classes != null && this.props.classes.length !== 0
                             ?
                             <Accordion>
-                                {this.state.classes != null && Object.keys(this.state.classes).map((key, index) => {
+                                {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
                                     return <AccordionItem key={key}>
                                         <AccordionItemTitle>
                                             <h3>
-                                                {this.state.classes[index].class}
+                                                {this.props.classes[index].class}
                                             </h3>
                                         </AccordionItemTitle>
                                         <AccordionItemBody className={"accordBody"}>
                                             <div>
                                                 <h5 className={"codeText"}>
-                                                    Class Code: {this.state.classes[index].code}
+                                                    Class Code: {this.props.classes[index].code}
                                                 </h5>
-                                                <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable
-                                                    Notifications</Button>
-                                                <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable
-                                                    Announcements</Button>
-                                                <span onClick={ () => this.toggle(this.state.classes[index].code)} className={"clickableIcon float-right"}>
+                                                {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
+                                                    {/*Notifications</Button>*/}
+                                                {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
+                                                    {/*Announcements</Button>*/}
+                                                <span onClick={ () => this.toggle(this.props.classes[index].code)} className={"clickableIcon float-right"}>
                                                     <i className="fas fa-trash-alt deleteIcon float-right"/>
                                                 </span>
 
@@ -284,23 +408,81 @@ class SetClassroom extends Component {
                             :
                             null
                         }
-                            <Modal size={"lg"} isOpen={this.state.modal} toggle={this.toggle}>
-                                <ModalHeader toggle={this.toggle}>Leave Course</ModalHeader>
-                                <ModalBody className={"ModalFonts"}>
-                                    Are you sure you want to leave this class? (You can rejoin!)
-                                </ModalBody>
-                                <ModalFooter>
-                                    <Button size={"lg"} color="info" onClick={() => this.handleDeleteClick(this.state.deletionCode)}>Leave Class</Button>
-                                    <Button size={"lg"} color="secondary" onClick={this.toggle}>Cancel</Button>
-                                </ModalFooter>
-                            </Modal>
+
+                          {this.state.role === "teacher" && this.props.classes != null && this.props.classes.length !== 0
+                            ?
+                            <Accordion>
+                              {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
+                                return <AccordionItem key={key}>
+                                  <AccordionItemTitle>
+                                    <h3>
+                                      {this.props.classes[index].class}
+                                    </h3>
+                                  </AccordionItemTitle>
+                                  <AccordionItemBody className={"accordBody"}>
+                                    <div>
+                                      <h5 className={"codeText"}>
+                                        Class Code: {this.props.classes[index].code}
+                                      </h5>
+                                      {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
+                                        {/*Notifications</Button>*/}
+                                      {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
+                                        {/*Announcements</Button>*/}
+
+                                      <Form onSubmit={this.onFormSubmit}>
+                                        <Input className={"hidden"} id="classCode" name="classCode" defaultValue={this.props.classes[index].code} />
+                                        <FormGroup row>
+                                          <Label size="lg" for="exampleClassName" sm={2}>Class Name:</Label>
+                                          <Col sm={6}>
+                                            <Input bsSize="lg" type="username" name="className" id="exampleClassName" defaultValue={this.props.classes[index].class} />
+                                          </Col>
+                                        </FormGroup>
+                                        {/*<FormGroup row>*/}
+                                          {/*<Label size="lg" for="exampleFile" sm={2}>Profile Picture:</Label>*/}
+                                          {/*<Col sm={10}>*/}
+                                            {/*<Input onChange={this.handlePicture} bsSize="lg" type="file" name="file" id="exampleFile" />*/}
+                                            {/*<FormText size="lg" color="muted">*/}
+                                              {/*Please only upload an image for your picture.*/}
+                                            {/*</FormText>*/}
+                                          {/*</Col>*/}
+                                          <Button outline color="success" size={"lg"}>
+                                            <i className="far fa-save" />
+                                          </Button>
+                                      </Form>
+
+
+                                      <span onClick={ () => this.toggle(this.props.classes[index].code)} className={"clickableIcon float-right"}>
+                                                    <i className="fas fa-trash-alt deleteIcon float-right"/>
+                                      </span>
+
+                                    </div>
+                                  </AccordionItemBody>
+                                </AccordionItem>
+                              })}
+                            </Accordion>
+                            :
+                            null
+                          }
+
+
+                          <Modal size={"lg"} isOpen={this.state.modal} toggle={this.toggle}>
+                          <ModalHeader toggle={this.toggle}>Leave Course</ModalHeader>
+                            <ModalBody className={"ModalFonts"}>
+                              Are you sure you want to leave this class? (You can rejoin!)
+                            </ModalBody>
+                            <ModalFooter>
+                              <Button size={"lg"} color="info" onClick={() => this.handleDeleteClick(this.state.deletionCode)}>Leave Class</Button>
+                              <Button size={"lg"} color="secondary" onClick={this.toggle}>Cancel</Button>
+                            </ModalFooter>
+                          </Modal>
                         </div>
 
                         <Row className={"Filler"}> </Row>
                         <Row className={"Filler"}> </Row>
 
-                      {this.state.role === "student" ?
-                        <Form onSubmit={this.onFormSubmit}>
+                      {this.state.role === "student"
+                        ?
+                        <Form onSubmit={this.onJoinClass}>
                             <FormGroup row check>
                                 <Col xs={{ size: 10, offset: 0}} sm={{ size: 5, offset: 2}} md={{ size: 5, offset: 2}} lg={{ size: 4, offset: 2}}>
                                     <Input bsSize="lg" type="classCode" name="classCode" id="classToAdd" placeholder="Class Code"/>
