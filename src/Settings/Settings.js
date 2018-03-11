@@ -162,6 +162,15 @@ class Settings extends Component {
 
     render() {
 
+      const actions = {
+        updateClasses: this.props.updateClasses,
+        updateRole: this.props.updateRole,
+        updateAnnouncements: this.props.updateAnnouncements,
+        updateUserImage: this.props.updateUserImage,
+        selectClass: this.props.selectClass,
+        updateClassPicture: this.props.updateClassPicture,
+      };
+
         if (this.state.name === null)
             return false;
         
@@ -182,6 +191,7 @@ class Settings extends Component {
                         />
                         :
                         <SetClassroom
+                            {...actions}
                             updateClasses={ this.props.updateClasses }
                             role={this.state.role}
                             uid={this.state.uid}

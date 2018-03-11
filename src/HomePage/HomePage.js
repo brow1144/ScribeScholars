@@ -495,7 +495,7 @@ class HomePage extends Component {
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <Settings userImage={ this.state.userImage } updateUserImage={ this.props.updateUserImage } updateClasses={ this.props.updateClasses } role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid} />
+          <Settings {...actions} userImage={ this.state.userImage } updateUserImage={ this.props.updateUserImage } updateClasses={ this.props.updateClasses } role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid} />
         </Sidebar>
       );
 

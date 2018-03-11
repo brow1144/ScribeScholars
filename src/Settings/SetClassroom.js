@@ -144,10 +144,13 @@ class SetClassroom extends Component {
       ev.preventDefault();
       let self = this;
 
-      let docRef = firestore.collection("classes").doc(ev.target.classCode.value);
+      let code = ev.target.classCode.value;
+      let newName = ev.target.className.value;
 
-      return docRef.update({
-        class: ev.target.className.value,
+      let docRef = firestore.collection("classes").doc(code);
+
+      docRef.update({
+        class: newName,
       })
         .then(function() {
           console.log("Document successfully updated!");
@@ -156,11 +159,80 @@ class SetClassroom extends Component {
           console.error("Error updating document: ", error);
         });
 
+      let tclasses = [];
+      let teacherRef = firestore.collection("users").doc(self.state.uid);
+      teacherRef.get().then(function(doc) {
+        if (doc.exists) {
+          let data = doc.data();
+          tclasses = data.classes;
+
+          for (let j in tclasses) {
+            if (tclasses[j].code === code)
+              tclasses[j].class = newName;
+          }
+
+          teacherRef.update({
+            classes: tclasses,
+          })
+            .then(function() {
+              console.log("Document successfully updated!");
+            }).catch(function(error) {
+            // The document probably doesn't exist.
+            console.error("Error updating document: ", error);
+          });
+          self.props.updateClasses(tclasses);
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(function(error) {
+        console.log("Error getting document:", error);
+      });
 
 
-      //ev.target.reset();
+      docRef.get().then(function(doc) {
+        if (doc.exists) {
+          let data= doc.data();
+          let students = data.students;
 
+          for (let i in students) {
+            let classes = [];
 
+            let studentsRef = firestore.collection("users").doc(students[i]);
+            studentsRef.get().then(function(doc) {
+              if (doc.exists) {
+                let data = doc.data();
+                classes = data.classes;
+
+                for (let j in classes) {
+                  if (classes[j].code === code)
+                    classes[j].class = newName;
+                }
+
+                studentsRef.update({
+                  classes: classes,
+                })
+                  .then(function() {
+                    console.log("Document successfully updated!");
+                  }).catch(function(error) {
+                  // The document probably doesn't exist.
+                  console.error("Error updating document: ", error);
+                });
+                //self.props.updateClasses(classes);
+              } else {
+                console.log("No such document!");
+              }
+            }).catch(function(error) {
+              console.log("Error getting document:", error);
+            });
+
+          }
+
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(function(error) {
+        console.log("Error getting document:", error);
+      });
     };
 
   onJoinClass = (ev) => {
