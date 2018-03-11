@@ -34,7 +34,7 @@ class SetClassroom extends Component {
         tempStudents: [],
         tempClassList: [],
 
-        classes: props.classes,
+        classes: this.props.classes,
 
         students: null,
 
@@ -377,26 +377,26 @@ class SetClassroom extends Component {
                     <Col xs={"6"}>
                         <div>
 
-                          {this.state.role === "student" && this.state.classes != null && this.state.classes.length !== 0
+                          {this.state.role === "student" && this.props.classes != null && this.props.classes.length !== 0
                             ?
                             <Accordion>
-                                {this.state.classes != null && Object.keys(this.state.classes).map((key, index) => {
+                                {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
                                     return <AccordionItem key={key}>
                                         <AccordionItemTitle>
                                             <h3>
-                                                {this.state.classes[index].class}
+                                                {this.props.classes[index].class}
                                             </h3>
                                         </AccordionItemTitle>
                                         <AccordionItemBody className={"accordBody"}>
                                             <div>
                                                 <h5 className={"codeText"}>
-                                                    Class Code: {this.state.classes[index].code}
+                                                    Class Code: {this.props.classes[index].code}
                                                 </h5>
                                                 {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
                                                     {/*Notifications</Button>*/}
                                                 {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
                                                     {/*Announcements</Button>*/}
-                                                <span onClick={ () => this.toggle(this.state.classes[index].code)} className={"clickableIcon float-right"}>
+                                                <span onClick={ () => this.toggle(this.props.classes[index].code)} className={"clickableIcon float-right"}>
                                                     <i className="fas fa-trash-alt deleteIcon float-right"/>
                                                 </span>
 
@@ -409,20 +409,20 @@ class SetClassroom extends Component {
                             null
                         }
 
-                          {this.state.role === "teacher" && this.state.classes != null && this.state.classes.length !== 0
+                          {this.state.role === "teacher" && this.props.classes != null && this.props.classes.length !== 0
                             ?
                             <Accordion>
-                              {this.state.classes != null && Object.keys(this.state.classes).map((key, index) => {
+                              {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
                                 return <AccordionItem key={key}>
                                   <AccordionItemTitle>
                                     <h3>
-                                      {this.state.classes[index].class}
+                                      {this.props.classes[index].class}
                                     </h3>
                                   </AccordionItemTitle>
                                   <AccordionItemBody className={"accordBody"}>
                                     <div>
                                       <h5 className={"codeText"}>
-                                        Class Code: {this.state.classes[index].code}
+                                        Class Code: {this.props.classes[index].code}
                                       </h5>
                                       {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
                                         {/*Notifications</Button>*/}
@@ -430,11 +430,11 @@ class SetClassroom extends Component {
                                         {/*Announcements</Button>*/}
 
                                       <Form onSubmit={this.onFormSubmit}>
-                                        <Input className={"hidden"} id="classCode" name="classCode" defaultValue={this.state.classes[index].code} />
+                                        <Input className={"hidden"} id="classCode" name="classCode" defaultValue={this.props.classes[index].code} />
                                         <FormGroup row>
                                           <Label size="lg" for="exampleClassName" sm={2}>Class Name:</Label>
                                           <Col sm={6}>
-                                            <Input bsSize="lg" type="username" name="className" id="exampleClassName" defaultValue={this.state.classes[index].class} />
+                                            <Input bsSize="lg" type="username" name="className" id="exampleClassName" defaultValue={this.props.classes[index].class} />
                                           </Col>
                                         </FormGroup>
                                         {/*<FormGroup row>*/}
@@ -451,7 +451,7 @@ class SetClassroom extends Component {
                                       </Form>
 
 
-                                      <span onClick={ () => this.toggle(this.state.classes[index].code)} className={"clickableIcon float-right"}>
+                                      <span onClick={ () => this.toggle(this.props.classes[index].code)} className={"clickableIcon float-right"}>
                                                     <i className="fas fa-trash-alt deleteIcon float-right"/>
                                       </span>
 

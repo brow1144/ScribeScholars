@@ -22,17 +22,18 @@ class Settings extends Component {
             phoneN: null,
             descript: null,
 
-            classes: [{
-                class: null,
-                teacher: null,
-                code:null,
-            }],
+            // classes: [{
+            //     class: null,
+            //     teacher: null,
+            //     code:null,
+            // }],
+          classes: this.props.classes,
         };
         this.getRole();
         this.getEmail();
         this.getPhone();
         this.getDescript();
-        this.getClasses();
+        //this.getClasses();
         this.getName();
     }
 
@@ -200,7 +201,7 @@ class Settings extends Component {
                             email={this.state.email}
                             phoneN={this.state.phoneN}
                             descript={this.state.descript}
-                            classes={this.state.classes}
+                            classes={this.props.classes}
                         />
                 }
 
