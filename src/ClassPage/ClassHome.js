@@ -36,6 +36,7 @@ class ClassHome extends Component {
 
   componentWillMount() {
     this.props.selectClass(this.props.path);
+    this.props.updateClassPicture(this.props.path);
   }
 
   switchAnnouncement = () => {
@@ -75,35 +76,32 @@ class ClassHome extends Component {
     })
   };
 
-  getClassImage = () => {
-    let docRef = firestore.collection("classes").doc(this.props.path);
-    let self = this;
-
-    docRef.get().then(function(doc) {
-      if (doc.exists) {
-        self.setState({
-          classImage: doc.data().classImage,
-        });
-
-      } else {
-        console.log("No such document!");
-      }
-      //self.props.updateUserImage(doc.data().userImage);
-    }).catch(function(error) {
-      console.log("Error getting document:", error);
-    })
-  };
+  // getClassImage = () => {
+  //   let docRef = firestore.collection("classes").doc(this.props.path);
+  //   let self = this;
+  //
+  //   docRef.get().then(function(doc) {
+  //     if (doc.exists) {
+  //       self.setState({
+  //         classImage: doc.data().classImage,
+  //       });
+  //
+  //     } else {
+  //       console.log("No such document!");
+  //     }
+  //   }).catch(function(error) {
+  //     console.log("Error getting document:", error);
+  //   })
+  // };
 
   render() {
-    this.getClassImage();
-
     const jumboStyle = {
-      background: `url(${this.state.classImage}) no-repeat center center`,
+      background: `url(${this.props.classImage}) no-repeat center center`,
     };
 
       return (
         <div>
-          <div style={jumboStyle}  className="jumbotron">
+          <div style={jumboStyle} className="jumbotron">
             <h1>{this.props.className}</h1>
             <p className="lead"> {this.props.selectedClass}</p>
           </div>

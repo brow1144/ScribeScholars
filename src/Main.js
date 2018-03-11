@@ -29,6 +29,8 @@ class Main extends Component {
 
       userImage: null,
 
+      classImage: null,
+
       role: null,
 
       classes: [{
@@ -162,6 +164,24 @@ class Main extends Component {
     });
   };
 
+  getClassImage = (classImage) => {
+    let docRef = firestore.collection("classes").doc(classImage);
+    let self = this;
+
+    docRef.get().then(function(doc) {
+      if (doc.exists) {
+        self.setState({
+          classImage: doc.data().classImage,
+        });
+
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function(error) {
+      console.log("Error getting document:", error);
+    })
+  };
+
   updateClasses = (classes) => {
     this.setState({
       classes: classes,
@@ -200,6 +220,14 @@ class Main extends Component {
       selectedClass: classCode,
     });
     this.getClassAnnouncments(classCode);
+    this.getClassImage(classCode);
+  };
+
+  updateClassPicture =(classImage) => {
+    this.setState({
+      classImage: classImage,
+    });
+    this.getClassImage(classImage);
   };
 
   getClassAnnouncments = (classCode) => {
@@ -253,6 +281,7 @@ class Main extends Component {
       selectedClass: this.state.selectedClass,
       className: this.state.className,
       classAnnouncements: this.state.classAnnouncements,
+      classImage: this.state.classImage,
     };
 
     const actions = {
@@ -262,6 +291,7 @@ class Main extends Component {
       updateAnnouncements: this.updateAnnouncements,
       updateUserImage: this.updateUserImage,
       selectClass: this.selectClass,
+      updateClassPicture: this.updateClassPicture,
     };
 
     return (

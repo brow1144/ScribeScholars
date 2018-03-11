@@ -424,6 +424,7 @@ class HomePage extends Component {
       className: this.props.className,
       classAnnouncements: this.props.classAnnouncements,
       path: this.props.path,
+      classImage: this.props.classImage,
     };
 
     const actions = {
@@ -432,6 +433,7 @@ class HomePage extends Component {
       updateAnnouncements: this.props.updateAnnouncements,
       updateUserImage: this.props.updateUserImage,
       selectClass: this.props.selectClass,
+      updateClassPicture: this.props.updateClassPicture,
     };
 
     if (this.props.page === "home") {
