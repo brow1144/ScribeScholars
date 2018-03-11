@@ -4,7 +4,8 @@ import { firestore } from '../base.js';
 
 import { NavLink } from 'react-router-dom'
 
-import { Button, Container, Row, Col, Form, FormGroup, Alert, Input, ModalBody, ModalFooter, ModalHeader, Modal } from 'reactstrap';
+import { Button, Container, Row, Col, Form, FormGroup, Alert, Input, ModalBody, ModalFooter, ModalHeader, Modal, Label } from 'reactstrap';
+
 import {
     Accordion,
     AccordionItem,
@@ -143,38 +144,61 @@ class SetClassroom extends Component {
       ev.preventDefault();
       let self = this;
 
-      let code = ev.target.classCode.value;
-      ev.target.reset();
+      let docRef = firestore.collection("classes").doc(ev.target.classCode.value);
 
-      if (code !== "") {
-        let docRef = firestore.collection("classes").doc(code);
-        docRef.get().then(function (doc) {
-          if (doc.exists) {
-            let data = doc.data();
-            self.setState({
-              newClass: data.class,
-              newClassCode: code,
-              newClassTeacher: data.teacher,
-              students: data.students,
-            });
+      return docRef.update({
+        class: ev.target.className.value,
+      })
+        .then(function() {
+          console.log("Document successfully updated!");
+        }).catch(function(error) {
+          // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+        });
 
-            self.checkClasses();
-          } else {
-            self.setState({
-              errorCode: "Class not found",
-              visible: true,
-            });
-          }
-        }).catch(function (error) {
-          console.log("Error getting document: ", error);
-        });
-      } else {
-        self.setState({
-          errorCode: "Please enter a 6-digit code",
-          visible: true,
-        });
-      }
+
+
+      //ev.target.reset();
+
+
     };
+
+  onJoinClass = (ev) => {
+    ev.preventDefault();
+    let self = this;
+
+    let code = ev.target.classCode.value;
+    ev.target.reset();
+
+    if (code !== "") {
+      let docRef = firestore.collection("classes").doc(code);
+      docRef.get().then(function (doc) {
+        if (doc.exists) {
+          let data = doc.data();
+          self.setState({
+            newClass: data.class,
+            newClassCode: code,
+            newClassTeacher: data.teacher,
+            students: data.students,
+          });
+
+          self.checkClasses();
+        } else {
+          self.setState({
+            errorCode: "Class not found",
+            visible: true,
+          });
+        }
+      }).catch(function (error) {
+        console.log("Error getting document: ", error);
+      });
+    } else {
+      self.setState({
+        errorCode: "Please enter a 6-digit code",
+        visible: true,
+      });
+    }
+  };
 
     handleDeleteClick = (classCode) => {
         let self = this;
@@ -253,7 +277,8 @@ class SetClassroom extends Component {
                 <Row className={"BoxForm"}>
                     <Col xs={"6"}>
                         <div>
-                        { this.state.classes != null && this.state.classes.length !== 0
+
+                          {this.state.role === "student" && this.state.classes != null && this.state.classes.length !== 0
                             ?
                             <Accordion>
                                 {this.state.classes != null && Object.keys(this.state.classes).map((key, index) => {
@@ -268,10 +293,10 @@ class SetClassroom extends Component {
                                                 <h5 className={"codeText"}>
                                                     Class Code: {this.state.classes[index].code}
                                                 </h5>
-                                                <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable
-                                                    Notifications</Button>
-                                                <Button className={"classroomButton"} size={"lg"} color={"info"}>Disable
-                                                    Announcements</Button>
+                                                {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
+                                                    {/*Notifications</Button>*/}
+                                                {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
+                                                    {/*Announcements</Button>*/}
                                                 <span onClick={ () => this.toggle(this.state.classes[index].code)} className={"clickableIcon float-right"}>
                                                     <i className="fas fa-trash-alt deleteIcon float-right"/>
                                                 </span>
@@ -284,23 +309,81 @@ class SetClassroom extends Component {
                             :
                             null
                         }
-                            <Modal size={"lg"} isOpen={this.state.modal} toggle={this.toggle}>
-                                <ModalHeader toggle={this.toggle}>Leave Course</ModalHeader>
-                                <ModalBody className={"ModalFonts"}>
-                                    Are you sure you want to leave this class? (You can rejoin!)
-                                </ModalBody>
-                                <ModalFooter>
-                                    <Button size={"lg"} color="info" onClick={() => this.handleDeleteClick(this.state.deletionCode)}>Leave Class</Button>
-                                    <Button size={"lg"} color="secondary" onClick={this.toggle}>Cancel</Button>
-                                </ModalFooter>
-                            </Modal>
+
+                          {this.state.role === "teacher" && this.state.classes != null && this.state.classes.length !== 0
+                            ?
+                            <Accordion>
+                              {this.state.classes != null && Object.keys(this.state.classes).map((key, index) => {
+                                return <AccordionItem key={key}>
+                                  <AccordionItemTitle>
+                                    <h3>
+                                      {this.state.classes[index].class}
+                                    </h3>
+                                  </AccordionItemTitle>
+                                  <AccordionItemBody className={"accordBody"}>
+                                    <div>
+                                      <h5 className={"codeText"}>
+                                        Class Code: {this.state.classes[index].code}
+                                      </h5>
+                                      {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
+                                        {/*Notifications</Button>*/}
+                                      {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
+                                        {/*Announcements</Button>*/}
+
+                                      <Form onSubmit={this.onFormSubmit}>
+                                        <Input className={"hidden"} id="classCode" name="classCode" defaultValue={this.state.classes[index].code} />
+                                        <FormGroup row>
+                                          <Label size="lg" for="exampleClassName" sm={2}>Class Name:</Label>
+                                          <Col sm={6}>
+                                            <Input bsSize="lg" type="username" name="className" id="exampleClassName" defaultValue={this.state.classes[index].class} />
+                                          </Col>
+                                        </FormGroup>
+                                        {/*<FormGroup row>*/}
+                                          {/*<Label size="lg" for="exampleFile" sm={2}>Profile Picture:</Label>*/}
+                                          {/*<Col sm={10}>*/}
+                                            {/*<Input onChange={this.handlePicture} bsSize="lg" type="file" name="file" id="exampleFile" />*/}
+                                            {/*<FormText size="lg" color="muted">*/}
+                                              {/*Please only upload an image for your picture.*/}
+                                            {/*</FormText>*/}
+                                          {/*</Col>*/}
+                                          <Button outline color="success" size={"lg"}>
+                                            <i className="far fa-save" />
+                                          </Button>
+                                      </Form>
+
+
+                                      <span onClick={ () => this.toggle(this.state.classes[index].code)} className={"clickableIcon float-right"}>
+                                                    <i className="fas fa-trash-alt deleteIcon float-right"/>
+                                      </span>
+
+                                    </div>
+                                  </AccordionItemBody>
+                                </AccordionItem>
+                              })}
+                            </Accordion>
+                            :
+                            null
+                          }
+
+
+                          <Modal size={"lg"} isOpen={this.state.modal} toggle={this.toggle}>
+                          <ModalHeader toggle={this.toggle}>Leave Course</ModalHeader>
+                            <ModalBody className={"ModalFonts"}>
+                              Are you sure you want to leave this class? (You can rejoin!)
+                            </ModalBody>
+                            <ModalFooter>
+                              <Button size={"lg"} color="info" onClick={() => this.handleDeleteClick(this.state.deletionCode)}>Leave Class</Button>
+                              <Button size={"lg"} color="secondary" onClick={this.toggle}>Cancel</Button>
+                            </ModalFooter>
+                          </Modal>
                         </div>
 
                         <Row className={"Filler"}> </Row>
                         <Row className={"Filler"}> </Row>
 
-                      {this.state.role === "student" ?
-                        <Form onSubmit={this.onFormSubmit}>
+                      {this.state.role === "student"
+                        ?
+                        <Form onSubmit={this.onJoinClass}>
                             <FormGroup row check>
                                 <Col xs={{ size: 10, offset: 0}} sm={{ size: 5, offset: 2}} md={{ size: 5, offset: 2}} lg={{ size: 4, offset: 2}}>
                                     <Input bsSize="lg" type="classCode" name="classCode" id="classToAdd" placeholder="Class Code"/>

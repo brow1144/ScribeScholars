@@ -4,10 +4,6 @@ import { Nav, NavLink } from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom'
 
 import Cards from '../HomePage/Cards';
-
-import { firestore } from "../base";
-
-
 import './ClassHome.css';
 import Homework from './Homework';
 import Inclass from './InclassStudent';
@@ -75,24 +71,6 @@ class ClassHome extends Component {
       discussionActive: true,
     })
   };
-
-  // getClassImage = () => {
-  //   let docRef = firestore.collection("classes").doc(this.props.path);
-  //   let self = this;
-  //
-  //   docRef.get().then(function(doc) {
-  //     if (doc.exists) {
-  //       self.setState({
-  //         classImage: doc.data().classImage,
-  //       });
-  //
-  //     } else {
-  //       console.log("No such document!");
-  //     }
-  //   }).catch(function(error) {
-  //     console.log("Error getting document:", error);
-  //   })
-  // };
 
   render() {
     const jumboStyle = {
