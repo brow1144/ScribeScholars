@@ -34,6 +34,10 @@ class ClassHome extends Component {
     };
   }
 
+  componentWillMount() {
+    this.props.selectClass(this.props.path);
+  }
+
   switchAnnouncement = () => {
     this.setState({
       announcementsActive: true,

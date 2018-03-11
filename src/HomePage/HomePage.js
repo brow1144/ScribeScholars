@@ -426,6 +426,14 @@ class HomePage extends Component {
       path: this.props.path,
     };
 
+    const actions = {
+      updateClasses: this.props.updateClasses,
+      updateRole: this.props.updateRole,
+      updateAnnouncements: this.props.updateAnnouncements,
+      updateUserImage: this.props.updateUserImage,
+      selectClass: this.props.selectClass,
+    };
+
     if (this.props.page === "home") {
       // If Screen is Big
       if (this.state.width > 600) {
@@ -497,7 +505,7 @@ class HomePage extends Component {
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <ClassHome {...classData} selectedClass={this.props.selectedClass} />
+          <ClassHome {...classData} {...actions} selectedClass={this.props.selectedClass} />
 
         </Sidebar>
       );
