@@ -7,10 +7,12 @@ const Cards = (props) => {
   return (
     <div>
       <Row>
-        <Col xs={{ size: '10', offset: 1 }}>
+        {/*<Col xs={{ size: '10', offset: 1 }}>*/}
+        {/*<Col md={{ size: '2', offset: 2 }}>*/}
           <CardDeck>
             {Object.keys(props.announcements).map((key, index) => {
-              return <Card key={key}>
+              return <Col key={key} md="4">
+                      <Card key={key}>
                         <CardHeader>{props.announcements[index].class}</CardHeader>
                         <CardBody>
                             <CardTitle>{props.announcements[index].title}</CardTitle>
@@ -18,9 +20,10 @@ const Cards = (props) => {
                             <CardText>{props.announcements[index].message}</CardText>
                           </CardBody>
                      </Card>
+                     <br />
+                    </Col>
             })}
           </CardDeck>
-        </Col>
       </Row>
 
     </div>
