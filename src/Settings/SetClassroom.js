@@ -4,7 +4,7 @@ import { firestore , storageRef } from "../base";
 
 import { NavLink } from 'react-router-dom'
 
-import { InputGroup, InputGroupAddon, Button, Container, Row, Col, Form, FormGroup, Alert, Input, ModalBody, ModalFooter, ModalHeader, Modal } from 'reactstrap';
+import { Label, InputGroupText, InputGroup, InputGroupAddon, Button, Container, Row, Col, Form, FormGroup, Alert, Input, ModalBody, ModalFooter, ModalHeader, Modal } from 'reactstrap';
 
 import {
     Accordion,
@@ -39,6 +39,8 @@ class SetClassroom extends Component {
         students: null,
 
         file: null,
+
+        makeAnn: null,
 
         errorCode: "",
         visible: false,
@@ -354,7 +356,7 @@ class SetClassroom extends Component {
     handlePicture = (ev) => {
       ev.preventDefault();
 
-      let classCode = ev.target.className;
+      let classCode = ev.target.className.value;
       classCode = classCode.substring(0, 6);
 
       let self = this;
@@ -382,6 +384,69 @@ class SetClassroom extends Component {
           console.log("Document Updated.")
         });
 
+      });
+
+    };
+
+    handleNewAnn = (ev, classCode) => {
+      ev.preventDefault();
+      let self = this;
+
+      let subtitle = ev.target.subtitle.value;
+      let title = ev.target.title.value;
+      let message = ev.target.message.value;
+
+      let classRef = firestore.collection("classes").doc(classCode);
+
+      classRef.get().then(function(doc) {
+        if (doc.exists) {
+          if (doc.data().announcements != null) {
+            self.setState({
+              announcements: doc.data().announcements,
+              newTitle: title,
+              newSubtitle: subtitle,
+              newMessage: message,
+            });
+            self.addAnnouncement(classRef);
+
+          }
+        } else {
+          console.log("user not found");
+        }
+      }).catch(function(error) {
+        console.log("Error getting document: ", error);
+      });
+
+      ev.target.reset();
+
+    };
+
+    addAnnouncement = (classRef) => {
+      let self = this;
+      let tmpNewAnnouncement = [{
+        message: self.state.newMessage,
+        subtitle: self.state.newSubtitle,
+        title: self.state.newTitle,
+      }];
+
+      // add temporary class to classes
+      if (self.state.announcements != null) {
+        self.setState({
+          announcements: self.state.announcements.concat(tmpNewAnnouncement),
+        });
+      } else {
+        self.setState({
+          announcements: tmpNewAnnouncement,
+        });
+      }
+
+      classRef.update({
+        announcements: self.state.announcements,
+      }).then(function() {
+        console.log("Successfully updated classes announcements");
+
+      }).catch(function(error) {
+        console.log("Error updating document: ", error);
       });
 
     };
@@ -470,13 +535,10 @@ class SetClassroom extends Component {
 
                                         <Col className="picIcon" xs="3">
                                           <Input onChange={this.handlePicture} type="file" name="file" id="exampleFile" className={this.props.classes[index].code} />
-                                          {/*<span onClick={(ev) => {this.handlePicture(this.props.classes[index].code, ev)}}>*/}
-                                            {/*<i className="fas fa-camera-retro" />*/}
-                                          {/*</span>*/}
                                         </Col>
 
                                         <Col className="picIcon" xs="1">
-                                          <span onClick={this.handlePicture}>
+                                          <span onClick={this.handleNewAnn}>
                                             <i className="fas fa-bullhorn" />
                                           </span>
                                         </Col>
@@ -488,29 +550,66 @@ class SetClassroom extends Component {
                                       {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
                                         {/*Announcements</Button>*/}
 
-                                    <Row>
-                                      <Col sm="12">
-                                        <Form onSubmit={this.onFormSubmit}>
-                                          <Input className={"hidden"} id="classCode" name="classCode" defaultValue={this.props.classes[index].code} />
+                                        <Row>
+                                          <Col sm="12">
+                                            <Form onSubmit={this.onFormSubmit}>
+                                              <Input className={"hidden"} id="classCode" name="classCode" defaultValue={this.props.classes[index].code} />
 
-                                          <FormGroup row>
-                                            <Col xs="7">
-                                              <InputGroup size="10">
-                                                <InputGroupAddon addonType="prepend">Class Name</InputGroupAddon>
-                                                <Input bsSize="md" type="username" name="className" id="exampleClassName" defaultValue={this.props.classes[index].class} />
-                                              </InputGroup>
+                                              <FormGroup row>
+                                                <Col xs="7">
+                                                  <InputGroup size="10">
+                                                    <InputGroupAddon addonType="prepend">Class Name</InputGroupAddon>
+                                                    <Input bsSize="md" type="username" name="className" id="exampleClassName" defaultValue={this.props.classes[index].class} />
+                                                  </InputGroup>
 
+                                                </Col>
+                                              </FormGroup>
+                                              <Button outline color="success" size={"lg"}>
+                                                <i className="far fa-save" />
+                                              </Button>
+                                              <span className="deleteIcon" onClick={ () => this.toggle(this.props.classes[index].code)}>
+                                                <i className="fas fa-trash-alt picIcon"/>
+                                              </span>
+                                            </Form>
+                                          </Col>
+                                        </Row>
+                                      <hr />
+                                        <Form onSubmit={(ev) => this.handleNewAnn(ev, this.props.classes[index].code)}>
+
+                                          <Row className={"rowt"}>
+                                            <Col>
+                                              <Label check>
+                                                <Input type="select" name="subtitle">
+                                                  <option>Test</option>
+                                                  <option>Quiz</option>
+                                                  <option>Homework</option>
+                                                  <option>Misc.</option>
+                                                </Input>
+                                              </Label>
                                             </Col>
-                                          </FormGroup>
-                                          <Button outline color="success" size={"lg"}>
-                                            <i className="far fa-save" />
+                                          </Row>
+                                          <br />
+
+                                          <InputGroup>
+                                            <InputGroupAddon addonType="prepend">
+                                              <InputGroupText>Title</InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input name="title" />
+                                          </InputGroup>
+                                          <br />
+
+                                          <InputGroup>
+                                            <InputGroupAddon addonType="prepend">
+                                              <InputGroupText>Message</InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input name="message" type="textarea" />
+                                          </InputGroup>
+                                          <br />
+
+                                          <Button type="submit" outline color="success" size={"lg"}>
+                                            <i className="far fa-arrow-alt-circle-right" />
                                           </Button>
-                                          <span className="deleteIcon" onClick={ () => this.toggle(this.props.classes[index].code)}>
-                                            <i className="fas fa-trash-alt picIcon"/>
-                                          </span>
                                         </Form>
-                                      </Col>
-                                    </Row>
                                     </div>
                                   </AccordionItemBody>
                                 </AccordionItem>
