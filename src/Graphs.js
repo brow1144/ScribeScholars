@@ -242,8 +242,9 @@ classes={this.state.classes}
             if (doc.data().assignments != null) {
               for (let j in doc.data().assignments) {
                 if (doc.data().assignments.hasOwnProperty(j)) {
-                  if (j.name === assignment.name && j.code === assignment.code) {
-                    total += j.score;
+                  if (doc.data().assignments[j].name === assignment.name && doc.data().assignments[j].code === assignment.code
+                    && doc.data().assignments[j].score != null) {
+                    total += doc.data().assignments[j].score;
                     numStudents++;
                   }
                 }
@@ -257,6 +258,34 @@ classes={this.state.classes}
     }
 
     return (total / numStudents) / assignment.maxScore;
+  };
+
+  getClassAverage = () => {
+    /*let total = 0;
+    let max = 0;
+
+    for (let i in this.state.students) {
+      if (this.state.students.hasOwnProperty(i)) {
+        for (let j in this.state.assignments) {
+          if (this.state.assignments.hasOwnProperty(j)) {
+            if (this.state.students[i].code === code) {
+              total += this.state.allAssignments[i].score;
+              max += this.state.allAssignments[i].maxscore;
+            }
+          }
+        }
+      }
+    }*/
+
+
+
+    for (let i in this.state.assignments) {
+      if (this.state.assignments.hasOwnProperty(i)) {
+        let avg = this.getAverageScore(this.state.assignments[i]);
+      }
+    }
+
+    return (total / max) * 100;
   };
 
   getAssignment = (name, code) => {
