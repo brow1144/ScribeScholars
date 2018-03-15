@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { Container, Row, Col , Card, CardTitle, CardText, Table } from 'reactstrap';
+import React, {Component} from 'react';
+import {Container, Row, Col, Card, CardTitle, CardText, Table, NavLink} from 'reactstrap';
 
 import './MyStudents.css';
 
 
 class MyStudents extends Component {
     render() {
-        return(
+        return (
             <div>
                 <Container fluid>
 
@@ -22,26 +22,44 @@ class MyStudents extends Component {
                             <h1>Assignments</h1>
                             <Row className={"assPad"}>
                                 <Col>
-                                    <Card body className="text-center">
-                                        <CardTitle className={"assTitle"}>Homework 1</CardTitle>
-                                        <CardText className={"assText"}>Read Chapter 1</CardText>
-                                    </Card>
+                                    <NavLink href="#">
+                                        <Card body className="text-center">
+                                            <CardTitle className={"assTitle"}>
+
+                                                Homework 3
+
+                                            </CardTitle>
+                                            <CardText className={"assText"}>Read Chapter 3</CardText>
+                                        </Card>
+                                    </NavLink>
                                 </Col>
                             </Row>
                             <Row className={"assPad"}>
                                 <Col>
-                                    <Card body className="text-center assPad">
-                                        <CardTitle className={"assTitle"}>Homework 2</CardTitle>
-                                        <CardText className={"assText"}>Read Chapter 2</CardText>
-                                    </Card>
+                                    <NavLink href="#">
+                                        <Card body className="text-center">
+                                            <CardTitle className={"assTitle"}>
+
+                                                Homework 2
+
+                                            </CardTitle>
+                                            <CardText className={"assText"}>Read Chapter 2</CardText>
+                                        </Card>
+                                    </NavLink>
                                 </Col>
                             </Row>
                             <Row className={"assPad"}>
                                 <Col>
-                                    <Card body className="text-center assPad">
-                                        <CardTitle className={"assTitle"}>Homework 3</CardTitle>
-                                        <CardText className={"assText"}>Read Chapter 3</CardText>
-                                    </Card>
+                                    <NavLink href="#">
+                                        <Card body className="text-center">
+                                            <CardTitle className={"assTitle"}>
+
+                                                Homework 1
+
+                                            </CardTitle>
+                                            <CardText className={"assText"}>Read Chapter 1</CardText>
+                                        </Card>
+                                    </NavLink>
                                 </Col>
                             </Row>
                         </Col>
@@ -62,19 +80,31 @@ class MyStudents extends Component {
                                         <tr>
                                             <th scope="row">1</th>
                                             <td>Jeremy</td>
-                                            <td>Putput</td>
+                                            <td>
+                                                <button className="link">
+                                                    Putput
+                                                </button>
+                                            </td>
                                             <td>3.8</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">2</th>
                                             <td>Jacob</td>
-                                            <td>Coons</td>
+                                            <td>
+                                                <button className="link">
+                                                    Coons
+                                                </button>
+                                            </td>
                                             <td>3.799999999</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">3</th>
                                             <td>Riley</td>
-                                            <td>Robot</td>
+                                            <td>
+                                                <button className="link">
+                                                    Robot
+                                                </button>
+                                            </td>
                                             <td>3.4</td>
                                         </tr>
                                         </tbody>
@@ -86,5 +116,7 @@ class MyStudents extends Component {
                 </Container>
             </div>
         )
-        }
-} export default MyStudents
+    }
+}
+
+export default MyStudents
