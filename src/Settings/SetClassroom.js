@@ -4,7 +4,7 @@ import { firestore } from '../base.js';
 
 import { NavLink } from 'react-router-dom'
 
-import { Button, Container, Row, Col, Form, FormGroup, Alert, Input, ModalBody, ModalFooter, ModalHeader, Modal, Label } from 'reactstrap';
+import { InputGroup, InputGroupAddon, Button, Container, Row, Col, Form, FormGroup, Alert, Input, ModalBody, ModalFooter, ModalHeader, Modal, Label } from 'reactstrap';
 
 import {
     Accordion,
@@ -374,7 +374,7 @@ class SetClassroom extends Component {
                 <Row className={"Filler"}> </Row>
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
-                    <Col xs={"6"}>
+                    <Col xs={"5"}>
                         <div>
 
                           {this.state.role === "student" && this.props.classes != null && this.props.classes.length !== 0
@@ -407,7 +407,7 @@ class SetClassroom extends Component {
                             </Accordion>
                             :
                             null
-                        }
+                          }
 
                           {this.state.role === "teacher" && this.props.classes != null && this.props.classes.length !== 0
                             ?
@@ -420,41 +420,53 @@ class SetClassroom extends Component {
                                     </h3>
                                   </AccordionItemTitle>
                                   <AccordionItemBody className={"accordBody"}>
-                                    <div>
-                                      <h5 className={"codeText"}>
-                                        Class Code: {this.props.classes[index].code}
-                                      </h5>
+                                    <div className="inside">
+                                      <Row>
+                                        <Col className="codeText" xs="11">
+                                          Class Code: {this.props.classes[index].code}
+                                        </Col>
+
+                                        <Col  className="picIcon" onClick={() => {console.log("Clicked!")}} xs="1">
+                                          <i  className="fas fa-camera-retro"/>
+                                        </Col>
+                                      </Row>
+
                                       {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
                                         {/*Notifications</Button>*/}
                                       {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
                                         {/*Announcements</Button>*/}
 
-                                      <Form onSubmit={this.onFormSubmit}>
-                                        <Input className={"hidden"} id="classCode" name="classCode" defaultValue={this.props.classes[index].code} />
-                                        <FormGroup row>
-                                          <Label size="lg" for="exampleClassName" sm={2}>Class Name:</Label>
-                                          <Col sm={6}>
-                                            <Input bsSize="lg" type="username" name="className" id="exampleClassName" defaultValue={this.props.classes[index].class} />
-                                          </Col>
-                                        </FormGroup>
-                                        {/*<FormGroup row>*/}
-                                          {/*<Label size="lg" for="exampleFile" sm={2}>Profile Picture:</Label>*/}
-                                          {/*<Col sm={10}>*/}
-                                            {/*<Input onChange={this.handlePicture} bsSize="lg" type="file" name="file" id="exampleFile" />*/}
-                                            {/*<FormText size="lg" color="muted">*/}
-                                              {/*Please only upload an image for your picture.*/}
-                                            {/*</FormText>*/}
-                                          {/*</Col>*/}
+                                    <Row>
+                                      <Col sm="12">
+                                        <Form onSubmit={this.onFormSubmit}>
+                                          <Input className={"hidden"} id="classCode" name="classCode" defaultValue={this.props.classes[index].code} />
+
+                                          <FormGroup row>
+                                            <Col xs="7">
+                                              <InputGroup size="10">
+                                                <InputGroupAddon addonType="prepend">Class Name</InputGroupAddon>
+                                                <Input bsSize="md" type="username" name="className" id="exampleClassName" defaultValue={this.props.classes[index].class} />
+                                              </InputGroup>
+
+                                            </Col>
+                                          </FormGroup>
+                                          {/*<FormGroup row>*/}
+                                            {/*<Label size="lg" for="exampleFile" sm={2}>Profile Picture:</Label>*/}
+                                            {/*<Col sm={10}>*/}
+                                              {/*<Input onChange={this.handlePicture} bsSize="lg" type="file" name="file" id="exampleFile" />*/}
+                                              {/*<FormText size="lg" color="muted">*/}
+                                                {/*Please only upload an image for your picture.*/}
+                                              {/*</FormText>*/}
+                                            {/*</Col>*/}
                                           <Button outline color="success" size={"lg"}>
                                             <i className="far fa-save" />
                                           </Button>
-                                      </Form>
-
-
-                                      <span onClick={ () => this.toggle(this.props.classes[index].code)} className={"clickableIcon float-right"}>
-                                                    <i className="fas fa-trash-alt deleteIcon float-right"/>
-                                      </span>
-
+                                          <span className="deleteIcon" onClick={ () => this.toggle(this.props.classes[index].code)}>
+                                            <i className="fas fa-trash-alt picIcon"/>
+                                          </span>
+                                        </Form>
+                                      </Col>
+                                    </Row>
                                     </div>
                                   </AccordionItemBody>
                                 </AccordionItem>
@@ -508,7 +520,7 @@ class SetClassroom extends Component {
                         </Col>
                       }
 
-                        </Col>
+                    </Col>
                 </Row>
             </Container>
         );
