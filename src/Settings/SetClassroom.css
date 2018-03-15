@@ -39,10 +39,15 @@ option
 {
     font-size: 1.5rem;
     text-align-all: end;
-    margin-top: 4rem;
+    /*margin-top: 4rem;*/
     margin-right: 0.5rem;
     cursor: pointer;
 }
+
+.fa-save {
+    font-size: 1.5rem;
+}
+
 .classroomButton
 {
     margin-left: 0.5rem;
@@ -83,5 +88,9 @@ option
     */
     background-color: #21CE99;
     background-color: rgba(33, 206, 153, 0.2);
+}
+
+.hidden {
+    visibility: hidden;
 }
 
