@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Row, Col,Form, FormGroup, Card, CardTitle, CardText, Table, NavLink} from 'reactstrap';
+import {Container,Input, Row, Label, Col,Form, FormGroup, Card, CardTitle, CardText, Table, NavLink} from 'reactstrap';
 
 import './MakeWork.css';
 
@@ -15,13 +15,18 @@ class MakeWork extends Component {
                         </Col>
                     </Row>
                     <Row>
-
-                        <Form>
-                            <FormGroup>
-
-                            </FormGroup>
-                        </Form>
-
+                            <Form>
+                                <Col>
+                                    <FormGroup xs>
+                                        <Label>Assignment Title</Label>
+                                        <Input type="title" placeholder="Enter Title"/>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label for="exampleText">Question</Label>
+                                        <Input type="textarea" placeholder="Enter Question" />
+                                    </FormGroup>
+                                </Col>
+                            </Form>
                     </Row>
                 </Container>
 
