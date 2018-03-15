@@ -400,12 +400,14 @@ class SetClassroom extends Component {
 
       classRef.get().then(function(doc) {
         if (doc.exists) {
+          console.log(doc.data().class);
           if (doc.data().announcements != null) {
             self.setState({
               announcements: doc.data().announcements,
               newTitle: title,
               newSubtitle: subtitle,
               newMessage: message,
+              class: doc.data().class,
             });
             self.addAnnouncement(classRef);
 
@@ -417,7 +419,7 @@ class SetClassroom extends Component {
         console.log("Error getting document: ", error);
       });
 
-      ev.target.reset();
+      //ev.target.reset();
 
     };
 
@@ -427,6 +429,7 @@ class SetClassroom extends Component {
         message: self.state.newMessage,
         subtitle: self.state.newSubtitle,
         title: self.state.newTitle,
+        class: self.state.class,
       }];
 
       // add temporary class to classes
