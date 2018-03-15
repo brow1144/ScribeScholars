@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-import { firestore } from '../base.js';
+import { firestore , storageRef } from "../base";
 
 import { NavLink } from 'react-router-dom'
 
-import { InputGroup, InputGroupAddon, Button, Container, Row, Col, Form, FormGroup, Alert, Input, ModalBody, ModalFooter, ModalHeader, Modal, Label } from 'reactstrap';
+import { InputGroup, InputGroupAddon, Button, Container, Row, Col, Form, FormGroup, Alert, Input, ModalBody, ModalFooter, ModalHeader, Modal } from 'reactstrap';
 
 import {
     Accordion,
@@ -37,6 +37,8 @@ class SetClassroom extends Component {
         classes: this.props.classes,
 
         students: null,
+
+        file: null,
 
         errorCode: "",
         visible: false,
@@ -349,6 +351,41 @@ class SetClassroom extends Component {
         });
     };
 
+    handlePicture = (ev) => {
+      ev.preventDefault();
+
+      let classCode = ev.target.className;
+      classCode = classCode.substring(0, 6);
+
+      let self = this;
+      let reader = new FileReader();
+      let file = ev.target.files[0];
+
+      reader.onloadend = () => {
+        self.setState({
+          file: file,
+        });
+      };
+
+
+      let imageUrl = null;
+      let userImageRef = storageRef.ref().child(`${classCode}`);
+      userImageRef.put(file).then(function(snapshot) {
+        imageUrl = snapshot.metadata.downloadURLs[0];
+        console.log('Uploaded a blob or file!');
+      }).then(() => {
+        let classes = firestore.collection("classes").doc(classCode);
+
+        classes.update({
+          'classImage': imageUrl,
+        }).then(function() {
+          console.log("Document Updated.")
+        });
+
+      });
+
+    };
+
     onDismiss = () => {
       this.setState({
         visible: false,
@@ -363,6 +400,11 @@ class SetClassroom extends Component {
     };
 
     render() {
+
+      if (this.state.file !== null) {
+        this.handleFirebase();
+      }
+
        return(
             <Container fluid className={"ContainerRules"}>
                 <Row className={"Filler"}> </Row>
@@ -422,13 +464,23 @@ class SetClassroom extends Component {
                                   <AccordionItemBody className={"accordBody"}>
                                     <div className="inside">
                                       <Row>
-                                        <Col className="codeText" xs="11">
+                                        <Col className="codeText" xs="8">
                                           Class Code: {this.props.classes[index].code}
                                         </Col>
 
-                                        <Col  className="picIcon" onClick={() => {console.log("Clicked!")}} xs="1">
-                                          <i  className="fas fa-camera-retro"/>
+                                        <Col className="picIcon" xs="3">
+                                          <Input onChange={this.handlePicture} type="file" name="file" id="exampleFile" className={this.props.classes[index].code} />
+                                          {/*<span onClick={(ev) => {this.handlePicture(this.props.classes[index].code, ev)}}>*/}
+                                            {/*<i className="fas fa-camera-retro" />*/}
+                                          {/*</span>*/}
                                         </Col>
+
+                                        <Col className="picIcon" xs="1">
+                                          <span onClick={this.handlePicture}>
+                                            <i className="fas fa-bullhorn" />
+                                          </span>
+                                        </Col>
+
                                       </Row>
 
                                       {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
@@ -450,14 +502,6 @@ class SetClassroom extends Component {
 
                                             </Col>
                                           </FormGroup>
-                                          {/*<FormGroup row>*/}
-                                            {/*<Label size="lg" for="exampleFile" sm={2}>Profile Picture:</Label>*/}
-                                            {/*<Col sm={10}>*/}
-                                              {/*<Input onChange={this.handlePicture} bsSize="lg" type="file" name="file" id="exampleFile" />*/}
-                                              {/*<FormText size="lg" color="muted">*/}
-                                                {/*Please only upload an image for your picture.*/}
-                                              {/*</FormText>*/}
-                                            {/*</Col>*/}
                                           <Button outline color="success" size={"lg"}>
                                             <i className="far fa-save" />
                                           </Button>
