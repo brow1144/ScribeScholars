@@ -261,27 +261,13 @@ classes={this.state.classes}
   };
 
   getClassAverage = () => {
-    /*let total = 0;
+    let total = 0;
     let max = 0;
 
     for (let i in this.state.students) {
       if (this.state.students.hasOwnProperty(i)) {
-        for (let j in this.state.assignments) {
-          if (this.state.assignments.hasOwnProperty(j)) {
-            if (this.state.students[i].code === code) {
-              total += this.state.allAssignments[i].score;
-              max += this.state.allAssignments[i].maxscore;
-            }
-          }
-        }
-      }
-    }*/
-
-
-
-    for (let i in this.state.assignments) {
-      if (this.state.assignments.hasOwnProperty(i)) {
-        let avg = this.getAverageScore(this.state.assignments[i]);
+        total += this.getGrade(this.state.code);
+        max += 100;
       }
     }
 
