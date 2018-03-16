@@ -12,10 +12,13 @@ class Graphs extends Component {
 
     this.state = {
       uid: props.uid,
+
       classes: null,
       //code: props.code,
       code: "668273",
       assignments: null,
+      students: null,
+
       allAssignments: null,
 
       data: [
@@ -62,6 +65,8 @@ class Graphs extends Component {
         {grade: 53, avg: 43, med: 50},
         {grade: 76, avg: 46, med: 55},
       ],
+
+      classGrades: [],
     };
   };
 
@@ -78,20 +83,34 @@ classes={this.state.classes}
 />
   */
 
+  componentWillMount() {
+    this.getClassInfo();
+    this.getAllAssignments();
+  };
+
+  init = () => {
+    this.getClassInfo();
+    this.getAllAssignments();
+
+    //console.log(this.calcGPA());
+    //this.buildAssignmentGraph(this.state.assignments[0]);  // temporary TODO
+  };
+
   // get assignments for a particular class
-  getAssignments = () => {
+  getClassInfo = () => {
     let self = this;
 
     let classRef = firestore.collection("classes").doc(this.state.code);
     classRef.get().then(function(doc) {
       if (doc.exists) {
-        if (doc.data().assignments != null) {
+        if (doc.data().assignments != null && doc.data().students != null) {
           self.setState({
             assignments: doc.data().assignments,
+            students: doc.data().students,
           });
         }
       } else {
-        console.log("Assignments not found");
+        console.log("Info not found");
       }
     }).catch(function(error) {
       console.log("Error getting document: ", error);
@@ -113,6 +132,8 @@ classes={this.state.classes}
         }
 
         console.log(self.calcGPA());
+        self.buildAssignmentGraph(self.state.assignments[0]);  // temporary TODO
+        self.testFunction();
       } else {
         console.log("Assignments not found");
       }
@@ -122,7 +143,7 @@ classes={this.state.classes}
   };
 
   // get all students in a class
-  getStudents = () => {
+  /*getStudents = () => {
     let self = this;
 
     let classRef = firestore.collection("classes").doc(this.state.code);
@@ -132,8 +153,6 @@ classes={this.state.classes}
           self.setState({
             students: doc.data().students,
           });
-
-          // get scores
         }
       } else {
         console.log("Students not found");
@@ -141,7 +160,7 @@ classes={this.state.classes}
     }).catch(function(error) {
       console.log("Error getting document: ", error);
     });
-  };
+  };*/
 
   /*
   getScores = () => {
@@ -260,6 +279,7 @@ classes={this.state.classes}
     return (total / numStudents) / assignment.maxScore;
   };
 
+  // get average grade in a class
   getClassAverage = () => {
     let classGrades = [];
     let total = 0;
@@ -278,7 +298,7 @@ classes={this.state.classes}
     return (total / max) * 100;
   };
 
-  getAssignment = (name, code) => {
+  /*getAssignment = (name, code) => {
     for (let i in this.state.allAssignments) {
       if (this.state.allAssignments.hasOwnProperty(i)) {
         if (i.name === name && i.code === code) {
@@ -286,7 +306,7 @@ classes={this.state.classes}
         }
       }
     }
-  };
+  };*/
 
   calcRank = () => {
     let classGrades = [];
@@ -298,8 +318,53 @@ classes={this.state.classes}
     }
 
     classGrades.sort();
+    // TODO fix
+  };
 
+  // build data for graph of classroom scores on a particular assignment
+  buildAssignmentGraph = (assignment) => {
+    let self = this;
 
+    for (let i in this.state.students) {
+      if (this.state.students.hasOwnProperty(i)) {
+        this.addStudentGrade(firestore.collection("users").doc(this.state.students[i]), assignment);
+      }
+    }
+
+    console.log("done");
+  };
+
+  // TODO fix synchronous issue
+  addStudentGrade = (studentRef, assignment) => {
+    let self = this;
+    //let studentRef = firestore.collection("users").doc(this.state.students[i]);
+    studentRef.get().then(function(doc) {
+      if (doc.exists) {
+        if (doc.data().assignments != null) {
+          for (let j in doc.data().assignments) {
+            if (doc.data().assignments.hasOwnProperty(j)) {
+              if (doc.data().assignments[j].name === assignment.name && doc.data().assignments[j].code === assignment.code
+                && doc.data().assignments[j].score != null) {
+                self.setState({
+                  classGrades: self.state.classGrades.concat({grade: doc.data().assignments[j].score}),
+                });
+                console.log("in here");
+              }
+            }
+          }
+        }
+      }
+    }).catch(function(error) {
+      console.log("Error getting document: ", error);
+    });
+  };
+
+  testFunction = () => {
+    console.log(this.state.classGrades);
+
+    this.state.classGrades.sort(this.compareValues("grade"));
+    //console.log(this.state.students);
+    console.log(this.state.classGrades);
   };
 
   // **************** meant for student uid **********
@@ -363,7 +428,9 @@ classes={this.state.classes}
   render = () => {
     //this.getAllAssignments();
     //console.log(this.calcGPA());
-    this.state.assignmentDist.sort(this.compareValues("grade"));
+
+    //this.state.assignmentDist.sort(this.compareValues("grade"));
+    //this.state.classGrades.sort(this.compareValues("grade"));
 
     return (
       /*<LineChart width={600} height={300} data={this.state.data}
@@ -389,9 +456,8 @@ classes={this.state.classes}
         <Bar dataKey="avg" fill="#bf8bff" />
         <Bar dataKey="med" fill="#b39eb5" />
       </BarChart>*/
-      <AreaChart width={730} height={250} data={this.state.assignmentDist}
-                 margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-                  onClick={this.getAllAssignments}>
+      <AreaChart width={730} height={250} data={this.state.classGrades}
+                 margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
         <defs>
           <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
@@ -404,7 +470,6 @@ classes={this.state.classes}
         <Tooltip />
         <Area type="monotone" dataKey="grade" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
       </AreaChart>
-
     );
   }
 }
