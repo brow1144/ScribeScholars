@@ -261,12 +261,16 @@ classes={this.state.classes}
   };
 
   getClassAverage = () => {
+    let classGrades = [];
     let total = 0;
     let max = 0;
 
     for (let i in this.state.students) {
       if (this.state.students.hasOwnProperty(i)) {
-        total += this.getGrade(this.state.code);
+        let grade = this.getGrade(this.state.code);
+        classGrades.push(grade);
+
+        total += grade;
         max += 100;
       }
     }
@@ -284,8 +288,22 @@ classes={this.state.classes}
     }
   };
 
+  calcRank = () => {
+    let classGrades = [];
+
+    for (let i in this.state.students) {
+      if (this.state.students.hasOwnProperty(i)) {
+        classGrades.push(this.getGrade(this.state.code));
+      }
+    }
+
+    classGrades.sort();
+
+
+  };
+
   // **************** meant for student uid **********
-  setScores = () => {
+ /* setScores = () => {
     let self = this;
 
     for(let i in self.state.classes) {
@@ -317,7 +335,7 @@ classes={this.state.classes}
         });
       }
     }
-  };
+  };*/
 
   compareValues(key) {
     return function(a, b) {
