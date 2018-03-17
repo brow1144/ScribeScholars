@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {Card, CardHeader, CardTitle, CardText, CardDeck, CardSubtitle, CardBody, Row, Col } from 'reactstrap';
+import {Card, CardHeader, CardTitle, CardText, CardSubtitle, CardBody, Row, Col } from 'reactstrap';
 
 const Cards = (props) => {
 
