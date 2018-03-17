@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { firestore } from './base.js';
 
+import { FormGroup, Form, Button } from 'reactstrap'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area } from 'recharts';
 
 import './Graphs.css';
@@ -67,6 +68,8 @@ class Graphs extends Component {
       ],
 
       classGrades: [],
+
+      graphVisible: false,
     };
   };
 
@@ -133,7 +136,6 @@ classes={this.state.classes}
 
         console.log(self.calcGPA());
         self.buildAssignmentGraph(self.state.assignments[0]);  // temporary TODO
-        self.testFunction();
       } else {
         console.log("Assignments not found");
       }
@@ -323,21 +325,15 @@ classes={this.state.classes}
 
   // build data for graph of classroom scores on a particular assignment
   buildAssignmentGraph = (assignment) => {
-    let self = this;
-
     for (let i in this.state.students) {
-      if (this.state.students.hasOwnProperty(i)) {
+      if (this.state.students.hasOwnProperty(i))
         this.addStudentGrade(firestore.collection("users").doc(this.state.students[i]), assignment);
-      }
     }
-
-    console.log("done");
   };
 
-  // TODO fix synchronous issue
   addStudentGrade = (studentRef, assignment) => {
     let self = this;
-    //let studentRef = firestore.collection("users").doc(this.state.students[i]);
+
     studentRef.get().then(function(doc) {
       if (doc.exists) {
         if (doc.data().assignments != null) {
@@ -348,7 +344,6 @@ classes={this.state.classes}
                 self.setState({
                   classGrades: self.state.classGrades.concat({grade: doc.data().assignments[j].score}),
                 });
-                console.log("in here");
               }
             }
           }
@@ -357,14 +352,6 @@ classes={this.state.classes}
     }).catch(function(error) {
       console.log("Error getting document: ", error);
     });
-  };
-
-  testFunction = () => {
-    console.log(this.state.classGrades);
-
-    this.state.classGrades.sort(this.compareValues("grade"));
-    //console.log(this.state.students);
-    console.log(this.state.classGrades);
   };
 
   // **************** meant for student uid **********
@@ -425,6 +412,14 @@ classes={this.state.classes}
     };
   }
 
+  showGraph = () => {
+    this.state.classGrades.sort(this.compareValues("grade"));
+
+    this.setState({
+      graphVisible: true,
+    });
+  };
+
   render = () => {
     //this.getAllAssignments();
     //console.log(this.calcGPA());
@@ -432,7 +427,6 @@ classes={this.state.classes}
     //this.state.assignmentDist.sort(this.compareValues("grade"));
     //this.state.classGrades.sort(this.compareValues("grade"));
 
-    return (
       /*<LineChart width={600} height={300} data={this.state.data}
                  margin={{top: 5, right: 30, left: 20, bottom: 5}}>
         <XAxis dataKey="name"/>
@@ -456,21 +450,31 @@ classes={this.state.classes}
         <Bar dataKey="avg" fill="#bf8bff" />
         <Bar dataKey="med" fill="#b39eb5" />
       </BarChart>*/
-      <AreaChart width={730} height={250} data={this.state.classGrades}
-                 margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-        <defs>
-          <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-            <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
-          </linearGradient>
-        </defs>
-        <XAxis/>
-        <YAxis />
-        <CartesianGrid strokeDasharray="3 3" />
-        <Tooltip />
-        <Area type="monotone" dataKey="grade" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
-      </AreaChart>
-    );
+
+    if (this.state.graphVisible) {
+      return (
+        <AreaChart width={730} height={250} data={this.state.classGrades}
+                   margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+          <defs>
+            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+              <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+            </linearGradient>
+          </defs>
+          <XAxis/>
+          <YAxis/>
+          <CartesianGrid strokeDasharray="3 3"/>
+          <Tooltip/>
+          <Area type="monotone" dataKey="grade" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)"/>
+        </AreaChart>
+      );
+    } else {
+      return (
+        <div>
+          <Button onClick={this.showGraph} className="showGraphButton" size="med" block>Show Graph</Button>
+        </div>
+      )
+    }
   }
 }
 
