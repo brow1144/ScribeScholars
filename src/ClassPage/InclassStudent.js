@@ -1,11 +1,22 @@
 import React, { Component } from 'react';
-import {Table, Container, Row, Col} from 'reactstrap';
+import { Table, Container, Row, Col} from 'reactstrap';
+
+import { NavLink as RouterLink } from 'react-router-dom'
 
 import './InclassStudent.css'
 
 class InclassStudent extends Component {
 
+    constructor(props) {
+        super(props);
+
+
+    }
+
     render() {
+
+        console.log(this.props.code)
+
         return (
             <div>
                 <Container fluid>
@@ -41,19 +52,31 @@ class InclassStudent extends Component {
                                     <th scope="row">1</th>
                                     <td>Practice Question</td>
                                     <td>yes</td>
-                                    <td><a href={'./HomePage'}>Link</a></td>
+                                    <td>
+                                        <RouterLink to={`practiceQuestion`}>
+                                            Link
+                                        </RouterLink>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">2</th>
                                     <td>Practice Question2</td>
                                     <td>no</td>
-                                    <td><a href={'./HomePage'}>Link</a></td>
+                                    <td>
+                                        <RouterLink to={`${this.props.code}/practiceQuestion2`}>
+                                            Link
+                                        </RouterLink>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">3</th>
                                     <td>Practice Question3</td>
                                     <td>no</td>
-                                    <td><a href={'./HomePage'}>Link</a></td>
+                                    <td>
+                                        <RouterLink to={`${this.props.code}/practiceQuestion3`}>
+                                            Link
+                                        </RouterLink>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </Table>
