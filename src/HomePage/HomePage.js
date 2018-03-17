@@ -462,14 +462,9 @@ class HomePage extends Component {
             <hr className="divider"/>
             <b className="annTest">Announcements</b>
 
-            <Row>
-              <Col>
-                <div className="announcementsDiv">
-                  <Cards announcements={this.props.announcements}/>
-                </div>
-              </Col>
-            </Row>
-
+            <div className="announcementsDiv">
+              <Cards announcements={this.props.announcements}/>
+            </div>
           </Sidebar>
         );
 
