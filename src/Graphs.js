@@ -67,7 +67,10 @@ class Graphs extends Component {
         {grade: 76, avg: 46, med: 55},
       ],
 
-      classGrades: [],
+      classGrades: [],  // class grades for an individual assignment
+      classAverageGrades: [],   // class average grades
+      assignmentScores: [],   // individual scores for each assignment
+      assignmentGrades: [],   // individual grades for each assignment
 
       graphVisible: false,
     };
@@ -91,15 +94,7 @@ classes={this.state.classes}
     this.getAllAssignments();
   };
 
-  init = () => {
-    this.getClassInfo();
-    this.getAllAssignments();
-
-    //console.log(this.calcGPA());
-    //this.buildAssignmentGraph(this.state.assignments[0]);  // temporary TODO
-  };
-
-  // get assignments for a particular class
+  // get assignments and students for a particular class
   getClassInfo = () => {
     let self = this;
 
@@ -120,7 +115,7 @@ classes={this.state.classes}
     });
   };
 
-  // get all assignments for a student
+  // get all assignments for a student (GPA)
   getAllAssignments = () => {
     let self = this;
 
@@ -134,8 +129,10 @@ classes={this.state.classes}
           });
         }
 
-        console.log(self.calcGPA());
-        self.buildAssignmentGraph(self.state.assignments[0]);  // temporary TODO
+        console.log(self.calcGPA());  // temporary
+        self.buildClassGradesGraph(self.state.assignments[0]);  // temporary TODO
+        self.buildAssignmentScoresGraph();
+        self.buildAssignmentGradesGraph();  // temporary
       } else {
         console.log("Assignments not found");
       }
@@ -251,7 +248,7 @@ classes={this.state.classes}
   };
 
   // calculate average score for an assignment
-  getAverageScore = (assignment) => {
+  getAverageScore = (assignment, percentage) => {
     let total = 0;
     let numStudents = 0;
 
@@ -278,7 +275,10 @@ classes={this.state.classes}
       }
     }
 
-    return (total / numStudents) / assignment.maxScore;
+    if (percentage)
+      return ((total / numStudents) / assignment.maxScore) * 100;
+    else
+      return (total / numStudents);
   };
 
   // get average grade in a class
@@ -291,6 +291,10 @@ classes={this.state.classes}
       if (this.state.students.hasOwnProperty(i)) {
         let grade = this.getGrade(this.state.code);
         classGrades.push(grade);
+
+        this.setState({
+          classAverageGrades: this.state.classAverageGrades.concat({grade: grade}),
+        });
 
         total += grade;
         max += 100;
@@ -323,8 +327,38 @@ classes={this.state.classes}
     // TODO fix
   };
 
+  // build data for assignmentScores
+  buildAssignmentScoresGraph = () => {
+    for (let i in this.state.assignments) {
+      if (this.state.assignments.hasOwnProperty(i)) {
+        let name = this.state.assignments[i].name;
+        let score = this.state.assignments[i].score;
+        let avg = this.getAverageScore(this.state.assignments[i], false);
+
+        this.setState({
+          assignmentGrades: this.state.assignmentGrades.concat({name: name, score: score, avg: avg}),
+        });
+      }
+    }
+  };
+
+  // build data for assignmentGrades
+  buildAssignmentGradesGraph = () => {
+    for (let i in this.state.assignments) {
+      if (this.state.assignments.hasOwnProperty(i)) {
+        let name = this.state.assignments[i].name;
+        let grade = (this.state.assignments[i].score / this.state.assignments[i].maxScore) * 100;
+        let avg = this.getAverageScore(this.state.assignments[i], true);
+
+        this.setState({
+          assignmentGrades: this.state.assignmentGrades.concat({name: name, grade: grade, avg: avg}),
+        });
+      }
+    }
+  };
+
   // build data for graph of classroom scores on a particular assignment
-  buildAssignmentGraph = (assignment) => {
+  buildClassGradesGraph = (assignment) => {
     for (let i in this.state.students) {
       if (this.state.students.hasOwnProperty(i))
         this.addStudentGrade(firestore.collection("users").doc(this.state.students[i]), assignment);
@@ -416,7 +450,7 @@ classes={this.state.classes}
     this.state.classGrades.sort(this.compareValues("grade"));
 
     this.setState({
-      graphVisible: true,
+      graph: "classGrades",
     });
   };
 
@@ -439,19 +473,7 @@ classes={this.state.classes}
       </LineChart>*/
 
 
-/*      <BarChart width={600} height={300} data={this.state.yourGrades}
-                margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-        <XAxis dataKey="name"/>
-        <YAxis/>
-        <CartesianGrid strokeDasharray="3 3"/>
-        <Tooltip/>
-        <Legend />
-        <Bar dataKey="grade" fill="#21CE99" />
-        <Bar dataKey="avg" fill="#bf8bff" />
-        <Bar dataKey="med" fill="#b39eb5" />
-      </BarChart>*/
-
-    if (this.state.graphVisible) {
+    if (this.state.graph === "classGrades") {
       return (
         <AreaChart width={730} height={250} data={this.state.classGrades}
                    margin={{top: 10, right: 30, left: 0, bottom: 0}}>
@@ -468,6 +490,32 @@ classes={this.state.classes}
           <Area type="monotone" dataKey="grade" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)"/>
         </AreaChart>
       );
+    } else if (this.state.graph === "assignmentScores") {
+      return (
+        <BarChart width={600} height={300} data={this.state.assignmentScores}
+                  margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+          <XAxis dataKey="name"/>
+          <YAxis/>
+          <CartesianGrid strokeDasharray="3 3"/>
+          <Tooltip/>
+          <Legend />
+          <Bar dataKey="score" fill="#21CE99" />
+          <Bar dataKey="avg" fill="#bf8bff" />
+        </BarChart>
+      )
+    } else if (this.state.graph === "assignmentGrades") {
+      return (
+        <BarChart width={600} height={300} data={this.state.assignmentGrades}
+                  margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+          <XAxis dataKey="name"/>
+          <YAxis/>
+          <CartesianGrid strokeDasharray="3 3"/>
+          <Tooltip/>
+          <Legend />
+          <Bar dataKey="grade" fill="#21CE99" />
+          <Bar dataKey="avg" fill="#bf8bff" />
+        </BarChart>
+      )
     } else {
       return (
         <div>
