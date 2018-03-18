@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 
 import { firestore } from './base.js';
 
-import { FormGroup, Form, Button } from 'reactstrap'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area } from 'recharts';
+import { Button } from 'reactstrap'
+import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area } from 'recharts';
 
 import './Graphs.css';
 
@@ -14,13 +14,15 @@ class Graphs extends Component {
     this.state = {
       uid: props.uid,
 
-      classes: null,
       //code: props.code,
-      code: "668273",
-      assignments: null,
-      students: null,
+      code: "668273",   // TODO temporary
 
-      allAssignments: null,
+      classes: [],  // TODO GPA page
+      myAssignments: [],  // all assignments from all the user's classes TODO GPA page
+
+      classAssignments: [],   // assignments in the class
+      students: [],   // all students in the class
+      allAssignments: [],   // all assignments from every student
 
       data: [
         {name: 'HW 1', uv: 4000, pv: 2400, amt: 2400},
@@ -67,8 +69,8 @@ class Graphs extends Component {
         {grade: 76, avg: 46, med: 55},
       ],
 
-      classGrades: [],  // class grades for an individual assignment
-      classAverageGrades: [],   // class average grades
+      classScores: [],  // class scores for an individual assignment
+      classOverallGrades: [],   // class overall grades
       assignmentScores: [],   // individual scores for each assignment
       assignmentGrades: [],   // individual grades for each assignment
 
@@ -91,24 +93,23 @@ classes={this.state.classes}
 
   componentWillMount() {
     this.getClassInfo();
-    this.getAllAssignments();
   };
 
   // get assignments and students for a particular class
   getClassInfo = () => {
     let self = this;
-
     let classRef = firestore.collection("classes").doc(this.state.code);
+
     classRef.get().then(function(doc) {
       if (doc.exists) {
         if (doc.data().assignments != null && doc.data().students != null) {
           self.setState({
-            assignments: doc.data().assignments,
+            classAssignments: doc.data().assignments,
             students: doc.data().students,
           });
         }
-      } else {
-        console.log("Info not found");
+
+        self.getMyAssignments();
       }
     }).catch(function(error) {
       console.log("Error getting document: ", error);
@@ -116,73 +117,60 @@ classes={this.state.classes}
   };
 
   // get all assignments for a student (GPA)
-  getAllAssignments = () => {
+  getMyAssignments = () => {
     let self = this;
-
     let studentRef = firestore.collection("users").doc(this.state.uid);
+
     studentRef.get().then(function(doc) {
       if (doc.exists) {
         if (doc.data().assignments != null) {
           self.setState({
-            allAssignments: doc.data().assignments,
+            myAssignments: doc.data().assignments,
             classes: doc.data().classes,  // temporary TODO
           });
-        }
 
-        console.log(self.calcGPA());  // temporary
-        self.buildClassGradesGraph(self.state.assignments[0]);  // temporary TODO
-        self.buildAssignmentScoresGraph();
-        self.buildAssignmentGradesGraph();  // temporary
-      } else {
-        console.log("Assignments not found");
+          self.getAllStudentInfo();
+        }
       }
     }).catch(function(error) {
       console.log("Error getting document: ", error);
     });
   };
 
-  // get all students in a class
-  /*getStudents = () => {
+  getAllStudentInfo = () => {
     let self = this;
 
-    let classRef = firestore.collection("classes").doc(this.state.code);
-    classRef.get().then(function(doc) {
-      if (doc.exists) {
-        if (doc.data().students != null) {
-          self.setState({
-            students: doc.data().students,
-          });
-        }
-      } else {
-        console.log("Students not found");
+    for (let i in this.state.students) {
+      if (this.state.students.hasOwnProperty(i)) {
+        let studentRef = firestore.collection("users").doc(this.state.students[i]);
+
+        studentRef.get().then(function(doc) {
+          if (doc.exists) {
+            if (doc.data().assignments != null) {
+              for (let j in doc.data().assignments) {
+                if (doc.data().assignments.hasOwnProperty(j)) {
+                  if (doc.data().assignments[j].code === self.state.code && doc.data().assignments[j].score != null) {
+                    self.setState({
+                      allAssignments: self.state.allAssignments.concat(doc.data().assignments[j]),
+                    });
+                  }
+                }
+              }
+            }
+          }
+
+          if (i == self.state.students.length - 1) {
+            console.log(self.calcGPA());  // temporary
+            self.buildClassScoresGraph(self.state.classAssignments[0]);  // temporary TODO
+            self.buildAssignmentScoresGraph();
+            self.buildAssignmentGradesGraph();  // temporary
+          }
+        }).catch(function(error) {
+          console.log("Error getting document:", error);
+        });
       }
-    }).catch(function(error) {
-      console.log("Error getting document: ", error);
-    });
-  };*/
-
-  /*
-  getScores = () => {
-    let self = this;
-
-    let studentRef = firestore.collection("users").doc(this.state.uid);
-    studentRef.get().then(function(doc) {
-      if (doc.exists) {
-        if (doc.data().assignments != null) {
-          self.setState({
-            assignments: doc.data().assignments,
-          });
-
-          self.setScores();
-        }
-      } else {
-        console.log("No assignments found");
-      }
-    }).catch(function(error) {
-      console.log("Error getting document: ", error);
-    });
+    }
   };
-  */
 
   // calculate GPA for a student
   calcGPA = () => {
@@ -235,11 +223,11 @@ classes={this.state.classes}
     let total = 0;
     let max = 0;
 
-    for (let i in this.state.allAssignments) {
-      if (this.state.allAssignments.hasOwnProperty(i)) {
-        if (this.state.allAssignments[i].code === code && this.state.allAssignments[i].maxscore != null) {
-          total += this.state.allAssignments[i].score;
-          max += this.state.allAssignments[i].maxscore;
+    for (let i in this.state.myAssignments) {
+      if (this.state.myAssignments.hasOwnProperty(i)) {
+        if (this.state.myAssignments[i].code === code && this.state.myAssignments[i].maxscore != null) {
+          total += this.state.myAssignments[i].score;
+          max += this.state.myAssignments[i].maxscore;
         }
       }
     }
@@ -252,32 +240,18 @@ classes={this.state.classes}
     let total = 0;
     let numStudents = 0;
 
-    for (let i in this.state.students) {
-      if (this.state.students.hasOwnProperty(i)) {
-        let studentRef = firestore.collection("users").doc(this.state.students[i]);
-        studentRef.get().then(function(doc) {
-          if (doc.exists) {
-            if (doc.data().assignments != null) {
-              for (let j in doc.data().assignments) {
-                if (doc.data().assignments.hasOwnProperty(j)) {
-                  if (doc.data().assignments[j].name === assignment.name && doc.data().assignments[j].code === assignment.code
-                    && doc.data().assignments[j].score != null) {
-                    total += doc.data().assignments[j].score;
-                    numStudents++;
-                  }
-                }
-              }
-            }
-          }
-        }).catch(function(error) {
-          console.log("Error getting document: ", error);
-        });
+    for (let i in this.state.allAssignments) {
+      if (this.state.allAssignments.hasOwnProperty(i)) {
+        if (this.state.allAssignments[i].name === assignment.name) {
+          total += this.state.allAssignments[i].score;
+          numStudents++;
+        }
       }
     }
 
-    if (percentage)
-      return ((total / numStudents) / assignment.maxScore) * 100;
-    else
+    if (percentage)   // return score as a percentage
+      return ((total / numStudents) / assignment.maxscore) * 100;
+    else  // return score
       return (total / numStudents);
   };
 
@@ -287,13 +261,13 @@ classes={this.state.classes}
     let total = 0;
     let max = 0;
 
-    for (let i in this.state.students) {
-      if (this.state.students.hasOwnProperty(i)) {
+    for (let i in this.state.allAssignments) {
+      if (this.state.allAssignments.hasOwnProperty(i)) {
         let grade = this.getGrade(this.state.code);
         classGrades.push(grade);
 
         this.setState({
-          classAverageGrades: this.state.classAverageGrades.concat({grade: grade}),
+          classOverallGrades: this.state.classOverallGrades.concat({grade: grade}),
         });
 
         total += grade;
@@ -304,21 +278,21 @@ classes={this.state.classes}
     return (total / max) * 100;
   };
 
-  /*getAssignment = (name, code) => {
-    for (let i in this.state.allAssignments) {
-      if (this.state.allAssignments.hasOwnProperty(i)) {
-        if (i.name === name && i.code === code) {
-          return i;
-        }
+  // get student's assignment from class list of assignments
+  getStudentAssignment = (assignment) => {
+    for (let i in this.state.myAssignments) {
+      if (this.state.myAssignments.hasOwnProperty(i)) {
+        if (this.state.myAssignments[i].name === assignment.name && this.state.myAssignments[i].code === assignment.code)
+          return this.state.myAssignments[i];
       }
     }
-  };*/
+  };
 
   calcRank = () => {
     let classGrades = [];
 
-    for (let i in this.state.students) {
-      if (this.state.students.hasOwnProperty(i)) {
+    for (let i in this.state.allAssignments) {
+      if (this.state.allAssignments.hasOwnProperty(i)) {
         classGrades.push(this.getGrade(this.state.code));
       }
     }
@@ -329,99 +303,54 @@ classes={this.state.classes}
 
   // build data for assignmentScores
   buildAssignmentScoresGraph = () => {
-    for (let i in this.state.assignments) {
-      if (this.state.assignments.hasOwnProperty(i)) {
-        let name = this.state.assignments[i].name;
-        let score = this.state.assignments[i].score;
-        let avg = this.getAverageScore(this.state.assignments[i], false);
+    for (let i in this.state.classAssignments) {
+      if (this.state.classAssignments.hasOwnProperty(i)) {
+        let assignment = this.getStudentAssignment(this.state.classAssignments[i]);
 
-        this.setState({
-          assignmentGrades: this.state.assignmentGrades.concat({name: name, score: score, avg: avg}),
-        });
+        if (assignment.score != null) {
+          let name = assignment.name;
+          let score = assignment.score;
+          let avg = this.getAverageScore(this.state.classAssignments[i], false);
+
+          this.setState({
+            assignmentScores: this.state.assignmentScores.concat({name: name, score: score, avg: avg}),
+          });
+        }
       }
     }
   };
 
   // build data for assignmentGrades
   buildAssignmentGradesGraph = () => {
-    for (let i in this.state.assignments) {
-      if (this.state.assignments.hasOwnProperty(i)) {
-        let name = this.state.assignments[i].name;
-        let grade = (this.state.assignments[i].score / this.state.assignments[i].maxScore) * 100;
-        let avg = this.getAverageScore(this.state.assignments[i], true);
+    for (let i in this.state.classAssignments) {
+      if (this.state.classAssignments.hasOwnProperty(i)) {
+        let assignment = this.getStudentAssignment(this.state.classAssignments[i]);
 
-        this.setState({
-          assignmentGrades: this.state.assignmentGrades.concat({name: name, grade: grade, avg: avg}),
-        });
+        if (assignment.score != null) {
+          let name = assignment.name;
+          let grade = (assignment.score / assignment.maxscore) * 100;
+          let avg = this.getAverageScore(this.state.classAssignments[i], true);
+
+          this.setState({
+            assignmentGrades: this.state.assignmentGrades.concat({name: name, grade: grade, avg: avg}),
+          });
+        }
       }
     }
   };
 
   // build data for graph of classroom scores on a particular assignment
-  buildClassGradesGraph = (assignment) => {
-    for (let i in this.state.students) {
-      if (this.state.students.hasOwnProperty(i))
-        this.addStudentGrade(firestore.collection("users").doc(this.state.students[i]), assignment);
-    }
-  };
-
-  addStudentGrade = (studentRef, assignment) => {
-    let self = this;
-
-    studentRef.get().then(function(doc) {
-      if (doc.exists) {
-        if (doc.data().assignments != null) {
-          for (let j in doc.data().assignments) {
-            if (doc.data().assignments.hasOwnProperty(j)) {
-              if (doc.data().assignments[j].name === assignment.name && doc.data().assignments[j].code === assignment.code
-                && doc.data().assignments[j].score != null) {
-                self.setState({
-                  classGrades: self.state.classGrades.concat({grade: doc.data().assignments[j].score}),
-                });
-              }
-            }
-          }
+  buildClassScoresGraph = (assignment) => {
+    for (let i in this.state.allAssignments) {
+      if (this.state.allAssignments.hasOwnProperty(i)) {
+        if (this.state.allAssignments[i].name === assignment.name) {
+          this.setState({
+            classScores: this.state.classScores.concat({grade: this.state.allAssignments[i].score}),
+          });
         }
       }
-    }).catch(function(error) {
-      console.log("Error getting document: ", error);
-    });
-  };
-
-  // **************** meant for student uid **********
- /* setScores = () => {
-    let self = this;
-
-    for(let i in self.state.classes) {
-      if (self.state.classes.hasOwnProperty(i)) {
-
-        let docRef = firestore.collection("classes").doc(this.state.classes[i].code);
-        docRef.get().then(function(doc) {
-          if (doc.exists) {
-            if (doc.data().assignments != null) {
-              for (let j in doc.data().assignments) {
-                if (doc.data().assignments.hasOwnProperty(j)) {
-                  let currentAssignment = self.getAssignment(j, self.state.classes[i].code);
-
-
-
-                  let studentRef = firestore.collection("users").doc(self.state.uid);
-
-                }
-
-
-              }
-            }
-          } else {
-            console.log("No such document!");
-          }
-
-        }).catch(function (error) {
-          console.log("Error getting document: ", error);
-        });
-      }
     }
-  };*/
+  };
 
   compareValues(key) {
     return function(a, b) {
@@ -447,16 +376,14 @@ classes={this.state.classes}
   }
 
   showGraph = () => {
-    this.state.classGrades.sort(this.compareValues("grade"));
+    this.state.classScores.sort(this.compareValues("score"));
 
     this.setState({
-      graph: "classGrades",
+      graph: "classScores",
     });
   };
 
   render = () => {
-    //this.getAllAssignments();
-    //console.log(this.calcGPA());
 
     //this.state.assignmentDist.sort(this.compareValues("grade"));
     //this.state.classGrades.sort(this.compareValues("grade"));
@@ -473,9 +400,9 @@ classes={this.state.classes}
       </LineChart>*/
 
 
-    if (this.state.graph === "classGrades") {
+    if (this.state.graph === "classScores") {
       return (
-        <AreaChart width={730} height={250} data={this.state.classGrades}
+        <AreaChart width={730} height={250} data={this.state.classScores}
                    margin={{top: 10, right: 30, left: 0, bottom: 0}}>
           <defs>
             <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
@@ -487,7 +414,7 @@ classes={this.state.classes}
           <YAxis/>
           <CartesianGrid strokeDasharray="3 3"/>
           <Tooltip/>
-          <Area type="monotone" dataKey="grade" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)"/>
+          <Area type="monotone" dataKey="score" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)"/>
         </AreaChart>
       );
     } else if (this.state.graph === "assignmentScores") {
