@@ -159,7 +159,7 @@ classes={this.state.classes}
             }
           }
 
-          if (i == self.state.students.length - 1) {
+          if (parseInt(i, 10) === self.state.students.length - 1) {
             console.log(self.calcGPA());  // temporary
             self.buildClassScoresGraph(self.state.classAssignments[0]);  // temporary TODO
             self.buildAssignmentScoresGraph();
@@ -345,39 +345,35 @@ classes={this.state.classes}
       if (this.state.allAssignments.hasOwnProperty(i)) {
         if (this.state.allAssignments[i].name === assignment.name) {
           this.setState({
-            classScores: this.state.classScores.concat({grade: this.state.allAssignments[i].score}),
+            classScores: this.state.classScores.concat({score: this.state.allAssignments[i].score}),
           });
         }
       }
     }
   };
 
+  // custom sorting function for the graphs
   compareValues(key) {
     return function(a, b) {
       // check that input is valid
-      if(!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+      if(!a.hasOwnProperty(key) || !b.hasOwnProperty(key))
         return 0;
-      }
 
-      /*let grade1 = (typeof a[key] === 'string') ? a[key].toUpperCase() : a[key];
-      let grade2 = (typeof b[key] === 'string') ? b[key].toUpperCase() : b[key];*/
-      let grade1 = a[key];
-      let grade2 = b[key];
+      let val1 = a[key];
+      let val2 = b[key];
 
       let comparison = 0;
-      if (grade1 > grade2) {
+
+      if (val1 > val2)
         comparison = 1;
-      } else if (grade1 < grade2) {
+      else if (val1 < val2)
         comparison = -1;
-      }
 
       return comparison;
     };
   }
 
   showGraph = () => {
-    this.state.classScores.sort(this.compareValues("score"));
-
     this.setState({
       graph: "classScores",
     });
@@ -401,6 +397,8 @@ classes={this.state.classes}
 
 
     if (this.state.graph === "classScores") {
+      this.state.classScores.sort(this.compareValues("score"));
+
       return (
         <AreaChart width={730} height={250} data={this.state.classScores}
                    margin={{top: 10, right: 30, left: 0, bottom: 0}}>
