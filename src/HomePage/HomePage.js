@@ -106,6 +106,7 @@ class HomePage extends Component {
       mql: mql,
       sidebarDocked: mql.matches,
     });
+
   };
 
   /**
@@ -422,6 +423,18 @@ class HomePage extends Component {
       code: this.props.selectedClass,
       className: this.props.className,
       classAnnouncements: this.props.classAnnouncements,
+      path: this.props.path,
+      classImage: this.props.classImage,
+    };
+
+    const actions = {
+      updateClasses: this.props.updateClasses,
+      updateRole: this.props.updateRole,
+      updateAnnouncements: this.props.updateAnnouncements,
+      updateUserImage: this.props.updateUserImage,
+      selectClass: this.props.selectClass,
+      updateClassPicture: this.props.updateClassPicture,
+      getClassAnnouncments: this.props.getClassAnnouncments,
     };
 
     if (this.props.page === "home") {
@@ -465,7 +478,7 @@ class HomePage extends Component {
                      width={this.state.width}/>
 
             <hr className="divider"/>
-            <b>Announcements</b>
+            <b className="annTest">Announcements</b>
 
             <div className="announcementsDiv">
               <Cards announcements={this.state.announcements}/>
@@ -483,7 +496,7 @@ class HomePage extends Component {
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <Settings userImage={ this.state.userImage } updateUserImage={ this.props.updateUserImage } updateClasses={ this.props.updateClasses } role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid} />
+          <Settings {...actions} classes={this.props.classes} userImage={ this.state.userImage } updateUserImage={ this.props.updateUserImage } updateClasses={ this.props.updateClasses } role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid} />
         </Sidebar>
       );
 
@@ -495,7 +508,7 @@ class HomePage extends Component {
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <ClassHome {...classData} selectedClass={this.props.selectedClass} />
+          <ClassHome {...classData} {...actions} selectedClass={this.props.selectedClass} />
 
         </Sidebar>
       );
