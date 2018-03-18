@@ -53,7 +53,7 @@ class InclassStudent extends Component {
                                     <td>Practice Question</td>
                                     <td>yes</td>
                                     <td>
-                                        <RouterLink to={`practiceQuestion`}>
+                                        <RouterLink to={`/HomePage/${this.props.code}/lessons/practiceQuestion`}>
                                             Link
                                         </RouterLink>
                                     </td>
@@ -63,7 +63,7 @@ class InclassStudent extends Component {
                                     <td>Practice Question2</td>
                                     <td>no</td>
                                     <td>
-                                        <RouterLink to={`practiceQuestion2`}>
+                                        <RouterLink to={`/HomePage/${this.props.code}/lessons/practiceQuestion2`}>
                                             Link
                                         </RouterLink>
                                     </td>
@@ -73,7 +73,7 @@ class InclassStudent extends Component {
                                     <td>Practice Question3</td>
                                     <td>no</td>
                                     <td>
-                                        <RouterLink to={`practiceQuestion3`}>
+                                        <RouterLink to={`/HomePage/${this.props.code}/lessons/practiceQuestion3`}>
                                             Link
                                         </RouterLink>
                                     </td>
