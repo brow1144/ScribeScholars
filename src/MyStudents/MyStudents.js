@@ -85,7 +85,7 @@ class MyStudents extends Component {
                                                     Putput
                                                 </button>
                                             </td>
-                                            <td>3.8</td>
+                                            <td>5.0</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">2</th>
@@ -95,7 +95,7 @@ class MyStudents extends Component {
                                                     Coons
                                                 </button>
                                             </td>
-                                            <td>3.799999999</td>
+                                            <td>4.0</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">3</th>
@@ -105,7 +105,7 @@ class MyStudents extends Component {
                                                     Robot
                                                 </button>
                                             </td>
-                                            <td>3.4</td>
+                                            <td>3.0</td>
                                         </tr>
                                         </tbody>
                                     </Table>
