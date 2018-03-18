@@ -85,18 +85,18 @@ class ClassHome extends Component {
           </div>
 
           <Nav horizontal="center" tabs>
-            <RouterLink className="navLinks" to={`announcements`}>
+            <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/announcements`}>
               <NavLink onClick={this.switchAnnouncement}
                        active={this.state.announcementsActive}>Announcements</NavLink>
             </RouterLink>
-            <RouterLink className="navLinks" to={`lessons`}>
+            <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/lessons`}>
               <NavLink onClick={this.switchLessons} active={this.state.lessonsActive}>In-Class
                        Lessons</NavLink>
             </RouterLink>
-            <RouterLink className="navLinks" to={`homework`}>
+            <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/homework`}>
               <NavLink onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
             </RouterLink>
-            <RouterLink className="navLinks" to={`discussion`}>
+            <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/discussion`}>
               <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
                 Board</NavLink>
             </RouterLink>
