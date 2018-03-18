@@ -26,18 +26,18 @@ class Homework extends Component {
         docRef.get().then(function (doc) {
             if (doc.exists) {
                 let data = doc.data();
-                self.setState({
+                /*self.setState({
                     name: data.name,
                     date: data.date,
                     link: data.link,
-                });
+                });*/
 
-                self.checkClasses();
+                //self.checkClasses();
             } else {
-                self.setState({
+                /*self.setState({
                     errorCode: "Class not found",
                     visible: true,
-                });
+                });*/
             }
         }).catch(function (error) {
             console.log("Error getting document: ", error);
@@ -65,7 +65,7 @@ class Homework extends Component {
                     </Row>
                     <Row>
                         <Col xs={12}>
-                            <p className={"pText"}>Assignments</p>
+                            <p className={"pText"}>Available Homeworks</p>
                         </Col>
                         <Col xs={12}>
                             <Table>

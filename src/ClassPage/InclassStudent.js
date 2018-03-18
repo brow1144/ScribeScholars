@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import {Table, Container, Row, Col} from 'reactstrap';
+import { NavLink as RouterLink } from 'react-router-dom'
 import { firestore } from "../base";
 
 import './InclassStudent.css'
@@ -28,18 +29,18 @@ class InclassStudent extends Component {
         docRef.get().then(function (doc) {
             if (doc.exists) {
                 let data = doc.data();
-                self.setState({
+                /*self.setState({
                     name: data.name,
                     available: data.available,
                     link: data.link,
                 });
 
-                self.checkClasses();
+                self.checkClasses();*/
             } else {
-                self.setState({
+                /*self.setState({
                     errorCode: "Class not found",
                     visible: true,
-                });
+                });*/
             }
         }).catch(function (error) {
             console.log("Error getting document: ", error);
