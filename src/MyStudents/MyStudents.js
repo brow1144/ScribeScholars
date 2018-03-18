@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Container, Row, Col, Card, CardTitle, CardText, Table, NavLink} from 'reactstrap';
 
 import './MyStudents.css';
+import Graphs from '../Dashboard/Dashboard';
 
 
 class MyStudents extends Component {
@@ -16,6 +17,9 @@ class MyStudents extends Component {
                         <Col className={"mainPage"}>
                             <p>My Students</p>
                         </Col>
+                    </Row>
+                    <Row>
+                        <Graphs/>
                     </Row>
                     <Row>
                         <Col>
