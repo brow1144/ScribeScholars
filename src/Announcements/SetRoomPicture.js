@@ -5,7 +5,7 @@ import './Announcements.css';
 import './CreateAnn.css';
 import Sidebar from 'react-sidebar';
 import AnnSide from "./AnnSide";
-import { firestore , storageRef } from "../base";
+import {storageRef} from "../base";
 import './SetRoomPicture.css';
 
 
@@ -93,21 +93,13 @@ export default class CreateAnn extends React.Component {
             });
         };
 
-      let imageUrl = null;
-      let userImageRef = storageRef.ref().child(`${classCode}`);
+        let userImageRef = storageRef.ref().child(`${classCode}`);
         userImageRef.put(file).then(function(snapshot) {
-          imageUrl = snapshot.metadata.downloadURLs[0];
-          console.log('Uploaded a blob or file!');
+            console.log('Uploaded a blob or file!');
         }).then(() => {
-          let classes = firestore.collection("classes").doc(classCode);
 
-          classes.update({
-            'classImage': imageUrl,
-          }).then(function() {
-            console.log("Document Updated.")
-          });
 
-        });
+        })
 
         ev.target.reset();
         this.successMessage();

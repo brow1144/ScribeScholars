@@ -1,261 +1,251 @@
 import React, { Component } from 'react';
 import { firestore } from '../base.js';
-import { Form, Input, Button, Label, Alert } from 'reactstrap';
+import { Form, Input, Button, Label } from 'reactstrap';
 import { Checkbox, CheckboxGroup } from 'react-checkbox-group';
 import ClassSuccess from './ClassSuccess';
 import './CreateClass.css'
-import logo from '../logo.svg';
-
+  
 class CreateClass extends Component {
 
-    constructor(props){
-        super(props);
+  constructor(props){
+    super(props);
 
-        this.MIN_NAME_LENGTH = 6;
+    this.MIN_NAME_LENGTH = 6;
 
-        this.handleTabBoxInput = this.handleTabBoxInput.bind(this);
+    this.handleInput = this.handleInput.bind(this);
+    this.handleTabBoxInput = this.handleTabBoxInput.bind(this);
 
-        this.state = {
-            uid: props.uid,
-
-            classes: null,
-            className: null,
-            email: null,
-            tabs: ['annoucements', 'assignments-and-documents', 'course-discussion', 'grades'],
-            code: null,
-
-            errorMessage: null,
-            visible: false,
-
-            done: false,
-        };
-
-    }
-
-    onFormSubmit = (ev) => {
-        ev.preventDefault();
-
-        let name = ev.target.className.value;
-        let email = ev.target.email.value;
-
-        if(name === ''){
-            this.setState({
-                errorMessage: "Please enter a class name.",
-                visible: true,
-            })
-        }
-
-        else if(email === ''){
-            this.setState({
-                errorMessage: "Please enter a class email.",
-                visible: true,
-            })
-        }
-
-        else if(name.length < this.MIN_NAME_LENGTH){
-            this.setState({
-                errorMessage: "Class name must be at least " + this.MIN_NAME_LENGTH + " characters long.",
-                visible: true,
-            })
-        }
-
-        else if(!email.includes("@")){
-            this.setState({
-                errorMessage: "Please enter a valid email.",
-                visible: true,
-            })
-        }
-
-        else {
-
-            this.setState({
-                className: name,
-                email: email,
-                visible: false,
-            }, this.createNewClassDoc );
-
-        }
+    this.state = {
+      uid: props.uid,
+      classes: null,
+      className: '',
+      email: '',
+      tabs: ['annoucements', 'assignments-and-documents', 'course-discussion', 'grades'],
+      nameValid: false,
+      formValid: false,
+      done: false,
+      code: null,
     };
 
-    //Update Firestore database
-    createNewClassDoc = () => {
-        let self = this;
-        let code = CreateClass.getCode();
+  }
 
-        //Create new document in "classes" collection
-        let classRef = firestore.collection("classes").doc(code);
-        classRef.get().then(function(doc) {
-            if (doc.exists) {
-                self.setNewDoc();
-            } else {
-                classRef.set({
-                    class: self.state.className,
-                    teacher: self.state.uid,
-                    teacher_email: self.state.email,
-                    announcements: [],
-                    deadlines: [],
-                    students: [],
-                    tabs: self.state.tabs,
-                }).then(function() {
-                    console.log("successfully written!");
+  onFormSubmit = (ev) => {
+    ev.preventDefault();
 
-                    self.setState({
-                        done: false,
-                        code: code,
-                    });
+    if(this.state.formValid){
 
-                    self.getClasses();
-                }).catch(function(error) {
-                    console.log(error);
-                });
-            }
-        }).catch(function(error) {
-            console.log("Error getting document: ", error);
-        });
-    };
+      this.setState({
+        className: this.state.className,
+      }, this.setNewDoc );
 
-    getClasses() {
-        let self = this;
-
-        let teacherRef = firestore.collection("users").doc(this.state.uid);
-        teacherRef.get().then(function (doc) {
-            if (doc.exists) {
-                if (doc.data().classes != null) {
-                    self.setState({
-                        classes: doc.data().classes,
-                    });
-                }
-
-                self.updateTeacher(teacherRef);
-            } else {
-                console.log("user not found");
-            }
-        }).catch(function (error) {
-            console.log("Error getting document: ", error);
-        });
+    } else {
+      ev.target.reset();
+      console.log("Error: Class name needs to be at least 6 characters");
     }
+  };
 
-    updateTeacher(teacherRef) {
-        let self = this;
+  //Update Firestore database
+  setNewDoc = () => {
+    let self = this;
+    let code = CreateClass.getCode();
 
-        let newClass = [{
-            class: this.state.className,
-            code: this.state.code,
-        }];
-
-        if (this.state.classes != null) {
-            this.setState({
-                classes: this.state.classes.concat(newClass),
-            });
-        } else {
-            this.setState({
-                classes: newClass,
-            });
-        }
-
-        teacherRef.update({
-            classes: self.state.classes,
+    //Create new document in "classes" collection
+    let classRef = firestore.collection("classes").doc(code);
+    classRef.get().then(function(doc) {
+      if (doc.exists) {
+        self.setNewDoc();
+      } else {
+        classRef.set({
+          class: self.state.className,
+          teacher: self.state.uid,
+          teacher_email: self.state.email,
+          announcements: [],
+          deadlines: [],
+          students: [],
+          tabs: self.state.tabs,
         }).then(function() {
-            console.log("Successfully updated classes list");
+          console.log("successfully written!");
 
-            self.setState({
-                done: true,
-            });
+          self.setState({
+            done: false,
+            code: code,
+          });
+
+          self.getClasses();
         }).catch(function(error) {
-            console.log("Error updating document: ", error);
+          console.log(error);
         });
-    }
+      }
+    }).catch(function(error) {
+      console.log("Error getting document: ", error);
+    });
+  };
 
-    //Generate class code
-    static getCode() {
-        let code = "";
-        for (let i = 0; i < 6; i++) {
-            code += Math.floor(Math.random()*10);
+  getClasses() {
+    let self = this;
+
+    let teacherRef = firestore.collection("users").doc(this.state.uid);
+    teacherRef.get().then(function (doc) {
+      if (doc.exists) {
+        if (doc.data().classes != null) {
+          self.setState({
+            classes: doc.data().classes,
+          });
         }
-        return code;
+
+        self.updateTeacher(teacherRef);
+      } else {
+        console.log("user not found");
+      }
+    }).catch(function (error) {
+      console.log("Error getting document: ", error);
+    });
+  }
+
+  updateTeacher(teacherRef) {
+    let self = this;
+
+    let newClass = [{
+      class: this.state.className,
+      code: this.state.code,
+    }];
+
+    if (this.state.classes != null) {
+      this.setState({
+        classes: this.state.classes.concat(newClass),
+      });
+    } else {
+      this.setState({
+        classes: newClass,
+      });
     }
 
-    //Sets this.state.tabs to checkboxes that are currently selected
-    handleTabBoxInput = (e) => {
-        this.setState({
-            tabs: e
-        });
-    };
+    teacherRef.update({
+      classes: self.state.classes,
+    }).then(function() {
+      console.log("Successfully updated classes list");
 
-    onDismiss = () => {
-        this.setState({ visible: false });
-    };
+      self.setState({
+        done: true,
+      });
+    }).catch(function(error) {
+      console.log("Error updating document: ", error);
+    });
+  }
 
-    render() {
+  //Generate class code
+  static getCode() {
+    let code = "";
+    for (let i = 0; i < 6; i++) {
+      code += Math.floor(Math.random()*10);
+    }
+    return code;
+  }
 
-        if (!this.state.done) {
+  //Sets this.state.tabs to checkboxes that are currently selected
+  handleTabBoxInput = (e) => {
+    this.setState({
+      tabs: e
+    });
+  };
 
-            return (
-                <div className="text-center">'
-                    <div className="Absolute-Center is-Responsive">
-                        <Form onSubmit={this.onFormSubmit}>
+  //Handle text field input
+  handleInput = (e) => {
+    const className = e.target.name;
+    const value = e.target.value;
+    this.setState({[className]: value},
+      () => {this.validateField(className, value)});
+  };
 
-                            <div className="form-group">
-                                <img src={logo} alt="" width="100" height="100"/>
-                            </div>
+  validateField(fieldName){
 
-                            <div className="form-group">
-                                <h3 className="h3 font-weight-normal">Create A New Classroom</h3>
-                            </div>
+    switch(fieldName){
 
-                            <div className="form-group">
-                                <Input name="className" className="inputField" type="text" placeholder="Enter class name"/>
-                            </div>
+      case 'className':
 
-                            <div className="form-group">
-                                <Input name="email" className="inputField" type="text" placeholder="Enter public class email"/>
-                            </div>
-
-                            <div className="form-group">
-                                <h5 className="h5 font-weight-normal">Classroom Tab Options: </h5>
-
-                                <CheckboxGroup name="tabs"
-                                               value={this.state.tabs}
-                                               checkboxDepth={2}
-                                               onChange={this.handleTabBoxInput}>
-
-                                    <Label> <Checkbox value="annoucements" name="annoucements" onChange={this.handleTabBoxInput}
-                                                      checked="checked"/> Annoucements </Label>
-
-                                    <div/>
-
-                                    <Label> <Checkbox value="assignments-and-documents" name="assignments-and-documents"
-                                                      onChange={this.handleTabBoxInput} checked="checked"/> Assignments and Documents
-                                    </Label>
-
-                                    <div/>
-
-                                    <Label> <Checkbox value="course-discussion" name="course-discussion" onChange={this.handleTabBoxInput}
-                                                      checked="checked"/> Course Discussion </Label>
-                                    <div/>
-
-                                    <Label> <Checkbox value="grades" name="grades" onChange={this.handleTabBoxInput}
-                                                      checked="checked"/> Grades </Label>
-                                </CheckboxGroup>
-
-                            </div>
-
-                            <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss.bind(this)}>
-                                {this.state.errorMessage}
-                            </Alert>
-
-                            <Button type="submit" className="createClassButton" size="lg" block>Create New Class!</Button>
-
-                        </Form>
-                    </div>
-                </div>
-            );
-        } else {
-            return(
-                <ClassSuccess uid={this.state.uid} className={this.state.className} code={this.state.code}/>
-            );
+        if(this.state.className.length >= this.MIN_NAME_LENGTH){
+          this.setState({nameValid: true}, this.validateForm
+          );
         }
+        else {
+          this.setState({nameValid: false}, this.validateForm);
+        }
+        return;
+
+      default:
+        //console.log("Error: incorrect fieldName");
+        return;
     }
+  }
+
+  validateForm = () => {
+    this.setState({formValid: this.state.nameValid});
+  };
+
+  render() {
+
+    if (!this.state.done) {
+
+      return (
+        <div className="quarter">
+          <Form onSubmit={this.onFormSubmit}>
+
+            <div className="form-group">
+              <h3 className="h3 font-weight-bold">Create A New Classroom</h3>
+            </div>
+
+            <div className="titleField"/>
+
+            <div className="form-group">
+              <Label className="inputLabel">Class Name: </Label>
+              <Input name="className" className="inputField" type="text" placeholder="Enter the class name"
+                     onChange={this.handleInput}
+              />
+            </div>
+
+            <div className="form-group">
+              <Label className="inputLabel">Email: (Students will see this as your public email) </Label>
+              <Input name="email" className="inputField" type="text" placeholder="Enter your email"
+                     onChange={this.handleInput}/>
+            </div>
+
+            <div className="form-group">
+              <Label>Choose which tabs you would like included in your classroom:</Label>
+              <div/>
+
+              <CheckboxGroup name="tabs"
+                             value={this.state.tabs}
+                             checkboxDepth={2}
+                             onChange={this.handleTabBoxInput}>
+                <Label> <Checkbox value="annoucements" name="annoucements" onChange={this.handleTabBoxInput}
+                                  checked="checked"/> Annoucements </Label>
+                <div/>
+                <Label> <Checkbox value="assignments-and-documents" name="assignments-and-documents"
+                                  onChange={this.handleTabBoxInput} checked="checked"/> Assignments and Documents
+                </Label>
+                <div/>
+                <Label> <Checkbox value="course-discussion" name="course-discussion" onChange={this.handleTabBoxInput}
+                                  checked="checked"/> Course Discussion </Label>
+                <div/>
+                <Label> <Checkbox value="grades" name="grades" onChange={this.handleTabBoxInput}
+                                  checked="checked"/> Grades </Label>
+              </CheckboxGroup>
+            </div>
+
+
+            <div className="titleField"/>
+
+            <Button type="submit" className="createClassButton" size="lg" block>Create Class!</Button>
+
+          </Form>
+        </div>
+      );
+    } else {
+      return(
+          <ClassSuccess uid={this.state.uid} className={this.state.className} code={this.state.code}/>
+      );
+    }
+  }
 }
 
 export default CreateClass;

@@ -3,17 +3,24 @@
     border-color: #21CE99 !important;
 }
 
-.Absolute-Center {
-    margin: auto;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0;
-    background: #f5f5f5 !important;
+.quarter {
+    margin-top: 75px;
+    margin-left: 250px;
+
+    min-width: 300px;
+    max-width: 300px;
+    padding: 10px;
 }
 
-.Absolute-Center.is-Responsive {
-    width: 50%;
-    height: 50%;
-    min-width: 400px;
-    max-width: 400px;
-    padding: 10px;
+.titleField {
+    margin-bottom: 50px;
+}
+
+.inputField {
+    margin-bottom: 20px;
+}
+
+.inputLabel {
+    margin-bottom: 5px;
+
 }

@@ -116,7 +116,7 @@ class Side extends Component {
 
         </div>
       )
-    }
+}
     }
   }
 

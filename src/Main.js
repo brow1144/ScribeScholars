@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 
 import { firestore } from "./base.js";
 
-import { Route, Switch } from 'react-router-dom';
-
 import HomePage from './HomePage/HomePage';
 
 class Main extends Component {
@@ -15,21 +13,9 @@ class Main extends Component {
 
       page: this.props.page,
 
-      selectedClass: null,
-      className: null,
-
-      classAnnouncements: [{
-        title: null,
-        subtitle: null,
-        message: null,
-        class: null,
-      }],
-
       uid: this.props.uid,
 
       userImage: null,
-
-      classImage: null,
 
       role: null,
 
@@ -164,24 +150,6 @@ class Main extends Component {
     });
   };
 
-  getClassImage = (classImage) => {
-    let docRef = firestore.collection("classes").doc(classImage);
-    let self = this;
-
-    docRef.get().then(function(doc) {
-      if (doc.exists) {
-        self.setState({
-          classImage: doc.data().classImage,
-        });
-
-      } else {
-        console.log("No such document!");
-      }
-    }).catch(function(error) {
-      console.log("Error getting document:", error);
-    })
-  };
-
   updateClasses = (classes) => {
     this.setState({
       classes: classes,
@@ -214,113 +182,22 @@ class Main extends Component {
     })
   };
 
-  selectClass = (classCode) => {
-    //console.log(classCode);
-    this.setState({
-      selectedClass: classCode,
-    });
-    this.getClassAnnouncments(classCode);
-    this.getClassImage(classCode);
-  };
-
-  updateClassPicture =(classImage) => {
-    this.setState({
-      classImage: classImage,
-    });
-    this.getClassImage(classImage);
-  };
-
-  getClassAnnouncments = (classCode) => {
-
-    let object = [{}];
-
-    let self = this;
-
-    let docRef = firestore.collection("classes").doc(classCode);
-
-    docRef.get().then(function (doc) {
-      if (doc.exists) {
-        let data = doc.data();
-        self.setState({
-          className: data.class,
-        });
-        for (let i in data.announcements) {
-          if (data.announcements.hasOwnProperty(i)) {
-            object.unshift({
-              class: data.announcements[i].class,
-              title: data.announcements[i].title,
-              subtitle: data.announcements[i].subtitle,
-              message: data.announcements[i].message,
-            });
-            self.setState({
-              classAnnouncements: object,
-            })
-          }}
-      } else {
-        console.log("No such document!");
-      }
-    }).catch(function (error) {
-      console.log("Error getting document:", error);
-    });
-
-    object.pop();
-
-    self.setState({
-      classAnnouncements: object
-    });
-  };
-
   render() {
-
-    const data = {
-      uid: this.state.uid,
-      classes: this.state.classes,
-      dates: this.state.dates,
-      announcements: this.state.announcements,
-      userImage: this.state.userImage,
-      selectedClass: this.state.selectedClass,
-      className: this.state.className,
-      classAnnouncements: this.state.classAnnouncements,
-      classImage: this.state.classImage,
-    };
-
-    const actions = {
-      updateClasses: this.updateClasses,
-      updateDates: this.updateDates,
-      updateRole: this.updateRole,
-      updateAnnouncements: this.updateAnnouncements,
-      updateUserImage: this.updateUserImage,
-      selectClass: this.selectClass,
-      updateClassPicture: this.updateClassPicture,
-      getClassAnnouncments: this.getClassAnnouncments
-    };
-
     return (
-      <Switch>
-        <Route path="/homepage/:class" render={(match) => (
-          <HomePage
-            path={match.match.params.class}
-            page="classes"
-            {...data}
-            {...actions}
-          />
-        )}/>
-        <Route path="/homepage" render={() => (
-          <HomePage
-            page={this.props.page}
-            {...data}
-            {...actions}
-          />
-        )}/>
-        <Route path="/settings" render={() => (
-          <HomePage
-            page={this.props.page}
-            {...data}
-            {...actions}
-          />
-        )}/>
-      </Switch>
-   )
+      <HomePage
+        page={this.props.page}
+        uid={this.state.uid}
+        classes={this.state.classes}
+        dates={this.state.dates}
+        announcements={this.state.announcements}
+        updateClasses={ this.updateClasses }
+        updateDates={ this.updateDates }
+        updateRole={ this.updateRole }
+        updateAnnouncements={ this.updateAnnouncements }
+        userImage={ this.state.userImage }
+        updateUserImage={ this.updateUserImage }
+        />
+    )
   }
 }
 

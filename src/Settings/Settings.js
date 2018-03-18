@@ -22,18 +22,17 @@ class Settings extends Component {
             phoneN: null,
             descript: null,
 
-            // classes: [{
-            //     class: null,
-            //     teacher: null,
-            //     code:null,
-            // }],
-          classes: this.props.classes,
+            classes: [{
+                class: null,
+                teacher: null,
+                code:null,
+            }],
         };
         this.getRole();
         this.getEmail();
         this.getPhone();
         this.getDescript();
-        //this.getClasses();
+        this.getClasses();
         this.getName();
     }
 
@@ -163,16 +162,6 @@ class Settings extends Component {
 
     render() {
 
-      const actions = {
-        updateClasses: this.props.updateClasses,
-        updateRole: this.props.updateRole,
-        updateAnnouncements: this.props.updateAnnouncements,
-        updateUserImage: this.props.updateUserImage,
-        selectClass: this.props.selectClass,
-        updateClassPicture: this.props.updateClassPicture,
-        getClassAnnouncments: this.props.getClassAnnouncments,
-      };
-
         if (this.state.name === null)
             return false;
         
@@ -193,7 +182,6 @@ class Settings extends Component {
                         />
                         :
                         <SetClassroom
-                            {...actions}
                             updateClasses={ this.props.updateClasses }
                             role={this.state.role}
                             uid={this.state.uid}
@@ -201,7 +189,7 @@ class Settings extends Component {
                             email={this.state.email}
                             phoneN={this.state.phoneN}
                             descript={this.state.descript}
-                            classes={this.props.classes}
+                            classes={this.state.classes}
                         />
                 }
 
