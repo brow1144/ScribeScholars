@@ -8,7 +8,9 @@ class Dashboard extends Component {
             <div>
                 <Container>
                     <Row>
-                        
+                        <Col>
+
+                        </Col>
                     </Row>
                 </Container>
             </div>
