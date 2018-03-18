@@ -533,11 +533,14 @@ class HomePage extends Component {
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <ClassHome {...classData} {...actions} selectedClass={this.props.selectedClass} />
-
+          <p>bubbles</p>
         </Sidebar>
       );
 
+    } else {
+      return (
+        <p>UH OH!</p>
+      );
     }
   }
 }

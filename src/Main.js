@@ -13,8 +13,6 @@ class Main extends Component {
 
     this.state = {
 
-      page: this.props.page,
-
       selectedClass: null,
       className: null,
 
