@@ -19,7 +19,16 @@ class MyStudents extends Component {
                         </Col>
                     </Row>
                     <Row>
-                        <Graphs/>
+                        <Col className={"mainPage"}>
+                            <Row>
+                                <Col className={"mainPage"}>
+                                    <h1>Dashboard</h1>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Graphs/>
+                            </Row>
+                        </Col>
                     </Row>
                     <Row>
                         <Col>
