@@ -1,10 +1,48 @@
 import React, { Component } from 'react';
 import {Table, Container, Row, Col} from 'reactstrap';
+import { firestore } from "../base";
 
 import './InclassStudent.css'
 
 class InclassStudent extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            uid: props.uid,
+            classCode: null,
+            assignment: [{
+                name: null,
+                available: null,
+                link: null,
+            }],
+        };
+
+    }
+
+    getAssignment = (classCode) => {
+        let docRef = firestore.collection("classes").doc(classCode);
+        docRef.get().then(function (doc) {
+            if (doc.exists) {
+                let data = doc.data();
+                self.setState({
+                    name: data.name,
+                    available: data.available,
+                    link: data.link,
+                });
+
+                self.checkClasses();
+            } else {
+                self.setState({
+                    errorCode: "Class not found",
+                    visible: true,
+                });
+            }
+        }).catch(function (error) {
+            console.log("Error getting document: ", error);
+        });
+    }
     render() {
         return (
             <div>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Table, Container, Row, Col} from 'reactstrap';
 
 import './Homework.css'
+import {firestore} from "../base";
 
 class Homework extends Component {
 
@@ -9,20 +10,40 @@ class Homework extends Component {
         super(props);
 
         this.state = {
-            announcements: [{
-                title: null,
-                subtitle: null,
-                message: null,
-                class: null,
+            uid: props.uid,
+            classCode: null,
+            assignment: [{
+                name: null,
+                date: null,
+                link: null,
             }],
-
-            announcementsActive: true,
-            lessonsActive: false,
-            homeworkActive: false,
-            discussionActive: false,
         };
 
     }
+
+    getHomework = (classCode) => {
+        let docRef = firestore.collection("classes").doc(classCode);
+        docRef.get().then(function (doc) {
+            if (doc.exists) {
+                let data = doc.data();
+                self.setState({
+                    name: data.name,
+                    date: data.date,
+                    link: data.link,
+                });
+
+                self.checkClasses();
+            } else {
+                self.setState({
+                    errorCode: "Class not found",
+                    visible: true,
+                });
+            }
+        }).catch(function (error) {
+            console.log("Error getting document: ", error);
+        });
+    }
+
 
     render() {
 

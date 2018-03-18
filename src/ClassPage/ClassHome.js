@@ -108,7 +108,9 @@ class ClassHome extends Component {
 
                   {this.state.homeworkActive
                       ?
-                    <Homework/>
+                    <Homework
+                        uid={this.state.uid}
+                    />
                       :
                       <div>
                       </div>

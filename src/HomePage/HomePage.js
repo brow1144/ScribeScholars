@@ -500,20 +500,6 @@ class HomePage extends Component {
         </Sidebar>
       );
 
-    } else if (this.props.page === "homework") {
-
-        return (
-            <Sidebar {...sideData}>
-
-                <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
-                         width={this.state.width}/>
-
-                <ClassHome {...classData} selectedClass={this.props.selectedClass} />
-
-            </Sidebar>
-        );
-
-    }
   }
 }
 
