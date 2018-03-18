@@ -116,7 +116,7 @@ class ClassHome extends Component {
 
           {this.state.homeworkActive
             ?
-            <Homework/>
+            <Homework code={this.props.code} />
             :
             <div>
             </div>

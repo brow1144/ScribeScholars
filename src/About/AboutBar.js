@@ -29,7 +29,7 @@ class AboutBar extends Component {
         return (
             <div className="main navT">
                 <Navbar className="bg-dark"  expand={"md"}>
-                    <NavbarToggler onClick={this.toggleNavbar} color={"black"} className="mr-2" />
+                    <NavbarToggler onClick={this.toggleNavbar} color={"white"} light className="mr-2" />
                     <Collapse isOpen={!this.state.collapsed} navbar>
                         <Nav navbar>
                             <NavItem>

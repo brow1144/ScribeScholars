@@ -11,43 +11,41 @@ class InclassStudent extends Component {
     constructor(props) {
         super(props);
 
-
         this.state = {
-            uid: props.uid,
-            classCode: null,
+            classCode: props.code,
             assignment: [{
                 name: null,
-                available: null,
+                maxScore: null,
                 link: null,
             }],
         };
-
     }
 
-    getAssignment = (classCode) => {
-        let docRef = firestore.collection("classes").doc(classCode);
+    getAssignment = () => {
+        let docRef = firestore.collection("classes").doc(this.props.classCode);
+        let self = this;
+
         docRef.get().then(function (doc) {
             if (doc.exists) {
                 let data = doc.data();
-                /*self.setState({
+                self.setState({
                     name: data.name,
-                    available: data.available,
-                    link: data.link,
+                    date: data.maxscore,
+                    //link: data.link,
                 });
-
-                self.checkClasses();*/
             } else {
-                /*self.setState({
+                self.setState({
                     errorCode: "Class not found",
                     visible: true,
-                });*/
+                });
             }
         }).catch(function (error) {
             console.log("Error getting document: ", error);
         });
     }
 
-    render() {
+    render()
+        {
 
         console.log(this.props.code)
 

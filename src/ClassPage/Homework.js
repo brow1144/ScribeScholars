@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Table, Container, Row, Col} from 'reactstrap';
 
+import Tables from './Tables';
 import './Homework.css'
 import {firestore} from "../base";
 
@@ -10,37 +11,48 @@ class Homework extends Component {
         super(props);
 
         this.state = {
-            uid: props.uid,
-            classCode: null,
+            classCode: props,
             assignment: [{
                 name: null,
-                date: null,
-                link: null,
+                maxscore: null,
+                //link: null,
             }],
         };
+        this.getHomework();
 
     }
 
-    getHomework = (classCode) => {
-        let docRef = firestore.collection("classes").doc(classCode);
+    getHomework = () => {
+        let object = [{}];
+        let docRef = firestore.collection("classes").doc(this.props.classCode);
+        let self = this;
+
         docRef.get().then(function (doc) {
             if (doc.exists) {
                 let data = doc.data();
-                /*self.setState({
-                    name: data.name,
-                    date: data.date,
-                    link: data.link,
-                });*/
-
-                //self.checkClasses();
+                for (let i in data.assignments) {
+                    if (data.assignments.hasOwnProperty(i)) {
+                        object.unshift({
+                            name: data.assignments[i].name,
+                            maxscore: data.assignments[i].maxscore,
+                        });
+                        self.setState({
+                            assignment: object,
+                        })
+                    }
+                }
             } else {
-                /*self.setState({
-                    errorCode: "Class not found",
-                    visible: true,
-                });*/
+                console.log("No such document!");
             }
+            //self.updateAnnouncements(self.state.announcements);
         }).catch(function (error) {
-            console.log("Error getting document: ", error);
+            console.log("Error getting document:", error);
+        });
+
+        object.pop();
+
+        self.setState({
+            announcements: object
         });
     }
 
@@ -67,35 +79,20 @@ class Homework extends Component {
                         <Col xs={12}>
                             <p className={"pText"}>Available Homeworks</p>
                         </Col>
+                    </Row>
+                    <Row>
                         <Col xs={12}>
                             <Table>
                                 <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Assignment</th>
-                                    <th>Date Due</th>
+                                    <th>Available</th>
                                     <th>Links</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Homework 1</td>
-                                    <td>3/7/18</td>
-                                    <td><a href={'./HomePage'}>Link</a></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Homework 2</td>
-                                    <td>3/7/18</td>
-                                    <td><a href={'./HomePage'}>Link</a></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>Homework 3</td>
-                                    <td>3/7/18</td>
-                                    <td><a href={'./HomePage'}>Link</a></td>
-                                </tr>
+                                    /*<Tables assignment={this.props.assignment}/>*/
                                 </tbody>
                             </Table>
                         </Col>
