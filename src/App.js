@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
 
-import firebase from './base.js';
-
 import { Route, Switch, Redirect } from 'react-router-dom';
+import './App.css';
+
+import firebase from './base.js';
 
 import SignIn from './Sigin/SignIn';
 import About from './About/AboutPage';
 import CreateAccount from './CreateAccount/CreateAccount';
 import Main from './Main';
-
+import LiveFeed from './ClassPage/LiveFeed';
 import CreateClass from './CreateClass/CreateClass';
 import ClassSuccess from './CreateClass/ClassSuccess';
-import './App.css';
+
 import Announcements from "./Announcements/Announcements";
 import CreateAnn from "./Announcements/CreateAnn";
 import SetRoomPic from "./Announcements/SetRoomPicture";
+import DashboardInfo from "./Dashboard/DashboardInfo";
+import MyStudents from "./MyStudents/MyStudents";
+import MakeWork from "./WorkForm/MakeWork";
 
 
 class App extends Component {
@@ -70,6 +74,12 @@ class App extends Component {
             : <Redirect to="/About" />
         )} />
 
+        <Route path='/LiveFeed' render={() => (
+        this.signedIn()
+          ? <LiveFeed uid={this.state.uid}/>
+          : <Redirect to="/About" />
+      )} />
+
         <Route exact path='/sign-in' render={() => (
           !this.signedIn()
             ? <SignIn />
@@ -78,6 +88,18 @@ class App extends Component {
 
           <Route path='/About' render={() => (
               <About />
+          )} />
+
+          <Route path='/DashboardInfo' render={() => (
+              this.signedIn()
+                  ? <DashboardInfo/>
+                  : <Redirect to="/About" />
+          )} />
+
+          <Route path='/MyStudents' render={() => (
+              this.signedIn()
+                  ? <MyStudents/>
+                  : <Redirect to="/About" />
           )} />
 
           <Route path='/Announcements' render={() => (
@@ -95,6 +117,12 @@ class App extends Component {
           <Route path='/SetRoomPicture' render={() => (
               this.signedIn()
                   ? <SetRoomPic/>
+                  : <Redirect to="/About" />
+          )} />
+
+          <Route path='/MakeWork' render={() => (
+              this.signedIn()
+                  ? <MakeWork/>
                   : <Redirect to="/About" />
           )} />
 
