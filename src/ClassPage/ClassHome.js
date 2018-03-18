@@ -90,8 +90,7 @@ class ClassHome extends Component {
                        active={this.state.announcementsActive}>Announcements</NavLink>
             </RouterLink>
             <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/lessons`}>
-              <NavLink onClick={this.switchLessons} active={this.state.lessonsActive}>In-Class
-                       Lessons</NavLink>
+              <NavLink onClick={this.switchLessons} active={this.state.lessonsActive}>In-Class Lessons</NavLink>
             </RouterLink>
             <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/homework`}>
               <NavLink onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>

@@ -525,9 +525,34 @@ class HomePage extends Component {
 
             </Sidebar>
         );
+    } else if (this.props.page === "liveFeed") {
+
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <ClassHome {...classData} {...actions} selectedClass={this.props.selectedClass} />
+
+        </Sidebar>
+      );
 
     }
   }
 }
 
 export default HomePage;
+
+
+
+
+
+
+
+
+
+
+
+
+

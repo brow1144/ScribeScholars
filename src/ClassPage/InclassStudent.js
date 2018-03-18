@@ -15,8 +15,6 @@ class InclassStudent extends Component {
 
     render() {
 
-        console.log(this.props.code)
-
         return (
             <div>
                 <Container fluid>
@@ -53,7 +51,7 @@ class InclassStudent extends Component {
                                     <td>Practice Question</td>
                                     <td>yes</td>
                                     <td>
-                                        <RouterLink to={`/HomePage/${this.props.code}/lessons/practiceQuestion`}>
+                                        <RouterLink to={`/HomePage/${this.props.code}/lessons/123456`}>
                                             Link
                                         </RouterLink>
                                     </td>
@@ -63,7 +61,7 @@ class InclassStudent extends Component {
                                     <td>Practice Question2</td>
                                     <td>no</td>
                                     <td>
-                                        <RouterLink to={`/HomePage/${this.props.code}/lessons/practiceQuestion2`}>
+                                        <RouterLink to={`/HomePage/${this.props.code}/lessons/12345`}>
                                             Link
                                         </RouterLink>
                                     </td>
@@ -73,7 +71,7 @@ class InclassStudent extends Component {
                                     <td>Practice Question3</td>
                                     <td>no</td>
                                     <td>
-                                        <RouterLink to={`/HomePage/${this.props.code}/lessons/practiceQuestion3`}>
+                                        <RouterLink to={`/HomePage/${this.props.code}/lessons/1234`}>
                                             Link
                                         </RouterLink>
                                     </td>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+ import React, { Component } from 'react';
 import { Navbar, NavbarToggler, NavbarBrand } from 'reactstrap';
 
 import './HomeNav.css'

@@ -299,7 +299,11 @@ class Main extends Component {
       <Switch>
 
         <Route path="/HomePage/:class/lessons/:lessonNumber" render={() => (
-          <p>bubbles</p>
+          <HomePage
+            page="liveFeed"
+            {...data}
+            {...actions}
+          />
         )}/>
 
         <Route path="/homepage/:class" render={(match) => (
