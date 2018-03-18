@@ -17,6 +17,9 @@ import './App.css';
 import Announcements from "./Announcements/Announcements";
 import CreateAnn from "./Announcements/CreateAnn";
 import SetRoomPic from "./Announcements/SetRoomPicture";
+import DashboardInfo from "./Dashboard/DashboardInfo";
+import MyStudents from "./MyStudents/MyStudents";
+import MakeWork from "./WorkForm/MakeWork";
 
 
 class App extends Component {
@@ -82,6 +85,18 @@ class App extends Component {
               <About />
           )} />
 
+          <Route path='/DashboardInfo' render={() => (
+              this.signedIn()
+                  ? <DashboardInfo/>
+                  : <Redirect to="/About" />
+          )} />
+
+          <Route path='/MyStudents' render={() => (
+              this.signedIn()
+                  ? <MyStudents/>
+                  : <Redirect to="/About" />
+          )} />
+
           <Route path='/Announcements' render={() => (
               this.signedIn()
                   ? <Announcements />
@@ -97,6 +112,12 @@ class App extends Component {
           <Route path='/SetRoomPicture' render={() => (
               this.signedIn()
                   ? <SetRoomPic/>
+                  : <Redirect to="/About" />
+          )} />
+
+          <Route path='/MakeWork' render={() => (
+              this.signedIn()
+                  ? <MakeWork/>
                   : <Redirect to="/About" />
           )} />
 

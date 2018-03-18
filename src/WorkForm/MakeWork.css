@@ -1,0 +1,13 @@
+.formCompPad {
+    padding: 1rem;
+}
+
+.entTitle
+{
+    align-content: center;
+    align-items: center;
+    align-self: center;
+}
+.qTitle {
+    font-size: 3rem !important;
+}
