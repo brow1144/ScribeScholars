@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 
-import firebase from './base.js';
-
 import { Route, Switch, Redirect } from 'react-router-dom';
+import './App.css';
+
+import firebase from './base.js';
 
 import SignIn from './Sigin/SignIn';
 import About from './About/AboutPage';
 import CreateAccount from './CreateAccount/CreateAccount';
 import Main from './Main';
-
-
+import LiveFeed from './ClassPage/LiveFeed';
 import CreateClass from './CreateClass/CreateClass';
 import ClassSuccess from './CreateClass/ClassSuccess';
-
-import './App.css';
 import Announcements from "./Announcements/Announcements";
 import CreateAnn from "./Announcements/CreateAnn";
 import SetRoomPic from "./Announcements/SetRoomPicture";
@@ -74,6 +72,12 @@ class App extends Component {
             ? <Main page={"home"} uid={this.state.uid}/>
             : <Redirect to="/About" />
         )} />
+
+        <Route path='/LiveFeed' render={() => (
+        this.signedIn()
+          ? <LiveFeed uid={this.state.uid}/>
+          : <Redirect to="/About" />
+      )} />
 
         <Route exact path='/sign-in' render={() => (
           !this.signedIn()
