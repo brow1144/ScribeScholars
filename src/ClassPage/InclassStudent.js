@@ -63,7 +63,7 @@ class InclassStudent extends Component {
                                     <td>Practice Question2</td>
                                     <td>no</td>
                                     <td>
-                                        <RouterLink to={`${this.props.code}/practiceQuestion2`}>
+                                        <RouterLink to={`practiceQuestion2`}>
                                             Link
                                         </RouterLink>
                                     </td>
@@ -73,7 +73,7 @@ class InclassStudent extends Component {
                                     <td>Practice Question3</td>
                                     <td>no</td>
                                     <td>
-                                        <RouterLink to={`${this.props.code}/practiceQuestion3`}>
+                                        <RouterLink to={`practiceQuestion3`}>
                                             Link
                                         </RouterLink>
                                     </td>
