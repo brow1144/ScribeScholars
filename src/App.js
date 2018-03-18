@@ -12,6 +12,7 @@ import Main from './Main';
 import LiveFeed from './ClassPage/LiveFeed';
 import CreateClass from './CreateClass/CreateClass';
 import ClassSuccess from './CreateClass/ClassSuccess';
+
 import Announcements from "./Announcements/Announcements";
 import CreateAnn from "./Announcements/CreateAnn";
 import SetRoomPic from "./Announcements/SetRoomPicture";
@@ -150,9 +151,13 @@ class App extends Component {
             : <Redirect to="/sign-in" />
         )} />
 
+          <Route path='/create-activity' render={() => (
+              this.signedIn()
+                  ? <Main page={"create-activity"} uid={this.state.uid}/>
+                  :<Redirect to="/sign-in" />
+          )} />
 
-        <Route render={() => <Redirect to='/HomePage' />} />
-
+        <Route render={() => <Redirect to="/HomePage" />} />
 
       </Switch>
     );
