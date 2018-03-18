@@ -1,64 +1,59 @@
-.ClassSelection
-{
+.ClassSelection {
     height: 15rem;
 }
 
-option
-{
+option {
     height: 3rem;
     font-size: large;
     border: solid thin;
 }
 
 
-.ContainerRules
-{
+.ContainerRules {
     max-width: 100%;
     overflow-x: hidden;
 }
 
-.BannerRow
-{
+.BannerRow {
     background: #21CE99;
     color: #6C6A69;
     padding-left: 5rem;
 }
 
-.BannerCol
-{
+.BannerCol {
     padding-top: 2rem;
 
 }
 
-.Filler
-{
+.Filler {
     height: 2rem;
 }
 
-.deleteIcon
-{
-    font-size: 1.5rem;
-    text-align-all: end;
-    margin-top: 4rem;
-    margin-right: 0.5rem;
-    cursor: pointer;
+.deleteIcon {
+    padding-left: 98%;
 }
-.classroomButton
-{
+
+.inside {
+    padding: 1rem 1rem 0 1rem;
+}
+
+.picIcon {
+    cursor: pointer;
+    color: grey;
+    font-size: 1.3rem;
+}
+
+.classroomButton {
     margin-left: 0.5rem;
 }
 
-.accordBody
-{
+.accordBody {
     margin-bottom: 4rem;
 }
 
-.codeText
-{
-    margin-top: 0.5rem;
-    margin-right: 0.5rem;
-    text-align: right;
+.codeText {
     color: grey;
+    font-size: 1.3rem;
 }
 
 .accordion {
@@ -78,10 +73,11 @@ option
 }
 
 .accordion__title:hover {
-    /*
-    background-color: #ddd;
-    */
     background-color: #21CE99;
     background-color: rgba(33, 206, 153, 0.2);
+}
+
+.hidden {
+    visibility: hidden;
 }
 
