@@ -8,6 +8,7 @@ import './ClassHome.css';
 import Homework from './Homework';
 import Inclass from './InclassStudent';
 import myStudents from '../MyStudents/MyStudents'
+import myStudentsLink from '../MyStudents/MyStudentLink'
 
 class ClassHome extends Component {
 
@@ -115,7 +116,7 @@ class ClassHome extends Component {
               <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
                 Board</NavLink>
             </RouterLink>
-              <RouterLink className="navLinks" to={`/MyStudents`}>
+              <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/myStudentsLink`}>
                   <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive}>My Students</NavLink>
               </RouterLink>
           </Nav>
@@ -148,7 +149,7 @@ class ClassHome extends Component {
           }
             {this.state.myStudentsActive
                 ?
-                <myStudents />
+                <myStudentsLink/>
                 :
                 <div>
                 </div>
