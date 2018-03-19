@@ -6,22 +6,58 @@ const Tables = (props) => {
 
     return (
         <div>
-            {Object.keys(props.assignment).map((key, index) => {
-                return
-                    <div key={key}>
-                        <tr>
-                            <th scope="row">{props.assignment[index]}</th>
-                            <td>{props.assignment[index].name}</td>
-                            <td>yes</td>
-                            <td>
-                                <RouterLink to={`practiceQuestion`}>
-                                    Link
-                                </RouterLink>
-                            </td>
-                        </tr>
-                    </div>
-                })
-            }
+          <Container fluid>
+            <Row>
+              <Col className={"makeSpace"}>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <p className={"homeworkTitle"}>Homework</p>
+              </Col>
+            </Row>
+            <Row>
+              <Col className={"makeSpace"}>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <p className={"pText"}>Available Homeworks</p>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <Table>
+                  <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Assignment</th>
+                    <th>Max Score</th>
+                    <th>Links</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    {Object.keys(props.assignment).map((key, index) => {
+                        return
+                            <div key={key}>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>{props.assignment[index].name}</td>
+                                    <td>{props.assignment[index].maxscore}</td>
+                                    <td>
+                                        <RouterLink to={`practiceQuestion`}>
+                                            Link
+                                        </RouterLink>
+                                    </td>
+                                </tr>
+                            </div>
+                        })
+                    }
+                  </tbody>
+                </Table>
+              </Col>
+            </Row>
+          </Container>
 
         </div>
     )

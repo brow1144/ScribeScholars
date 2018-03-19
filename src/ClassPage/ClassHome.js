@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Nav, NavLink } from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom'
 
+import Tables from './Tables';
 import Cards from '../HomePage/Cards';
 import './ClassHome.css';
 import Homework from './Homework';
@@ -19,6 +20,12 @@ class ClassHome extends Component {
         subtitle: null,
         message: null,
         class: null,
+      }],
+
+      assignment: [{
+        code: null,
+        name: null,
+        maxscore: null,
       }],
 
       classImage: null,
@@ -116,7 +123,9 @@ class ClassHome extends Component {
 
           {this.state.homeworkActive
             ?
-            <Homework code={this.props.code} />
+            <div>
+              <Tables assignment={this.props.assignment} />
+            </div>
             :
             <div>
             </div>

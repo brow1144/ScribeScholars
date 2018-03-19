@@ -25,6 +25,11 @@ class Main extends Component {
         class: null,
       }],
 
+        assignment: [{
+            name: null,
+            maxscore: null,
+        }],
+
       uid: this.props.uid,
 
       userImage: null,
@@ -221,6 +226,7 @@ class Main extends Component {
     });
     this.getClassAnnouncments(classCode);
     this.getClassImage(classCode);
+    this.getAssignment(classCode);
   };
 
   updateClassPicture =(classImage) => {
@@ -270,6 +276,45 @@ class Main extends Component {
     });
   };
 
+  getAssignment = (classCode) => {
+
+    let object = [{}];
+
+    let self = this;
+
+    let docRef = firestore.collection("classes").doc(classCode);
+
+    docRef.get().then(function (doc) {
+      if (doc.exists) {
+        let data = doc.data();
+        self.setState({
+          className: data.class,
+        });
+        for (let i in data.assignments) {
+          if (data.assignments.hasOwnProperty(i)) {
+            object.unshift({
+              name: data.assignments[i].name,
+              maxscore: data.assignments[i].maxscore,
+            });
+            self.setState({
+              assignment: object,
+            })
+          }}
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+
+    object.pop();
+
+    self.setState({
+      assignment: object
+    });
+  };
+
+
   render() {
 
     const data = {
@@ -282,6 +327,7 @@ class Main extends Component {
       className: this.state.className,
       classAnnouncements: this.state.classAnnouncements,
       classImage: this.state.classImage,
+
     };
 
     const actions = {
@@ -292,7 +338,8 @@ class Main extends Component {
       updateUserImage: this.updateUserImage,
       selectClass: this.selectClass,
       updateClassPicture: this.updateClassPicture,
-      getClassAnnouncments: this.getClassAnnouncments
+      getClassAnnouncments: this.getClassAnnouncments,
+      getAssignment: this.getAssignment
     };
 
     return (

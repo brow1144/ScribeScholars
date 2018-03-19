@@ -438,6 +438,7 @@ class HomePage extends Component {
             selectClass: this.props.selectClass,
             updateClassPicture: this.props.updateClassPicture,
             getClassAnnouncments: this.props.getClassAnnouncments,
+            getAssignment: this.props.getAssignment
         };
 
         if (this.props.page === "home") {

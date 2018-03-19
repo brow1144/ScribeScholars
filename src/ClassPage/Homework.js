@@ -44,7 +44,11 @@ class Homework extends Component {
             } else {
                 console.log("No such document!");
             }
-            //self.updateAnnouncements(self.state.announcements);
+
+            this.setState({
+                assignment: object,
+            })
+
         }).catch(function (error) {
             console.log("Error getting document:", error);
         });
@@ -52,7 +56,7 @@ class Homework extends Component {
         object.pop();
 
         self.setState({
-            announcements: object
+            assignment: object
         });
     }
 
