@@ -25,7 +25,7 @@ class MyStudents extends Component {
                                     <h1>Dashboard</h1>
                                 </Col>
                             </Row>
-                            <Row>
+                            <Row className="chartAlign">
                                 <Graphs/>
                             </Row>
                         </Col>

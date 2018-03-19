@@ -86,9 +86,10 @@ class Dashboard extends Component {
     render() {
         return (
             <div>
-                <Container fluid>
-                    <Col>
-                        <Row className="dbBG dbGraphs">
+
+                    <Col xs={2}/>
+                    <Col xs={10} className="col-centered">
+                        <Row className="dbBG dbGraphs dbBorder">
                             <Col>
                                 <Row className="dbGraphs">
                                     <Col>
@@ -104,6 +105,7 @@ class Dashboard extends Component {
                                     </PieChart>
                                 </Row>
                             </Col>
+
                             <Col className="dbGraphs">
                                 <Row className="dbGraphs">
                                     <Col>
@@ -118,6 +120,7 @@ class Dashboard extends Component {
                                     </Col>
                                 </Row>
                             </Col>
+
                             <Col>
                                 <Row className="dbGraphs">
                                     <Col>
@@ -125,17 +128,23 @@ class Dashboard extends Component {
                                     </Col>
                                 </Row>
                                 <Row className="chartAlign">
-                                    <PieChart className="piePad" width={365} height={175}>
-                                        <Pie data={this.state.data03} dataKey="value" nameKey="name" cx="50%" cy="50%"
-                                             outerRadius={25} fill="#8884d8"/>
-                                        <Pie data={this.state.data04} dataKey="value" nameKey="name" cx="50%" cy="50%"
-                                             innerRadius={30} outerRadius={40} fill="#82ca9d" label/>
-                                    </PieChart>
+
+
+                                        <PieChart className="piePad" width={365} height={175}>
+                                            <Pie data={this.state.data03} dataKey="value" nameKey="name" cx="50%"
+                                                 cy="50%"
+                                                 outerRadius={25} fill="#8884d8"/>
+                                            <Pie data={this.state.data04} dataKey="value" nameKey="name" cx="50%"
+                                                 cy="50%"
+                                                 innerRadius={30} outerRadius={40} fill="#82ca9d" label/>
+                                        </PieChart>
+
                                 </Row>
                             </Col>
                         </Row>
                     </Col>
-                </Container>
+                    <Col xs={2}/>
+
             </div>
         )
     }

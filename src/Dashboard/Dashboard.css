@@ -18,13 +18,36 @@
 
 .chartAlign {
     align-items: center;
+    align-content: center;
+    align-self: center;
+    alignment: center;
+    justify-content: center;
+    justify-items: center;
+    justify-self: center;
 }
 
 .piePad {
     padding: 1em;
+    align-self: center;
 }
 
 .dbBG {
     align-items: center;
     background-color: #b2ffe8;
+}
+
+.dbBorder {
+    border-color: #444444;
+    border-style: solid;
+    border-width: medium;
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+.rb {
+    border-color: red;
+    border-style: solid;
 }
