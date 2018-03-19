@@ -7,6 +7,7 @@ import Cards from '../HomePage/Cards';
 import './ClassHome.css';
 import Homework from './Homework';
 import Inclass from './InclassStudent';
+import myStudents from '../MyStudents/MyStudents'
 
 class ClassHome extends Component {
 
@@ -27,6 +28,7 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: false,
+        myStudentsActive: false,
     };
   }
 
@@ -41,6 +43,7 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: false,
+        myStudentsActive: false,
     })
   };
 
@@ -50,6 +53,7 @@ class ClassHome extends Component {
       lessonsActive: true,
       homeworkActive: false,
       discussionActive: false,
+        myStudentsActive: false,
     })
   };
 
@@ -59,6 +63,7 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: true,
       discussionActive: false,
+        myStudentsActive: false,
     });
 
   };
@@ -69,8 +74,19 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: true,
+        myStudentsActive: false,
     })
   };
+
+    switchMyStudents = () => {
+        this.setState({
+            announcementsActive: false,
+            lessonsActive: false,
+            homeworkActive: false,
+            discussionActive: false,
+            myStudentsActive: true,
+        })
+    };
 
   render() {
     const jumboStyle = {
@@ -99,6 +115,9 @@ class ClassHome extends Component {
               <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
                 Board</NavLink>
             </RouterLink>
+              <RouterLink className="navLinks" to={`/MyStudents`}>
+                  <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive}>My Students</NavLink>
+              </RouterLink>
           </Nav>
 
           {this.state.announcementsActive
@@ -127,6 +146,13 @@ class ClassHome extends Component {
             <div>
             </div>
           }
+            {this.state.myStudentsActive
+                ?
+                <myStudents />
+                :
+                <div>
+                </div>
+            }
         </div>
       )
   }
