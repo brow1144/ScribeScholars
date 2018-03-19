@@ -27,6 +27,7 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: false,
+        myStudentsActive: false,
     };
   }
 
@@ -41,6 +42,7 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: false,
+        myStudentsActive: false,
     })
   };
 
@@ -50,6 +52,7 @@ class ClassHome extends Component {
       lessonsActive: true,
       homeworkActive: false,
       discussionActive: false,
+        myStudentsActive: false,
     })
   };
 
@@ -59,6 +62,7 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: true,
       discussionActive: false,
+        myStudentsActive: false,
     });
 
   };
@@ -69,8 +73,19 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: true,
+        myStudentsActive: false,
     })
   };
+
+    switchMyStudents = () => {
+        this.setState({
+            announcementsActive: false,
+            lessonsActive: false,
+            homeworkActive: false,
+            discussionActive: false,
+            myStudentsActive: true,
+        })
+    };
 
   render() {
     const jumboStyle = {
@@ -100,6 +115,9 @@ class ClassHome extends Component {
               <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
                 Board</NavLink>
             </RouterLink>
+              <RouterLink className="navLinks" to={`/MyStudents`}>
+                  <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive}>My Students</NavLink>
+              </RouterLink>
           </Nav>
 
           {this.state.announcementsActive
