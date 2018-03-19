@@ -434,6 +434,8 @@ class HomePage extends Component {
             classAnnouncements: this.props.classAnnouncements,
             path: this.props.path,
             classImage: this.props.classImage,
+            assignments: this.props.assignments,
+            homeworks: this.props.homeworks,
         };
 
         const actions = {
@@ -445,6 +447,7 @@ class HomePage extends Component {
             updateClassPicture: this.props.updateClassPicture,
             getClassAnnouncments: this.props.getClassAnnouncments,
             getAssignments: this.props.getAssignments,
+            getHomeworks: this.props.getHomeworks,
         };
 
         if (this.props.page === "home") {

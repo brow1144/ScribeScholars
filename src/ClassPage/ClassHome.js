@@ -3,11 +3,10 @@ import React, { Component } from 'react';
 import { Nav, NavLink } from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom'
 
-import Tables from './Tables';
+import AssignTable from "./AssignTable";
+import HomeworkTable from './HomeworkTable';
 import Cards from '../HomePage/Cards';
 import './ClassHome.css';
-
-import Inclass from './InclassStudent';
 
 class ClassHome extends Component {
 
@@ -124,7 +123,7 @@ class ClassHome extends Component {
           {this.state.homeworkActive
             ?
             <div>
-              <Tables assignments={this.props.assignments} />
+              <HomeworkTable homeworks={this.props.homeworks} />
             </div>
             :
             <div>
@@ -132,7 +131,7 @@ class ClassHome extends Component {
           }
           {this.state.lessonsActive
             ?
-            <Inclass code={this.props.code} />
+            <AssignTable assignments={this.props.assignments} />
             :
             <div>
             </div>

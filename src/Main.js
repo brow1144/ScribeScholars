@@ -25,12 +25,6 @@ class Main extends Component {
         class: null,
       }],
 
-      assignments: [{
-        code: null,
-        maxscore: null,
-        name: null,
-      }],
-
       uid: this.props.uid,
 
       userImage: null,
@@ -56,6 +50,18 @@ class Main extends Component {
         subtitle: null,
         message: null,
         class: null,
+      }],
+
+      homeworks: [{
+        code: null,
+        maxscore: null,
+        name: null,
+      }],
+
+      assignments: [{
+        code: null,
+        maxscore: null,
+        name: null,
       }],
     }
   }
@@ -228,6 +234,7 @@ class Main extends Component {
     this.getClassAnnouncments(classCode);
     this.getClassImage(classCode);
     this.getAssignments(classCode);
+    this.getHomeworks(classCode);
   };
 
   updateClassPicture =(classImage) => {
@@ -316,6 +323,45 @@ class Main extends Component {
     });
   };
 
+  getHomeworks = (classCode) => {
+
+    let object = [{}];
+
+    let self = this;
+
+    let docRef = firestore.collection("classes").doc(classCode);
+
+    docRef.get().then(function (doc) {
+      if (doc.exists) {
+        let data = doc.data();
+        self.setState({
+          className: data.class,
+        });
+        for (let i in data.homeworks) {
+          if (data.homeworks.hasOwnProperty(i)) {
+            object.unshift({
+              code: data.homeworks[i].code,
+              maxscore: data.homeworks[i].maxscore,
+              name: data.homeworks[i].name,
+            });
+            self.setState({
+              homeworks: object,
+            })
+          }}
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+
+    object.pop();
+
+    self.setState({
+      homeworks: object
+    });
+  };
+
 
   render() {
 
@@ -330,7 +376,7 @@ class Main extends Component {
       classAnnouncements: this.state.classAnnouncements,
       classImage: this.state.classImage,
       assignments: this.state.assignments,
-
+      homeworks: this.state.homeworks,
     };
 
     const actions = {
@@ -343,6 +389,7 @@ class Main extends Component {
       updateClassPicture: this.updateClassPicture,
       getClassAnnouncments: this.getClassAnnouncments,
       getAssignments: this.getAssignments,
+      getHomeworks: this.getHomeworks,
     };
 
     return (
