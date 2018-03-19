@@ -53,5 +53,10 @@
 }
 
 .progPad {
-    padding: 6em;
+    padding: 10em;
+}
+
+.progText {
+    font-size: 1rem;
+    font-weight: bolder;
 }

@@ -88,9 +88,9 @@ class Dashboard extends Component {
                                     </Col>
                                 </Row>
                                 <Row className="chartAlign">
-                                    <PieChart className="piePad" width={365} height={175}>
+                                    <PieChart className="piePad" width={365} height={250}>
                                         <Pie data={this.state.data01} dataKey="value" nameKey="name" cx="50%" cy="50%"
-                                             outerRadius={40} fill="#8884d8" label>{
+                                             outerRadius={70} fill="#8884d8" label>{
                                             this.state.data01.map((entry, index) => <Cell fill={this.state.COLORS[index % this.state.COLORS.length]}/>)
                                         } </Pie>
                                     </PieChart>
@@ -121,14 +121,11 @@ class Dashboard extends Component {
                                 <Row className="chartAlign">
 
 
-                                        <PieChart className="piePad" width={365} height={175}>
+                                        <PieChart className="piePad" width={365} height={250}>
                                             <Pie data={this.state.data03} dataKey="value" nameKey="name" cx="50%"
                                                  cy="50%"
-                                                 outerRadius={25} fill="#8884d8"/>
-                                            <Pie data={this.state.data04} dataKey="value" nameKey="name" cx="50%"
-                                                 cy="50%"
-                                                 innerRadius={30} outerRadius={40} fill="#82ca9d" label/>
-                                        </PieChart>
+                                                 outerRadius={70} fill="#8884d8" label/>
+                                            </PieChart>
 
                                 </Row>
                             </Col>
@@ -141,7 +138,7 @@ class Dashboard extends Component {
                                 </Row>
                                 <Row className="dbGraphs piePad">
                                     <Col className={"progPad"}>
-                                        <div className="text-center">74%</div>
+                                        <div className="text-center progText">74%</div>
                                         <Progress color={"success"} value={74}/>
                                     </Col>
                                 </Row>
