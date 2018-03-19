@@ -31,7 +31,6 @@ class MyStudentLink extends Component {
                     <Button color="success">
                         MyStudents
                     </Button>
-                    <p>hello</p>
                 </Container>
             </div>
 
