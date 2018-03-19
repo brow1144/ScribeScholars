@@ -9,7 +9,9 @@ class MCQ extends Component {
         super(props);
         this.state = {
             selectedOption: "",
+            question: this.props.question,
         }
+
     }
 
 
