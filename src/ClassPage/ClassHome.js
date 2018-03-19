@@ -7,6 +7,7 @@ import Cards from '../HomePage/Cards';
 import './ClassHome.css';
 import Homework from './Homework';
 import Inclass from './InclassStudent';
+import myStudents from '../MyStudents/MyStudents'
 
 class ClassHome extends Component {
 
@@ -146,6 +147,13 @@ class ClassHome extends Component {
             <div>
             </div>
           }
+            {this.state.myStudentsActive
+                ?
+                <myStudents />
+                :
+                <div>
+                </div>
+            }
         </div>
       )
   }
