@@ -90,7 +90,7 @@ class Dashboard extends Component {
                                 <Row className="chartAlign">
                                     <PieChart className="piePad" width={365} height={175}>
                                         <Pie data={this.state.data01} dataKey="value" nameKey="name" cx="50%" cy="50%"
-                                             outerRadius={40} fill="#8884d8">{
+                                             outerRadius={40} fill="#8884d8" label>{
                                             this.state.data01.map((entry, index) => <Cell fill={this.state.COLORS[index % this.state.COLORS.length]}/>)
                                         } </Pie>
                                     </PieChart>
