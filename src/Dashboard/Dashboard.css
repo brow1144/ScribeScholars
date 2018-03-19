@@ -1,0 +1,62 @@
+.dbGraphs {
+    text-align: center;
+    align-content: center;
+}
+
+.dbGraphs h1 {
+    font-size: 2em;
+}
+
+.dbGraphs h3 {
+    font-size: 6em;
+    padding: 1em;
+    font-weight: bolder;
+    font-family: 'Roboto', sans-serif ;
+    background-color: #dddddd;
+    color: #21CE99;
+}
+
+.chartAlign {
+    align-items: center;
+    align-content: center;
+    align-self: center;
+    alignment: center;
+    justify-content: center;
+    justify-items: center;
+    justify-self: center;
+}
+
+.piePad {
+    padding: 1em;
+    align-self: center;
+}
+
+.dbBG {
+    align-items: center;
+    background-color: #b2ffe8;
+}
+
+.dbBorder {
+    border-color: #444444;
+    border-style: solid;
+    border-width: medium;
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+.rb {
+    border-color: red;
+    border-style: solid;
+}
+
+.progPad {
+    padding: 10em;
+}
+
+.progText {
+    font-size: 1rem;
+    font-weight: bolder;
+}

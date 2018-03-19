@@ -527,10 +527,49 @@ class HomePage extends Component {
 
                     <ClassHome {...classData} {...actions} selectedClass={this.props.selectedClass}/>
 
+<<<<<<< HEAD
                 </Sidebar>
             );
 
         }
+=======
+            </Sidebar>
+        );
+    } else if (this.props.page === "liveFeed") {
+
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <p>bubbles</p>
+        </Sidebar>
+      );
+
+    } else {
+      return (
+        <p>UH OH!</p>
+      );
+>>>>>>> master
     }
 }
+<<<<<<< HEAD
 export default HomePage
+=======
+
+export default HomePage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> master

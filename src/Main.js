@@ -13,8 +13,6 @@ class Main extends Component {
 
     this.state = {
 
-      page: this.props.page,
-
       selectedClass: null,
       className: null,
 
@@ -394,6 +392,15 @@ class Main extends Component {
 
     return (
       <Switch>
+
+        <Route path="/HomePage/:class/lessons/:lessonNumber" render={() => (
+          <HomePage
+            page="liveFeed"
+            {...data}
+            {...actions}
+          />
+        )}/>
+
         <Route path="/homepage/:class" render={(match) => (
           <HomePage
             path={match.match.params.class}
@@ -402,6 +409,7 @@ class Main extends Component {
             {...actions}
           />
         )}/>
+
         <Route path="/homepage" render={() => (
           <HomePage
             page={this.props.page}
@@ -409,6 +417,7 @@ class Main extends Component {
             {...actions}
           />
         )}/>
+
         <Route path="/settings" render={() => (
           <HomePage
             page={this.props.page}
