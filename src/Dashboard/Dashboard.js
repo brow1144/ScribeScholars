@@ -52,6 +52,18 @@ class Dashboard extends Component {
                 {name: 'Group F', value: 4800}
                 ],
 
+            data03: [
+                {name: 'Group A', value: 400},
+                {name: 'Group B', value: 300},
+
+            ],
+
+            data04: [
+                {name: 'Group A', value: 2400},
+                {name: 'Group E', value: 3908},
+                {name: 'Group F', value: 4800}
+            ],
+
 
             gpas: [
                 3.0,
@@ -75,35 +87,54 @@ class Dashboard extends Component {
         return (
             <div>
                 <Container fluid>
-                    <Row>
-                        <Col>
-                            <Row className="dbGraphs">
-                                <Col>
-                                    <h1>Pie Chart</h1>
-                                </Col>
-                            </Row>
-                            <Row className="chartAlign">
-                                <PieChart className="piePad" width={365} height={175}>
-                                    <Pie data={this.state.data01} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={25} fill="#8884d8" />
-                                    <Pie data={this.state.data02} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={30} outerRadius={40} fill="#82ca9d" label />
-                                </PieChart>
-                            </Row>
-                        </Col>
-                        <Col className="dbGraphs">
-                            <Row className="dbGraphs">
-                                <Col>
-                                    <h1>Avg. GPA</h1>
-                                </Col>
-                            </Row>
-                            <Row className="dbGraphs">
-                                <Col>
-                                    <h3>
-                                        3.75
-                                    </h3>
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>
+                    <Col>
+                        <Row className="dbBG dbGraphs">
+                            <Col>
+                                <Row className="dbGraphs">
+                                    <Col>
+                                        <h1>Pie Chart</h1>
+                                    </Col>
+                                </Row>
+                                <Row className="chartAlign">
+                                    <PieChart className="piePad" width={365} height={175}>
+                                        <Pie data={this.state.data01} dataKey="value" nameKey="name" cx="50%" cy="50%"
+                                             outerRadius={25} fill="#8884d8"/>
+                                        <Pie data={this.state.data02} dataKey="value" nameKey="name" cx="50%" cy="50%"
+                                             innerRadius={30} outerRadius={40} fill="#82ca9d" label/>
+                                    </PieChart>
+                                </Row>
+                            </Col>
+                            <Col className="dbGraphs">
+                                <Row className="dbGraphs">
+                                    <Col>
+                                        <h1>Avg. GPA</h1>
+                                    </Col>
+                                </Row>
+                                <Row className="dbGraphs">
+                                    <Col>
+                                        <h3>
+                                            3.75
+                                        </h3>
+                                    </Col>
+                                </Row>
+                            </Col>
+                            <Col>
+                                <Row className="dbGraphs">
+                                    <Col>
+                                        <h1>Recent Assignment</h1>
+                                    </Col>
+                                </Row>
+                                <Row className="chartAlign">
+                                    <PieChart className="piePad" width={365} height={175}>
+                                        <Pie data={this.state.data03} dataKey="value" nameKey="name" cx="50%" cy="50%"
+                                             outerRadius={25} fill="#8884d8"/>
+                                        <Pie data={this.state.data04} dataKey="value" nameKey="name" cx="50%" cy="50%"
+                                             innerRadius={30} outerRadius={40} fill="#82ca9d" label/>
+                                    </PieChart>
+                                </Row>
+                            </Col>
+                        </Row>
+                    </Col>
                 </Container>
             </div>
         )
