@@ -44,7 +44,7 @@ const AssignTable = (props) => {
                     <td>{props.assignments[index].name}</td>
                     <td>{props.assignments[index].maxscore}</td>
                     <td>
-                      <RouterLink to={`practiceQuestion`}>
+                      <RouterLink to={`/HomePage/${this.props.code}/lessons/12345`}>
                         Link
                       </RouterLink>
                     </td>
