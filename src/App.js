@@ -18,6 +18,7 @@ import SetRoomPic from "./Announcements/SetRoomPicture";
 import DashboardInfo from "./Dashboard/DashboardInfo";
 import MyStudents from "./MyStudents/MyStudents";
 import MakeWork from "./WorkForm/MakeWork";
+import StudentGradePage from "./Grades/StudentGradePage";
 
 
 class App extends Component {
@@ -123,6 +124,12 @@ class App extends Component {
               this.signedIn()
                   ? <MakeWork/>
                   : <Redirect to="/About" />
+          )} />
+
+          <Route exact path='/my-grades' render={() => (
+              this.signedIn()
+                  ? <StudentGradePage />
+                  :<Redirect to="/HomePage" />
           )} />
 
         <Route exact path='/create-account' render={() => (
