@@ -1,0 +1,25 @@
+.dbGraphs {
+    text-align: center;
+    align-content: center;
+}
+
+.dbGraphs h1 {
+    font-size: 2em;
+}
+
+.dbGraphs h3 {
+    font-size: 6em;
+    padding: 1em;
+
+    font-family: 'Roboto', sans-serif ;
+    background-color: #dddddd;
+    color: #21CE99;
+}
+
+.chartAlign {
+    align-items: center;
+}
+
+.piePad {
+    padding: 1em;
+}

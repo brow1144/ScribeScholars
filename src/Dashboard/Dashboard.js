@@ -3,8 +3,8 @@ import React, {Component} from 'react';
 import { PieChart, Pie, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area } from 'recharts';
 
 
-import {Container, Row, Col, Card, CardTitle, CardText, Table, NavLink} from 'reactstrap';
-
+import {Jumbotron, Container, Row, Col, Card, CardTitle, CardText, Table, NavLink} from 'reactstrap';
+import './Dashboard.css';
 
 class Dashboard extends Component {
 
@@ -74,13 +74,34 @@ class Dashboard extends Component {
     render() {
         return (
             <div>
-                <Container>
+                <Container fluid>
                     <Row>
                         <Col>
-                            <PieChart width={730} height={250}>
-                                <Pie data={this.state.data01} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={50} fill="#8884d8" />
-                                <Pie data={this.state.data02} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} fill="#82ca9d" label />
-                            </PieChart>
+                            <Row className="dbGraphs">
+                                <Col>
+                                    <h1>Pie Chart</h1>
+                                </Col>
+                            </Row>
+                            <Row className="chartAlign">
+                                <PieChart className="piePad" width={365} height={175}>
+                                    <Pie data={this.state.data01} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={25} fill="#8884d8" />
+                                    <Pie data={this.state.data02} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={30} outerRadius={40} fill="#82ca9d" label />
+                                </PieChart>
+                            </Row>
+                        </Col>
+                        <Col className="dbGraphs">
+                            <Row className="dbGraphs">
+                                <Col>
+                                    <h1>Avg. GPA</h1>
+                                </Col>
+                            </Row>
+                            <Row className="dbGraphs">
+                                <Col>
+                                    <h3>
+                                        3.75
+                                    </h3>
+                                </Col>
+                            </Row>
                         </Col>
                     </Row>
                 </Container>
