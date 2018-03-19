@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, Card, CardTitle, CardText, Table, NavLink} from 'reactstrap';
+import {Container, Row, Col, Table} from 'reactstrap';
+import { firestore } from '../base.js';
 import './StudentGradePage.css';
 
 
@@ -13,7 +14,51 @@ class StudentGradePage extends Component {
             //code: props.code,
             code: "668273",
             assignments: null,
+            assignmentData: null,
+            currentRow: 0,
             total: 0,
+        }
+        this.getAssignments();
+    }
+
+    getAssignments(){
+        let self = this;
+
+        let studentRef = firestore.collection("users").doc(self.state.uid);
+        studentRef.get().then(function (doc) {
+           if(doc.exists){
+               if(doc.data().assignments != null){
+                   self.setState({
+                      assignments: doc.data().assignments,
+                   });
+               }
+           }
+        }).catch(function (error) {
+            console.log("User not found!");
+        });
+    }
+
+    incrememntCurrentRow = () =>{
+        let curRow = this.state.currentRow;
+        curRow++;
+        this.setState({
+            currentRow: curRow,
+        });
+    }
+
+    setUpRows(){
+        let assignmentData = [];
+        for(let i = 0; i < this.state.assignments.length; i++){
+            let currentAssignment = this.state.assignments[this.state.currentRow];
+
+            assignmentData[this.state.currentRow] = "<tr>" +
+                "<th scope='row'>" + this.state.currentRow + "</th>" +
+                "<td>" + currentAssignment.name + "</td>" +
+                "<td>" + currentAssignment.score + "</td>" +
+                "<td>" + currentAssignment.maxscore + "</td>" +
+                "</tr>";
+
+            this.incrememntCurrentRow;
         }
     }
 

@@ -128,7 +128,7 @@ class App extends Component {
 
           <Route exact path='/my-grades' render={() => (
               this.signedIn()
-                  ? <StudentGradePage />
+                  ? <StudentGradePage uid={this.state.uid}/>
                   :<Redirect to="/HomePage" />
           )} />
 
