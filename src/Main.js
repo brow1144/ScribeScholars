@@ -25,10 +25,11 @@ class Main extends Component {
         class: null,
       }],
 
-        assignment: [{
-            name: null,
-            maxscore: null,
-        }],
+      assignments: [{
+        code: null,
+        maxscore: null,
+        name: null,
+      }],
 
       uid: this.props.uid,
 
@@ -226,7 +227,7 @@ class Main extends Component {
     });
     this.getClassAnnouncments(classCode);
     this.getClassImage(classCode);
-    this.getAssignment(classCode);
+    this.getAssignments(classCode);
   };
 
   updateClassPicture =(classImage) => {
@@ -276,7 +277,7 @@ class Main extends Component {
     });
   };
 
-  getAssignment = (classCode) => {
+  getAssignments = (classCode) => {
 
     let object = [{}];
 
@@ -293,11 +294,12 @@ class Main extends Component {
         for (let i in data.assignments) {
           if (data.assignments.hasOwnProperty(i)) {
             object.unshift({
-              name: data.assignments[i].name,
+              code: data.assignments[i].code,
               maxscore: data.assignments[i].maxscore,
+              name: data.assignments[i].name,
             });
             self.setState({
-              assignment: object,
+              assignments: object,
             })
           }}
       } else {
@@ -310,7 +312,7 @@ class Main extends Component {
     object.pop();
 
     self.setState({
-      assignment: object
+      assignments: object
     });
   };
 
@@ -327,6 +329,7 @@ class Main extends Component {
       className: this.state.className,
       classAnnouncements: this.state.classAnnouncements,
       classImage: this.state.classImage,
+      assignments: this.state.assignments,
 
     };
 
@@ -339,7 +342,7 @@ class Main extends Component {
       selectClass: this.selectClass,
       updateClassPicture: this.updateClassPicture,
       getClassAnnouncments: this.getClassAnnouncments,
-      getAssignment: this.getAssignment
+      getAssignments: this.getAssignments,
     };
 
     return (

@@ -6,7 +6,7 @@ import { NavLink as RouterLink } from 'react-router-dom'
 import Tables from './Tables';
 import Cards from '../HomePage/Cards';
 import './ClassHome.css';
-import Homework from './Homework';
+
 import Inclass from './InclassStudent';
 
 class ClassHome extends Component {
@@ -22,7 +22,7 @@ class ClassHome extends Component {
         class: null,
       }],
 
-      assignment: [{
+      assignments: [{
         code: null,
         name: null,
         maxscore: null,
@@ -124,7 +124,7 @@ class ClassHome extends Component {
           {this.state.homeworkActive
             ?
             <div>
-              <Tables assignment={this.props.assignment} />
+              <Tables assignments={this.props.assignments} />
             </div>
             :
             <div>

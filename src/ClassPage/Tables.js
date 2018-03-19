@@ -1,6 +1,5 @@
 import React from 'react'
-import { NavLink as RouterLink } from 'react-router-dom'
-import {Table, Container, Card, CardHeader, CardTitle, CardText, CardSubtitle, CardBody, Row, Col } from 'reactstrap';
+import {Table, Container, Row, Col } from 'reactstrap';
 
 const Tables = (props) => {
 
@@ -37,22 +36,7 @@ const Tables = (props) => {
                   </tr>
                   </thead>
                   <tbody>
-                    {Object.keys(props.assignment).map((key, index) => {
-                        return
-                            <div key={key}>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>{props.assignment[index].name}</td>
-                                    <td>{props.assignment[index].maxscore}</td>
-                                    <td>
-                                        <RouterLink to={`practiceQuestion`}>
-                                            Link
-                                        </RouterLink>
-                                    </td>
-                                </tr>
-                            </div>
-                        })
-                    }
+
                   </tbody>
                 </Table>
               </Col>

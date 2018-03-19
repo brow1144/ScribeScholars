@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {Table, Container, Row, Col} from 'reactstrap';
 
-import Tables from './Tables';
 import './Homework.css'
 import {firestore} from "../base";
 

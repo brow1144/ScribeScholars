@@ -74,6 +74,12 @@ class HomePage extends Component {
                 class: null,
             }],
 
+            assignments: [{
+                code: null,
+                maxscore: null,
+                name: null,
+            }],
+
             personalPage: true,
 
             width: window.innerWidth,
@@ -438,7 +444,7 @@ class HomePage extends Component {
             selectClass: this.props.selectClass,
             updateClassPicture: this.props.updateClassPicture,
             getClassAnnouncments: this.props.getClassAnnouncments,
-            getAssignment: this.props.getAssignment
+            getAssignments: this.props.getAssignments,
         };
 
         if (this.props.page === "home") {
