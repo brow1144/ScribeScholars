@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 
-import { PieChart, Pie, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area } from 'recharts';
+import { PieChart, Cell,Pie, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area } from 'recharts';
 
 
-import {Jumbotron, Container, Row, Col, Card, CardTitle, CardText, Table, NavLink} from 'reactstrap';
+import {Progress, Row, Col, Card, CardTitle, CardText, Table, NavLink} from 'reactstrap';
 import './Dashboard.css';
 
 class Dashboard extends Component {
@@ -35,12 +35,8 @@ class Dashboard extends Component {
             ],
 
             data01: [
-                {name: 'Group A', value: 400},
-                {name: 'Group B', value: 300},
-                {name: 'Group C', value: 300},
-                {name: 'Group D', value: 200},
-                {name: 'Group E', value: 278},
-                {name: 'Group F', value: 189}
+                {name: 'Pass', value: 95},
+                {name: 'Fail', value: 5},
                 ],
 
             data02: [
@@ -64,13 +60,8 @@ class Dashboard extends Component {
                 {name: 'Group F', value: 4800}
             ],
 
-
-            gpas: [
-                3.0,
-                4.0,
-                3.5,
-                3.6
-            ],
+            COLORS: ['#00C49F',
+                '#FF8042'],
 
 
             classScores: [],  // class scores for an individual assignment
@@ -93,15 +84,15 @@ class Dashboard extends Component {
                             <Col>
                                 <Row className="dbGraphs">
                                     <Col>
-                                        <h1>Pie Chart</h1>
+                                        <h1>Pass/Fail %</h1>
                                     </Col>
                                 </Row>
                                 <Row className="chartAlign">
                                     <PieChart className="piePad" width={365} height={175}>
                                         <Pie data={this.state.data01} dataKey="value" nameKey="name" cx="50%" cy="50%"
-                                             outerRadius={25} fill="#8884d8"/>
-                                        <Pie data={this.state.data02} dataKey="value" nameKey="name" cx="50%" cy="50%"
-                                             innerRadius={30} outerRadius={40} fill="#82ca9d" label/>
+                                             outerRadius={40} fill="#8884d8">{
+                                            this.state.data01.map((entry, index) => <Cell fill={this.state.COLORS[index % this.state.COLORS.length]}/>)
+                                        } </Pie>
                                     </PieChart>
                                 </Row>
                             </Col>
@@ -124,7 +115,7 @@ class Dashboard extends Component {
                             <Col>
                                 <Row className="dbGraphs">
                                     <Col>
-                                        <h1>Recent Assignment</h1>
+                                        <h1>GPA Distribution</h1>
                                     </Col>
                                 </Row>
                                 <Row className="chartAlign">
@@ -139,6 +130,20 @@ class Dashboard extends Component {
                                                  innerRadius={30} outerRadius={40} fill="#82ca9d" label/>
                                         </PieChart>
 
+                                </Row>
+                            </Col>
+
+                            <Col className="dbGraphs">
+                                <Row className="dbGraphs">
+                                    <Col>
+                                        <h1>Recent Assignment</h1>
+                                    </Col>
+                                </Row>
+                                <Row className="dbGraphs piePad">
+                                    <Col className={"progPad"}>
+                                        <div className="text-center">74%</div>
+                                        <Progress color={"success"} value={74}/>
+                                    </Col>
                                 </Row>
                             </Col>
                         </Row>

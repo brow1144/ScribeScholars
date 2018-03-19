@@ -10,7 +10,7 @@
 .dbGraphs h3 {
     font-size: 6em;
     padding: 1em;
-
+    font-weight: bolder;
     font-family: 'Roboto', sans-serif ;
     background-color: #dddddd;
     color: #21CE99;
@@ -50,4 +50,8 @@
 .rb {
     border-color: red;
     border-style: solid;
+}
+
+.progPad {
+    padding: 6em;
 }
