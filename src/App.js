@@ -41,6 +41,7 @@ class App extends Component {
         } else {
           // finished signing out
           this.setState({ uid: null })
+          Window.reload();
         }
       }
     )
