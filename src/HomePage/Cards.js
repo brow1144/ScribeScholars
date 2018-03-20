@@ -5,8 +5,8 @@ import {Card, CardHeader, CardTitle, CardText, CardSubtitle, CardBody, Row, Col 
 const Cards = (props) => {
 
   return (
-      <div>
-        <Row>
+    <div>
+      <Row>
         {Object.keys(props.announcements).map((key, index) => {
           return <Col sm={4} key={key}>
             <Card key={key}>

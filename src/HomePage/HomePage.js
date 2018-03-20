@@ -493,6 +493,20 @@ class HomePage extends Component {
                      expand={this.dockSideBar}
                      width={this.state.width}/>
 
+            <Row>
+              <Col md="1"/>
+              <Col md="8">
+                <BigCalendar
+                  toolbar={false}
+                  events={this.props.dates}
+                  style={calendarStyles}
+                  defaultDate={new Date()}
+                  eventPropGetter={(this.eventStyleGetter)}
+                />
+              </Col>
+              <Col md="3"/>
+            </Row>
+
             <hr className="divider"/>
             <b className="annTest">Announcements</b>
 
