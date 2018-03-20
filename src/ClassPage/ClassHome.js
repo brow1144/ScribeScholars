@@ -3,10 +3,12 @@ import React, { Component } from 'react';
 import { Nav, NavLink } from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom'
 
+import AssignTable from "./AssignTable";
+import HomeworkTable from './HomeworkTable';
 import Cards from '../HomePage/Cards';
 import './ClassHome.css';
-import Homework from './Homework';
-import Inclass from './InclassStudent';
+import MyStudents from '../MyStudents/MyStudents';
+import StudLink from '../MyStudents/MyStudentLink'
 
 class ClassHome extends Component {
 
@@ -21,12 +23,19 @@ class ClassHome extends Component {
         class: null,
       }],
 
+      assignments: [{
+        code: null,
+        name: null,
+        maxscore: null,
+      }],
+
       classImage: null,
 
       announcementsActive: true,
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: false,
+        myStudentsActive: false,
     };
   }
 
@@ -41,6 +50,7 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: false,
+        myStudentsActive: false,
     })
   };
 
@@ -50,6 +60,7 @@ class ClassHome extends Component {
       lessonsActive: true,
       homeworkActive: false,
       discussionActive: false,
+        myStudentsActive: false,
     })
   };
 
@@ -59,6 +70,7 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: true,
       discussionActive: false,
+        myStudentsActive: false,
     });
 
   };
@@ -69,8 +81,19 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: true,
+        myStudentsActive: false,
     })
   };
+
+    switchMyStudents = () => {
+        this.setState({
+            announcementsActive: false,
+            lessonsActive: false,
+            homeworkActive: false,
+            discussionActive: false,
+            myStudentsActive: true,
+        })
+    };
 
   render() {
     const jumboStyle = {
@@ -99,6 +122,9 @@ class ClassHome extends Component {
               <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
                 Board</NavLink>
             </RouterLink>
+              <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/myStudents`}>
+                  <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive}>My Students</NavLink>
+              </RouterLink>
           </Nav>
 
           {this.state.announcementsActive
@@ -115,18 +141,29 @@ class ClassHome extends Component {
 
           {this.state.homeworkActive
             ?
-            <Homework/>
+            <div>
+              <HomeworkTable homeworks={this.props.homeworks} />
+            </div>
             :
             <div>
             </div>
           }
           {this.state.lessonsActive
             ?
-            <Inclass code={this.props.code} />
+            <AssignTable assignments={this.props.assignments} />
             :
             <div>
             </div>
           }
+            {this.state.myStudentsActive
+                ?
+                <div>
+                  <MyStudents/>
+                </div>
+                :
+                <div>
+                </div>
+            }
         </div>
       )
   }

@@ -609,10 +609,15 @@ class SetClassroom extends Component {
                                           </InputGroup>
                                           <br />
 
-                                          <Button type="submit" outline color="success" size={"lg"}>
-                                            <i className="far fa-arrow-alt-circle-right" />
-                                          </Button>
+
                                         </Form>
+                                        <hr/>
+                                        <h4>My Students</h4>
+                                        <NavLink style={{textDecoration: 'none'}} to={`/MyStudents`}>
+                                            <Button type="submit" outline color="success" size={"lg"}>
+                                                <i className="far fa-arrow-alt-circle-right" />
+                                            </Button>
+                                        </NavLink>
                                     </div>
                                   </AccordionItemBody>
                                 </AccordionItem>

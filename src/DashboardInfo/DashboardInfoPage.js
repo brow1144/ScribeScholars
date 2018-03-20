@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Container, Row, Col } from 'reactstrap';
 
-import './DashboardInfo.css';
+import './DashboardInfoPage.css';
 import DashboardInfoBar from "./DashboardInfoBar";
 
-class DashboardInfo extends Component {
+class DashboardInfoPage extends Component {
     render() {
         return (
             <div>
@@ -66,4 +66,4 @@ class DashboardInfo extends Component {
     }
 }
 
-export default DashboardInfo
+export default DashboardInfoPage
