@@ -8,7 +8,6 @@ import HomeworkTable from './HomeworkTable';
 import Cards from '../HomePage/Cards';
 import './ClassHome.css';
 import MyStudents from '../MyStudents/MyStudents';
-import StudLink from '../MyStudents/MyStudentLink'
 
 class ClassHome extends Component {
 
