@@ -188,7 +188,7 @@ classes={this.state.classes}
         let grade = this.getGrade(this.state.classes[i].code);
 
         if (!isNaN(grade))
-          grades.push(this.getGrade(this.state.classes[i].code));
+          grades.push(grade);
       }
     }
 
