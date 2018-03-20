@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { firestore } from './base.js';
 
 import { Button } from 'reactstrap'
-import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area } from 'recharts';
+import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area, ReferenceLine } from 'recharts';
 
 import './Graphs.css';
 
@@ -15,10 +15,11 @@ class Graphs extends Component {
       uid: props.uid,
 
       //code: props.code,
-      code: "668273",   // TODO temporary
+      code: "Graphs",   // TODO temporary
 
       classes: [],  // TODO GPA page
       myAssignments: [],  // all assignments from all the user's classes TODO GPA page
+      myScore: null,  // user's score on current assignment TODO remove hardcoding
 
       classAssignments: [],   // assignments in the class
       students: [],   // all students in the class
@@ -160,8 +161,14 @@ classes={this.state.classes}
           }
 
           if (parseInt(i, 10) === self.state.students.length - 1) {
+            let tempIndex = 2;  // temporary TODO
+
+            self.setState({
+              myScore: self.getStudentAssignment(self.state.classAssignments[tempIndex]).score,
+            });
+
             console.log(self.calcGPA());  // temporary
-            self.buildClassScoresGraph(self.state.classAssignments[0]);  // temporary TODO
+            self.buildClassScoresGraph(self.state.classAssignments[tempIndex]);  // temporary TODO
             self.buildAssignmentScoresGraph();
             self.buildAssignmentGradesGraph();  // temporary
           }
@@ -398,20 +405,22 @@ classes={this.state.classes}
 
     if (this.state.graph === "classScores") {
       this.state.classScores.sort(this.compareValues("score"));
+      let pos = this.state.classScores.map((e) => {return e.score;}).indexOf(this.state.myScore);
 
       return (
         <AreaChart width={730} height={250} data={this.state.classScores}
-                   margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+                   margin={{top: 30, right: 30, left: 0, bottom: 0}}>
           <defs>
             <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
               <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
             </linearGradient>
           </defs>
-          <XAxis/>
+          <XAxis dataKey=""/>
           <YAxis/>
           <CartesianGrid strokeDasharray="3 3"/>
           <Tooltip/>
+          <ReferenceLine x={pos} stroke="green" label={{value: "You", position: "top"}}/>
           <Area type="monotone" dataKey="score" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)"/>
         </AreaChart>
       );
