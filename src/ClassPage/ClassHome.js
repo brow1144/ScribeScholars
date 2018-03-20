@@ -7,6 +7,8 @@ import AssignTable from "./AssignTable";
 import HomeworkTable from './HomeworkTable';
 import Cards from '../HomePage/Cards';
 import './ClassHome.css';
+import MyStudents from '../MyStudents/MyStudents';
+import StudLink from '../MyStudents/MyStudentLink'
 
 class ClassHome extends Component {
 
@@ -120,7 +122,7 @@ class ClassHome extends Component {
               <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
                 Board</NavLink>
             </RouterLink>
-              <RouterLink className="navLinks" to={`/MyStudents`}>
+              <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/myStudents`}>
                   <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive}>My Students</NavLink>
               </RouterLink>
           </Nav>
@@ -155,7 +157,9 @@ class ClassHome extends Component {
           }
             {this.state.myStudentsActive
                 ?
-                <myStudents />
+                <div>
+                  <MyStudents/>
+                </div>
                 :
                 <div>
                 </div>
