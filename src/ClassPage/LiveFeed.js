@@ -229,7 +229,6 @@ class LiveFeed extends Component {
         <br/>
         <br/>
         <br/>
-
       </div>
     );
   }
