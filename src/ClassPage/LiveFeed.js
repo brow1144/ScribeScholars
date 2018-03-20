@@ -210,9 +210,9 @@ class LiveFeed extends Component {
         <Col xs="12" md="4">
           <Card body outline color="info">
             <CardTitle>Grade Distribution</CardTitle>
-            <ResponsiveContainer width="100%" height={100}>
+            <ResponsiveContainer width="100%" height={150}>
               <PieChart>
-                <Pie startAngle={0} endAngle={360} data={data} dataKey="value" outerRadius={40} fill="#21CE99" label/>
+                <Pie data={data} dataKey="value" outerRadius={35} fill="#21CE99" label/>
                 <Tooltip />
               </PieChart>
             </ResponsiveContainer>
