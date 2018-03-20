@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-import { firestore } from '../base.js';
+import { firestore , storageRef } from "../base";
 
 import { NavLink } from 'react-router-dom'
 
-import { Button, Container, Row, Col, Form, FormGroup, Alert, Input, ModalBody, ModalFooter, ModalHeader, Modal, Label } from 'reactstrap';
+import { Label, InputGroupText, InputGroup, InputGroupAddon, Button, Container, Row, Col, Form, FormGroup, Alert, Input, ModalBody, ModalFooter, ModalHeader, Modal } from 'reactstrap';
 
 import {
     Accordion,
@@ -37,6 +37,10 @@ class SetClassroom extends Component {
         classes: this.props.classes,
 
         students: null,
+
+        file: null,
+
+        makeAnn: null,
 
         errorCode: "",
         visible: false,
@@ -349,6 +353,107 @@ class SetClassroom extends Component {
         });
     };
 
+    handlePicture = (ev) => {
+      ev.preventDefault();
+
+      let classCode = ev.target.className.value;
+      classCode = classCode.substring(0, 6);
+
+      let self = this;
+      let reader = new FileReader();
+      let file = ev.target.files[0];
+
+      reader.onloadend = () => {
+        self.setState({
+          file: file,
+        });
+      };
+
+
+      let imageUrl = null;
+      let userImageRef = storageRef.ref().child(`${classCode}`);
+      userImageRef.put(file).then(function(snapshot) {
+        imageUrl = snapshot.metadata.downloadURLs[0];
+        console.log('Uploaded a blob or file!');
+      }).then(() => {
+        let classes = firestore.collection("classes").doc(classCode);
+
+        classes.update({
+          'classImage': imageUrl,
+        }).then(function() {
+          console.log("Document Updated.")
+        });
+
+      });
+
+    };
+
+    handleNewAnn = (ev, classCode) => {
+      ev.preventDefault();
+      let self = this;
+
+      let subtitle = ev.target.subtitle.value;
+      let title = ev.target.title.value;
+      let message = ev.target.message.value;
+
+      let classRef = firestore.collection("classes").doc(classCode);
+
+      classRef.get().then(function(doc) {
+        if (doc.exists) {
+          console.log(doc.data().class);
+          if (doc.data().announcements != null) {
+            self.setState({
+              announcements: doc.data().announcements,
+              newTitle: title,
+              newSubtitle: subtitle,
+              newMessage: message,
+              class: doc.data().class,
+            });
+            self.addAnnouncement(classRef);
+
+          }
+        } else {
+          console.log("user not found");
+        }
+      }).catch(function(error) {
+        console.log("Error getting document: ", error);
+      });
+
+      //ev.target.reset();
+
+    };
+
+    addAnnouncement = (classRef) => {
+      let self = this;
+      let tmpNewAnnouncement = [{
+        message: self.state.newMessage,
+        subtitle: self.state.newSubtitle,
+        title: self.state.newTitle,
+        class: self.state.class,
+      }];
+
+      // add temporary class to classes
+      if (self.state.announcements != null) {
+        self.setState({
+          announcements: self.state.announcements.concat(tmpNewAnnouncement),
+        });
+      } else {
+        self.setState({
+          announcements: tmpNewAnnouncement,
+        });
+      }
+
+      classRef.update({
+        announcements: self.state.announcements,
+      }).then(function() {
+        console.log("Successfully updated classes announcements");
+
+      }).catch(function(error) {
+        console.log("Error updating document: ", error);
+      });
+
+    };
+
     onDismiss = () => {
       this.setState({
         visible: false,
@@ -363,6 +468,11 @@ class SetClassroom extends Component {
     };
 
     render() {
+
+      if (this.state.file !== null) {
+        this.handleFirebase();
+      }
+
        return(
             <Container fluid className={"ContainerRules"}>
                 <Row className={"Filler"}> </Row>
@@ -374,7 +484,7 @@ class SetClassroom extends Component {
                 <Row className={"Filler"}> </Row>
                 <Row className={"Filler"}> </Row>
                 <Row className={"BoxForm"}>
-                    <Col xs={"6"}>
+                    <Col xs={"5"}>
                         <div>
 
                           {this.state.role === "student" && this.props.classes != null && this.props.classes.length !== 0
@@ -407,7 +517,7 @@ class SetClassroom extends Component {
                             </Accordion>
                             :
                             null
-                        }
+                          }
 
                           {this.state.role === "teacher" && this.props.classes != null && this.props.classes.length !== 0
                             ?
@@ -420,41 +530,94 @@ class SetClassroom extends Component {
                                     </h3>
                                   </AccordionItemTitle>
                                   <AccordionItemBody className={"accordBody"}>
-                                    <div>
-                                      <h5 className={"codeText"}>
-                                        Class Code: {this.props.classes[index].code}
-                                      </h5>
+                                    <div className="inside">
+                                      <Row>
+                                        <Col className="codeText" xs="8">
+                                          Class Code: {this.props.classes[index].code}
+                                        </Col>
+
+                                        <Col className="picIcon" xs="3">
+                                          <Input onChange={this.handlePicture} type="file" name="file" id="exampleFile" className={this.props.classes[index].code} />
+                                        </Col>
+
+                                        <Col className="picIcon" xs="1">
+                                          <span onClick={this.handleNewAnn}>
+                                            <i className="fas fa-bullhorn" />
+                                          </span>
+                                        </Col>
+
+                                      </Row>
+
                                       {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
                                         {/*Notifications</Button>*/}
                                       {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
                                         {/*Announcements</Button>*/}
 
-                                      <Form onSubmit={this.onFormSubmit}>
-                                        <Input className={"hidden"} id="classCode" name="classCode" defaultValue={this.props.classes[index].code} />
-                                        <FormGroup row>
-                                          <Label size="lg" for="exampleClassName" sm={2}>Class Name:</Label>
-                                          <Col sm={6}>
-                                            <Input bsSize="lg" type="username" name="className" id="exampleClassName" defaultValue={this.props.classes[index].class} />
+                                        <Row>
+                                          <Col sm="12">
+                                            <Form onSubmit={this.onFormSubmit}>
+                                              <Input className={"hidden"} id="classCode" name="classCode" defaultValue={this.props.classes[index].code} />
+
+                                              <FormGroup row>
+                                                <Col xs="7">
+                                                  <InputGroup size="10">
+                                                    <InputGroupAddon addonType="prepend">Class Name</InputGroupAddon>
+                                                    <Input bsSize="md" type="username" name="className" id="exampleClassName" defaultValue={this.props.classes[index].class} />
+                                                  </InputGroup>
+
+                                                </Col>
+                                              </FormGroup>
+                                              <Button outline color="success" size={"lg"}>
+                                                <i className="far fa-save" />
+                                              </Button>
+                                              <span className="deleteIcon" onClick={ () => this.toggle(this.props.classes[index].code)}>
+                                                <i className="fas fa-trash-alt picIcon"/>
+                                              </span>
+                                            </Form>
                                           </Col>
-                                        </FormGroup>
-                                        {/*<FormGroup row>*/}
-                                          {/*<Label size="lg" for="exampleFile" sm={2}>Profile Picture:</Label>*/}
-                                          {/*<Col sm={10}>*/}
-                                            {/*<Input onChange={this.handlePicture} bsSize="lg" type="file" name="file" id="exampleFile" />*/}
-                                            {/*<FormText size="lg" color="muted">*/}
-                                              {/*Please only upload an image for your picture.*/}
-                                            {/*</FormText>*/}
-                                          {/*</Col>*/}
-                                          <Button outline color="success" size={"lg"}>
-                                            <i className="far fa-save" />
-                                          </Button>
-                                      </Form>
+                                        </Row>
+                                      <hr />
+                                        <Form onSubmit={(ev) => this.handleNewAnn(ev, this.props.classes[index].code)}>
+
+                                          <Row className={"rowt"}>
+                                            <Col>
+                                              <Label check>
+                                                <Input type="select" name="subtitle">
+                                                  <option>Test</option>
+                                                  <option>Quiz</option>
+                                                  <option>Homework</option>
+                                                  <option>Misc.</option>
+                                                </Input>
+                                              </Label>
+                                            </Col>
+                                          </Row>
+                                          <br />
+
+                                          <InputGroup>
+                                            <InputGroupAddon addonType="prepend">
+                                              <InputGroupText>Title</InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input name="title" />
+                                          </InputGroup>
+                                          <br />
+
+                                          <InputGroup>
+                                            <InputGroupAddon addonType="prepend">
+                                              <InputGroupText>Message</InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input name="message" type="textarea" />
+                                          </InputGroup>
+                                          <br />
 
 
-                                      <span onClick={ () => this.toggle(this.props.classes[index].code)} className={"clickableIcon float-right"}>
-                                                    <i className="fas fa-trash-alt deleteIcon float-right"/>
-                                      </span>
-
+                                        </Form>
+                                        <hr/>
+                                        <h4>My Students</h4>
+                                        <NavLink style={{textDecoration: 'none'}} to={`/MyStudents`}>
+                                            <Button type="submit" outline color="success" size={"lg"}>
+                                                <i className="far fa-arrow-alt-circle-right" />
+                                            </Button>
+                                        </NavLink>
                                     </div>
                                   </AccordionItemBody>
                                 </AccordionItem>
@@ -508,7 +671,7 @@ class SetClassroom extends Component {
                         </Col>
                       }
 
-                        </Col>
+                    </Col>
                 </Row>
             </Container>
         );

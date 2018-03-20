@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import {Table, Container, Row, Col} from 'reactstrap';
+import { Table, Container, Row, Col} from 'reactstrap';
 
-import './InclassStudent.css'
+import { NavLink as RouterLink } from 'react-router-dom'
+
+import './InclassStudent.css';
 
 class InclassStudent extends Component {
 
     render() {
+
         return (
             <div>
                 <Container fluid>
@@ -41,19 +44,31 @@ class InclassStudent extends Component {
                                     <th scope="row">1</th>
                                     <td>Practice Question</td>
                                     <td>yes</td>
-                                    <td><a href={'./HomePage'}>Link</a></td>
+                                    <td>
+                                        <RouterLink to={`/HomePage/${this.props.code}/lessons/123456`}>
+                                            Link
+                                        </RouterLink>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">2</th>
                                     <td>Practice Question2</td>
                                     <td>no</td>
-                                    <td><a href={'./HomePage'}>Link</a></td>
+                                    <td>
+                                        <RouterLink to={`/HomePage/${this.props.code}/lessons/12345`}>
+                                            Link
+                                        </RouterLink>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">3</th>
                                     <td>Practice Question3</td>
                                     <td>no</td>
-                                    <td><a href={'./HomePage'}>Link</a></td>
+                                    <td>
+                                        <RouterLink to={`/HomePage/${this.props.code}/lessons/1234`}>
+                                            Link
+                                        </RouterLink>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </Table>

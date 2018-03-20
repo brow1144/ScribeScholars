@@ -28,8 +28,8 @@ class AboutBar extends Component {
     render() {
         return (
             <div className="main navT">
-                <Navbar className="bg-dark"  expand={"md"}>
-                    <NavbarToggler onClick={this.toggleNavbar} color={"black"} className="mr-2" />
+                <Navbar className="bg-light" light  expand={"md"}>
+                    <NavbarToggler onClick={this.toggleNavbar} color={"white"} light className="mr-2" />
                     <Collapse isOpen={!this.state.collapsed} navbar>
                         <Nav navbar>
                             <NavItem>
