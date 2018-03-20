@@ -11,6 +11,7 @@ import Side from './Side';
 import HomeNav from './HomeNav';
 import Cards from './Cards';
 import ClassHome from '../ClassPage/ClassHome';
+import LiveFeed from '../ClassPage/LiveFeed';
 
 import Settings from '../Settings/Settings';
 
@@ -533,7 +534,11 @@ class HomePage extends Component {
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <p>bubbles</p>
+          <Row>
+            <Col>
+              <LiveFeed />
+            </Col>
+          </Row>
         </Sidebar>
       );
 
