@@ -23,25 +23,37 @@ class LiveFeed extends Component {
       {name: 'Group E', value: 278}, {name: 'Group F', value: 189}
       ];
 
+    const data1 = [
+      {name: 'Page A', uv: 4000, pv: 2400, amt: 2400},
+      {name: 'Page B', uv: 3000, pv: 1398, amt: 2210},
+      {name: 'Page C', uv: 2000, pv: 9800, amt: 2290},
+      {name: 'Page D', uv: 2780, pv: 3908, amt: 2000},
+      {name: 'Page E', uv: 1890, pv: 4800, amt: 2181},
+      {name: 'Page F', uv: 2390, pv: 3800, amt: 2500},
+      {name: 'Page G', uv: 3490, pv: 4300, amt: 2100},
+    ];
+
     return (
       <div>
+        <hr/>
+        <br/>
         <Row>
           <Col xs="1" />
           <Col xs="10">
             <CardDeck>
-              <Card body inverse style={{ backgroundColor: '#333', borderColor: '#333' }}>
+              <Card body inverse style={{ backgroundColor: '#030C14', borderWidth: '0.2em', borderColor: '#21CE99' }}>
                 <CardTitle>Class Progress</CardTitle>
                 <Progress value="45">45%</Progress>
               </Card>
-              <Card body inverse style={{ backgroundColor: '#333', borderColor: '#333' }}>
+              <Card body inverse style={{ backgroundColor: '#030C14', borderWidth: '0.2em', borderColor: '#21CE99' }}>
                 <CardTitle>Class Average</CardTitle>
                 <CardText>80%</CardText>
               </Card>
-              <Card body inverse style={{ backgroundColor: '#333', borderColor: '#333' }}>
+              <Card body inverse style={{ backgroundColor: '#030C14', borderWidth: '0.2em', borderColor: '#21CE99' }}>
                 <CardTitle>Class Median</CardTitle>
                 <CardText>75%</CardText>
               </Card>
-              <Card body inverse style={{ backgroundColor: '#333', borderColor: '#333' }}>
+              <Card body inverse style={{ backgroundColor: '#030C14', borderWidth: '0.2em', borderColor: '#21CE99' }}>
                 <CardTitle>Number of Questions</CardTitle>
                 <CardText>15</CardText>
             </Card>
@@ -66,7 +78,7 @@ class LiveFeed extends Component {
           <Col sm="12" md="3" >
             <Row>
               <Col>
-                <Card body inverse style={{ backgroundColor: '#333', borderColor: '#333' }}>
+                <Card body inverse style={{ backgroundColor: '#030C14', borderWidth: '0.2em', borderColor: '#21CE99' }}>
                   <CardTitle>Stats</CardTitle>
                 </Card>
               </Col>
@@ -96,7 +108,7 @@ class LiveFeed extends Component {
           </Col>
 
 
-          <Col xs="2">
+          <Col xs="12" md="2" >
 
             <Row>
               <Col>
@@ -118,7 +130,7 @@ class LiveFeed extends Component {
                 <b>Remaining Time</b>
                 <ResponsiveContainer width="100%" height={150}>
                   <PieChart>
-                    <Pie startAngle={90} endAngle={-60} data={data} outerRadius={40} fill="#8884d8" label/>
+                    <Pie startAngle={90} endAngle={-60} data={data} dataKey="value" outerRadius={40} fill="#F45531" label/>
                     <Tooltip />
                   </PieChart>
                 </ResponsiveContainer>
@@ -128,21 +140,19 @@ class LiveFeed extends Component {
 
           <Col sm="12" md="5">
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={data}>
+              <BarChart data={data1}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Legend />
-                <Bar dataKey="pv" fill="#8884d8" />
-                <Bar dataKey="uv" fill="#82ca9d" />
+                <Legend />f
+                <Bar dataKey="pv" fill="#21CE99" />
+                <Bar dataKey="uv" fill="#030C14" />
               </BarChart>
             </ResponsiveContainer>
           </Col>
 
-
           <Col xs="1" />
-
 
         </Row>
 
@@ -155,50 +165,71 @@ class LiveFeed extends Component {
         </Row>
 
       <Row>
-          <Col xs="1" />
-          <Col xs="10">
-            <Table striped>
-              <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Module</th>
-                <th>Progress</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Kyle</td>
-                <td>Investing</td>
-                <td>
-                  <div className="text-center">85%</div>
-                  <Progress animated color="success" value="85" />
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Walter</td>
-                <td>Wealth</td>
-                <td>
-                  <div className="text-center">15%</div>
-                  <Progress animated color="danger" value="15" />
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Jeremy</td>
-                <td>Debt</td>
-                <td>
-                  <div className="text-center">55%</div>
-                  <Progress animated color="warning" value="55" />
-                </td>
-              </tr>
-              </tbody>
-            </Table>
-          </Col>
-          <Col xs="1" />
-        </Row>
+        <Col md="1" />
+        <Col xs="12" md="6">
+          <Table striped>
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Module</th>
+              <th>Progress</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Kyle</td>
+              <td>Investing</td>
+              <td>
+                <div className="text-center">85%</div>
+                <Progress animated color="success" value="85" />
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>Walter</td>
+              <td>Wealth</td>
+              <td>
+                <div className="text-center">15%</div>
+                <Progress animated color="danger" value="15" />
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>Jeremy</td>
+              <td>Debt</td>
+              <td>
+                <div className="text-center">55%</div>
+                <Progress animated color="warning" value="55" />
+              </td>
+            </tr>
+            </tbody>
+          </Table>
+        </Col>
+        <Col xs="12" md="4">
+          <Card body outline color="info">
+            <CardTitle>Grade Distribution</CardTitle>
+            <ResponsiveContainer width="100%" height={100}>
+              <PieChart>
+                <Pie startAngle={0} endAngle={360} data={data} dataKey="value" outerRadius={40} fill="#21CE99" label/>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </Card>
+        </Col>
+        <Col md="1" />
+      </Row>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+
       </div>
     );
   }
