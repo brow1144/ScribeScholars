@@ -612,8 +612,8 @@ class SetClassroom extends Component {
 
                                         </Form>
                                         <hr/>
-                                        <h4>My Students</h4>
-                                        <NavLink style={{textDecoration: 'none'}} to={`/MyStudents`}>
+                                        <h4>Dashboard Information</h4>
+                                        <NavLink style={{textDecoration: 'none'}} to={`/DashboardInfo`}>
                                             <Button type="submit" outline color="success" size={"lg"}>
                                                 <i className="far fa-arrow-alt-circle-right" />
                                             </Button>
