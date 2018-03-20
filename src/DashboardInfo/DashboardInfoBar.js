@@ -30,6 +30,18 @@ class DashboardInfoBar extends Component {
                             <NavItem>
                                 <NavLink className="link" href="#Overview" ><h2>Overview</h2></NavLink>
                             </NavItem>
+                            <NavItem>
+                                <NavLink className="link" href="#Component1" ><h2>Pass/Fail %</h2></NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink className="link" href="#Component2" ><h2>Avg. GPA</h2></NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink className="link" href="#Component3" ><h2>GPA Distr.</h2></NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink className="link" href="#Component4" ><h2>Recent Assignment</h2></NavLink>
+                            </NavItem>
                         </Nav>
                     </Collapse>
                 </Navbar>
