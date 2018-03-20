@@ -31,6 +31,7 @@ class StudentGradePage extends Component {
                    self.setState({
                       assignments: doc.data().assignments,
                    });
+                   self.setUpRows();
                }
            }
         }).catch(function (error) {
@@ -38,7 +39,7 @@ class StudentGradePage extends Component {
         });
     }
 
-    incrememntCurrentRow = () =>{
+    incrememntCurrentRow(){
         let curRow = this.state.currentRow;
         curRow++;
         this.setState({
@@ -52,14 +53,42 @@ class StudentGradePage extends Component {
             let currentAssignment = this.state.assignments[this.state.currentRow];
 
             assignmentData[this.state.currentRow] = "<tr>" +
-                "<th scope='row'>" + this.state.currentRow + "</th>" +
+                "<th scope='row'>" + (this.state.currentRow + 1) + "</th>" +
                 "<td>" + currentAssignment.name + "</td>" +
                 "<td>" + currentAssignment.score + "</td>" +
                 "<td>" + currentAssignment.maxscore + "</td>" +
                 "</tr>";
 
-            this.incrememntCurrentRow;
+            this.incrememntCurrentRow();
         }
+
+        this.setState({
+           assignmentData: assignmentData,
+        });
+    }
+
+    printAssignmentData = () => {
+        console.log("Reached assignment data");
+        if(this.state.assignmentData === null){
+            console.log("Assignment data is null");
+            return;
+        }
+
+        let data = "";
+        for(let i = 0; i < this.state.assignmentData.length; i++){
+            data += this.state.assignmentData[i];
+        }
+        console.log(data);
+        return data;
+    }
+
+    addToAssignmentTable(){
+        let table = document.getElementById("assignmentTable");
+        let added = document.createElement("div");
+        table.appendChild(added);
+        added.appendChild(document.createElement("tr"));
+        let th = document.createElement("th");
+        th.scope = "row";
     }
 
     render() {
@@ -75,7 +104,7 @@ class StudentGradePage extends Component {
                 <Row>
                     <Col className={"grade-text"}>
                         <Row>
-                            <Table dark>
+                            <Table dark striped bordered hover style={{width: "80%"}}>
                                 <thead>
                                 <tr>
                                     <th>#</th>
@@ -85,19 +114,8 @@ class StudentGradePage extends Component {
                                 </tr>
                                 </thead>
 
-                                <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Homework 1</td>
-                                    <td>14</td>
-                                    <td>15</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Midterm</td>
-                                    <td>90</td>
-                                    <td>100</td>
-                                </tr>
+                                <tbody id="assignmentTable">
+
                                 </tbody>
 
                             </Table>
