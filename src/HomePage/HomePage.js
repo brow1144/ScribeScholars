@@ -531,7 +531,7 @@ class HomePage extends Component {
       return (
         <Sidebar {...sideData}>
 
-          <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
+          <HomeNav firstName={"Personal Finance"} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
           <Row>

@@ -3,15 +3,9 @@ import { Table, Container, Row, Col} from 'reactstrap';
 
 import { NavLink as RouterLink } from 'react-router-dom'
 
-import './InclassStudent.css'
+import './InclassStudent.css';
 
 class InclassStudent extends Component {
-
-    constructor(props) {
-        super(props);
-
-
-    }
 
     render() {
 
