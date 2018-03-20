@@ -222,7 +222,12 @@ classes={this.state.classes}
         points += 0;
     }
 
-    return (points / maxPoints);
+    let gpa = points / maxPoints;
+
+    if (gpa % 1 !== 0)
+      gpa = Math.round(gpa * 100) / 100;
+
+    return gpa;
   };
 
   // get grade in a specific class
@@ -239,7 +244,12 @@ classes={this.state.classes}
       }
     }
 
-    return (total / max) * 100;
+    let grade = (total / max) * 100;
+
+    if (grade % 1 !== 0)
+      grade = Math.round(grade * 100) / 100;
+
+    return grade;
   };
 
   // calculate average score for an assignment
@@ -256,10 +266,21 @@ classes={this.state.classes}
       }
     }
 
-    if (percentage)   // return score as a percentage
-      return ((total / numStudents) / assignment.maxscore) * 100;
-    else  // return score
-      return (total / numStudents);
+    if (percentage) {   // return score as a percentage
+      let grade = ((total / numStudents) / assignment.maxscore) * 100;
+
+      if (grade % 1 !== 0)
+        grade = Math.round(grade * 100) / 100;
+
+      return grade;
+    } else {  // return score
+      let score = total / numStudents;
+
+      if (score % 1 !== 0)
+        score = Math.round(score * 100) / 100;
+
+      return score;
+    }
   };
 
   // get average grade in a class
@@ -282,7 +303,12 @@ classes={this.state.classes}
       }
     }
 
-    return (total / max) * 100;
+    let grade = (total / max) * 100;
+
+    if (grade % 1 !== 0)
+      grade = Math.round(grade * 100) / 100;
+
+    return grade;
   };
 
   // get student's assignment from class list of assignments
@@ -306,6 +332,19 @@ classes={this.state.classes}
 
     classGrades.sort();
     // TODO fix
+  };
+
+  // build data for graph of classroom scores on a particular assignment
+  buildClassScoresGraph = (assignment) => {
+    for (let i in this.state.allAssignments) {
+      if (this.state.allAssignments.hasOwnProperty(i)) {
+        if (this.state.allAssignments[i].name === assignment.name) {
+          this.setState({
+            classScores: this.state.classScores.concat({score: this.state.allAssignments[i].score}),
+          });
+        }
+      }
+    }
   };
 
   // build data for assignmentScores
@@ -346,19 +385,6 @@ classes={this.state.classes}
     }
   };
 
-  // build data for graph of classroom scores on a particular assignment
-  buildClassScoresGraph = (assignment) => {
-    for (let i in this.state.allAssignments) {
-      if (this.state.allAssignments.hasOwnProperty(i)) {
-        if (this.state.allAssignments[i].name === assignment.name) {
-          this.setState({
-            classScores: this.state.classScores.concat({score: this.state.allAssignments[i].score}),
-          });
-        }
-      }
-    }
-  };
-
   // custom sorting function for the graphs
   compareValues(key) {
     return function(a, b) {
@@ -382,7 +408,7 @@ classes={this.state.classes}
 
   showGraph = () => {
     this.setState({
-      graph: "classScores",
+      graph: "assignmentScores",
     });
   };
 
