@@ -183,6 +183,7 @@ class HomePage extends Component {
    *
    */
   componentWillMount() {
+    this.props.getShowGPA();
     this.getClasses();
     mql.addListener(this.mediaQueryChanged);
     window.addEventListener('resize', this.handleWindowChange);
@@ -544,6 +545,7 @@ class HomePage extends Component {
 
             <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} gpa={this.state.gpa}
                      expand={this.dockSideBar}
+                     showGPA={this.props.showGPA}
                      width={this.state.width}/>
             <Row>
               <Col md="1"/>

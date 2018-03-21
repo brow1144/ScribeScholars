@@ -24,7 +24,7 @@ class Main extends Component {
       }],
 
       uid: this.props.uid,
-      showGPA: true,
+      showGPA: null,
 
       userImage: null,
 
@@ -286,11 +286,36 @@ class Main extends Component {
       });
     };
 
-    toggleGPA = () => {
-      this.setState({
-        showGPA: !this.state.showGPA,
+    getShowGPA = () => {
+      let self = this;
+
+      let studentRef = firestore.collection("users").doc(this.state.uid);
+
+      studentRef.get().then((doc) => {
+        if (doc.exists) {
+          self.setState({
+            showGPA: doc.data().showGPA,
+          });
+        }
+      }).catch((error) => {
+        console.log("Error getting document:", error);
       });
-      console.log(this.state.showGPA);
+    };
+
+    toggleGPA = () => {
+      let self = this;
+
+      let studentRef = firestore.collection("users").doc(this.state.uid);
+
+      studentRef.update({
+        "showGPA": !self.state.showGPA,
+      }).then(() => {
+        self.setState({
+          showGPA: !self.state.showGPA,
+        });
+      }).catch((error) => {
+        console.log("Error getting document:", error);
+      });
     };
 
     getAssignments = (classCode) => {
@@ -397,6 +422,7 @@ class Main extends Component {
         updateRole: this.updateRole,
         updateAnnouncements: this.updateAnnouncements,
         updateUserImage: this.updateUserImage,
+        getShowGPA: this.getShowGPA,
         toggleGPA: this.toggleGPA,
         selectClass: this.selectClass,
         updateClassPicture: this.updateClassPicture,
