@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 
-import { PieChart, Cell,Pie, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area } from 'recharts';
+import { PieChart, Cell,Pie } from 'recharts';
 
 
-import {Progress, Row, Col, Card, CardTitle, CardText, Table, NavLink} from 'reactstrap';
+import {Progress, Row, Col } from 'reactstrap';
 import './Dashboard.css';
 
 class Dashboard extends Component {
