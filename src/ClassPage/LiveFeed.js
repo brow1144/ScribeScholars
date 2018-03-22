@@ -22,7 +22,7 @@ class LiveFeed extends Component {
       classProgress: null,
       classAverage: 0,
       classMedian: 0,
-      numberOfQuestions: null,
+      numberOfQuestions: 0,
 
       highestScore: null,
       lowestScore: null,
@@ -66,17 +66,24 @@ class LiveFeed extends Component {
     self.state.students.forEach(function(element) {
       let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
 
+      console.log(element);
+
       lessonDataPerStudent.get().then(function (doc) {
         if (doc.exists) {
           scores.unshift(doc.data().currentScore);
+          self.setState({
+            numberOfQuestions: doc.data().numOfQuestions,
+          });
         } else {
           console.log("No such document!");
         }
         self.setState({
           scores: scores,
+        }, () => {
+          self.calculateAverage();
+          self.calculateMedian();
         });
-        self.calculateAverage();
-        self.calculateMedian();
+
 
       }).catch(function (error) {
         console.log("Error getting document:", error);
@@ -86,6 +93,7 @@ class LiveFeed extends Component {
 
   calculateAverage = () => {
 
+    console.log("average: " + this.state.scores.length);
     let temp = 0;
     for (let i in this.state.scores) {
       temp += this.state.scores[i];
@@ -97,17 +105,19 @@ class LiveFeed extends Component {
   };
 
   calculateMedian = () => {
+    console.log("median: " + this.state.scores.length);
+
     let median = 0;
     let array = this.state.scores;
     array.sort();
 
-    if (this.state.scores.length % 2 !== 0) {
+    if ((this.state.scores.length % 2) !== 0) {
       // Even
       median += array[Math.floor(this.state.scores.length / 2)];
     } else {
       // Odd
       median += array[Math.floor(this.state.scores.length / 2)];
-      median += array[Math.floor((this.state.scores.length / 2)) + 1];
+      median += array[Math.floor((this.state.scores.length / 2)) - 1];
       median = median / 2;
     }
 
@@ -121,6 +131,7 @@ class LiveFeed extends Component {
     const lesssonStatsData = {
       classAverage: this.state.classAverage,
       classMedian: this.state.classMedian,
+      numberOfQuestions: this.state.numberOfQuestions,
     };
 
     return (
