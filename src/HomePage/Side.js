@@ -65,7 +65,7 @@ class Side extends Component {
     };
 
     render() {
-        if (this.props.page === "home" || this.props.page === "classes") {
+        if (this.props.page === "home" || this.props.page === "classes" || this.props.page === "liveFeed") {
             return (
                 <div>
                     <NavLink style={{textDecoration: 'none'}} to={`/HomePage`}>
