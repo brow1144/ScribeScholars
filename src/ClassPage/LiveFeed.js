@@ -17,15 +17,24 @@ class LiveFeed extends Component {
     this.state = {
       students: [],
 
+      highUID: "",
+      lowUID: "",
+
+      highFirstName: "",
+      highLastName: "",
+
+      lowFirstName: "",
+      lowLastName: "",
+
+      highestScore: 0,
+      lowestScore: 0,
+
       scores: [],
 
       classProgress: null,
       classAverage: 0,
       classMedian: 0,
       numberOfQuestions: 0,
-
-      highestScore: null,
-      lowestScore: null,
 
       notStarted: null,
       inProgress: null,
@@ -48,6 +57,8 @@ class LiveFeed extends Component {
             students: doc.data().students,
           }, () => {
             self.getClassAverage();
+            self.getHighLowScore();
+            //self.getUserNames();
           });
         }
       } else {
@@ -62,11 +73,8 @@ class LiveFeed extends Component {
 
     let scores = [];
     let self = this;
-    // for (let i in this.state.students) {
     self.state.students.forEach(function(element) {
       let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
-
-      console.log(element);
 
       lessonDataPerStudent.get().then(function (doc) {
         if (doc.exists) {
@@ -79,6 +87,8 @@ class LiveFeed extends Component {
         }
         self.setState({
           scores: scores,
+          lowestScore: scores[0],
+          lowUID: element,
         }, () => {
           self.calculateAverage();
           self.calculateMedian();
@@ -93,7 +103,6 @@ class LiveFeed extends Component {
 
   calculateAverage = () => {
 
-    console.log("average: " + this.state.scores.length);
     let temp = 0;
     for (let i in this.state.scores) {
       temp += this.state.scores[i];
@@ -105,7 +114,6 @@ class LiveFeed extends Component {
   };
 
   calculateMedian = () => {
-    console.log("median: " + this.state.scores.length);
 
     let median = 0;
     let array = this.state.scores;
@@ -126,12 +134,86 @@ class LiveFeed extends Component {
     });
   };
 
+  getHighLowScore = () => {
+    let self = this;
+    self.state.students.forEach(function(element) {
+      let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
+
+      lessonDataPerStudent.get().then(function (doc) {
+        if (doc.exists) {
+          if (doc.data().currentScore > self.state.highestScore) {
+            self.setState({
+              highUID: element,
+              highestScore: doc.data().currentScore,
+            })
+          } else if (doc.data().currentScore < self.state.lowestScore) {
+            self.setState({
+              lowUID: element,
+              lowestScore: doc.data().currentScore,
+            })
+          }
+          self.getUserNames();
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(function (error) {
+        console.log("Error getting document:", error);
+      })
+    })
+  };
+
+  getUserNames = () => {
+
+    let docRef = firestore.collection("users").doc(this.state.highUID);
+    let self = this;
+
+    docRef.get().then(function (doc) {
+      if (doc.exists) {
+        self.setState({
+          highFirstName: doc.data().firstName,
+          highLastName: doc.data().lastName,
+        });
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+
+    let docRef1 = firestore.collection("users").doc(this.state.lowUID);
+
+    docRef1.get().then(function (doc) {
+      if (doc.exists) {
+        self.setState({
+          lowFirstName: doc.data().firstName,
+          lowLastName: doc.data().lastName,
+        });
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    })
+
+  };
+
   render() {
 
     const lesssonStatsData = {
       classAverage: this.state.classAverage,
       classMedian: this.state.classMedian,
       numberOfQuestions: this.state.numberOfQuestions,
+    };
+
+    const liveGraphsData = {
+      highestScore: this.state.highestScore,
+      lowestScore: this.state.lowestScore,
+
+      highFirstName: this.state.highFirstName,
+      highLastName: this.state.highLastName,
+
+      lowFirstName: this.state.lowFirstName,
+      lowLastName: this.state.lowLastName,
     };
 
     return (
@@ -143,7 +225,7 @@ class LiveFeed extends Component {
 
         <LineBreak />
 
-        <LiveGraphs />
+        <LiveGraphs {...liveGraphsData}  />
 
         <LineBreak />
 

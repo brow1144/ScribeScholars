@@ -5,6 +5,12 @@ import { ResponsiveContainer, PieChart, Pie, Bar, BarChart, XAxis, YAxis, Cartes
 
 class LineBreak extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    }
+  }
   render() {
 
     const data1 = [
@@ -44,7 +50,7 @@ class LineBreak extends Component {
             <Col>
               <Card body outline color="info">
                 <CardTitle>Highest Score</CardTitle>
-                <CardText>Kyle Brown: 98%</CardText>
+                <CardText>{this.props.highFirstName} {this.props.highLastName}: {this.props.highestScore}%</CardText>
               </Card>
             </Col>
           </Row>
@@ -55,7 +61,7 @@ class LineBreak extends Component {
             <Col>
               <Card body outline color="info">
                 <CardTitle>Lowest Score</CardTitle>
-                <CardText>Walter 29%</CardText>
+                <CardText>{this.props.lowFirstName} {this.props.lowLastName}: {this.props.lowestScore}%</CardText>
               </Card>
             </Col>
           </Row>
