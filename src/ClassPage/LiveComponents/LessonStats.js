@@ -20,7 +20,7 @@ class LessonStats extends Component {
               </Card>
               <Card body inverse style={{ backgroundColor: '#030C14', borderWidth: '0.2em', borderColor: '#21CE99' }}>
                 <CardTitle>Class Median</CardTitle>
-                <CardText>75%</CardText>
+                <CardText>{this.props.classMedian}%</CardText>
               </Card>
               <Card body inverse style={{ backgroundColor: '#030C14', borderWidth: '0.2em', borderColor: '#21CE99' }}>
                 <CardTitle>Number of Questions</CardTitle>

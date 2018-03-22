@@ -21,7 +21,7 @@ class LiveFeed extends Component {
 
       classProgress: null,
       classAverage: 0,
-      classMedian: null,
+      classMedian: 0,
       numberOfQuestions: null,
 
       highestScore: null,
@@ -76,13 +76,13 @@ class LiveFeed extends Component {
           scores: scores,
         });
         self.calculateAverage();
+        self.calculateMedian();
 
       }).catch(function (error) {
         console.log("Error getting document:", error);
       })
     })
   };
-
 
   calculateAverage = () => {
 
@@ -91,17 +91,36 @@ class LiveFeed extends Component {
       temp += this.state.scores[i];
     }
     temp = temp / this.state.scores.length;
-
     this.setState({
       classAverage: temp,
     });
+  };
 
+  calculateMedian = () => {
+    let median = 0;
+    let array = this.state.scores;
+    array.sort();
+
+    if (this.state.scores.length % 2 !== 0) {
+      // Even
+      median += array[Math.floor(this.state.scores.length / 2)];
+    } else {
+      // Odd
+      median += array[Math.floor(this.state.scores.length / 2)];
+      median += array[Math.floor((this.state.scores.length / 2)) + 1];
+      median = median / 2;
+    }
+
+    this.setState({
+      classMedian: median,
+    });
   };
 
   render() {
 
     const lesssonStatsData = {
       classAverage: this.state.classAverage,
+      classMedian: this.state.classMedian,
     };
 
     return (
