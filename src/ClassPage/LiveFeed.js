@@ -10,19 +10,21 @@ import './LiveFeed.css';
 
 class LiveFeed extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
 
-    }
+    };
+    console.log(this.props);
+    console.log();
   }
 
   render() {
     return (
       <div>
-        <hr/>
-        <br/>
+        <hr />
+        <br />
 
         <LessonStats />
 
@@ -43,6 +45,7 @@ class LiveFeed extends Component {
         <br/>
         <br/>
         <br/>
+
       </div>
     );
   }
