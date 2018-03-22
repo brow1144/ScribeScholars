@@ -1,17 +1,11 @@
 import React, { Component } from 'react';
 
-import { Alert, Row, Col, Card, CardTitle, CardText } from 'reactstrap';
+import { Row, Col, Card, CardTitle, CardText } from 'reactstrap';
 import { ResponsiveContainer, PieChart, Pie, Bar, BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 class LineBreak extends Component {
 
   render() {
-
-    const data = [
-      {name: 'Group A', value: 400}, {name: 'Group B', value: 300},
-      {name: 'Group C', value: 300}, {name: 'Group D', value: 200},
-      {name: 'Group E', value: 278}, {name: 'Group F', value: 189}
-    ];
 
     const data1 = [
       {name: 'Page A', Unanswered: 4000, Incorrect: 2400, Correct: 2400},
