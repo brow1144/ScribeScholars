@@ -3,19 +3,11 @@ import { Table, Container, Row, Col} from 'reactstrap';
 
 import { NavLink as RouterLink } from 'react-router-dom'
 
-import './InclassStudent.css'
+import './InclassStudent.css';
 
 class InclassStudent extends Component {
 
-    constructor(props) {
-        super(props);
-
-
-    }
-
     render() {
-
-        console.log(this.props.code)
 
         return (
             <div>
@@ -53,7 +45,7 @@ class InclassStudent extends Component {
                                     <td>Practice Question</td>
                                     <td>yes</td>
                                     <td>
-                                        <RouterLink to={`practiceQuestion`}>
+                                        <RouterLink to={`/HomePage/${this.props.code}/lessons/123456`}>
                                             Link
                                         </RouterLink>
                                     </td>
@@ -63,7 +55,7 @@ class InclassStudent extends Component {
                                     <td>Practice Question2</td>
                                     <td>no</td>
                                     <td>
-                                        <RouterLink to={`${this.props.code}/practiceQuestion2`}>
+                                        <RouterLink to={`/HomePage/${this.props.code}/lessons/12345`}>
                                             Link
                                         </RouterLink>
                                     </td>
@@ -73,7 +65,7 @@ class InclassStudent extends Component {
                                     <td>Practice Question3</td>
                                     <td>no</td>
                                     <td>
-                                        <RouterLink to={`${this.props.code}/practiceQuestion3`}>
+                                        <RouterLink to={`/HomePage/${this.props.code}/lessons/1234`}>
                                             Link
                                         </RouterLink>
                                     </td>

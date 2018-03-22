@@ -21,6 +21,7 @@ class Side extends Component {
             uid: props.uid,
             userImage: this.props.userImage,
         });
+
     }
 
     /**

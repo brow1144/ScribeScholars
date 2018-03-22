@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Container, Row, Col, Card, CardTitle, CardText, Table, NavLink} from 'reactstrap';
 
 import './MyStudents.css';
+import Graphs from '../Dashboard/Dashboard';
 
 
 class MyStudents extends Component {
@@ -15,6 +16,18 @@ class MyStudents extends Component {
                     <Row>
                         <Col className={"mainPage"}>
                             <p>My Students</p>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col className={"mainPage"}>
+                            <Row>
+                                <Col className={"mainPage"}>
+                                    <h1>Dashboard</h1>
+                                </Col>
+                            </Row>
+                            <Row className="chartAlign">
+                                <Graphs/>
+                            </Row>
                         </Col>
                     </Row>
                     <Row>
@@ -85,7 +98,7 @@ class MyStudents extends Component {
                                                     Putput
                                                 </button>
                                             </td>
-                                            <td>3.8</td>
+                                            <td>5.0</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">2</th>
@@ -95,7 +108,7 @@ class MyStudents extends Component {
                                                     Coons
                                                 </button>
                                             </td>
-                                            <td>3.799999999</td>
+                                            <td>4.0</td>
                                         </tr>
                                         <tr>
                                             <th scope="row">3</th>
@@ -105,7 +118,7 @@ class MyStudents extends Component {
                                                     Robot
                                                 </button>
                                             </td>
-                                            <td>3.4</td>
+                                            <td>3.0</td>
                                         </tr>
                                         </tbody>
                                     </Table>

@@ -13,8 +13,6 @@ class Main extends Component {
 
     this.state = {
 
-      page: this.props.page,
-
       selectedClass: null,
       className: null,
 
@@ -50,6 +48,18 @@ class Main extends Component {
         subtitle: null,
         message: null,
         class: null,
+      }],
+
+      homeworks: [{
+        code: null,
+        maxscore: null,
+        name: null,
+      }],
+
+      assignments: [{
+        code: null,
+        maxscore: null,
+        name: null,
       }],
     }
   }
@@ -221,6 +231,8 @@ class Main extends Component {
     });
     this.getClassAnnouncments(classCode);
     this.getClassImage(classCode);
+    this.getAssignments(classCode);
+    this.getHomeworks(classCode);
   };
 
   updateClassPicture =(classImage) => {
@@ -270,6 +282,85 @@ class Main extends Component {
     });
   };
 
+  getAssignments = (classCode) => {
+
+    let object = [{}];
+
+    let self = this;
+
+    let docRef = firestore.collection("classes").doc(classCode);
+
+    docRef.get().then(function (doc) {
+      if (doc.exists) {
+        let data = doc.data();
+        self.setState({
+          className: data.class,
+        });
+        for (let i in data.assignments) {
+          if (data.assignments.hasOwnProperty(i)) {
+            object.unshift({
+              code: data.assignments[i].code,
+              maxscore: data.assignments[i].maxscore,
+              name: data.assignments[i].name,
+            });
+            self.setState({
+              assignments: object,
+            })
+          }}
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+
+    object.pop();
+
+    self.setState({
+      assignments: object
+    });
+  };
+
+  getHomeworks = (classCode) => {
+
+    let object = [{}];
+
+    let self = this;
+
+    let docRef = firestore.collection("classes").doc(classCode);
+
+    docRef.get().then(function (doc) {
+      if (doc.exists) {
+        let data = doc.data();
+        self.setState({
+          className: data.class,
+        });
+        for (let i in data.homeworks) {
+          if (data.homeworks.hasOwnProperty(i)) {
+            object.unshift({
+              code: data.homeworks[i].code,
+              maxscore: data.homeworks[i].maxscore,
+              name: data.homeworks[i].name,
+            });
+            self.setState({
+              homeworks: object,
+            })
+          }}
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+
+    object.pop();
+
+    self.setState({
+      homeworks: object
+    });
+  };
+
+
   render() {
 
     const data = {
@@ -282,6 +373,8 @@ class Main extends Component {
       className: this.state.className,
       classAnnouncements: this.state.classAnnouncements,
       classImage: this.state.classImage,
+      assignments: this.state.assignments,
+      homeworks: this.state.homeworks,
     };
 
     const actions = {
@@ -292,11 +385,22 @@ class Main extends Component {
       updateUserImage: this.updateUserImage,
       selectClass: this.selectClass,
       updateClassPicture: this.updateClassPicture,
-      getClassAnnouncments: this.getClassAnnouncments
+      getClassAnnouncments: this.getClassAnnouncments,
+      getAssignments: this.getAssignments,
+      getHomeworks: this.getHomeworks,
     };
 
     return (
       <Switch>
+
+        <Route path="/HomePage/:class/lessons/:lessonNumber" render={() => (
+          <HomePage
+            page="liveFeed"
+            {...data}
+            {...actions}
+          />
+        )}/>
+
         <Route path="/homepage/:class" render={(match) => (
           <HomePage
             path={match.match.params.class}
@@ -305,6 +409,7 @@ class Main extends Component {
             {...actions}
           />
         )}/>
+
         <Route path="/homepage" render={() => (
           <HomePage
             page={this.props.page}
@@ -312,6 +417,7 @@ class Main extends Component {
             {...actions}
           />
         )}/>
+
         <Route path="/settings" render={() => (
           <HomePage
             page={this.props.page}

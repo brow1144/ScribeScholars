@@ -15,7 +15,7 @@ import ClassSuccess from './CreateClass/ClassSuccess';
 import Announcements from "./Announcements/Announcements";
 import CreateAnn from "./Announcements/CreateAnn";
 import SetRoomPic from "./Announcements/SetRoomPicture";
-import DashboardInfo from "./Dashboard/DashboardInfo";
+import DashboardInfo from "./DashboardInfo/DashboardInfoPage";
 import MyStudents from "./MyStudents/MyStudents";
 import MakeWork from "./WorkForm/MakeWork";
 import CreateActivity from './QuestionPage/CreateActivity';
@@ -41,6 +41,7 @@ class App extends Component {
         } else {
           // finished signing out
           this.setState({ uid: null })
+          Window.reload();
         }
       }
     )

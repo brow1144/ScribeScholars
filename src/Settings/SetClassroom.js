@@ -400,7 +400,6 @@ class SetClassroom extends Component {
 
       classRef.get().then(function(doc) {
         if (doc.exists) {
-          console.log(doc.data().class);
           if (doc.data().announcements != null) {
             self.setState({
               announcements: doc.data().announcements,
@@ -410,7 +409,6 @@ class SetClassroom extends Component {
               class: doc.data().class,
             });
             self.addAnnouncement(classRef);
-
           }
         } else {
           console.log("user not found");
@@ -418,9 +416,6 @@ class SetClassroom extends Component {
       }).catch(function(error) {
         console.log("Error getting document: ", error);
       });
-
-      //ev.target.reset();
-
     };
 
     addAnnouncement = (classRef) => {
@@ -613,6 +608,13 @@ class SetClassroom extends Component {
                                             <i className="far fa-arrow-alt-circle-right" />
                                           </Button>
                                         </Form>
+                                        <hr/>
+                                        <h4>My Students</h4>
+                                        <NavLink style={{textDecoration: 'none'}} to={`/MyStudents`}>
+                                            <Button type="submit" outline color="success" size={"lg"}>
+                                                <i className="far fa-arrow-alt-circle-right" />
+                                            </Button>
+                                        </NavLink>
                                     </div>
                                   </AccordionItemBody>
                                 </AccordionItem>

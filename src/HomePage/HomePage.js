@@ -11,6 +11,7 @@ import Side from './Side';
 import HomeNav from './HomeNav';
 import Cards from './Cards';
 import ClassHome from '../ClassPage/ClassHome';
+import LiveFeed from '../ClassPage/LiveFeed';
 
 import Settings from '../Settings/Settings';
 
@@ -74,6 +75,12 @@ class HomePage extends Component {
         class: null,
       }],
 
+      assignments: [{
+        code: null,
+        maxscore: null,
+        name: null,
+      }],
+
       personalPage: true,
 
       width: window.innerWidth,
@@ -84,7 +91,8 @@ class HomePage extends Component {
     };
   }
 
-  componentDidUpdate(){}
+  componentDidUpdate() {
+  }
 
   /**
    *
@@ -145,7 +153,7 @@ class HomePage extends Component {
     let docRef = firestore.collection("users").doc(this.state.uid);
     let self = this;
 
-    docRef.get().then(function(doc) {
+    docRef.get().then(function (doc) {
       if (doc.exists) {
         if (doc.data().classes !== null) {
           self.setState({
@@ -167,7 +175,7 @@ class HomePage extends Component {
       }
       self.props.updateClasses(self.state.classes);
       self.props.updateRole(self.props.role);
-    }).catch(function(error) {
+    }).catch(function (error) {
       console.log("Error getting document:", error);
     });
 
@@ -177,7 +185,7 @@ class HomePage extends Component {
     let docRef = firestore.collection("users").doc(this.state.uid);
     let self = this;
 
-    docRef.get().then(function(doc) {
+    docRef.get().then(function (doc) {
       if (doc.exists) {
         self.setState({
           userImage: doc.data().userImage,
@@ -187,7 +195,7 @@ class HomePage extends Component {
         console.log("No such document!");
       }
       self.props.updateUserImage(doc.data().userImage);
-    }).catch(function(error) {
+    }).catch(function (error) {
       console.log("Error getting document:", error);
     })
   };
@@ -212,7 +220,7 @@ class HomePage extends Component {
 
     let self = this;
 
-    for(let j in self.state.classes) {
+    for (let j in self.state.classes) {
 
       let docRef = firestore.collection("classes").doc(self.state.classes[j].code);
 
@@ -267,7 +275,7 @@ class HomePage extends Component {
 
     let self = this;
 
-    for(let j in self.state.classes) {
+    for (let j in self.state.classes) {
 
       let docRef = firestore.collection("classes").doc(self.state.classes[j].code);
 
@@ -393,8 +401,10 @@ class HomePage extends Component {
    */
   render() {
 
-    let sidebarContent = <Side selectedClass={ this.props.selectedClass } selectClass={ this.props.selectClass } userImage={ this.props.userImage } updateUserImage={ this.props.updateUserImage } flipClass={this.flipToClass.bind(this)} flipPersonal={this.flipToPersonal.bind(this)}
-                                page={this.props.page} uid={this.state.uid} classes={this.props.classes} />;
+    let sidebarContent = <Side selectedClass={this.props.selectedClass} selectClass={this.props.selectClass}
+                               userImage={this.props.userImage} updateUserImage={this.props.updateUserImage}
+                               flipClass={this.flipToClass.bind(this)} flipPersonal={this.flipToPersonal.bind(this)}
+                               page={this.props.page} uid={this.state.uid} classes={this.props.classes}/>;
 
     const sidebarStyles = {
       sidebar: {
@@ -425,6 +435,8 @@ class HomePage extends Component {
       classAnnouncements: this.props.classAnnouncements,
       path: this.props.path,
       classImage: this.props.classImage,
+      assignments: this.props.assignments,
+      homeworks: this.props.homeworks,
     };
 
     const actions = {
@@ -435,6 +447,8 @@ class HomePage extends Component {
       selectClass: this.props.selectClass,
       updateClassPicture: this.props.updateClassPicture,
       getClassAnnouncments: this.props.getClassAnnouncments,
+      getAssignments: this.props.getAssignments,
+      getHomeworks: this.props.getHomeworks,
     };
 
     if (this.props.page === "home") {
@@ -444,7 +458,8 @@ class HomePage extends Component {
         return (
           <Sidebar {...sideData}>
 
-            <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} expand={this.dockSideBar}
+            <HomeNav firstName={this.state.firstName} lastName={this.state.lastName}
+                     expand={this.dockSideBar}
                      width={this.state.width}/>
             <Row>
               <Col md="1"/>
@@ -474,8 +489,23 @@ class HomePage extends Component {
         return (
           <Sidebar {...sideData}>
 
-            <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} expand={this.dockSideBar}
+            <HomeNav firstName={this.state.firstName} lastName={this.state.lastName}
+                     expand={this.dockSideBar}
                      width={this.state.width}/>
+
+            <Row>
+              <Col md="1"/>
+              <Col md="8">
+                <BigCalendar
+                  toolbar={false}
+                  events={this.props.dates}
+                  style={calendarStyles}
+                  defaultDate={new Date()}
+                  eventPropGetter={(this.eventStyleGetter)}
+                />
+              </Col>
+              <Col md="3"/>
+            </Row>
 
             <hr className="divider"/>
             <b className="annTest">Announcements</b>
@@ -496,7 +526,9 @@ class HomePage extends Component {
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <Settings {...actions} classes={this.props.classes} userImage={ this.state.userImage } updateUserImage={ this.props.updateUserImage } updateClasses={ this.props.updateClasses } role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid} />
+          <Settings {...actions} classes={this.props.classes} userImage={this.state.userImage}
+                    updateUserImage={this.props.updateUserImage} updateClasses={this.props.updateClasses}
+                    role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid}/>
         </Sidebar>
       );
 
@@ -508,26 +540,31 @@ class HomePage extends Component {
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <ClassHome {...classData} {...actions} selectedClass={this.props.selectedClass} />
+          <ClassHome {...classData} {...actions} selectedClass={this.props.selectedClass}/>
 
         </Sidebar>
       );
+    } else if (this.props.page === "liveFeed") {
 
-    } else if (this.props.page === "homework") {
+      return (
+        <Sidebar {...sideData}>
 
-        return (
-            <Sidebar {...sideData}>
+          <HomeNav firstName={"Personal Finance"} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
 
-                <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
-                         width={this.state.width}/>
+          <Row>
+            <Col>
+              <LiveFeed />
+            </Col>
+          </Row>
+        </Sidebar>
+      );
 
-                <ClassHome {...classData} selectedClass={this.props.selectedClass} />
-
-            </Sidebar>
-        );
-
+    } else {
+      return (
+        <p>UH OH!</p>
+      );
     }
   }
 }
-
-export default HomePage;
+export default HomePage
