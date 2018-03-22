@@ -23,6 +23,7 @@ class CreateActivity extends Component {
             //selectedAss: props.selectedAss,
             questions: [],
             question: null,
+            questionIndex: 0,
         };
         this.createQuestion();
         this.grabQuestions();
@@ -31,9 +32,9 @@ class CreateActivity extends Component {
     createQuestion = () => {
         let classRef = firestore.collection("classes").doc("668273").collection("Homework").doc("Homework1");
 
-        classRef.set({
-            question1: {option1: "1", option2: "2", option3: "3", option4: "4", correctOpt: "option1", prompt: "Hello", type: "MCQ"}
-        })
+        /*classRef.add({
+            this.state.questionIndex: {option1: "1", option2: "2", option3: "3", option4: "4", correctOpt: "option1", prompt: "Hello", type: "MCQ"}
+        })*/
  /*       db.collection("cities").add({
             name: "Tokyo",
             country: "Japan"
@@ -68,7 +69,7 @@ class CreateActivity extends Component {
 
 
     render() {
-        /*if (this.state.questions !== [])
+/*        if (this.state.questions !== [])
             return (
                 <Container fluid className={"ContainerRules"}>
                     <Row className={"Filler"}> </Row>
@@ -83,10 +84,9 @@ class CreateActivity extends Component {
                     {Object.keys(this.state.questions).map((key, index) => {
                         //console.log(this.state.questions[index]);
 
-                        if (this.state.questions[index].type === "MCQ")
-                            <MCQ
-                                question={ this.state.question }
-                            />
+                        if (this.state.questions[index].type === "MCQ") {
+                            return <MCQ question={ this.state.question } />
+                        }
                     })
                     }
 
