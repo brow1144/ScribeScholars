@@ -62,7 +62,7 @@ class LineBreak extends Component {
             <CardTitle>Grade Distribution</CardTitle>
             <ResponsiveContainer width="100%" height={150}>
               <PieChart>
-                <Pie data={data} dataKey="value" outerRadius={35} fill="#21CE99" label/>
+                <Pie isAnimationActive={false} data={data} dataKey="value" outerRadius={35} fill="#21CE99" label/>
                 <Tooltip />
               </PieChart>
             </ResponsiveContainer>
