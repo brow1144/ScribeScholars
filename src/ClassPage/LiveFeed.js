@@ -29,8 +29,6 @@ class LiveFeed extends Component {
       highestScore: 0,
       lowestScore: 100,
 
-      scores: [],
-
       scoresMap: {},
 
       classProgress: null,
@@ -52,7 +50,7 @@ class LiveFeed extends Component {
     let docRef = firestore.collection("classes").doc(this.props.class);
     let self = this;
 
-    docRef.get().then(function (doc) {
+    docRef.onSnapshot(function (doc) {
       if (doc.exists) {
         if (doc.data().students != null) {
           self.setState({
@@ -60,28 +58,23 @@ class LiveFeed extends Component {
           }, () => {
             self.getClassAverage();
             self.getHighLowScore();
-            //self.getUserNames();
           });
         }
       } else {
         console.log("No such document!");
       }
-    }).catch(function (error) {
-      console.log("Error getting document:", error);
     })
   };
 
   getClassAverage = () => {
 
-    let scores = [];
     let scoresMap = {};
     let self = this;
     self.state.students.forEach(function(element) {
       let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
 
-      lessonDataPerStudent.get().then(function (doc) {
+      lessonDataPerStudent.onSnapshot(function (doc) {
         if (doc.exists) {
-          //scores.unshift(doc.data().currentScore);
           scoresMap[element] = doc.data().currentScore;
           self.setState({
             numberOfQuestions: doc.data().numOfQuestions,
@@ -90,18 +83,13 @@ class LiveFeed extends Component {
           console.log("No such document!");
         }
         self.setState({
-          // scores: scores,
           scoresMap: scoresMap,
-          // lowestScore: scoresMap[element],
-          // lowUID: element,
         }, () => {
           self.calculateAverage();
           self.calculateMedian();
         });
 
 
-      }).catch(function (error) {
-        console.log("Error getting document:", error);
       })
     })
   };
@@ -152,7 +140,7 @@ class LiveFeed extends Component {
     self.state.students.forEach(function(element) {
       let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
 
-      lessonDataPerStudent.get().then(function (doc) {
+      lessonDataPerStudent.onSnapshot(function (doc) {
         if (doc.exists) {
           if (doc.data().currentScore > self.state.highestScore) {
             self.setState({
@@ -162,7 +150,7 @@ class LiveFeed extends Component {
               self.getHighName();
             })
           }
-          
+
           if (doc.data().currentScore < self.state.lowestScore) {
             self.setState({
               lowUID: element,
@@ -171,13 +159,53 @@ class LiveFeed extends Component {
               self.getlowName();
             })
           }
+          self.updateHighLowScore();
         } else {
           console.log("No such document!");
         }
-      }).catch(function (error) {
-        console.log("Error getting document:", error);
       })
+
     })
+  };
+
+  updateHighLowScore = () => {
+    this.setState({
+      highUID: "",
+      highestScore: 0,
+
+      lowUID: "",
+      lowestScore: 100,
+    }, () => {
+      let self = this;
+      self.state.students.forEach(function(element) {
+        let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
+
+        lessonDataPerStudent.get().then(function (doc) {
+          if (doc.exists) {
+            if (doc.data().currentScore > self.state.highestScore) {
+              self.setState({
+                highUID: element,
+                highestScore: doc.data().currentScore,
+              }, () => {
+                self.getHighName();
+              })
+            }
+
+            if (doc.data().currentScore < self.state.lowestScore) {
+              self.setState({
+                lowUID: element,
+                lowestScore: doc.data().currentScore,
+              }, () => {
+                self.getlowName();
+              })
+            }
+          } else {
+            console.log("No such document!");
+          }
+        })
+      })
+    });
+
   };
 
   getHighName = () => {
@@ -185,7 +213,7 @@ class LiveFeed extends Component {
     let docRef = firestore.collection("users").doc(this.state.highUID);
     let self = this;
 
-    docRef.get().then(function (doc) {
+    docRef.onSnapshot(function (doc) {
       if (doc.exists) {
         self.setState({
           highFirstName: doc.data().firstName,
@@ -194,9 +222,7 @@ class LiveFeed extends Component {
       } else {
         console.log("No such document!");
       }
-    }).catch(function (error) {
-      console.log("Error getting document:", error);
-    });
+    })
   };
 
   getlowName = () => {
@@ -204,7 +230,7 @@ class LiveFeed extends Component {
     let docRef1 = firestore.collection("users").doc(this.state.lowUID);
     let self = this;
 
-    docRef1.get().then(function (doc) {
+    docRef1.onSnapshot(function (doc) {
       if (doc.exists) {
         self.setState({
           lowFirstName: doc.data().firstName,
@@ -213,8 +239,6 @@ class LiveFeed extends Component {
       } else {
         console.log("No such document!");
       }
-    }).catch(function (error) {
-      console.log("Error getting document:", error);
     })
   };
 
