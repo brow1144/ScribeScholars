@@ -38,9 +38,6 @@ class LiveFeed extends Component {
       classMedian: 0,
       numberOfQuestions: 0,
 
-      notStarted: null,
-      inProgress: null,
-      Completed: null,
     };
   }
 
