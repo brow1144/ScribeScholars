@@ -147,7 +147,7 @@ class LiveFeed extends Component {
               highUID: element,
               highestScore: doc.data().currentScore,
             }, () => {
-              self.getHighName();
+              //self.getHighName();
             })
           }
 
@@ -156,56 +156,15 @@ class LiveFeed extends Component {
               lowUID: element,
               lowestScore: doc.data().currentScore,
             }, () => {
-              self.getlowName();
+              //self.getlowName();
             })
           }
-          self.updateHighLowScore();
         } else {
           console.log("No such document!");
         }
       })
 
     })
-  };
-
-  updateHighLowScore = () => {
-    this.setState({
-      highUID: "",
-      highestScore: 0,
-
-      lowUID: "",
-      lowestScore: 100,
-    }, () => {
-      let self = this;
-      self.state.students.forEach(function(element) {
-        let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
-
-        lessonDataPerStudent.get().then(function (doc) {
-          if (doc.exists) {
-            if (doc.data().currentScore > self.state.highestScore) {
-              self.setState({
-                highUID: element,
-                highestScore: doc.data().currentScore,
-              }, () => {
-                self.getHighName();
-              })
-            }
-
-            if (doc.data().currentScore < self.state.lowestScore) {
-              self.setState({
-                lowUID: element,
-                lowestScore: doc.data().currentScore,
-              }, () => {
-                self.getlowName();
-              })
-            }
-          } else {
-            console.log("No such document!");
-          }
-        })
-      })
-    });
-
   };
 
   getHighName = () => {
