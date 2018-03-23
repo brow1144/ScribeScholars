@@ -3,6 +3,8 @@ import {Container, Row, Col, Card, CardTitle, CardText, Table, NavLink} from 're
 
 import './MyStudents.css';
 import Graphs from '../Dashboard/Dashboard';
+import StudList from '../Dashboard/StudList'
+import AssCards from '../Dashboard/AssignmentCards'
 
 
 class MyStudents extends Component {
