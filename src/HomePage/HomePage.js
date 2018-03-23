@@ -11,6 +11,7 @@ import Side from './Side';
 import HomeNav from './HomeNav';
 import Cards from './Cards';
 import ClassHome from '../ClassPage/ClassHome';
+import LiveFeed from '../ClassPage/LiveFeed';
 
 import Settings from '../Settings/Settings';
 
@@ -492,6 +493,20 @@ class HomePage extends Component {
                      expand={this.dockSideBar}
                      width={this.state.width}/>
 
+            <Row>
+              <Col md="1"/>
+              <Col md="8">
+                <BigCalendar
+                  toolbar={false}
+                  events={this.props.dates}
+                  style={calendarStyles}
+                  defaultDate={new Date()}
+                  eventPropGetter={(this.eventStyleGetter)}
+                />
+              </Col>
+              <Col md="3"/>
+            </Row>
+
             <hr className="divider"/>
             <b className="annTest">Announcements</b>
 
@@ -534,10 +549,14 @@ class HomePage extends Component {
       return (
         <Sidebar {...sideData}>
 
-          <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
+          <HomeNav firstName={"Personal Finance"} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <p>bubbles</p>
+          <Row>
+            <Col>
+              <LiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} uid={this.state.uid}/>
+            </Col>
+          </Row>
         </Sidebar>
       );
 
