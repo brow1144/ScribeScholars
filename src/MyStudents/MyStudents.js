@@ -6,6 +6,26 @@ import Graphs from '../Dashboard/Dashboard';
 
 
 class MyStudents extends Component {
+
+    constructor (props) {
+        super(props);
+
+        this.state = {
+
+            assignments : [{
+
+                code: null,
+
+                questions : [{
+
+                }]
+
+
+            }]
+        }
+
+    }
+
     render() {
         return (
             <div>
