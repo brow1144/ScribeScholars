@@ -20,25 +20,24 @@ class LiveFeed extends Component {
       highUID: "",
       lowUID: "",
 
-      highFirstName: "",
+      highFirstName: "Loading",
       highLastName: "",
 
-      lowFirstName: "",
+      lowFirstName: "Loading",
       lowLastName: "",
 
       highestScore: 0,
-      lowestScore: 0,
+      lowestScore: 100,
 
-      scores: [],
+      scoresMap: {},
 
-      classProgress: null,
+      classProgress: 0,
+      progressMap: {},
+
       classAverage: 0,
       classMedian: 0,
       numberOfQuestions: 0,
 
-      notStarted: null,
-      inProgress: null,
-      Completed: null,
     };
   }
 
@@ -50,7 +49,9 @@ class LiveFeed extends Component {
     let docRef = firestore.collection("classes").doc(this.props.class);
     let self = this;
 
-    docRef.get().then(function (doc) {
+
+    docRef.onSnapshot(function (doc) {
+
       if (doc.exists) {
         if (doc.data().students != null) {
           self.setState({
@@ -58,27 +59,30 @@ class LiveFeed extends Component {
           }, () => {
             self.getClassAverage();
             self.getHighLowScore();
-            //self.getUserNames();
+
+            self.getProgress();
+
           });
         }
       } else {
         console.log("No such document!");
       }
-    }).catch(function (error) {
-      console.log("Error getting document:", error);
     })
   };
 
   getClassAverage = () => {
 
-    let scores = [];
+
+    let scoresMap = {};
+
     let self = this;
     self.state.students.forEach(function(element) {
       let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
 
-      lessonDataPerStudent.get().then(function (doc) {
+
+      lessonDataPerStudent.onSnapshot(function (doc) {
         if (doc.exists) {
-          scores.unshift(doc.data().currentScore);
+          scoresMap[element] = doc.data().currentScore;
           self.setState({
             numberOfQuestions: doc.data().numOfQuestions,
           });
@@ -86,17 +90,14 @@ class LiveFeed extends Component {
           console.log("No such document!");
         }
         self.setState({
-          scores: scores,
-          lowestScore: scores[0],
-          lowUID: element,
+          scoresMap: scoresMap,
         }, () => {
           self.calculateAverage();
           self.calculateMedian();
         });
 
 
-      }).catch(function (error) {
-        console.log("Error getting document:", error);
+
       })
     })
   };
@@ -104,10 +105,12 @@ class LiveFeed extends Component {
   calculateAverage = () => {
 
     let temp = 0;
-    for (let i in this.state.scores) {
-      temp += this.state.scores[i];
+
+    for (let i in this.state.scoresMap) {
+      temp += this.state.scoresMap[i];
     }
-    temp = temp / this.state.scores.length;
+    let size = Object.keys(this.state.scoresMap).length;
+    temp = temp / size;
     this.setState({
       classAverage: temp,
     });
@@ -116,16 +119,24 @@ class LiveFeed extends Component {
   calculateMedian = () => {
 
     let median = 0;
-    let array = this.state.scores;
+
+    let array = [];
+
+    for (let i in this.state.scoresMap) {
+      array.unshift(this.state.scoresMap[i]);
+    }
+
     array.sort();
 
-    if ((this.state.scores.length % 2) !== 0) {
+    let size = Object.keys(this.state.scoresMap).length;
+    if ((size % 2) !== 0) {
       // Even
-      median += array[Math.floor(this.state.scores.length / 2)];
+      median += array[Math.floor(size / 2)];
     } else {
       // Odd
-      median += array[Math.floor(this.state.scores.length / 2)];
-      median += array[Math.floor((this.state.scores.length / 2)) - 1];
+      median += array[Math.floor((size) / 2)];
+      median += array[Math.floor((size / 2)) - 1];
+
       median = median / 2;
     }
 
@@ -139,35 +150,43 @@ class LiveFeed extends Component {
     self.state.students.forEach(function(element) {
       let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
 
-      lessonDataPerStudent.get().then(function (doc) {
+
+      lessonDataPerStudent.onSnapshot(function (doc) {
         if (doc.exists) {
           if (doc.data().currentScore > self.state.highestScore) {
             self.setState({
               highUID: element,
               highestScore: doc.data().currentScore,
+
+            }, () => {
+              //self.getHighName();
             })
-          } else if (doc.data().currentScore < self.state.lowestScore) {
+          }
+
+          if (doc.data().currentScore < self.state.lowestScore) {
             self.setState({
               lowUID: element,
               lowestScore: doc.data().currentScore,
+            }, () => {
+              //self.getlowName();
             })
           }
-          self.getUserNames();
         } else {
           console.log("No such document!");
         }
-      }).catch(function (error) {
-        console.log("Error getting document:", error);
       })
+
     })
   };
 
-  getUserNames = () => {
+  getHighName = () => {
 
     let docRef = firestore.collection("users").doc(this.state.highUID);
     let self = this;
 
-    docRef.get().then(function (doc) {
+
+    docRef.onSnapshot(function (doc) {
+
       if (doc.exists) {
         self.setState({
           highFirstName: doc.data().firstName,
@@ -176,6 +195,7 @@ class LiveFeed extends Component {
       } else {
         console.log("No such document!");
       }
+
     }).catch(function (error) {
       console.log("Error getting document:", error);
     });
@@ -183,6 +203,17 @@ class LiveFeed extends Component {
     let docRef1 = firestore.collection("users").doc(this.state.lowUID);
 
     docRef1.get().then(function (doc) {
+
+    })
+  };
+
+  getlowName = () => {
+
+    let docRef1 = firestore.collection("users").doc(this.state.lowUID);
+    let self = this;
+
+    docRef1.onSnapshot(function (doc) {
+
       if (doc.exists) {
         self.setState({
           lowFirstName: doc.data().firstName,
@@ -191,15 +222,53 @@ class LiveFeed extends Component {
       } else {
         console.log("No such document!");
       }
-    }).catch(function (error) {
-      console.log("Error getting document:", error);
+
     })
+  };
+
+  getProgress = () => {
+
+    let progressMap = this.state.progressMap;
+    let self = this;
+
+    self.state.students.forEach(function(element) {
+      let lessonProgressPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
+
+      lessonProgressPerStudent.onSnapshot(function (doc) {
+        if (doc.exists) {
+          progressMap[element] = doc.data().currentQuestion / doc.data().numOfQuestions;
+        } else {
+          console.log("No such document!");
+        }
+        self.setState({
+          progressMap: progressMap,
+        }, () => {
+          self.calculateProgress();
+        });
+      })
+    })
+  };
+
+  calculateProgress = () => {
+
+    let temp = 0;
+    for (let i in this.state.progressMap) {
+      temp += this.state.progressMap[i];
+    }
+    let size = Object.keys(this.state.progressMap).length;
+    temp = temp / size;
+    temp *= 100;
+    this.setState({
+      classProgress: temp,
+    });
 
   };
+
 
   render() {
 
     const lesssonStatsData = {
+      classProgress: this.state.classProgress,
       classAverage: this.state.classAverage,
       classMedian: this.state.classMedian,
       numberOfQuestions: this.state.numberOfQuestions,

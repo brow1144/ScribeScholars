@@ -12,7 +12,7 @@ class LessonStats extends Component {
             <CardDeck>
               <Card body inverse style={{ backgroundColor: '#030C14', borderWidth: '0.2em', borderColor: '#21CE99' }}>
                 <CardTitle>Class Progress</CardTitle>
-                <Progress value="45">45%</Progress>
+                <Progress value={this.props.classProgress}>{this.props.classProgress}%</Progress>
               </Card>
               <Card body inverse style={{ backgroundColor: '#030C14', borderWidth: '0.2em', borderColor: '#21CE99' }}>
                 <CardTitle>Class Average</CardTitle>
