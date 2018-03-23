@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 
 import { Col, FormGroup, Label, Input} from 'reactstrap';
 
-import './MCQ.css';
+import './MCQForm.css';
 
-class MCQ extends Component {
+class MCQForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -45,4 +45,4 @@ class MCQ extends Component {
     }
 }
 
-export default MCQ
+export default MCQForm
