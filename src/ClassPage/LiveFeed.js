@@ -20,16 +20,18 @@ class LiveFeed extends Component {
       highUID: "",
       lowUID: "",
 
-      highFirstName: "",
+      highFirstName: "Loading",
       highLastName: "",
 
-      lowFirstName: "",
+      lowFirstName: "Loading",
       lowLastName: "",
 
       highestScore: 0,
-      lowestScore: 0,
+      lowestScore: 100,
 
       scores: [],
+
+      scoresMap: {},
 
       classProgress: null,
       classAverage: 0,
@@ -72,13 +74,15 @@ class LiveFeed extends Component {
   getClassAverage = () => {
 
     let scores = [];
+    let scoresMap = {};
     let self = this;
     self.state.students.forEach(function(element) {
       let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
 
       lessonDataPerStudent.get().then(function (doc) {
         if (doc.exists) {
-          scores.unshift(doc.data().currentScore);
+          //scores.unshift(doc.data().currentScore);
+          scoresMap[element] = doc.data().currentScore;
           self.setState({
             numberOfQuestions: doc.data().numOfQuestions,
           });
@@ -86,9 +90,10 @@ class LiveFeed extends Component {
           console.log("No such document!");
         }
         self.setState({
-          scores: scores,
-          lowestScore: scores[0],
-          lowUID: element,
+          // scores: scores,
+          scoresMap: scoresMap,
+          // lowestScore: scoresMap[element],
+          // lowUID: element,
         }, () => {
           self.calculateAverage();
           self.calculateMedian();
@@ -104,10 +109,11 @@ class LiveFeed extends Component {
   calculateAverage = () => {
 
     let temp = 0;
-    for (let i in this.state.scores) {
-      temp += this.state.scores[i];
+    for (let i in this.state.scoresMap) {
+      temp += this.state.scoresMap[i];
     }
-    temp = temp / this.state.scores.length;
+    let size = Object.keys(this.state.scoresMap).length;
+    temp = temp / size;
     this.setState({
       classAverage: temp,
     });
@@ -116,16 +122,23 @@ class LiveFeed extends Component {
   calculateMedian = () => {
 
     let median = 0;
-    let array = this.state.scores;
+
+    let array = [];
+
+    for (let i in this.state.scoresMap) {
+      array.unshift(this.state.scoresMap[i]);
+    }
+
     array.sort();
 
-    if ((this.state.scores.length % 2) !== 0) {
+    let size = Object.keys(this.state.scoresMap).length;
+    if ((size % 2) !== 0) {
       // Even
-      median += array[Math.floor(this.state.scores.length / 2)];
+      median += array[Math.floor(size / 2)];
     } else {
       // Odd
-      median += array[Math.floor(this.state.scores.length / 2)];
-      median += array[Math.floor((this.state.scores.length / 2)) - 1];
+      median += array[Math.floor((size) / 2)];
+      median += array[Math.floor((size / 2)) - 1];
       median = median / 2;
     }
 
@@ -145,14 +158,19 @@ class LiveFeed extends Component {
             self.setState({
               highUID: element,
               highestScore: doc.data().currentScore,
+            }, () => {
+              self.getHighName();
             })
-          } else if (doc.data().currentScore < self.state.lowestScore) {
+          }
+          
+          if (doc.data().currentScore < self.state.lowestScore) {
             self.setState({
               lowUID: element,
               lowestScore: doc.data().currentScore,
+            }, () => {
+              self.getlowName();
             })
           }
-          self.getUserNames();
         } else {
           console.log("No such document!");
         }
@@ -162,7 +180,7 @@ class LiveFeed extends Component {
     })
   };
 
-  getUserNames = () => {
+  getHighName = () => {
 
     let docRef = firestore.collection("users").doc(this.state.highUID);
     let self = this;
@@ -179,8 +197,12 @@ class LiveFeed extends Component {
     }).catch(function (error) {
       console.log("Error getting document:", error);
     });
+  };
+
+  getlowName = () => {
 
     let docRef1 = firestore.collection("users").doc(this.state.lowUID);
+    let self = this;
 
     docRef1.get().then(function (doc) {
       if (doc.exists) {
@@ -194,8 +216,8 @@ class LiveFeed extends Component {
     }).catch(function (error) {
       console.log("Error getting document:", error);
     })
-
   };
+
 
   render() {
 
