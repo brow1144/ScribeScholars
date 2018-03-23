@@ -554,7 +554,7 @@ class HomePage extends Component {
 
           <Row>
             <Col>
-              <LiveFeed />
+              <LiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} uid={this.state.uid}/>
             </Col>
           </Row>
         </Sidebar>

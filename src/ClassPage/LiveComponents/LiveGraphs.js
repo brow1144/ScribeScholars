@@ -1,27 +1,35 @@
 import React, { Component } from 'react';
 
-import { Alert, Row, Col, Card, CardTitle, CardText } from 'reactstrap';
+import { Row, Col, Card, CardTitle, CardText } from 'reactstrap';
 import { ResponsiveContainer, PieChart, Pie, Bar, BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 class LineBreak extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+
+    }
+  }
   render() {
 
-    const data = [
-      {name: 'Group A', value: 400}, {name: 'Group B', value: 300},
-      {name: 'Group C', value: 300}, {name: 'Group D', value: 200},
-      {name: 'Group E', value: 278}, {name: 'Group F', value: 189}
+    const data1 = [
+      {name: 'Page A', Unanswered: 4000, Incorrect: 2400, Correct: 2400},
+      {name: 'Page B', Unanswered: 3000, Incorrect: 1398, Correct: 2210},
+      {name: 'Page C', Unanswered: 2000, Incorrect: 9800, Correct: 2290},
+      {name: 'Page D', Unanswered: 2780, Incorrect: 3908, Correct: 2000},
+      {name: 'Page E', Unanswered: 1890, Incorrect: 4800, Correct: 2181},
+      {name: 'Page F', Unanswered: 2390, Incorrect: 3800, Correct: 2500},
+      {name: 'Page G', Unanswered: 3490, Incorrect: 4300, Correct: 2100},
+      {name: 'Page A', Unanswered: 4000, Incorrect: 2400, Correct: 2400},
+      {name: 'Page B', Unanswered: 3000, Incorrect: 1398, Correct: 2210},
+      {name: 'Page B', Unanswered: 3000, Incorrect: 1398, Correct: 2210},
     ];
 
-    const data1 = [
-      {name: 'Page A', uv: 4000, pv: 2400, amt: 2400},
-      {name: 'Page B', uv: 3000, pv: 1398, amt: 2210},
-      {name: 'Page C', uv: 2000, pv: 9800, amt: 2290},
-      {name: 'Page D', uv: 2780, pv: 3908, amt: 2000},
-      {name: 'Page E', uv: 1890, pv: 4800, amt: 2181},
-      {name: 'Page F', uv: 2390, pv: 3800, amt: 2500},
-      {name: 'Page G', uv: 3490, pv: 4300, amt: 2100},
-    ];
+    const data01 =
+      [ {name: 'Not Started', value: 1},
+        {name: 'In Progress', value: 4},
+        {name: 'Completed', value: 6}];
 
     return (
       <Row>
@@ -42,7 +50,7 @@ class LineBreak extends Component {
             <Col>
               <Card body outline color="info">
                 <CardTitle>Highest Score</CardTitle>
-                <CardText>Kyle Brown: 98%</CardText>
+                <CardText>{this.props.highFirstName} {this.props.highLastName}: {this.props.highestScore}%</CardText>
               </Card>
             </Col>
           </Row>
@@ -53,7 +61,7 @@ class LineBreak extends Component {
             <Col>
               <Card body outline color="info">
                 <CardTitle>Lowest Score</CardTitle>
-                <CardText>Walter 29%</CardText>
+                <CardText>{this.props.lowFirstName} {this.props.lowLastName}: {this.props.lowestScore}%</CardText>
               </Card>
             </Col>
           </Row>
@@ -61,45 +69,27 @@ class LineBreak extends Component {
 
 
         <Col xs="12" md="2" >
-
-          <Row>
-            <Col>
-              <Alert color="success">
-                <h4 className="alert-heading">Number of Students Remaining</h4>
-                <p>
-                  15
-                </p>
-                <hr />
-                <p className="mb-0">
-                  out of 26
-                </p>
-              </Alert>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col>
-              <b>Remaining Time</b>
-              <ResponsiveContainer width="100%" height={150}>
-                <PieChart>
-                  <Pie startAngle={90} endAngle={-60} data={data} dataKey="value" outerRadius={40} fill="#F45531" label/>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </Col>
-          </Row>
+          <b>Not Started / Working / Finished</b>
+          <ResponsiveContainer width="100%" height={200}>
+            <PieChart>
+              <Pie isAnimationActive={false} data={data01} dataKey="value" innerRadius={20} outerRadius={40} fill="#21CE99" label/>
+              <Tooltip/>
+            </PieChart>
+          </ResponsiveContainer>
         </Col>
 
         <Col sm="12" md="5">
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data1}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />f
-              <Bar dataKey="pv" fill="#21CE99" />
-              <Bar dataKey="uv" fill="#030C14" />
+            <BarChart data={data1}
+                      margin={{top: 20, right: 30, left: 20, bottom: 5}}>
+              <XAxis dataKey="name"/>
+              <YAxis/>
+              <CartesianGrid strokeDasharray="3 3"/>
+              <Tooltip/>
+              <Legend />
+              <Bar dataKey="Unanswered" stackId="a" fill="#030C14" />
+              <Bar dataKey="Incorrect" stackId="a" fill="#F45531" />
+              <Bar dataKey="Correct" stackId="a" fill="#21CE99" />
             </BarChart>
           </ResponsiveContainer>
         </Col>
