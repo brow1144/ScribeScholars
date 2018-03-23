@@ -50,7 +50,7 @@ class LineBreak extends Component {
             <Col>
               <Card body outline color="info">
                 <CardTitle>Highest Score</CardTitle>
-                <CardText>{this.props.highFirstName} {this.props.highLastName}: {this.props.highestScore}%</CardText>
+                <CardText>{this.props.highestScore}%</CardText>
               </Card>
             </Col>
           </Row>
@@ -61,7 +61,7 @@ class LineBreak extends Component {
             <Col>
               <Card body outline color="info">
                 <CardTitle>Lowest Score</CardTitle>
-                <CardText>{this.props.lowFirstName} {this.props.lowLastName}: {this.props.lowestScore}%</CardText>
+                <CardText>{this.props.lowestScore}%</CardText>
               </Card>
             </Col>
           </Row>

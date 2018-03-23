@@ -393,7 +393,7 @@ class Main extends Component {
     return (
       <Switch>
 
-        <Route path="/HomePage/:class/lessons/:lessonNumber" render={(match) => (
+        <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber" render={(match) => (
           <HomePage
             class={match.match.params.class}
             lessonNumber={match.match.params.lessonNumber}
