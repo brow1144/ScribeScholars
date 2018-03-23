@@ -5,6 +5,7 @@ import { NavLink as RouterLink } from 'react-router-dom'
 
 import AssignTable from "./AssignTable";
 import HomeworkTable from './HomeworkTable';
+import GradesTable from './GradesTable';
 import Cards from '../HomePage/Cards';
 import './ClassHome.css';
 import MyStudents from '../MyStudents/MyStudents';
@@ -34,7 +35,8 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: false,
-        myStudentsActive: false,
+      myStudentsActive: false,
+      gradesActive: false,
     };
   }
 
@@ -49,7 +51,8 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: false,
-        myStudentsActive: false,
+      myStudentsActive: false,
+      gradesActive: false,
     })
   };
 
@@ -59,7 +62,8 @@ class ClassHome extends Component {
       lessonsActive: true,
       homeworkActive: false,
       discussionActive: false,
-        myStudentsActive: false,
+      myStudentsActive: false,
+      gradesActive: false,
     })
   };
 
@@ -69,9 +73,9 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: true,
       discussionActive: false,
-        myStudentsActive: false,
+      myStudentsActive: false,
+      gradesActive: false,
     });
-
   };
 
   switchDiscussions = () => {
@@ -80,7 +84,8 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: true,
-        myStudentsActive: false,
+      myStudentsActive: false,
+      gradesActive: false,
     })
   };
 
@@ -91,7 +96,19 @@ class ClassHome extends Component {
             homeworkActive: false,
             discussionActive: false,
             myStudentsActive: true,
+            gradesActive: false,
         })
+    };
+
+    switchGrades = () => {
+      this.setState({
+        announcementsActive: false,
+        lessonsActive: false,
+        homeworkActive: false,
+        discussionActive: false,
+        myStudentsActive: false,
+        gradesActive: true,
+      })
     };
 
   render() {
@@ -124,6 +141,9 @@ class ClassHome extends Component {
               <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/myStudents`}>
                   <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive}>My Students</NavLink>
               </RouterLink>
+            <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/grades`}>
+              <NavLink onClick={this.switchGrades} active={this.state.gradesActive}>Grades</NavLink>
+            </RouterLink>
           </Nav>
 
           {this.state.announcementsActive
@@ -154,6 +174,7 @@ class ClassHome extends Component {
             <div>
             </div>
           }
+
             {this.state.myStudentsActive
                 ?
                 <div>
@@ -163,6 +184,13 @@ class ClassHome extends Component {
                 <div>
                 </div>
             }
+          {this.state.gradesActive
+            ?
+            <GradesTable grades={this.props.grades} />
+            :
+            <div>
+            </div>
+          }
         </div>
       )
   }
