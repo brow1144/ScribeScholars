@@ -7,8 +7,7 @@ const AssignmentCards = (props) => {
     return (
         <div>
                 {Object.keys(props.homeworks).map((key, index) => {
-                    return <Col sm={4} key={key}>
-                        <Row className={"assPad"}>
+                    return<Row key={key} className={"assPad"}>
                             <Col>
                                 <NavLink href="#">
                                     <Card body key={key} className="text-center">
@@ -19,8 +18,6 @@ const AssignmentCards = (props) => {
                                 </NavLink>
                             </Col>
                         </Row>
-                        <br/>
-                    </Col>
                 })}
         </div>
     )
