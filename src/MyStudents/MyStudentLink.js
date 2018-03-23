@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Container } from 'reactstrap';
+import { Button, Container } from 'reactstrap';
 
 
 class MyStudentLink extends Component {

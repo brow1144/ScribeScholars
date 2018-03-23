@@ -1,225 +1,236 @@
 import React, { Component } from 'react';
 
-import { Table, Alert, Row, Col, Progress, Card, CardTitle, CardText, CardDeck } from 'reactstrap';
-import { ResponsiveContainer, PieChart, Pie, Bar, BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import LessonStats from './LiveComponents/LessonStats';
+import LineBreak from './LiveComponents/LineBreak';
+import LiveGraphs from './LiveComponents/LiveGraphs';
+import StudentsChart from './LiveComponents/StudentsChart';
+
+import { firestore } from "../base";
 
 import './LiveFeed.css';
 
 class LiveFeed extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
-    }
+      students: [],
+
+      highUID: "",
+      lowUID: "",
+
+      highFirstName: "",
+      highLastName: "",
+
+      lowFirstName: "",
+      lowLastName: "",
+
+      highestScore: 0,
+      lowestScore: 0,
+
+      scores: [],
+
+      classProgress: null,
+      classAverage: 0,
+      classMedian: 0,
+      numberOfQuestions: 0,
+
+      notStarted: null,
+      inProgress: null,
+      Completed: null,
+    };
   }
+
+  componentWillMount() {
+    this.getStudentsInClass();
+  }
+
+  getStudentsInClass = () => {
+    let docRef = firestore.collection("classes").doc(this.props.class);
+    let self = this;
+
+    docRef.get().then(function (doc) {
+      if (doc.exists) {
+        if (doc.data().students != null) {
+          self.setState({
+            students: doc.data().students,
+          }, () => {
+            self.getClassAverage();
+            self.getHighLowScore();
+            //self.getUserNames();
+          });
+        }
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    })
+  };
+
+  getClassAverage = () => {
+
+    let scores = [];
+    let self = this;
+    self.state.students.forEach(function(element) {
+      let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
+
+      lessonDataPerStudent.get().then(function (doc) {
+        if (doc.exists) {
+          scores.unshift(doc.data().currentScore);
+          self.setState({
+            numberOfQuestions: doc.data().numOfQuestions,
+          });
+        } else {
+          console.log("No such document!");
+        }
+        self.setState({
+          scores: scores,
+          lowestScore: scores[0],
+          lowUID: element,
+        }, () => {
+          self.calculateAverage();
+          self.calculateMedian();
+        });
+
+
+      }).catch(function (error) {
+        console.log("Error getting document:", error);
+      })
+    })
+  };
+
+  calculateAverage = () => {
+
+    let temp = 0;
+    for (let i in this.state.scores) {
+      temp += this.state.scores[i];
+    }
+    temp = temp / this.state.scores.length;
+    this.setState({
+      classAverage: temp,
+    });
+  };
+
+  calculateMedian = () => {
+
+    let median = 0;
+    let array = this.state.scores;
+    array.sort();
+
+    if ((this.state.scores.length % 2) !== 0) {
+      // Even
+      median += array[Math.floor(this.state.scores.length / 2)];
+    } else {
+      // Odd
+      median += array[Math.floor(this.state.scores.length / 2)];
+      median += array[Math.floor((this.state.scores.length / 2)) - 1];
+      median = median / 2;
+    }
+
+    this.setState({
+      classMedian: median,
+    });
+  };
+
+  getHighLowScore = () => {
+    let self = this;
+    self.state.students.forEach(function(element) {
+      let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
+
+      lessonDataPerStudent.get().then(function (doc) {
+        if (doc.exists) {
+          if (doc.data().currentScore > self.state.highestScore) {
+            self.setState({
+              highUID: element,
+              highestScore: doc.data().currentScore,
+            })
+          } else if (doc.data().currentScore < self.state.lowestScore) {
+            self.setState({
+              lowUID: element,
+              lowestScore: doc.data().currentScore,
+            })
+          }
+          self.getUserNames();
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(function (error) {
+        console.log("Error getting document:", error);
+      })
+    })
+  };
+
+  getUserNames = () => {
+
+    let docRef = firestore.collection("users").doc(this.state.highUID);
+    let self = this;
+
+    docRef.get().then(function (doc) {
+      if (doc.exists) {
+        self.setState({
+          highFirstName: doc.data().firstName,
+          highLastName: doc.data().lastName,
+        });
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+
+    let docRef1 = firestore.collection("users").doc(this.state.lowUID);
+
+    docRef1.get().then(function (doc) {
+      if (doc.exists) {
+        self.setState({
+          lowFirstName: doc.data().firstName,
+          lowLastName: doc.data().lastName,
+        });
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    })
+
+  };
 
   render() {
 
+    const lesssonStatsData = {
+      classAverage: this.state.classAverage,
+      classMedian: this.state.classMedian,
+      numberOfQuestions: this.state.numberOfQuestions,
+    };
 
-    const data = [
-      {name: 'Group A', value: 400}, {name: 'Group B', value: 300},
-      {name: 'Group C', value: 300}, {name: 'Group D', value: 200},
-      {name: 'Group E', value: 278}, {name: 'Group F', value: 189}
-      ];
+    const liveGraphsData = {
+      highestScore: this.state.highestScore,
+      lowestScore: this.state.lowestScore,
 
-    const data1 = [
-      {name: 'Page A', uv: 4000, pv: 2400, amt: 2400},
-      {name: 'Page B', uv: 3000, pv: 1398, amt: 2210},
-      {name: 'Page C', uv: 2000, pv: 9800, amt: 2290},
-      {name: 'Page D', uv: 2780, pv: 3908, amt: 2000},
-      {name: 'Page E', uv: 1890, pv: 4800, amt: 2181},
-      {name: 'Page F', uv: 2390, pv: 3800, amt: 2500},
-      {name: 'Page G', uv: 3490, pv: 4300, amt: 2100},
-    ];
+      highFirstName: this.state.highFirstName,
+      highLastName: this.state.highLastName,
+
+      lowFirstName: this.state.lowFirstName,
+      lowLastName: this.state.lowLastName,
+    };
 
     return (
       <div>
-        <hr/>
-        <br/>
-        <Row>
-          <Col xs="1" />
-          <Col xs="10">
-            <CardDeck>
-              <Card body inverse style={{ backgroundColor: '#030C14', borderWidth: '0.2em', borderColor: '#21CE99' }}>
-                <CardTitle>Class Progress</CardTitle>
-                <Progress value="45">45%</Progress>
-              </Card>
-              <Card body inverse style={{ backgroundColor: '#030C14', borderWidth: '0.2em', borderColor: '#21CE99' }}>
-                <CardTitle>Class Average</CardTitle>
-                <CardText>80%</CardText>
-              </Card>
-              <Card body inverse style={{ backgroundColor: '#030C14', borderWidth: '0.2em', borderColor: '#21CE99' }}>
-                <CardTitle>Class Median</CardTitle>
-                <CardText>75%</CardText>
-              </Card>
-              <Card body inverse style={{ backgroundColor: '#030C14', borderWidth: '0.2em', borderColor: '#21CE99' }}>
-                <CardTitle>Number of Questions</CardTitle>
-                <CardText>15</CardText>
-            </Card>
-            </CardDeck>
-          </Col>
-          <Col xs="1" />
-        </Row>
+        <hr />
+        <br />
 
-        <Row>
-          <Col xs="1" />
-          <Col xs="10">
-            <hr />
-          </Col>
-          <Col xs="" />
-        </Row>
+        <LessonStats {...lesssonStatsData} />
 
-        <Row>
-          <Col xs="1" />
+        <LineBreak />
 
+        <LiveGraphs {...liveGraphsData}  />
 
+        <LineBreak />
 
-          <Col sm="12" md="3" >
-            <Row>
-              <Col>
-                <Card body inverse style={{ backgroundColor: '#030C14', borderWidth: '0.2em', borderColor: '#21CE99' }}>
-                  <CardTitle>Stats</CardTitle>
-                </Card>
-              </Col>
-            </Row>
+        <StudentsChart />
 
-            <br />
-
-            <Row>
-              <Col>
-                <Card body outline color="info">
-                  <CardTitle>Highest Score</CardTitle>
-                  <CardText>Kyle Brown: 98%</CardText>
-                </Card>
-              </Col>
-            </Row>
-
-            <br />
-
-            <Row>
-              <Col>
-                <Card body outline color="info">
-                  <CardTitle>Lowest Score</CardTitle>
-                  <CardText>Walter 29%</CardText>
-                </Card>
-              </Col>
-            </Row>
-          </Col>
-
-
-          <Col xs="12" md="2" >
-
-            <Row>
-              <Col>
-                <Alert color="success">
-                  <h4 className="alert-heading">Number of Students Remaining</h4>
-                  <p>
-                    15
-                  </p>
-                  <hr />
-                  <p className="mb-0">
-                    out of 26
-                  </p>
-                </Alert>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col>
-                <b>Remaining Time</b>
-                <ResponsiveContainer width="100%" height={150}>
-                  <PieChart>
-                    <Pie startAngle={90} endAngle={-60} data={data} dataKey="value" outerRadius={40} fill="#F45531" label/>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </Col>
-            </Row>
-          </Col>
-
-          <Col sm="12" md="5">
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={data1}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />f
-                <Bar dataKey="pv" fill="#21CE99" />
-                <Bar dataKey="uv" fill="#030C14" />
-              </BarChart>
-            </ResponsiveContainer>
-          </Col>
-
-          <Col xs="1" />
-
-        </Row>
-
-        <Row>
-          <Col xs="1" />
-          <Col xs="10">
-            <hr />
-          </Col>
-          <Col xs="" />
-        </Row>
-
-      <Row>
-        <Col md="1" />
-        <Col xs="12" md="6">
-          <Table striped>
-            <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Module</th>
-              <th>Progress</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Kyle</td>
-              <td>Investing</td>
-              <td>
-                <div className="text-center">85%</div>
-                <Progress animated color="success" value="85" />
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Walter</td>
-              <td>Wealth</td>
-              <td>
-                <div className="text-center">15%</div>
-                <Progress animated color="danger" value="15" />
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Jeremy</td>
-              <td>Debt</td>
-              <td>
-                <div className="text-center">55%</div>
-                <Progress animated color="warning" value="55" />
-              </td>
-            </tr>
-            </tbody>
-          </Table>
-        </Col>
-        <Col xs="12" md="4">
-          <Card body outline color="info">
-            <CardTitle>Grade Distribution</CardTitle>
-            <ResponsiveContainer width="100%" height={150}>
-              <PieChart>
-                <Pie data={data} dataKey="value" outerRadius={35} fill="#21CE99" label/>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </Card>
-        </Col>
-        <Col md="1" />
-      </Row>
         <br/>
         <br/>
         <br/>
@@ -229,6 +240,7 @@ class LiveFeed extends Component {
         <br/>
         <br/>
         <br/>
+
       </div>
     );
   }

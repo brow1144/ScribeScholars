@@ -3,6 +3,10 @@ import { Container, Row, Col } from 'reactstrap';
 
 import './DashboardInfoPage.css';
 import DashboardInfoBar from "./DashboardInfoBar";
+import c1 from './pics/component1.png'
+import c2 from './pics/component2.png'
+import c3 from './pics/component3.png'
+import c4 from './pics/component4.png'
 
 class DashboardInfoPage extends Component {
     render() {
@@ -42,11 +46,16 @@ class DashboardInfoPage extends Component {
                     <Row className="compBg2">
 
                         <Col xs={12} lg={6} className="text compBg2">
-                            <h1 className={"componentHeader"}>Component 1</h1>
-                            <p className="componentText">This is where all the info for the
-                                first component that we decide to elaborate on will be sectioned
+                            <h1 className={"componentHeader"}>Pass/Fail %</h1>
+                            <p className="componentText">This component will show
+                                the passing and failing percentage of all students
+                                within the teacher's class.
                             </p>
                         </Col>
+                        <Col xs={12} lg={6} className="compBg3">
+                            <img src={c1} className="picture" alt=""/>
+                        </Col>
+
                     </Row>
                     <Row>
                         <a name="Component2"><Col className={"fillerCol"} xs={12}></Col></a>
@@ -54,11 +63,50 @@ class DashboardInfoPage extends Component {
                     <Row className="compBg1">
 
                         <Col xs={12} lg={6} className="text compBg1">
-                            <h1 className={"componentHeader"}>Component 2</h1>
-                            <p className="componentText">This is where all the info for the
-                                second component that we decide to elaborate on will be sectioned
+                            <h1 className={"componentHeader"}>Average GPA</h1>
+                            <p className="componentText">This component will show
+                                the average GPA across all students within the
+                                teacher's class.
                             </p>
                         </Col>
+                        <Col xs={12} lg={6} className="compBg3">
+                            <img src={c2} className="picture" alt=""/>
+                        </Col>
+
+                    </Row>
+                    <Row>
+                        <a name="Component3"><Col className={"fillerCol"} xs={12}></Col></a>
+                    </Row>
+                    <Row className="compBg2">
+
+                        <Col xs={12} lg={6} className="text compBg2">
+                            <h1 className={"componentHeader"}>GPA Distribution</h1>
+                            <p className="componentText">This component will show
+                                the GPA distribution amongst all students in the
+                                teacher's class.
+                            </p>
+                        </Col>
+                        <Col xs={12} lg={6} className="compBg3">
+                            <img src={c3} className="picture" alt=""/>
+                        </Col>
+
+                    </Row>
+                    <Row>
+                        <a name="Component4"><Col className={"fillerCol"} xs={12}></Col></a>
+                    </Row>
+                    <Row className="compBg1">
+
+                        <Col xs={12} lg={6} className="text compBg1">
+                            <h1 className={"componentHeader"}>Recent Assignment</h1>
+                            <p className="componentText">This component will show
+                                the average grade on the most recent graded assignment
+                                or test for the teacher's class.
+                            </p>
+                        </Col>
+                        <Col xs={12} lg={6} className="compBg3">
+                            <img src={c4} className="picture" alt=""/>
+                        </Col>
+
                     </Row>
                 </Container>
             </div>

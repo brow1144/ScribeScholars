@@ -21,6 +21,7 @@ import MakeWork from "./WorkForm/MakeWork";
 
 import Graphs from "./Graphs";
 
+import CreateActivity from './CreateActivity/CreateActivity';
 
 class App extends Component {
 
@@ -158,6 +159,12 @@ class App extends Component {
         )} />
 
         <Route render={() => <Redirect to="/HomePage" />} />
+
+          <Route exact path='/create-activity' render={() => (
+              this.signedIn()
+                  ? <CreateActivity uid={this.state.uid}/>
+                  : <Redirect to="/About" />
+          )} />
 
         <Route render={() => <Redirect to='/HomePage' />} />
 

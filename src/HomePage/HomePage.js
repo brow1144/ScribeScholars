@@ -580,6 +580,20 @@ class HomePage extends Component {
                      showGPA={this.props.showGPA}
                      width={this.state.width}/>
 
+            <Row>
+              <Col md="1"/>
+              <Col md="8">
+                <BigCalendar
+                  toolbar={false}
+                  events={this.props.dates}
+                  style={calendarStyles}
+                  defaultDate={new Date()}
+                  eventPropGetter={(this.eventStyleGetter)}
+                />
+              </Col>
+              <Col md="3"/>
+            </Row>
+
             <hr className="divider"/>
             <b className="annTest">Announcements</b>
 
@@ -627,7 +641,7 @@ class HomePage extends Component {
 
           <Row>
             <Col>
-              <LiveFeed />
+              <LiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} uid={this.state.uid}/>
             </Col>
           </Row>
         </Sidebar>
