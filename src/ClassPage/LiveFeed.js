@@ -49,7 +49,9 @@ class LiveFeed extends Component {
     let docRef = firestore.collection("classes").doc(this.props.class);
     let self = this;
 
+
     docRef.onSnapshot(function (doc) {
+
       if (doc.exists) {
         if (doc.data().students != null) {
           self.setState({
@@ -57,7 +59,9 @@ class LiveFeed extends Component {
           }, () => {
             self.getClassAverage();
             self.getHighLowScore();
+
             self.getProgress();
+
           });
         }
       } else {
@@ -68,10 +72,13 @@ class LiveFeed extends Component {
 
   getClassAverage = () => {
 
+
     let scoresMap = {};
+
     let self = this;
     self.state.students.forEach(function(element) {
       let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
+
 
       lessonDataPerStudent.onSnapshot(function (doc) {
         if (doc.exists) {
@@ -90,6 +97,7 @@ class LiveFeed extends Component {
         });
 
 
+
       })
     })
   };
@@ -97,6 +105,7 @@ class LiveFeed extends Component {
   calculateAverage = () => {
 
     let temp = 0;
+
     for (let i in this.state.scoresMap) {
       temp += this.state.scoresMap[i];
     }
@@ -127,6 +136,7 @@ class LiveFeed extends Component {
       // Odd
       median += array[Math.floor((size) / 2)];
       median += array[Math.floor((size / 2)) - 1];
+
       median = median / 2;
     }
 
@@ -140,12 +150,14 @@ class LiveFeed extends Component {
     self.state.students.forEach(function(element) {
       let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
 
+
       lessonDataPerStudent.onSnapshot(function (doc) {
         if (doc.exists) {
           if (doc.data().currentScore > self.state.highestScore) {
             self.setState({
               highUID: element,
               highestScore: doc.data().currentScore,
+
             }, () => {
               //self.getHighName();
             })
@@ -172,7 +184,9 @@ class LiveFeed extends Component {
     let docRef = firestore.collection("users").doc(this.state.highUID);
     let self = this;
 
+
     docRef.onSnapshot(function (doc) {
+
       if (doc.exists) {
         self.setState({
           highFirstName: doc.data().firstName,
@@ -181,6 +195,15 @@ class LiveFeed extends Component {
       } else {
         console.log("No such document!");
       }
+
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+
+    let docRef1 = firestore.collection("users").doc(this.state.lowUID);
+
+    docRef1.get().then(function (doc) {
+
     })
   };
 
@@ -190,6 +213,7 @@ class LiveFeed extends Component {
     let self = this;
 
     docRef1.onSnapshot(function (doc) {
+
       if (doc.exists) {
         self.setState({
           lowFirstName: doc.data().firstName,
@@ -198,6 +222,7 @@ class LiveFeed extends Component {
       } else {
         console.log("No such document!");
       }
+
     })
   };
 

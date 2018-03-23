@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, Card, CardTitle, CardText, Table, NavLink} from 'reactstrap';
+import {Container, Row, Col, Table} from 'reactstrap';
 
 import './MyStudents.css';
 import Graphs from '../Dashboard/Dashboard';
 import StudList from '../Dashboard/StudList'
-import AssCards from '../Dashboard/AssignmentCards'
+import HomeCards from '../Dashboard/AssignmentCards'
+import {firestore} from "../base";
 
 
 class MyStudents extends Component {
@@ -14,19 +15,118 @@ class MyStudents extends Component {
 
         this.state = {
 
-            assignments : [{
 
-                code: null,
+            students : [{
+                name: null,
+                email: null
+            }],
 
-                questions : [{
+            homeworks : [{
+               name: null,
+               max: null
+            }],
 
-                }]
+            inclass : [{
+                name: null,
+                max: null
+            }],
 
-
+            quizzes : [{
+                name: null,
+                max: null
             }]
         }
 
     }
+
+    componentWillMount() {
+        this.getHomeworks();
+        this.getStudents();
+    };
+
+    getHomeworks = () => {
+
+        let object = [{}];
+
+        let self = this;
+
+
+        let colRef = firestore.collection("classes").doc(this.props.code)
+            .collection("Homework");
+
+        colRef.get().then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                // doc.data() is never undefined for query doc snapshots
+
+                object.unshift({
+                    name: doc.data().name,
+                    max: doc.data().questions.length
+                });
+                self.setState({
+                    homeworks: object,
+                });
+            });
+
+        }).catch(function (error) {
+            console.log("Error getting document:", error);
+        });
+
+        object.pop();
+
+        self.setState({
+            homeworks: object
+        });
+
+    };
+
+    getStudents = () => {
+
+        let object = [{}];
+
+        let self = this;
+
+
+        let docRef = firestore.collection("classes").doc(this.props.code);
+
+        docRef.get().then(function (doc) {
+            if (doc.exists) {
+                let data = doc.data();
+                for (let i in data.students) {
+
+                    if (data.students.hasOwnProperty(i)) {
+                        let id = data.students[i];
+                        let studRef = firestore.collection("users").doc(id);
+
+                        studRef.get().then(function (doc) {
+                            let data = doc.data();
+                            object.unshift({
+                                name: data.firstName + " " + data.lastName,
+                                email: data.email
+                            });
+                            self.setState({
+                                students: object,
+                            }, () => {
+                            });
+
+                        });
+                    }
+                }
+            } else {
+                console.log("No such document!");
+            }
+        }).catch(function (error) {
+            console.log("Error getting document:", error);
+        });
+
+        object.pop();
+
+        self.setState({
+            students: object
+        });
+
+    };
+
+
 
     render() {
         return (
@@ -55,48 +155,7 @@ class MyStudents extends Component {
                     <Row>
                         <Col>
                             <h1>Assignments</h1>
-                            <Row className={"assPad"}>
-                                <Col>
-                                    <NavLink href="#">
-                                        <Card body className="text-center">
-                                            <CardTitle className={"assTitle"}>
-
-                                                Homework 3
-
-                                            </CardTitle>
-                                            <CardText className={"assText"}>Read Chapter 3</CardText>
-                                        </Card>
-                                    </NavLink>
-                                </Col>
-                            </Row>
-                            <Row className={"assPad"}>
-                                <Col>
-                                    <NavLink href="#">
-                                        <Card body className="text-center">
-                                            <CardTitle className={"assTitle"}>
-
-                                                Homework 2
-
-                                            </CardTitle>
-                                            <CardText className={"assText"}>Read Chapter 2</CardText>
-                                        </Card>
-                                    </NavLink>
-                                </Col>
-                            </Row>
-                            <Row className={"assPad"}>
-                                <Col>
-                                    <NavLink href="#">
-                                        <Card body className="text-center">
-                                            <CardTitle className={"assTitle"}>
-
-                                                Homework 1
-
-                                            </CardTitle>
-                                            <CardText className={"assText"}>Read Chapter 1</CardText>
-                                        </Card>
-                                    </NavLink>
-                                </Col>
-                            </Row>
+                            <HomeCards homeworks={this.state.homeworks}/>
                         </Col>
                         <Col>
                             <h1>Students</h1>
@@ -107,42 +166,12 @@ class MyStudents extends Component {
                                         <tr>
                                             <th>Rank</th>
                                             <th>Name</th>
-                                            <th>Username</th>
-                                            <th>GPA</th>
+                                            <th>Email</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Jeremy</td>
-                                            <td>
-                                                <button className="link">
-                                                    Putput
-                                                </button>
-                                            </td>
-                                            <td>5.0</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Jacob</td>
-                                            <td>
-                                                <button className="link">
-                                                    Coons
-                                                </button>
-                                            </td>
-                                            <td>4.0</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Riley</td>
-                                            <td>
-                                                <button className="link">
-                                                    Robot
-                                                </button>
-                                            </td>
-                                            <td>3.0</td>
-                                        </tr>
-                                        </tbody>
+
+                                        <StudList students={this.state.students}/>
+
                                     </Table>
                                 </Col>
                             </Row>
