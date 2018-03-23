@@ -31,7 +31,9 @@ class LiveFeed extends Component {
 
       scoresMap: {},
 
-      classProgress: null,
+      classProgress: 0,
+      progressMap: {},
+
       classAverage: 0,
       classMedian: 0,
       numberOfQuestions: 0,
@@ -58,6 +60,7 @@ class LiveFeed extends Component {
           }, () => {
             self.getClassAverage();
             self.getHighLowScore();
+            self.getProgress();
           });
         }
       } else {
@@ -201,10 +204,49 @@ class LiveFeed extends Component {
     })
   };
 
+  getProgress = () => {
+
+    let progressMap = this.state.progressMap;
+    let self = this;
+
+    self.state.students.forEach(function(element) {
+      let lessonProgressPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
+
+      lessonProgressPerStudent.onSnapshot(function (doc) {
+        if (doc.exists) {
+          progressMap[element] = doc.data().currentQuestion / doc.data().numOfQuestions;
+        } else {
+          console.log("No such document!");
+        }
+        self.setState({
+          progressMap: progressMap,
+        }, () => {
+          self.calculateProgress();
+        });
+      })
+    })
+  };
+
+  calculateProgress = () => {
+
+    let temp = 0;
+    for (let i in this.state.progressMap) {
+      temp += this.state.progressMap[i];
+    }
+    let size = Object.keys(this.state.progressMap).length;
+    temp = temp / size;
+    temp *= 100;
+    this.setState({
+      classProgress: temp,
+    });
+
+  };
+
 
   render() {
 
     const lesssonStatsData = {
+      classProgress: this.state.classProgress,
       classAverage: this.state.classAverage,
       classMedian: this.state.classMedian,
       numberOfQuestions: this.state.numberOfQuestions,
