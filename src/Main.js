@@ -303,16 +303,16 @@ class Main extends Component {
     };
 
     toggleGPA = () => {
-      let self = this;
+      let old_state = this.state.showGPA;
+
+      this.setState({
+        showGPA: !this.state.showGPA,
+      });
 
       let studentRef = firestore.collection("users").doc(this.state.uid);
 
       studentRef.update({
-        "showGPA": !self.state.showGPA,
-      }).then(() => {
-        self.setState({
-          showGPA: !self.state.showGPA,
-        });
+        "showGPA": !old_state,
       }).catch((error) => {
         console.log("Error getting document:", error);
       });
