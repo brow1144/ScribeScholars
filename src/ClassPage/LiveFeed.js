@@ -664,6 +664,10 @@ class LiveFeed extends Component {
       progressMap: this.state.progressMap,
       scoresMap: this.state.scoresMap,
       gradeMap: this.state.gradeMap,
+
+      class: this.props.class,
+      lessonNumber: this.props.lessonNumber,
+      uid: this.props.uid,
     };
 
     return (
