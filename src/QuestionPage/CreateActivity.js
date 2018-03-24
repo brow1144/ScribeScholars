@@ -11,7 +11,6 @@ import VideoActivity from './VideoActivity';
 
 import FRQ from './FRQ';
 import {firestore} from "../base";
-import CreateClass from "../CreateClass/CreateClass";
 //import SMQ from './SMQ';
 
 class CreateActivity extends Component {
@@ -20,110 +19,54 @@ class CreateActivity extends Component {
         this.state = {
             uid: props.uid,
             role: this.props.role,
-            //classCode: this.props.classCode,
+            //classCode: props.classCode,
+            //selectedAss: props.selectedAss,
             questions: [],
-            question: {},
+            question: null,
             questionIndex: 0,
         };
-
-        this.createHomework();
+        this.createQuestion();
+        this.grabQuestions();
     }
 
-    createHomework = () => {
-        let self = this;
-        let code = this.getCode();
-        //Create new document in "classes" collection
-        let classRef = firestore.collection("classes").doc("668273").collection("Homework").doc(code);
-        classRef.get().then(function(doc) {
-            if (doc.exists) {
-                self.setNewDoc();
-            } else {
-                classRef.set({}).then(function() {
-                    console.log("successfully written!");
-                }).catch(function(error) {
-                    console.log(error);
-                });
-            }
-        }).catch(function(error) {
-            console.log("Error getting document: ", error);
-        });
-    };
-
     createQuestion = () => {
-        let homeworkRef = firestore.collection("classes").doc("668273").collection("Homework").doc("12345678");
+        let classRef = firestore.collection("classes").doc("668273").collection("Homework").doc("Homework1");
 
-        let self = this;
-        let tmpNewQuestion = [{
-            correctAns: "option3",
-            option1: "Kyle",
-            option2: "Walter",
-            option3: "Jeremy",
-            option4: "Jake",
-            prompt: "Which group member is Jeremy?",
-            type: "MCQ",
-        }];
-
-
-        if (self.state.questions != null) {
-            self.setState({
-                questions: self.state.questions.concat(tmpNewQuestion),
-            }, () => {
-                homeworkRef.update({
-                    questions: self.state.questions,
-                }).then(function() {
-                    console.log("Successfully added a question");
-
-                }).catch(function(error) {
-                    console.log("Error updating document: ", error);
-                });
-            });
-        } else {
-            self.setState({
-                questions: tmpNewQuestion,
-            }, () => {
-                homeworkRef.update({
-                    questions: self.state.questions,
-                }).then(function() {
-                    console.log("Successfully added a question");
-
-                }).catch(function(error) {
-                    console.log("Error updating document: ", error);
-                });
-            });
-        }
-
+        /*classRef.add({
+            this.state.questionIndex: {option1: "1", option2: "2", option3: "3", option4: "4", correctOpt: "option1", prompt: "Hello", type: "MCQ"}
+        })*/
+ /*       db.collection("cities").add({
+            name: "Tokyo",
+            country: "Japan"
+        })
+            .then(function(docRef) {
+                console.log("Document written with ID: ", docRef.id);
+            })
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+            });*/
     };
 
     grabQuestions = () => {
         let self = this;
 
-        // the classes' assignment collection reference
-        let homeworkRef = firestore.collection("classes").doc("668273").collection("Homework").doc("12345678");
-        homeworkRef.get().then(function(doc) {
+        // the classes' assignment
+        let classRef = firestore.collection("classes").doc("668273"); //self.state.classCode);
+        classRef.get().then(function(doc) {
             if (doc.exists) {
-                if (doc.data().questions != null) {
+                if (doc.data().Homework1 != null) {
                     self.setState({
-                        questions: doc.data().questions,
+                        questions: doc.data().Homework1,
                     });
                 }
             } else {
                 console.log("user not found");
             }
-
-
         }).catch(function(error) {
             console.log("Error getting document: ", error);
         });
     };
 
-    //Generate New Homework code
-    getCode = () => {
-        let code = "";
-        for (let i = 0; i < 8; i++) {
-            code += Math.floor(Math.random()*10);
-        }
-        return code;
-    };
 
     render() {
 /*        if (this.state.questions !== [])
@@ -166,7 +109,7 @@ class CreateActivity extends Component {
 
                     <MCQ/>
                     <FRQ/>
-                    {/*<VideoActivity/>*/}
+                    <VideoActivity/>
 
 
                     <Row className={"Filler"}> </Row>

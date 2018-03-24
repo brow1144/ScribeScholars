@@ -1,64 +1,54 @@
 import React, { Component } from 'react';
 
-import { Row, Col, Card, CardTitle, Table, Progress } from 'reactstrap';
+import { Row, Col, Card, CardTitle, Table } from 'reactstrap';
 import { ResponsiveContainer, PieChart, Pie, Tooltip } from 'recharts';
 
-class LineBreak extends Component {
+import TableElement from './TableElement';
+
+class StudentsChart extends Component {
 
   render() {
 
     const data = [
-      {name: 'A', value: 234},
-      {name: 'B', value: 234},
+      {name: 'A', value: 1},
+      {name: 'B', value: 2},
       {name: 'C', value: 300},
       {name: 'D', value: 200},
+      {name: 'E', value: 278},
       {name: 'F', value: 189}
     ];
 
+    const tableElementData = {
+      studentsData: this.props.studentsData,
+      progressMap: this.props.progressMap,
+      scoresMap: this.props.scoresMap,
+    };
+
     return (
       <Row>
+
         <Col md="1" />
         <Col xs="12" md="6">
-          <Table striped>
+          <Table hover>
             <thead>
             <tr>
               <th>#</th>
               <th>Name</th>
-              <th>Module</th>
+              <th>Current Score</th>
               <th>Progress</th>
             </tr>
             </thead>
-            <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Kyle</td>
-              <td>Investing</td>
-              <td>
-                <div className="text-center">85%</div>
-                <Progress animated color="success" value="85" />
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Walter</td>
-              <td>Wealth</td>
-              <td>
-                <div className="text-center">15%</div>
-                <Progress animated color="danger" value="15" />
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Jeremy</td>
-              <td>Debt</td>
-              <td>
-                <div className="text-center">55%</div>
-                <Progress animated color="warning" value="55" />
-              </td>
-            </tr>
-            </tbody>
+
+              {Object.keys(this.props.studentsData).map((key, index) => {
+                return (
+                  <TableElement {...tableElementData} key={key} index={index}/>
+                )
+              })}
+
           </Table>
         </Col>
+
+
         <Col xs="12" md="4">
           <Card body outline color="info">
             <CardTitle>Grade Distribution</CardTitle>
@@ -76,4 +66,4 @@ class LineBreak extends Component {
   }
 }
 
-export default LineBreak;
+export default StudentsChart;
