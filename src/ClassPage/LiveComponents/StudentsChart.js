@@ -10,11 +10,10 @@ class StudentsChart extends Component {
   render() {
 
     const data = [
-      {name: 'A', value: 1},
-      {name: 'B', value: 2},
+      {name: 'A', value: 234},
+      {name: 'B', value: 234},
       {name: 'C', value: 300},
       {name: 'D', value: 200},
-      {name: 'E', value: 278},
       {name: 'F', value: 189}
     ];
 
