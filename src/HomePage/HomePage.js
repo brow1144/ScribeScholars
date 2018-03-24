@@ -578,7 +578,39 @@ class HomePage extends Component {
         </Sidebar>
       );
 
-    }  else {
+    } else if (this.props.page === "homeworks") {
+
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={"Homework"} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <Row>
+            <Col>
+
+            </Col>
+          </Row>
+        </Sidebar>
+      );
+
+    } else if (this.props.page === "inclass") {
+
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={"InClass Lesson"} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <Row>
+            <Col>
+
+            </Col>
+          </Row>
+        </Sidebar>
+      );
+
+    } else {
       return (
         <p>UH OH!</p>
       );

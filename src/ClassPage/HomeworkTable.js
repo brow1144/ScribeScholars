@@ -42,7 +42,7 @@ const HomeworkTable = (props) => {
                   <td>{props.homeworks[index].name}</td>
                   <td>{props.homeworks[index].maxscore}</td>
                   <td>
-                    <RouterLink to={`practiceQuestion`}>
+                    <RouterLink to={`${props.homeworks[index].code}`}>
                       Link
                     </RouterLink>
                   </td>

@@ -423,6 +423,39 @@ class Main extends Component {
           />
         )}/>
 
+        <Route path="/HomePage/:class/lessons/:lessonNumber" render={(match) => (
+
+          <HomePage
+            class={match.match.params.class}
+            lessonNumber={match.match.params.lessonNumber}
+            page="inclass"
+            {...data}
+            {...actions}
+          />
+
+        )}/>
+
+        <Route path="/HomePage/:class/homework/:lessonNumber" render={(match) => (
+          this.state.role === "teacher"
+            ?
+            <HomePage
+              class={match.match.params.class}
+              lessonNumber={match.match.params.lessonNumber}
+              page="liveFeed"
+              {...data}
+              {...actions}
+            />
+            :
+            <HomePage
+              class={match.match.params.class}
+              lessonNumber={match.match.params.lessonNumber}
+              page="homeworks"
+              {...data}
+              {...actions}
+            />
+
+        )}/>
+
         <Route path="/homepage/:class" render={(match) => (
           <HomePage
             path={match.match.params.class}
