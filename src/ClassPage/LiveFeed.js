@@ -424,17 +424,17 @@ class LiveFeed extends Component {
 
         <StudentsChart {...studentChartData} />
 
-        <LiveBreak />
-        <LiveBreak />
-        <LiveBreak />
-        <LiveBreak />
-        <LiveBreak />
-        <LiveBreak />
-        <LiveBreak />
-        <LiveBreak />
-        <LiveBreak />
-        <LiveBreak />
-        <LiveBreak />
+        <LineBreak />
+        <LineBreak />
+        <LineBreak />
+        <LineBreak />
+        <LineBreak />
+        <LineBreak />
+        <LineBreak />
+        <LineBreak />
+        <LineBreak />
+        <LineBreak />
+        <LineBreak />
 
 
         <br/>
