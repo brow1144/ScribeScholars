@@ -27,11 +27,9 @@ class LiveFeed extends Component {
       lowUID: "",
 
       highFirstName: "Loading",
-      highLastName: "",
-
+      // highLastName: "",
       lowFirstName: "Loading",
-      lowLastName: "",
-
+      // lowLastName: "",
       highestScore: 0,
       lowestScore: 100,
 
@@ -43,7 +41,6 @@ class LiveFeed extends Component {
       classAverage: 0,
       classMedian: 0,
       numberOfQuestions: 0,
-
     };
   }
 
@@ -161,6 +158,16 @@ class LiveFeed extends Component {
 
     array.sort();
 
+    this.setState({
+      highestScore: array[array.length - 1],
+      lowestScore: array[0],
+      highUID: this.getKeyByValue(this.state.scoresMap, array[array.length - 1]),
+      lowUID: this.getKeyByValue(this.state.scoresMap, array[0]),
+    }, () => {
+      this.getHighName();
+      this.getlowName();
+    });
+
     let size = Object.keys(this.state.scoresMap).length;
     if ((size % 2) !== 0) {
       // Even
@@ -174,11 +181,15 @@ class LiveFeed extends Component {
 
     median = Math.round(median * 100) / 100;
 
-
     this.setState({
       classMedian: median,
     });
+
   };
+
+  getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+  }
 
   getHighLowScore = () => {
     let self = this;
