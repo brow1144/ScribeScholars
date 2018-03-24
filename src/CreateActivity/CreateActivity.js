@@ -6,8 +6,11 @@ import { Container, Row, Col } from 'reactstrap';
 //import firebase from '../base.js';
 
 import './CreateActivity.css';
-import MCQ from './MCQ';
-import VideoActivity from './VideoActivity';
+import MCQ from './MCQForm';
+import VideoForm from './VideoForm';
+import FRQ from './FRQForm';
+//import Instruct from './Instruct';
+
 
 import FRQ from './FRQ';
 import {firestore} from "../base";
