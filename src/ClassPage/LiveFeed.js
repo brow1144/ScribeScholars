@@ -420,6 +420,7 @@ class LiveFeed extends Component {
         }
         self.setState({
           individualAnswerMap: individualAnswerMap,
+          answerMap: [{}],
         }, () => {
           self.removeEmptyElements();
         })
@@ -432,14 +433,26 @@ class LiveFeed extends Component {
     let individualAnswerMap = this.state.individualAnswerMap;
     for (let i in individualAnswerMap) {
       let data = individualAnswerMap[i];
-
       if (Object.keys(data).length === 0) {
         individualAnswerMap.pop();
       }
-
     }
+
+    let data = [
+
+    ];
+
+    let size = Object.keys(individualAnswerMap).length;
+
+    let j;
+    for (j = 0; j < size; j++) {
+      if (data.indexOf(individualAnswerMap[j]) === -1){
+        data.push(individualAnswerMap[j])
+      }
+    }
+
     this.setState({
-      individualAnswerMap: individualAnswerMap,
+      individualAnswerMap: data,
     }, () => {
       this.setAnswerMap();
     })
@@ -478,8 +491,6 @@ class LiveFeed extends Component {
 
       let k;
       for (k = 0; k < data.questions.length; k++) {
-
-        console.log(array[k]);
 
         if (data.questions[k] === "0") {
           array[k].Incorrect++;
