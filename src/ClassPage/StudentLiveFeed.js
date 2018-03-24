@@ -13,7 +13,9 @@ class StudentLiveFeed extends Component {
 
     return (
       <div>
-        <p>BUBBLES!</p>
+        <p>{this.props.class}</p>
+        <p>{this.props.lessonNumber}</p>
+        <p>{this.props.uid}</p>
       </div>
     );
   }
