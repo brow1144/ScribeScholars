@@ -4,7 +4,9 @@ import {Container, Row, Col, Table} from 'reactstrap';
 import './MyStudents.css';
 import Graphs from '../Dashboard/Dashboard';
 import StudList from '../Dashboard/StudList'
-import HomeCards from '../Dashboard/AssignmentCards'
+import HomeCards from '../Dashboard/HomeCards'
+import InClassCards from '../Dashboard/InClassCards'
+import QuizCards from '../Dashboard/QuizCards'
 import {firestore} from "../base";
 
 
@@ -42,6 +44,8 @@ class MyStudents extends Component {
     componentWillMount() {
         this.getHomeworks();
         this.getStudents();
+        this.getInClass();
+        this.getQuizzes();
     };
 
     getHomeworks = () => {
@@ -75,6 +79,76 @@ class MyStudents extends Component {
 
         self.setState({
             homeworks: object
+        });
+
+    };
+
+    getInClass = () => {
+
+        let object = [{}];
+
+        let self = this;
+
+
+        let colRef = firestore.collection("classes").doc(this.props.code)
+            .collection("InClass");
+
+        colRef.get().then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                // doc.data() is never undefined for query doc snapshots
+
+                object.unshift({
+                    name: doc.data().name,
+                    max: doc.data().questions.length
+                });
+                self.setState({
+                    inclass: object,
+                });
+            });
+
+        }).catch(function (error) {
+            console.log("Error getting document:", error);
+        });
+
+        object.pop();
+
+        self.setState({
+            inclass: object
+        });
+
+    };
+
+    getQuizzes = () => {
+
+        let object = [{}];
+
+        let self = this;
+
+
+        let colRef = firestore.collection("classes").doc(this.props.code)
+            .collection("Quizzes");
+
+        colRef.get().then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                // doc.data() is never undefined for query doc snapshots
+
+                object.unshift({
+                    name: doc.data().name,
+                    max: doc.data().questions.length
+                });
+                self.setState({
+                    quizzes: object,
+                });
+            });
+
+        }).catch(function (error) {
+            console.log("Error getting document:", error);
+        });
+
+        object.pop();
+
+        self.setState({
+            quizzes: object
         });
 
     };
@@ -154,9 +228,6 @@ class MyStudents extends Component {
                     </Row>
                     <Row>
                         <Col>
-                            <h1>Assignments</h1>
-                            <HomeCards homeworks={this.state.homeworks}/>
-                        </Col>
                         <Col>
                             <h1>Students</h1>
                             <Row>
@@ -175,6 +246,21 @@ class MyStudents extends Component {
                                     </Table>
                                 </Col>
                             </Row>
+                        </Col>
+                        </Col>
+                        <Col>
+                        <Col>
+                            <h1>Homework</h1>
+                            <HomeCards homeworks={this.state.homeworks}/>
+                        </Col>
+                        <Col>
+                            <h1>In-Class Lessons</h1>
+                            <InClassCards inclass={this.state.inclass}/>
+                        </Col>
+                        <Col>
+                            <h1>Quizzes</h1>
+                            <QuizCards quizzes={this.state.quizzes}/>
+                        </Col>
                         </Col>
                     </Row>
                 </Container>
