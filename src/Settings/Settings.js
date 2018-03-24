@@ -151,6 +151,10 @@ class Settings extends Component {
 
     };
 
+    toggleTest = () => {
+      console.log("toggle test");
+      this.props.toggleGPA();
+    };
 
     updatePersonal = (mail, number, descriptText) => {
         this.setState({
@@ -168,6 +172,7 @@ class Settings extends Component {
         updateRole: this.props.updateRole,
         updateAnnouncements: this.props.updateAnnouncements,
         updateUserImage: this.props.updateUserImage,
+        toggleGPA: this.props.toggleGPA,
         selectClass: this.props.selectClass,
         updateClassPicture: this.props.updateClassPicture,
         getClassAnnouncments: this.props.getClassAnnouncments,
@@ -182,6 +187,7 @@ class Settings extends Component {
                 {this.props.personalPage
                         ?
                         <SetPersonal
+                            {...actions}
                             updateUserImage={ this.props.updateUserImage }
                             userImage={ this.props.userImage }
                             uid={this.state.uid}
@@ -189,6 +195,7 @@ class Settings extends Component {
                             email={this.state.email}
                             phoneN={this.state.phoneN}
                             descript={this.state.descript}
+                            showGPA={this.props.showGPA}
                             updateP={this.updatePersonal.bind(this)}
                         />
                         :
