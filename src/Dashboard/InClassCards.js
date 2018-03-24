@@ -1,26 +1,26 @@
 import React from 'react'
 
-import {NavLink, Card, CardText,CardTitle, Row, Col } from 'reactstrap';
+import {NavLink, Button,Card, CardText,CardTitle, Row, Col } from 'reactstrap';
+
+import './AssignStyle.css'
 
 const InClassCards = (props) => {
 
     return (
-        <div>
+        <Row>
             {Object.keys(props.inclass).map((key, index) => {
-                return<Row key={key} className={"assPad"}>
-                    <Col>
-                        <NavLink href="#">
-                            <Card body key={key} className="text-center">
-                                <CardTitle className={"assTitle"}>
-                                    {props.inclass[index].name}
-                                </CardTitle>
-                                <CardText className={"assText"}>Max Score: {props.inclass[index].max}</CardText>
-                            </Card>
-                        </NavLink>
-                    </Col>
-                </Row>
+                return<Col xs={12} key={key} className={"assPad"}>
+                    <NavLink style={{ textDecoration: 'none' }} to="/#">
+                        <Button size="lg" className={"assButt"} key={key} block>
+                            <h1 className={"assTitle"}>
+                                {props.inclass[index].name}
+                            </h1>
+                            <h2 className={"assText"}>Max Score: {props.inclass[index].max}</h2>
+                        </Button>
+                    </NavLink>
+                </Col>
             })}
-        </div>
+        </Row>
     )
 };
 
