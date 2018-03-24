@@ -17,7 +17,6 @@ import Settings from '../Settings/Settings';
 
 import './HomePage.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import CreateActivity from "../CreateActivity/CreateActivity";
 
 const mql = window.matchMedia(`(min-width: 600px)`);
 
@@ -547,35 +546,19 @@ class HomePage extends Component {
       );
     } else if (this.props.page === "liveFeed") {
 
-        return (
-            <Sidebar {...sideData}>
+      return (
+        <Sidebar {...sideData}>
 
-                <HomeNav firstName={"Personal Finance"} lastName={""} expand={this.dockSideBar}
-                         width={this.state.width}/>
+          <HomeNav firstName={"Personal Finance"} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
 
-                <Row>
-                    <Col>
-                        <LiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} uid={this.state.uid}/>
-                    </Col>
-                </Row>
-            </Sidebar>
-        );
-
-    } else if (this.props.page === "createActivity") {
-
-        return (
-            <Sidebar {...sideData}>
-
-                <HomeNav firstName={"Create: " + this.props.assType} lastName={""} expand={this.dockSideBar}
-                         width={this.state.width}/>
-
-                <Row>
-                    <Col>
-                        <CreateActivity {...classData} class={this.props.class} assType={this.props.assType} uid={this.state.uid}/>
-                    </Col>
-                </Row>
-            </Sidebar>
-        );
+          <Row>
+            <Col>
+              <LiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} uid={this.state.uid}/>
+            </Col>
+          </Row>
+        </Sidebar>
+      );
 
     } else {
       return (

@@ -27,9 +27,9 @@ class LiveFeed extends Component {
       lowUID: "",
 
       highFirstName: "Loading",
-      // highLastName: "",
+      highLastName: "",
       lowFirstName: "Loading",
-      // lowLastName: "",
+      lowLastName: "",
       highestScore: 0,
       lowestScore: 100,
 
@@ -37,6 +37,11 @@ class LiveFeed extends Component {
 
       classProgress: 0,
       progressMap: {},
+
+      completionMap: {},
+      notStarted: 0,
+      inProgress: 0,
+      completed: 0,
 
       classAverage: 0,
       classMedian: 0,
@@ -63,7 +68,6 @@ class LiveFeed extends Component {
             self.getStudentData();
             self.getClassAverage();
             self.getHighLowScore();
-
             self.getProgress();
 
           });
@@ -111,6 +115,7 @@ class LiveFeed extends Component {
 
 
     let scoresMap = {};
+    let completionMap = {};
 
     let self = this;
     self.state.students.forEach(function(element) {
@@ -119,19 +124,26 @@ class LiveFeed extends Component {
 
       lessonDataPerStudent.onSnapshot(function (doc) {
         if (doc.exists) {
+
           scoresMap[element] = doc.data().currentScore;
           scoresMap[element] = Math.round(scoresMap[element] * 100) / 100;
+
+          completionMap[element] = doc.data().completed;
+
           self.setState({
             numberOfQuestions: doc.data().numOfQuestions,
           });
+
         } else {
           console.log("No such document!");
         }
         self.setState({
           scoresMap: scoresMap,
+          completionMap: completionMap,
         }, () => {
           self.calculateAverage();
           self.calculateMedian();
+          self.getCompletion();
         });
 
 
@@ -200,6 +212,31 @@ class LiveFeed extends Component {
   getKeyByValue(object, value) {
     return Object.keys(object).find(key => object[key] === value);
   }
+
+  getCompletion = () => {
+
+    let notStarted = 0;
+    let inProgress = 0;
+    let completed = 0;
+
+    for (let i in this.state.completionMap) {
+
+      if (this.state.completionMap[i] === "0") {
+        notStarted++;
+      } else if (this.state.completionMap[i] === "1") {
+        inProgress++;
+      } else if (this.state.completionMap[i] === "2") {
+        completed++;
+      }
+    }
+
+    this.setState({
+      notStarted: notStarted,
+      inProgress: inProgress,
+      completed: completed,
+    })
+
+  };
 
   getHighLowScore = () => {
     let self = this;
@@ -342,6 +379,12 @@ class LiveFeed extends Component {
 
       lowFirstName: this.state.lowFirstName,
       lowLastName: this.state.lowLastName,
+
+      completionMap: this.state.completionMap,
+
+      notStarted: this.state.notStarted,
+      inProgress: this.state.inProgress,
+      completed: this.state.completed,
     };
 
     const studentChartData = {
