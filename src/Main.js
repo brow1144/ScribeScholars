@@ -393,6 +393,25 @@ class Main extends Component {
     return (
       <Switch>
 
+        <Route path="/HomePage/:class/lessons/create-activity" render={(match) => (
+          <HomePage
+            class={match.match.params.class}
+            assType="Lesson"
+            page="createActivity"
+            {...data}
+            {...actions}
+          />
+        )}/>
+        <Route path="/HomePage/:class/homework/create-activity" render={(match) => (
+          <HomePage
+            class={match.match.params.class}
+            assType="Homework"
+            page="createActivity"
+            {...data}
+            {...actions}
+          />
+        )}/>
+
         <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber" render={(match) => (
 
           <HomePage
