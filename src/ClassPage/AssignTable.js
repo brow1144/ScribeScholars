@@ -61,6 +61,9 @@ const AssignTable = (props) => {
         </Row>
         <Row>
           <Col className={"moreSpace"}>
+            <RouterLink to={`/HomePage/${props.code}/lessons/create-activity`}>
+              Create New In Class Lesson
+            </RouterLink>
           </Col>
         </Row>
         <Row>
