@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Row, Col, Card, CardTitle, CardText } from 'reactstrap';
 import { ResponsiveContainer, PieChart, Pie, Bar, BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
-class LineBreak extends Component {
+class LiveGraphs extends Component {
 
   constructor(props) {
     super(props);
@@ -26,11 +26,6 @@ class LineBreak extends Component {
       {name: 'Page B', Unanswered: 3000, Incorrect: 1398, Correct: 2210},
     ];
 
-    const data01 =
-      [ {name: 'Not Started', value: 1},
-        {name: 'In Progress', value: 4},
-        {name: 'Completed', value: 6}];
-
     return (
       <Row>
         <Col xs="1" />
@@ -50,7 +45,7 @@ class LineBreak extends Component {
             <Col>
               <Card body outline color="info">
                 <CardTitle>Highest Score</CardTitle>
-                <CardText>{this.props.highFirstName} {this.props.highLastName}: {this.props.highestScore}%</CardText>
+                <CardText>{this.props.highFirstName} {this.props.highLastName} {this.props.highestScore}%</CardText>
               </Card>
             </Col>
           </Row>
@@ -61,7 +56,7 @@ class LineBreak extends Component {
             <Col>
               <Card body outline color="info">
                 <CardTitle>Lowest Score</CardTitle>
-                <CardText>{this.props.lowFirstName} {this.props.lowLastName}: {this.props.lowestScore}%</CardText>
+                <CardText>{this.props.lowFirstName} {this.props.lowLastName} {this.props.lowestScore}%</CardText>
               </Card>
             </Col>
           </Row>
@@ -72,7 +67,7 @@ class LineBreak extends Component {
           <b>Not Started / Working / Finished</b>
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
-              <Pie isAnimationActive={false} data={data01} dataKey="value" innerRadius={20} outerRadius={40} fill="#21CE99" label/>
+              <Pie isAnimationActive={false} data={this.props.completionGraphMap} dataKey="value" innerRadius={20} outerRadius={40} fill="#21CE99" label/>
               <Tooltip/>
             </PieChart>
           </ResponsiveContainer>
@@ -101,4 +96,4 @@ class LineBreak extends Component {
   }
 }
 
-export default LineBreak;
+export default LiveGraphs;

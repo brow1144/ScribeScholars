@@ -13,6 +13,8 @@ import Cards from './Cards';
 import ClassHome from '../ClassPage/ClassHome';
 import LiveFeed from '../ClassPage/LiveFeed';
 
+import CreateActivity from '../CreateActivity/CreateActivity';
+
 import Settings from '../Settings/Settings';
 
 import './HomePage.css';
@@ -88,8 +90,6 @@ class HomePage extends Component {
       mql: mql,
       docked: props.docked,
       open: props.open,
-
-      lessonNumber: null,
     };
   }
 
@@ -439,7 +439,6 @@ class HomePage extends Component {
       classImage: this.props.classImage,
       assignments: this.props.assignments,
       homeworks: this.props.homeworks,
-      lessonNumber: this.props.lessonNumber,
     };
 
     const actions = {
@@ -558,6 +557,22 @@ class HomePage extends Component {
           <Row>
             <Col>
               <LiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} uid={this.state.uid}/>
+            </Col>
+          </Row>
+        </Sidebar>
+      );
+
+    } else if (this.props.page === "createActivity") {
+
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={"Create: " + this.props.assType} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <Row>
+            <Col>
+              <CreateActivity {...classData} class={this.props.class} assType={this.props.assType} uid={this.state.uid}/>
             </Col>
           </Row>
         </Sidebar>
