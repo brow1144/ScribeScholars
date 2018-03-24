@@ -415,6 +415,7 @@ class LiveFeed extends Component {
 
         <LessonStats {...lesssonStatsData} />
 
+        
         <LineBreak />
 
         <LiveGraphs {...liveGraphsData}  />
