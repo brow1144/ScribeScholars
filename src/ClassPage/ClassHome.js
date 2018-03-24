@@ -149,7 +149,7 @@ class ClassHome extends Component {
           {this.state.homeworkActive
             ?
             <div>
-              <HomeworkTable myCode = {this.props.classCode} lessonNumber = {this.props.lessonNumber} homeworks={this.props.homeworks} />
+              <HomeworkTable code = {this.props.code} lessonNumber = {this.props.lessonNumber} homeworks={this.props.homeworks} />
             </div>
             :
             <div>
@@ -157,7 +157,7 @@ class ClassHome extends Component {
           }
           {this.state.lessonsActive
             ?
-            <AssignTable myCode = {this.props.classCode} lessonNumber = {this.props.lessonNumber} assignments={this.props.assignments} />
+            <AssignTable code = {this.props.code} lessonNumber = {this.props.lessonNumber} assignments={this.props.assignments} />
             :
             <div>
             </div>
