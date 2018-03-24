@@ -78,7 +78,7 @@ class Dashboard extends Component {
     getAvgGpa = () => {
         let totGpa = 0.0;
         let count = 0;
-        let avg = 0;
+        //let avg = 0;
         let docRef = firestore.collection("classes").doc(this.props.code);
 
         let self = this;
