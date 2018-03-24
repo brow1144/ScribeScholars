@@ -13,6 +13,8 @@ import Cards from './Cards';
 import ClassHome from '../ClassPage/ClassHome';
 import LiveFeed from '../ClassPage/LiveFeed';
 
+import CreateActivity from '../CreateActivity/CreateActivity';
+
 import Settings from '../Settings/Settings';
 
 import './HomePage.css';
@@ -560,7 +562,23 @@ class HomePage extends Component {
         </Sidebar>
       );
 
-    } else {
+    } else if (this.props.page === "createActivity") {
+
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={"Create: " + this.props.assType} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <Row>
+            <Col>
+              <CreateActivity {...classData} class={this.props.class} assType={this.props.assType} uid={this.state.uid}/>
+            </Col>
+          </Row>
+        </Sidebar>
+      );
+
+    }  else {
       return (
         <p>UH OH!</p>
       );
