@@ -61,7 +61,10 @@ const AssignTable = (props) => {
         </Row>
         <Row>
           <Col className={"moreSpace"}>
-          </Col>
+              <RouterLink to={`/HomePage/${props.code}/lessons/create-activity`}>
+                  Create New In Class Lesson
+              </RouterLink>
+              </Col>
         </Row>
         <Row>
           <Col className={"moreSpace"}>
@@ -115,7 +118,7 @@ import React, { Component } from 'react';
 
 import { Col, FormGroup, Label, Input} from 'reactstrap';
 
-import './MCQ.css';
+import './MCQForm.css';
 
 class MCQ extends Component {
     constructor(props) {
@@ -168,7 +171,7 @@ import React, { Component } from 'react';
 
 import { Col, FormGroup, Label, Input } from 'reactstrap';
 
-import './FRQ.css';
+import './FRQForm.css';
 
 class FRQ extends Component {
     constructor(props) {

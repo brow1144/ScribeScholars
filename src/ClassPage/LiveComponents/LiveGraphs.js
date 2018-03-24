@@ -27,9 +27,9 @@ class LineBreak extends Component {
     ];
 
     const data01 =
-      [ {name: 'Not Started', value: this.props.notStarted},
-        {name: 'In Progress', value: this.props.inProgress},
-        {name: 'Completed', value: this.props.completed}];
+      [ {name: 'Not Started', value: 1},
+        {name: 'In Progress', value: 4},
+        {name: 'Completed', value: 6}];
 
     return (
       <Row>
@@ -50,7 +50,7 @@ class LineBreak extends Component {
             <Col>
               <Card body outline color="info">
                 <CardTitle>Highest Score</CardTitle>
-                <CardText>{this.props.highFirstName} {this.props.highLastName} {this.props.highestScore}%</CardText>
+                <CardText>{this.props.highFirstName} {this.props.highLastName}: {this.props.highestScore}%</CardText>
               </Card>
             </Col>
           </Row>
@@ -61,7 +61,7 @@ class LineBreak extends Component {
             <Col>
               <Card body outline color="info">
                 <CardTitle>Lowest Score</CardTitle>
-                <CardText>{this.props.lowFirstName} {this.props.lowLastName} {this.props.lowestScore}%</CardText>
+                <CardText>{this.props.lowFirstName} {this.props.lowLastName}: {this.props.lowestScore}%</CardText>
               </Card>
             </Col>
           </Row>

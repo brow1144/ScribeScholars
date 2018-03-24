@@ -5,19 +5,6 @@
     overflow-x: hidden;
 }
 
-.BannerRow
-{
-    background: #21CE99;
-    color: #6C6A69;
-    padding-left: 5rem;
-}
-
-.BannerCol
-{
-    padding-top: 2rem;
-
-}
-
 .Filler
 {
     height: 2rem;
