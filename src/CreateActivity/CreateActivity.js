@@ -6,7 +6,7 @@ import './CreateActivity.css';
 import MCQ from './MCQForm';
 import VideoForm from './VideoForm';
 import FRQ from './FRQForm';
-import Instruct from './Instruct';
+//import Instruct from './Instruct';
 
 import {firestore} from "../base";
 
