@@ -29,6 +29,12 @@ class ClassHome extends Component {
         maxscore: null,
       }],
 
+      homeworks: [{
+        code: null,
+        name: null,
+        maxscore: null,
+      }],
+
       classImage: null,
 
       announcementsActive: true,
@@ -43,6 +49,7 @@ class ClassHome extends Component {
   componentWillMount() {
     this.props.selectClass(this.props.path);
     this.props.updateClassPicture(this.props.path);
+
   }
 
   switchAnnouncement = () => {
@@ -161,7 +168,7 @@ class ClassHome extends Component {
           {this.state.homeworkActive
             ?
             <div>
-              <HomeworkTable homeworks={this.props.homeworks} />
+              <HomeworkTable myCode = {this.props.classCode} lessonNumber = {this.props.lessonNumber} homeworks={this.props.homeworks} />
             </div>
             :
             <div>
@@ -169,7 +176,7 @@ class ClassHome extends Component {
           }
           {this.state.lessonsActive
             ?
-            <AssignTable assignments={this.props.assignments} />
+            <AssignTable myCode = {this.props.classCode} lessonNumber = {this.props.lessonNumber} assignments={this.props.assignments} />
             :
             <div>
             </div>
@@ -178,7 +185,7 @@ class ClassHome extends Component {
             {this.state.myStudentsActive
                 ?
                 <div>
-                  <MyStudents/>
+                  <MyStudents code={this.props.code}/>
                 </div>
                 :
                 <div>

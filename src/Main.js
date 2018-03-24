@@ -398,7 +398,6 @@ class Main extends Component {
       });
     };
 
-
     render()
     {
       const data = {
@@ -431,44 +430,98 @@ class Main extends Component {
         getHomeworks: this.getHomeworks,
       };
 
-      return (
-        <Switch>
+    return (
+      <Switch>
 
-          <Route path="/HomePage/:class/lessons/:lessonNumber" render={() => (
+        <Route path="/HomePage/:class/lessons/create-activity" render={(match) => (
+          <HomePage
+            class={match.match.params.class}
+            assType="Lesson"
+            page="createActivity"
+            {...data}
+            {...actions}
+          />
+        )}/>
+        <Route path="/HomePage/:class/homework/create-activity" render={(match) => (
+          <HomePage
+            class={match.match.params.class}
+            assType="Homework"
+            page="createActivity"
+            {...data}
+            {...actions}
+          />
+        )}/>
+
+        <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber" render={(match) => (
+
+          <HomePage
+            class={match.match.params.class}
+            lessonNumber={match.match.params.lessonNumber}
+            page="liveFeed"
+            {...data}
+            {...actions}
+          />
+        )}/>
+
+        <Route path="/HomePage/:class/lessons/:lessonNumber" render={(match) => (
+
+          <HomePage
+            class={match.match.params.class}
+            lessonNumber={match.match.params.lessonNumber}
+            page="inclass"
+            {...data}
+            {...actions}
+          />
+
+        )}/>
+
+        <Route path="/HomePage/:class/homework/:lessonNumber" render={(match) => (
+          this.state.role === "teacher"
+            ?
             <HomePage
+              class={match.match.params.class}
+              lessonNumber={match.match.params.lessonNumber}
               page="liveFeed"
               {...data}
               {...actions}
             />
-          )}/>
-
-          <Route path="/homepage/:class" render={(match) => (
+            :
             <HomePage
-              path={match.match.params.class}
-              page="classes"
+              class={match.match.params.class}
+              lessonNumber={match.match.params.lessonNumber}
+              page="homeworks"
               {...data}
               {...actions}
             />
-          )}/>
+        )}/>
 
-          <Route path="/homepage" render={() => (
-            <HomePage
-              page={this.props.page}
-              {...data}
-              {...actions}
-            />
-          )}/>
+        <Route path="/homepage/:class" render={(match) => (
+          <HomePage
+            path={match.match.params.class}
+            page="classes"
+            {...data}
+            {...actions}
+          />
+        )}/>
 
-          <Route path="/settings" render={() => (
-            <HomePage
-              page={this.props.page}
-              {...data}
-              {...actions}
-            />
-          )}/>
-        </Switch>
-      )
-    }
+        <Route path="/homepage" render={() => (
+          <HomePage
+            page={this.props.page}
+            {...data}
+            {...actions}
+          />
+        )}/>
+
+        <Route path="/settings" render={() => (
+          <HomePage
+            page={this.props.page}
+            {...data}
+            {...actions}
+          />
+        )}/>
+      </Switch>
+   )
+  }
 }
 
 export default Main;

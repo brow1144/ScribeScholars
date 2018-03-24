@@ -5,6 +5,7 @@ import { PieChart, Cell,Pie } from 'recharts';
 
 import {Progress, Row, Col } from 'reactstrap';
 import './Dashboard.css';
+import {firestore} from "../base";
 
 class Dashboard extends Component {
 
@@ -15,7 +16,8 @@ class Dashboard extends Component {
             uid: props.uid,
 
             //code: props.code,
-            code: "668273",   // TODO temporary
+
+            avgGpa: 0,
 
             classes: [],  // TODO GPA page
             myAssignments: [],  // all assignments from all the user's classes TODO GPA page
@@ -73,6 +75,46 @@ class Dashboard extends Component {
         };
     };
 
+    getAvgGpa = () => {
+        let totGpa = 0.0;
+        let count = 0;
+        let avg = 0;
+        let docRef = firestore.collection("classes").doc(this.props.code);
+
+        let self = this;
+        docRef.get().then(function (doc) {
+            if (doc.exists) {
+                let data = doc.data();
+                count = data.students.length;
+                console.log(count);
+                for (let i in data.students) {
+
+                    if (data.students.hasOwnProperty(i)) {
+                        let id = data.students[i];
+                        let studRef = firestore.collection("users").doc(id);
+
+
+                        studRef.get().then(function (doc) {
+                            totGpa = totGpa + doc.data().gpa;
+                            console.log(totGpa/count);
+                            self.state.avgGpa = totGpa/count;
+                        });
+                        console.log(totGpa + " aaaaaaa");
+                    }
+                    console.log(totGpa + " bbbbbbb");
+                }
+            } else {
+                console.log("No such document!");
+            }
+        }).catch(function (error) {
+            console.log("Error getting document:", error);
+        });
+
+
+
+        return this.state.avgGpa;
+    };
+
 
     render() {
         return (
@@ -91,7 +133,7 @@ class Dashboard extends Component {
                                     <PieChart className="piePad" width={365} height={250}>
                                         <Pie data={this.state.data01} dataKey="value" nameKey="name" cx="50%" cy="50%"
                                              outerRadius={70} fill="#8884d8" label>{
-                                            this.state.data01.map((entry, index) => <Cell fill={this.state.COLORS[index % this.state.COLORS.length]}/>)
+                                            this.state.data01.map((entry, index) => <Cell key={entry} fill={this.state.COLORS[index % this.state.COLORS.length]}/>)
                                         } </Pie>
                                     </PieChart>
                                 </Row>
@@ -106,7 +148,7 @@ class Dashboard extends Component {
                                 <Row className="dbGraphs">
                                     <Col>
                                         <h3>
-                                            3.75
+                                            {this.getAvgGpa()}
                                         </h3>
                                     </Col>
                                 </Row>

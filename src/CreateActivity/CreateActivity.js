@@ -2,17 +2,13 @@ import React, {Component} from 'react';
 
 import { Container, Row, Col } from 'reactstrap';
 
-//import { firestore , storageRef } from "../base";
-//import firebase from '../base.js';
-
 import './CreateActivity.css';
-import MCQ from './MCQ';
-import VideoActivity from './VideoActivity';
+import MCQ from './MCQForm';
+import VideoForm from './VideoForm';
+import FRQ from './FRQForm';
+import Instruct from './Instruct';
 
-import FRQ from './FRQ';
 import {firestore} from "../base";
-import CreateClass from "../CreateClass/CreateClass";
-//import SMQ from './SMQ';
 
 class CreateActivity extends Component {
     constructor(props) {
@@ -20,13 +16,12 @@ class CreateActivity extends Component {
         this.state = {
             uid: props.uid,
             role: this.props.role,
-            //classCode: this.props.classCode,
+            class: this.props.class,
             questions: [],
             question: {},
-            questionIndex: 0,
         };
 
-        this.createHomework();
+        //this.createHomework();
     }
 
     createHomework = () => {
@@ -126,49 +121,13 @@ class CreateActivity extends Component {
     };
 
     render() {
-/*        if (this.state.questions !== [])
-            return (
-                <Container fluid className={"ContainerRules"}>
-                    <Row className={"Filler"}> </Row>
-                    <Row className={"BannerRow"}>
-                        <Col xs={"12"} sm={"12"} md={"12"} lg={"12"} xl={"12"} className={"BannerCol"}>
-                            <h1>Assignment Title Creation:</h1>
-                        </Col>
-                    </Row>
-                    <Row className={"Filler"}> </Row>
-                    <Row className={"Filler"}> </Row>
 
-                    {Object.keys(this.state.questions).map((key, index) => {
-                        //console.log(this.state.questions[index]);
-
-                        if (this.state.questions[index].type === "MCQ") {
-                            return <MCQ question={ this.state.question } />
-                        }
-                    })
-                    }
-
-                    <Row className={"Filler"}> </Row>
-                    <Row className={"Filler"}> </Row>
-
-                </Container>
-            );
-        else*/
             return(
                 <Container fluid className={"ContainerRules"}>
-                    <Row className={"Filler"}> </Row>
-                    <Row className={"BannerRow"}>
-                     <Col xs={"12"} sm={"12"} md={"12"} lg={"12"} xl={"12"} className={"BannerCol"}>
-                         <h1>Assignment Title Creation:</h1>
-                     </Col>
-                    </Row>
-                    <Row className={"Filler"}> </Row>
-                    <Row className={"Filler"}> </Row>
+                    <hr style={{marginRight: '-20px', marginLeft: '-20px'}} />
+                    <Row style={{}} className={"Filler"}> </Row>
 
-                    <MCQ/>
-                    <FRQ/>
-                    {/*<VideoActivity/>*/}
-
-
+                    <Instruct/>
                     <Row className={"Filler"}> </Row>
                     <Row className={"Filler"}> </Row>
 

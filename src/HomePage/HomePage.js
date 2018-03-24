@@ -13,6 +13,8 @@ import Cards from './Cards';
 import ClassHome from '../ClassPage/ClassHome';
 import LiveFeed from '../ClassPage/LiveFeed';
 
+import CreateActivity from '../CreateActivity/CreateActivity';
+
 import Settings from '../Settings/Settings';
 
 import './HomePage.css';
@@ -642,6 +644,54 @@ class HomePage extends Component {
           <Row>
             <Col>
               <LiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} uid={this.state.uid}/>
+            </Col>
+          </Row>
+        </Sidebar>
+      );
+
+    } else if (this.props.page === "createActivity") {
+
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={"Create: " + this.props.assType} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <Row>
+            <Col>
+              <CreateActivity {...classData} class={this.props.class} assType={this.props.assType} uid={this.state.uid}/>
+            </Col>
+          </Row>
+        </Sidebar>
+      );
+
+    } else if (this.props.page === "homeworks") {
+
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={"Homework"} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <Row>
+            <Col>
+
+            </Col>
+          </Row>
+        </Sidebar>
+      );
+
+    } else if (this.props.page === "inclass") {
+
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={"InClass Lesson"} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <Row>
+            <Col>
+
             </Col>
           </Row>
         </Sidebar>
