@@ -17,13 +17,22 @@ class Dashboard extends Component {
 
             //code: props.code,
 
+
+
+            students: [],
+
+            studentsData: [{
+                gpa: "",
+            }],
+
+            gpaMap: {},
+
             avgGpa: 0,
 
             classes: [],  // TODO GPA page
             myAssignments: [],  // all assignments from all the user's classes TODO GPA page
 
             classAssignments: [],   // assignments in the class
-            students: [],   // all students in the class
             allAssignments: [],   // all assignments from every student
 
             data: [
@@ -73,53 +82,116 @@ class Dashboard extends Component {
 
             graphVisible: true,
         };
+
     };
 
-    getAvgGpa = () => {
-        let totGpa = 0.0;
-        let count = 0;
-        let avg = 0;
+    componentWillMount() {
+        this.getStudentsInClass();
+    }
+
+    getStudentsInClass = () => {
         let docRef = firestore.collection("classes").doc(this.props.code);
-
         let self = this;
-        docRef.get().then(function (doc) {
+
+
+        docRef.onSnapshot(function (doc) {
+
             if (doc.exists) {
-                let data = doc.data();
-                count = data.students.length;
-                console.log(count);
-                for (let i in data.students) {
-
-                    if (data.students.hasOwnProperty(i)) {
-                        let id = data.students[i];
-                        let studRef = firestore.collection("users").doc(id);
-
-
-                        studRef.get().then(function (doc) {
-                            totGpa = totGpa + doc.data().gpa;
-                            console.log(totGpa/count);
-                            self.state.avgGpa = totGpa/count;
-                        });
-                        console.log(totGpa + " aaaaaaa");
-                    }
-                    console.log(totGpa + " bbbbbbb");
+                if (doc.data().students != null) {
+                    self.setState({
+                        students: doc.data().students,
+                    }, () => {
+                        self.getStudentData();
+                        self.getClassAverage();
+                    });
                 }
             } else {
                 console.log("No such document!");
             }
-        }).catch(function (error) {
-            console.log("Error getting document:", error);
+        })
+    };
+
+    getStudentData = () => {
+
+        let studentsData = [{}];
+        let object = {};
+        let self = this;
+        self.state.students.forEach(function(element) {
+            let dataPerStudent = firestore.collection("users").doc(element);
+
+            dataPerStudent.onSnapshot(function (doc) {
+                if (doc.exists) {
+                    object = {
+                        gpa: doc.data().gpa,
+                    };
+                    studentsData.unshift(object);
+
+                    self.setState({
+                        studentsData: studentsData,
+                    });
+                } else {
+                    console.log("No such document!");
+                }
+            })
         });
 
+        studentsData.pop();
+        self.setState({
+            studentsData: studentsData
+        });
+
+    };
+
+    getClassAverage = () => {
 
 
-        return this.state.avgGpa;
+        let gpaMap = {};
+        let completionMap = {};
+
+        let self = this;
+        self.state.students.forEach(function(element) {
+            let stud = firestore.collection("users").doc(element);
+
+
+            stud.onSnapshot(function (doc) {
+                if (doc.exists) {
+
+                    gpaMap[element] = doc.data().gpa;
+                    gpaMap[element] = Math.round(gpaMap[element] * 100) / 100;
+
+
+                } else {
+                    console.log("No such document!");
+                }
+                self.setState({
+                    gpaMap: gpaMap,
+                }, () => {
+                    self.getAvgGpa();
+                });
+            })
+        })
+    };
+
+    getAvgGpa = () => {
+        let temp = 0;
+
+        for (let i in this.state.gpaMap) {
+            temp += this.state.gpaMap[i];
+        }
+        let size = Object.keys(this.state.gpaMap).length;
+        temp = temp / size;
+        temp = Math.round(temp * 100) / 100;
+        console.log(temp);
+        this.setState({
+            avgGpa: temp,
+        });
+
     };
 
 
     render() {
         return (
             <div>
-
                     <Col xs={2}/>
                     <Col xs={10} className="col-centered">
                         <Row className="dbBG dbGraphs dbBorder">
@@ -148,7 +220,7 @@ class Dashboard extends Component {
                                 <Row className="dbGraphs">
                                     <Col>
                                         <h3>
-                                            {this.getAvgGpa()}
+                                            {this.state.avgGpa}
                                         </h3>
                                     </Col>
                                 </Row>
