@@ -29,7 +29,13 @@ class LiveFeed extends Component {
       highestScore: 0,
       lowestScore: 0,
 
-      scores: [],
+      completionMap: {},
+      notStarted: 0,
+      inProgress: 0,
+      completed: 0,
+      completionGraphMap: [{}],
+
+      letterGradeMap: [{}],
 
       classProgress: null,
       classAverage: 0,
@@ -92,11 +98,9 @@ class LiveFeed extends Component {
         }, () => {
           self.calculateAverage();
           self.calculateMedian();
+          self.getCompletion();
+          self.getLetterGrades();
         });
-
-
-      }).catch(function (error) {
-        console.log("Error getting document:", error);
       })
     })
   };
@@ -132,6 +136,90 @@ class LiveFeed extends Component {
     this.setState({
       classMedian: median,
     });
+  };
+
+  getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+  }
+
+  getCompletion = () => {
+
+    let notStarted = 0;
+    let inProgress = 0;
+    let completed = 0;
+
+    for (let i in this.state.completionMap) {
+
+      if (this.state.completionMap[i] === "0") {
+        notStarted++;
+      } else if (this.state.completionMap[i] === "1") {
+        inProgress++;
+      } else if (this.state.completionMap[i] === "2") {
+        completed++;
+      }
+    }
+
+    let object = [{}];
+
+    if (notStarted !== 0) {
+      object.unshift({"name": "Not Started", "value": notStarted});
+    }
+
+    if (inProgress !== 0) {
+      object.unshift({"name": "In Progress", "value": inProgress});
+    }
+
+    if (completed !== 0) {
+      object.unshift({"name": "Completed", "value": completed});
+    }
+
+
+    this.setState({
+      notStarted: notStarted,
+      inProgress: inProgress,
+      completed: completed,
+      completionGraphMap: object,
+    })
+
+  };
+
+  getLetterGrades = () => {
+
+    let A = 0;
+    let B = 0;
+    let C = 0;
+    let D = 0;
+    let F = 0;
+
+    for (let i in this.state.scoresMap) {
+
+      if (this.state.scoresMap[i] >= 0 && this.state.scoresMap[i] < 60) {
+        // F
+      } else if (this.state.scoresMap[i] >= 60 && this.state.scoresMap[i] < 63) {
+        // D -
+      } else if (this.state.scoresMap[i] >= 63 && this.state.scoresMap[i] < 67) {
+        // D
+      } else if (this.state.scoresMap[i] >= 67 && this.state.scoresMap[i] < 70) {
+        // D +
+      } else if (this.state.scoresMap[i] >= 70 && this.state.scoresMap[i] < 80) {
+        // C -
+      } else if (this.state.scoresMap[i] >= 80 && this.state.scoresMap[i] < 90) {
+        // C
+      } else if (this.state.scoresMap[i] >= 90 && this.state.scoresMap[i] <= 100) {
+        // C +
+      } else if (this.state.scoresMap[i] >= 90 && this.state.scoresMap[i] <= 100) {
+        // B -
+      } else if (this.state.scoresMap[i] >= 90 && this.state.scoresMap[i] <= 100) {
+        // B
+      } else if (this.state.scoresMap[i] >= 90 && this.state.scoresMap[i] <= 100) {
+        // B +
+      } else if (this.state.scoresMap[i] >= 90 && this.state.scoresMap[i] <= 100) {
+        // A -
+      } else if (this.state.scoresMap[i] >= 90 && this.state.scoresMap[i] <= 100) {
+        // A
+      }
+    }
+
   };
 
   getHighLowScore = () => {
@@ -214,6 +302,18 @@ class LiveFeed extends Component {
 
       lowFirstName: this.state.lowFirstName,
       lowLastName: this.state.lowLastName,
+      completionMap: this.state.completionMap,
+
+      notStarted: this.state.notStarted,
+      inProgress: this.state.inProgress,
+      completed: this.state.completed,
+      completionGraphMap: this.state.completionGraphMap,
+    };
+
+    const studentChartData = {
+      studentsData: this.state.studentsData,
+      progressMap: this.state.progressMap,
+      scoresMap: this.state.scoresMap,
     };
 
     return (
