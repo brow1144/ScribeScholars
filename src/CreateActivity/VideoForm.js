@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player'
 
-class VideoActivity extends Component {
+class VideoForm extends Component {
     constructor(props) {
         super(props);
         this.state = {}
@@ -19,4 +19,4 @@ class VideoActivity extends Component {
     }
 }
 
-export default VideoActivity
+export default VideoForm
