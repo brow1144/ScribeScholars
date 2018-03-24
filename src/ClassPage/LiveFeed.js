@@ -622,6 +622,7 @@ class LiveFeed extends Component {
     }
     let size = Object.keys(this.state.progressMap).length;
     temp = temp / size;
+    temp = Math.round(temp * 100) / 100;
     //temp *= 100;
     this.setState({
       classProgress: temp,

@@ -438,7 +438,7 @@ class Main extends Component {
         <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber/:uid" render={(match) => (
 
           <HomePage
-            uid={match.match.params.uid}
+            studUid={match.match.params.uid}
             class={match.match.params.class}
             lessonNumber={match.match.params.lessonNumber}
             page="studentLiveFeed"

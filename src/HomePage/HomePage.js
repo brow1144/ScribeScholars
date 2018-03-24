@@ -660,7 +660,7 @@ class HomePage extends Component {
 
           <Row>
             <Col>
-              <StudentLiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} uid={this.props.uid}/>
+              <StudentLiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} studUid={this.props.studUid}/>
             </Col>
           </Row>
         </Sidebar>

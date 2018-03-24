@@ -21,12 +21,12 @@ class TableElement extends Component {
 
   render() {
 
+    const individualStudent = this.props.studentsData[this.props.index];
+
     if (this.state.redirect) {
       return <Redirect push
-                       to={`/HomePage/${this.props.class}/lessons/liveFeed/${this.props.lessonNumber}/${this.props.uid}`}/>;
+                       to={`/HomePage/${this.props.class}/lessons/liveFeed/${this.props.lessonNumber}/${individualStudent.uid}`}/>;
     }
-
-    const individualStudent = this.props.studentsData[this.props.index];
 
     return (
       <tbody style={{cursor: 'pointer'}} onClick={this.studentLiveFeed}>
