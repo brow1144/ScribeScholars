@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Row, Col, Card, CardTitle, Table, Progress } from 'reactstrap';
+import { Row, Col, Card, CardTitle, Table } from 'reactstrap';
 import { ResponsiveContainer, PieChart, Pie, Tooltip } from 'recharts';
 
 import TableElement from './TableElement';
