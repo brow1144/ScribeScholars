@@ -17,15 +17,19 @@ class LiveFeed extends Component {
     this.state = {
       students: [],
 
+      studentsData: [{
+        firstName: "",
+        lastName: "",
+        uid: "",
+      }],
+
       highUID: "",
       lowUID: "",
 
       highFirstName: "Loading",
-      highLastName: "",
-
+      // highLastName: "",
       lowFirstName: "Loading",
-      lowLastName: "",
-
+      // lowLastName: "",
       highestScore: 0,
       lowestScore: 100,
 
@@ -37,7 +41,6 @@ class LiveFeed extends Component {
       classAverage: 0,
       classMedian: 0,
       numberOfQuestions: 0,
-
     };
   }
 
@@ -57,6 +60,7 @@ class LiveFeed extends Component {
           self.setState({
             students: doc.data().students,
           }, () => {
+            self.getStudentData();
             self.getClassAverage();
             self.getHighLowScore();
 
@@ -68,6 +72,39 @@ class LiveFeed extends Component {
         console.log("No such document!");
       }
     })
+  };
+
+  getStudentData = () => {
+
+    let studentsData = [{}];
+    let object = {};
+    let self = this;
+    self.state.students.forEach(function(element) {
+      let dataPerStudent = firestore.collection("users").doc(element);
+
+      dataPerStudent.onSnapshot(function (doc) {
+        if (doc.exists) {
+          object = {
+            firstName: doc.data().firstName,
+            lastName: doc.data().lastName,
+            uid: element,
+          };
+          studentsData.unshift(object);
+
+          self.setState({
+            studentsData: studentsData,
+          });
+        } else {
+          console.log("No such document!");
+        }
+      })
+    });
+
+    studentsData.pop();
+    self.setState({
+      studentsData: studentsData
+    });
+
   };
 
   getClassAverage = () => {
@@ -83,6 +120,7 @@ class LiveFeed extends Component {
       lessonDataPerStudent.onSnapshot(function (doc) {
         if (doc.exists) {
           scoresMap[element] = doc.data().currentScore;
+          scoresMap[element] = Math.round(scoresMap[element] * 100) / 100;
           self.setState({
             numberOfQuestions: doc.data().numOfQuestions,
           });
@@ -111,6 +149,7 @@ class LiveFeed extends Component {
     }
     let size = Object.keys(this.state.scoresMap).length;
     temp = temp / size;
+    temp = Math.round(temp * 100) / 100;
     this.setState({
       classAverage: temp,
     });
@@ -128,6 +167,16 @@ class LiveFeed extends Component {
 
     array.sort();
 
+    this.setState({
+      highestScore: array[array.length - 1],
+      lowestScore: array[0],
+      highUID: this.getKeyByValue(this.state.scoresMap, array[array.length - 1]),
+      lowUID: this.getKeyByValue(this.state.scoresMap, array[0]),
+    }, () => {
+      this.getHighName();
+      this.getlowName();
+    });
+
     let size = Object.keys(this.state.scoresMap).length;
     if ((size % 2) !== 0) {
       // Even
@@ -140,10 +189,17 @@ class LiveFeed extends Component {
       median = median / 2;
     }
 
+    median = Math.round(median * 100) / 100;
+
     this.setState({
       classMedian: median,
     });
+
   };
+
+  getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+  }
 
   getHighLowScore = () => {
     let self = this;
@@ -154,19 +210,22 @@ class LiveFeed extends Component {
       lessonDataPerStudent.onSnapshot(function (doc) {
         if (doc.exists) {
           if (doc.data().currentScore > self.state.highestScore) {
+            let highScore = doc.data().currentScore;
+            highScore = Math.round(highScore * 100) / 100;
             self.setState({
               highUID: element,
-              highestScore: doc.data().currentScore,
-
+              highestScore: highScore,
             }, () => {
               //self.getHighName();
             })
           }
 
           if (doc.data().currentScore < self.state.lowestScore) {
+            let lowScore = doc.data().currentScore;
+            lowScore = Math.round(lowScore * 100) / 100;
             self.setState({
               lowUID: element,
-              lowestScore: doc.data().currentScore,
+              lowestScore: lowScore,
             }, () => {
               //self.getlowName();
             })
@@ -236,7 +295,7 @@ class LiveFeed extends Component {
 
       lessonProgressPerStudent.onSnapshot(function (doc) {
         if (doc.exists) {
-          progressMap[element] = doc.data().currentQuestion / doc.data().numOfQuestions;
+          progressMap[element] = (doc.data().currentQuestion / doc.data().numOfQuestions) * 100;
         } else {
           console.log("No such document!");
         }
@@ -257,7 +316,7 @@ class LiveFeed extends Component {
     }
     let size = Object.keys(this.state.progressMap).length;
     temp = temp / size;
-    temp *= 100;
+    //temp *= 100;
     this.setState({
       classProgress: temp,
     });
@@ -285,6 +344,12 @@ class LiveFeed extends Component {
       lowLastName: this.state.lowLastName,
     };
 
+    const studentChartData = {
+      studentsData: this.state.studentsData,
+      progressMap: this.state.progressMap,
+      scoresMap: this.state.scoresMap,
+    };
+
     return (
       <div>
         <hr />
@@ -298,7 +363,7 @@ class LiveFeed extends Component {
 
         <LineBreak />
 
-        <StudentsChart />
+        <StudentsChart {...studentChartData} />
 
         <br/>
         <br/>
