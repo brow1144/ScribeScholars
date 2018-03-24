@@ -19,13 +19,24 @@ class Instruct extends Component {
         return(
             <Container fluid>
                 <Row>
-                    <p>Hey there bud</p>
+                    <Col xs={7} style={{borderStyle: 'solid', marginRight: '2rem'}}>
+                        <p>Hey there bud</p>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                    </Col>
+                    <Col xs={4} style={{backgroundColor: 'red'}}>
+                        <p>Hey there bud</p>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                    </Col>
                 </Row>
-                <Row className={"Filler"}> </Row>
-                <Row className={"Filler"}> </Row><Row className={"Filler"}> </Row>
-                <Row className={"Filler"}> </Row><Row className={"Filler"}> </Row>
-                <Row className={"Filler"}> </Row><Row className={"Filler"}> </Row>
-                <Row className={"Filler"}> </Row>
+
             </Container>
 
         );
