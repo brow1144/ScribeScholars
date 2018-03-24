@@ -424,6 +424,8 @@ class LiveFeed extends Component {
 
         <StudentsChart {...studentChartData} />
 
+        <LineBreak />
+
         <br/>
         <br/>
         <br/>
