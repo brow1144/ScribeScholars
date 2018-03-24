@@ -3,7 +3,7 @@ import {Table, Container, Row, Col } from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom'
 import './Table.css'
 
-const HomeworkTable = (props) => {
+const GradesTable = (props) => {
 
   return (
     <div>
@@ -14,7 +14,7 @@ const HomeworkTable = (props) => {
         </Row>
         <Row>
           <Col>
-            <p className={"homeworkTitle"}>Homework</p>
+            <p className={"gradesTitle"}>Grades</p>
           </Col>
         </Row>
         <Row>
@@ -42,7 +42,7 @@ const HomeworkTable = (props) => {
                   <td>{props.homeworks[index].name}</td>
                   <td>{props.homeworks[index].maxscore}</td>
                   <td>
-                    <RouterLink to={`${props.homeworks[index].code}`}>
+                    <RouterLink to={`practiceQuestion`}>
                       Link
                     </RouterLink>
                   </td>
@@ -67,4 +67,4 @@ const HomeworkTable = (props) => {
   )
 };
 
-export default HomeworkTable
+export default GradesTable

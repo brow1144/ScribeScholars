@@ -93,6 +93,82 @@ class HomePage extends Component {
     };
   }
 
+  // calculate GPA for a student
+  calcGPA = () => {
+    let grades = [];
+
+    for (let i in this.state.classes) {
+      if (this.state.classes.hasOwnProperty(i)) {
+        let grade = this.getGrade(this.state.classes[i].code);
+
+        if (!isNaN(grade))
+          grades.push(grade);
+      }
+    }
+
+    let points = 0;
+    let maxPoints = grades.length;
+
+    for (let i in grades) {
+      if (grades[i] >= 92.5)
+        points += 4;
+      else if (89.5 <= grades[i] && grades[i] < 92.5)
+        points += 3.7;
+      else if (86.5 <= grades[i] && grades[i] < 89.5)
+        points += 3.3;
+      else if (82.5 <= grades[i] && grades[i] < 86.5)
+        points += 3;
+      else if (79.5 <= grades[i] && grades[i] < 82.5)
+        points += 2.7;
+      else if (76.5 <= grades[i] && grades[i] < 79.5)
+        points += 2.3;
+      else if (72.5 <= grades[i] && grades[i] < 76.5)
+        points += 2;
+      else if (69.5 <= grades[i] && grades[i] < 72.5)
+        points += 1.7;
+      else if (66.5 <= grades[i] && grades[i] < 69.5)
+        points += 1.3;
+      else if (62.5 <= grades[i] && grades[i] < 66.5)
+        points += 1;
+      else if (59.5 <= grades[i] && grades[i] < 62.5)
+        points += 0.7;
+      else if (grades[i] < 59.5)
+        points += 0;
+    }
+
+    let gpa = points / maxPoints;
+
+    if (gpa % 1 !== 0)
+      gpa = Math.round(gpa * 100) / 100;
+
+    return gpa;
+  };
+
+  // get grade in a specific class
+  getGrade = (code) => {
+    let total = 0;
+    let max = 0;
+
+    for (let i in this.state.myAssignments) {
+      if (this.state.myAssignments.hasOwnProperty(i)) {
+        if (this.state.myAssignments[i].code === code && this.state.myAssignments[i].maxscore != null) {
+          total += this.state.myAssignments[i].score;
+          max += this.state.myAssignments[i].maxscore;
+        }
+      }
+    }
+
+    let grade = (total / max) * 100;
+
+    if (grade % 1 !== 0)
+      grade = Math.round(grade * 100) / 100;
+
+    return grade;
+  };
+
+
+
+
   componentDidUpdate() {
   }
 
@@ -109,6 +185,7 @@ class HomePage extends Component {
    *
    */
   componentWillMount() {
+    this.props.getShowGPA();
     this.getClasses();
     mql.addListener(this.mediaQueryChanged);
     window.addEventListener('resize', this.handleWindowChange);
@@ -160,7 +237,14 @@ class HomePage extends Component {
         if (doc.data().classes !== null) {
           self.setState({
             classes: doc.data().classes,
+            myAssignments: doc.data().assignments, // NEW *****************
           });
+
+          let gpa = self.calcGPA();
+          self.setState({
+            gpa: gpa,
+          });
+
           self.getUserImage();
           self.getDeadlines();
           self.getAnnouncements();
@@ -446,9 +530,10 @@ class HomePage extends Component {
       updateRole: this.props.updateRole,
       updateAnnouncements: this.props.updateAnnouncements,
       updateUserImage: this.props.updateUserImage,
+      toggleGPA: this.props.toggleGPA,
       selectClass: this.props.selectClass,
       updateClassPicture: this.props.updateClassPicture,
-      getClassAnnouncments: this.props.getClassAnnouncments,
+      getClassAnnouncements: this.props.getClassAnnouncements,
       getAssignments: this.props.getAssignments,
       getHomeworks: this.props.getHomeworks,
     };
@@ -460,8 +545,9 @@ class HomePage extends Component {
         return (
           <Sidebar {...sideData}>
 
-            <HomeNav firstName={this.state.firstName} lastName={this.state.lastName}
+            <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} gpa={this.state.gpa}
                      expand={this.dockSideBar}
+                     showGPA={this.props.showGPA}
                      width={this.state.width}/>
             <Row>
               <Col md="1"/>
@@ -491,8 +577,9 @@ class HomePage extends Component {
         return (
           <Sidebar {...sideData}>
 
-            <HomeNav firstName={this.state.firstName} lastName={this.state.lastName}
+            <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} gpa={this.state.gpa}
                      expand={this.dockSideBar}
+                     showGPA={this.props.showGPA}
                      width={this.state.width}/>
 
             <Row>
@@ -530,7 +617,7 @@ class HomePage extends Component {
 
           <Settings {...actions} classes={this.props.classes} userImage={this.state.userImage}
                     updateUserImage={this.props.updateUserImage} updateClasses={this.props.updateClasses}
-                    role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid}/>
+                    role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid} showGPA={this.props.showGPA}/>
         </Sidebar>
       );
 
@@ -578,7 +665,39 @@ class HomePage extends Component {
         </Sidebar>
       );
 
-    }  else {
+    } else if (this.props.page === "homeworks") {
+
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={"Homework"} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <Row>
+            <Col>
+
+            </Col>
+          </Row>
+        </Sidebar>
+      );
+
+    } else if (this.props.page === "inclass") {
+
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={"InClass Lesson"} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <Row>
+            <Col>
+
+            </Col>
+          </Row>
+        </Sidebar>
+      );
+
+    } else {
       return (
         <p>UH OH!</p>
       );

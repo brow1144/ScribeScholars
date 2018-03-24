@@ -117,7 +117,6 @@ class SetPersonal extends Component {
       })
     };
 
-
     render() {
         return (
 
@@ -161,10 +160,19 @@ class SetPersonal extends Component {
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
-                                <Col sm={{ size:6, offset: 2}}>
+                                <Col sm={6}>
+                                  <FormGroup check inline>
+                                    <Label check size="lg">
+                                      <Input onChange={this.props.toggleGPA} type="checkbox" id="checkbox" checked={this.props.showGPA === true}/> Show GPA
+                                    </Label>
+                                  </FormGroup>
+                                </Col>
+                            </FormGroup>
+                            <FormGroup row>
+                                <Col sm={{size:6, offset: 2}}>
                                     <Button className={"PasswordButton"} size={"lg"} onClick={this.toggle}>Reset Password</Button>
                                     <Modal size={"lg"} isOpen={this.state.modal} toggle={this.toggle}>
-                                        <ModalHeader toggle={this.toggle}>Password Reset</ModalHeader>
+                                        <ModalHeader toggle={this.props.toggleTest}>Password Reset</ModalHeader>
                                         <ModalBody className={"ModalFonts"}>
                                             Are you sure you want to reset your password? (An email will be sent to your account)
                                         </ModalBody>

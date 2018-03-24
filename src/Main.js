@@ -24,6 +24,7 @@ class Main extends Component {
       }],
 
       uid: this.props.uid,
+      showGPA: null,
 
       userImage: null,
 
@@ -51,101 +52,213 @@ class Main extends Component {
       }],
 
       homeworks: [{
-        code: null,
+        lessonCode: null,
         maxscore: null,
         name: null,
       }],
 
       assignments: [{
-        code: null,
+        lessonCode: null,
         maxscore: null,
         name: null,
       }],
+
+      myAssignments: [],
     }
   }
 
-  /**
-   *
-   * Now that we have the teacher uid and the students
-   * array of classes,
-   *
-   * 1. We got to the teachers uid and find her classes
-   *
-   * 2. When then find the classes that correlate with the
-   *    student and the teacher
-   *
-   * 3. Then we get the deadlines from the central classroom data
-   *    and set state to update the calendar
-   *
-   */
-  getDeadlines = () => {
+    /**
+     *
+     * Now that we have the teacher uid and the students
+     * array of classes,
+     *
+     * 1. We got to the teachers uid and find her classes
+     *
+     * 2. When then find the classes that correlate with the
+     *    student and the teacher
+     *
+     * 3. Then we get the deadlines from the central classroom data
+     *    and set state to update the calendar
+     *
+     */
+    getDeadlines = () => {
 
-    let object = [{}];
+      let object = [{}];
 
-    let self = this;
+      let self = this;
 
-    for(let j in self.state.classes) {
+      for (let j in self.state.classes) {
 
-      let docRef = firestore.collection("classes").doc(self.state.classes[j].code);
+        let docRef = firestore.collection("classes").doc(self.state.classes[j].code);
+
+        docRef.get().then(function (doc) {
+          if (doc.exists) {
+            let data = doc.data();
+            for (let i in data.deadlines) {
+              if (data.deadlines.hasOwnProperty(i)) {
+                object.unshift({
+                  title: data.deadlines[i].title,
+                  start: new Date(data.deadlines[i].startYear, data.deadlines[i].startMonth, data.deadlines[i].startDay, data.deadlines[i].startHour, data.deadlines[i].startMinute, 0),
+                  end: new Date(data.deadlines[i].endYear, data.deadlines[i].endMonth, data.deadlines[i].endDay, data.deadlines[i].endHour, data.deadlines[i].endMinute, 0),
+                });
+                self.setState({
+                  dates: object,
+                })
+              }
+            }
+          } else {
+            console.log("No such document!");
+          }
+          self.updateDates(self.state.dates);
+        }).catch(function (error) {
+          console.log("Error getting document:", error);
+        });
+      }
+      object.pop();
+
+      self.setState({
+        dates: object
+      });
+
+    };
+
+    /**
+     *
+     * Now that we have the class code and the students
+     * array of classes,
+     *
+     * 1. We go to the class code and find her classes
+     *
+     * 2. We then find the classes that correlate with the
+     *    student and the teacher
+     *
+     * 3. Then we get the announcements from the central classroom data
+     *    and set state to update the calendar
+     *
+     */
+    getAnnouncements = () => {
+
+      let object = [{}];
+
+      let self = this;
+
+      for (let j in self.state.classes) {
+
+        let docRef = firestore.collection("classes").doc(self.state.classes[j].code);
+
+        docRef.get().then(function (doc) {
+          if (doc.exists) {
+            let data = doc.data();
+            for (let i in data.announcements) {
+              if (data.announcements.hasOwnProperty(i)) {
+                object.unshift({
+                  class: data.announcements[i].class,
+                  title: data.announcements[i].title,
+                  subtitle: data.announcements[i].subtitle,
+                  message: data.announcements[i].message,
+                });
+                self.setState({
+                  announcements: object,
+                })
+              }
+            }
+          } else {
+            console.log("No such document!");
+          }
+          self.updateAnnouncements(self.state.announcements);
+        }).catch(function (error) {
+          console.log("Error getting document:", error);
+        });
+      }
+      object.pop();
+
+      self.setState({
+        announcements: object
+      });
+    };
+
+    getClassImage = (classImage) => {
+      let docRef = firestore.collection("classes").doc(classImage);
+      let self = this;
 
       docRef.get().then(function (doc) {
         if (doc.exists) {
-          let data = doc.data();
-          for (let i in data.deadlines) {
-            if (data.deadlines.hasOwnProperty(i)) {
-              object.unshift({
-                title: data.deadlines[i].title,
-                start: new Date(data.deadlines[i].startYear, data.deadlines[i].startMonth, data.deadlines[i].startDay, data.deadlines[i].startHour, data.deadlines[i].startMinute, 0),
-                end: new Date(data.deadlines[i].endYear, data.deadlines[i].endMonth, data.deadlines[i].endDay, data.deadlines[i].endHour, data.deadlines[i].endMinute, 0),
-              });
-              self.setState({
-                dates: object,
-              })
-            }
-          }
+          self.setState({
+            classImage: doc.data().classImage,
+          });
+
         } else {
           console.log("No such document!");
         }
-        self.updateDates(self.state.dates);
       }).catch(function (error) {
         console.log("Error getting document:", error);
+      })
+    };
+
+    updateClasses = (classes) => {
+      this.setState({
+        classes: classes,
       });
-    }
-    object.pop();
+      this.getAnnouncements();
+      this.getDeadlines();
+    };
 
-    self.setState({
-      dates: object
-    });
+    updateDates = (dates) => {
+      this.setState({
+        dates: dates,
+      })
+    };
 
-  };
+    updateAnnouncements = (announcements) => {
+      this.setState({
+        announcements: announcements,
+      })
+    };
 
-  /**
-   *
-   * Now that we have the class code and the students
-   * array of classes,
-   *
-   * 1. We go to the class code and find her classes
-   *
-   * 2. We then find the classes that correlate with the
-   *    student and the teacher
-   *
-   * 3. Then we get the announcements from the central classroom data
-   *    and set state to update the calendar
-   *
-   */
-  getAnnouncements = () => {
+    updateRole = (role) => {
+      this.setState({
+        role: role,
+      })
+    };
 
-    let object = [{}];
+    updateUserImage = (userImage) => {
+      this.setState({
+        userImage: userImage,
+      })
+    };
 
-    let self = this;
+    selectClass = (classCode) => {
+      //console.log(classCode);
+      this.setState({
+        selectedClass: classCode,
+      });
+      this.getClassAnnouncements(classCode);
+      this.getClassImage(classCode);
+      this.getAssignments(classCode);
+      this.getHomeworks(classCode);
+    };
 
-    for(let j in self.state.classes) {
+    updateClassPicture = (classImage) => {
+      this.setState({
+        classImage: classImage,
+      });
+      this.getClassImage(classImage);
+    };
 
-      let docRef = firestore.collection("classes").doc(self.state.classes[j].code);
+    getClassAnnouncements = (classCode) => {
+
+      let object = [{}];
+
+      let self = this;
+
+      let docRef = firestore.collection("classes").doc(classCode);
 
       docRef.get().then(function (doc) {
         if (doc.exists) {
           let data = doc.data();
+          self.setState({
+            className: data.class,
+          });
           for (let i in data.announcements) {
             if (data.announcements.hasOwnProperty(i)) {
               object.unshift({
@@ -155,132 +268,55 @@ class Main extends Component {
                 message: data.announcements[i].message,
               });
               self.setState({
-                announcements: object,
+                classAnnouncements: object,
               })
             }
           }
         } else {
           console.log("No such document!");
         }
-        self.updateAnnouncements(self.state.announcements);
       }).catch(function (error) {
         console.log("Error getting document:", error);
       });
-    }
-    object.pop();
 
-    self.setState({
-      announcements: object
-    });
-  };
+      object.pop();
 
-  getClassImage = (classImage) => {
-    let docRef = firestore.collection("classes").doc(classImage);
-    let self = this;
+      self.setState({
+        classAnnouncements: object
+      });
+    };
 
-    docRef.get().then(function(doc) {
-      if (doc.exists) {
-        self.setState({
-          classImage: doc.data().classImage,
-        });
+    getShowGPA = () => {
+      let self = this;
 
-      } else {
-        console.log("No such document!");
-      }
-    }).catch(function(error) {
-      console.log("Error getting document:", error);
-    })
-  };
+      let studentRef = firestore.collection("users").doc(this.state.uid);
 
-  updateClasses = (classes) => {
-    this.setState({
-      classes: classes,
-    });
-    this.getAnnouncements();
-    this.getDeadlines();
-  };
+      studentRef.get().then((doc) => {
+        if (doc.exists) {
+          self.setState({
+            showGPA: doc.data().showGPA,
+          });
+        }
+      }).catch((error) => {
+        console.log("Error getting document:", error);
+      });
+    };
 
-  updateDates = (dates) => {
-    this.setState({
-      dates: dates,
-    })
-  };
+    toggleGPA = () => {
+      let old_state = this.state.showGPA;
 
-  updateAnnouncements = (announcements) => {
-    this.setState({
-      announcements: announcements,
-    })
-  };
+      this.setState({
+        showGPA: !this.state.showGPA,
+      });
 
-  updateRole = (role) => {
-    this.setState({
-      role: role,
-    })
-  };
+      let studentRef = firestore.collection("users").doc(this.state.uid);
 
-  updateUserImage = (userImage) => {
-    this.setState({
-      userImage: userImage,
-    })
-  };
-
-  selectClass = (classCode) => {
-    //console.log(classCode);
-    this.setState({
-      selectedClass: classCode,
-    });
-    this.getClassAnnouncments(classCode);
-    this.getClassImage(classCode);
-    this.getAssignments(classCode);
-    this.getHomeworks(classCode);
-  };
-
-  updateClassPicture =(classImage) => {
-    this.setState({
-      classImage: classImage,
-    });
-    this.getClassImage(classImage);
-  };
-
-  getClassAnnouncments = (classCode) => {
-
-    let object = [{}];
-
-    let self = this;
-
-    let docRef = firestore.collection("classes").doc(classCode);
-
-    docRef.get().then(function (doc) {
-      if (doc.exists) {
-        let data = doc.data();
-        self.setState({
-          className: data.class,
-        });
-        for (let i in data.announcements) {
-          if (data.announcements.hasOwnProperty(i)) {
-            object.unshift({
-              class: data.announcements[i].class,
-              title: data.announcements[i].title,
-              subtitle: data.announcements[i].subtitle,
-              message: data.announcements[i].message,
-            });
-            self.setState({
-              classAnnouncements: object,
-            })
-          }}
-      } else {
-        console.log("No such document!");
-      }
-    }).catch(function (error) {
-      console.log("Error getting document:", error);
-    });
-
-    object.pop();
-
-    self.setState({
-      classAnnouncements: object
-    });
-  };
+      studentRef.update({
+        "showGPA": !old_state,
+      }).catch((error) => {
+        console.log("Error getting document:", error);
+      });
+    };
 
   getAssignments = (classCode) => {
 
@@ -288,28 +324,22 @@ class Main extends Component {
 
     let self = this;
 
-    let docRef = firestore.collection("classes").doc(classCode);
+    let docRef = firestore.collection("users").doc(this.state.uid).collection("inClass");
 
-    docRef.get().then(function (doc) {
-      if (doc.exists) {
-        let data = doc.data();
-        self.setState({
-          className: data.class,
-        });
-        for (let i in data.assignments) {
-          if (data.assignments.hasOwnProperty(i)) {
-            object.unshift({
-              code: data.assignments[i].code,
-              maxscore: data.assignments[i].maxscore,
-              name: data.assignments[i].name,
-            });
-            self.setState({
-              assignments: object,
-            })
-          }}
-      } else {
-        console.log("No such document!");
-      }
+    docRef.get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+
+        if (doc.data().class === classCode) {
+          object.unshift({
+            code: doc.id,
+            maxscore: doc.data().maxscore,
+            name: doc.data().name,
+          });
+          self.setState({
+            assignments: object,
+          })
+        }
+      })
     }).catch(function (error) {
       console.log("Error getting document:", error);
     });
@@ -327,28 +357,18 @@ class Main extends Component {
 
     let self = this;
 
-    let docRef = firestore.collection("classes").doc(classCode);
+    let docRef = firestore.collection("classes").doc(classCode).collection("Homework");
 
-    docRef.get().then(function (doc) {
-      if (doc.exists) {
-        let data = doc.data();
-        self.setState({
-          className: data.class,
+    docRef.get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        object.unshift({
+          maxscore: doc.data().maxscore,
+          name: doc.data().name,
         });
-        for (let i in data.homeworks) {
-          if (data.homeworks.hasOwnProperty(i)) {
-            object.unshift({
-              code: data.homeworks[i].code,
-              maxscore: data.homeworks[i].maxscore,
-              name: data.homeworks[i].name,
-            });
-            self.setState({
-              homeworks: object,
-            })
-          }}
-      } else {
-        console.log("No such document!");
-      }
+        self.setState({
+          homeworks: object,
+        })
+      })
     }).catch(function (error) {
       console.log("Error getting document:", error);
     });
@@ -358,37 +378,40 @@ class Main extends Component {
     self.setState({
       homeworks: object
     });
+
   };
 
+    render()
+    {
+      const data = {
+        uid: this.state.uid,
+        classes: this.state.classes,
+        showGPA: this.state.showGPA,
+        dates: this.state.dates,
+        announcements: this.state.announcements,
+        userImage: this.state.userImage,
+        selectedClass: this.state.selectedClass,
+        className: this.state.className,
+        classAnnouncements: this.state.classAnnouncements,
+        classImage: this.state.classImage,
+        assignments: this.state.assignments,
+        homeworks: this.state.homeworks,
+      };
 
-  render() {
-
-    const data = {
-      uid: this.state.uid,
-      classes: this.state.classes,
-      dates: this.state.dates,
-      announcements: this.state.announcements,
-      userImage: this.state.userImage,
-      selectedClass: this.state.selectedClass,
-      className: this.state.className,
-      classAnnouncements: this.state.classAnnouncements,
-      classImage: this.state.classImage,
-      assignments: this.state.assignments,
-      homeworks: this.state.homeworks,
-    };
-
-    const actions = {
-      updateClasses: this.updateClasses,
-      updateDates: this.updateDates,
-      updateRole: this.updateRole,
-      updateAnnouncements: this.updateAnnouncements,
-      updateUserImage: this.updateUserImage,
-      selectClass: this.selectClass,
-      updateClassPicture: this.updateClassPicture,
-      getClassAnnouncments: this.getClassAnnouncments,
-      getAssignments: this.getAssignments,
-      getHomeworks: this.getHomeworks,
-    };
+      const actions = {
+        updateClasses: this.updateClasses,
+        updateDates: this.updateDates,
+        updateRole: this.updateRole,
+        updateAnnouncements: this.updateAnnouncements,
+        updateUserImage: this.updateUserImage,
+        getShowGPA: this.getShowGPA,
+        toggleGPA: this.toggleGPA,
+        selectClass: this.selectClass,
+        updateClassPicture: this.updateClassPicture,
+        getClassAnnouncements: this.getClassAnnouncements,
+        getAssignments: this.getAssignments,
+        getHomeworks: this.getHomeworks,
+      };
 
     return (
       <Switch>
@@ -421,6 +444,38 @@ class Main extends Component {
             {...data}
             {...actions}
           />
+        )}/>
+
+        <Route path="/HomePage/:class/lessons/:lessonNumber" render={(match) => (
+
+          <HomePage
+            class={match.match.params.class}
+            lessonNumber={match.match.params.lessonNumber}
+            page="inclass"
+            {...data}
+            {...actions}
+          />
+
+        )}/>
+
+        <Route path="/HomePage/:class/homework/:lessonNumber" render={(match) => (
+          this.state.role === "teacher"
+            ?
+            <HomePage
+              class={match.match.params.class}
+              lessonNumber={match.match.params.lessonNumber}
+              page="liveFeed"
+              {...data}
+              {...actions}
+            />
+            :
+            <HomePage
+              class={match.match.params.class}
+              lessonNumber={match.match.params.lessonNumber}
+              page="homeworks"
+              {...data}
+              {...actions}
+            />
         )}/>
 
         <Route path="/homepage/:class" render={(match) => (

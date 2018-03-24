@@ -18,6 +18,9 @@ import SetRoomPic from "./Announcements/SetRoomPicture";
 import DashboardInfo from "./DashboardInfo/DashboardInfoPage";
 import MyStudents from "./MyStudents/MyStudents";
 import MakeWork from "./WorkForm/MakeWork";
+
+import Graphs from "./Graphs";
+
 import CreateActivity from './CreateActivity/CreateActivity';
 
 
@@ -151,6 +154,12 @@ class App extends Component {
             ? <Main page={"settings"} uid={this.state.uid}/>
             : <Redirect to="/sign-in" />
         )} />
+
+        <Route path='/graphs' render={() => (
+          <Graphs uid={this.state.uid}/>
+        )} />
+
+        <Route render={() => <Redirect to="/HomePage" />} />
 
           <Route exact path='/create-activity' render={() => (
               this.signedIn()
