@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 
 import { Col, FormGroup, Label, Input } from 'reactstrap';
 
-import './FRQForm.css';
+import './FRQ.css';
 
-class FRQForm extends Component {
+class FRQ extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -27,4 +27,4 @@ class FRQForm extends Component {
     }
 }
 
-export default FRQForm
+export default FRQ

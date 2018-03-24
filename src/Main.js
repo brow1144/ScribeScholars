@@ -394,6 +394,7 @@ class Main extends Component {
       <Switch>
 
         <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber" render={(match) => (
+
           <HomePage
             class={match.match.params.class}
             lessonNumber={match.match.params.lessonNumber}
@@ -402,25 +403,6 @@ class Main extends Component {
             {...actions}
           />
         )}/>
-
-          <Route path="/HomePage/:class/lessons/create-activity" render={(match) => (
-              <HomePage
-                  class={match.match.params.class}
-                  assType="Lesson"
-                  page="createActivity"
-                  {...data}
-                  {...actions}
-              />
-          )}/>
-          <Route path="/HomePage/:class/homework/create-activity" render={(match) => (
-              <HomePage
-                  class={match.match.params.class}
-                  assType="Homework"
-                  page="createActivity"
-                  {...data}
-                  {...actions}
-              />
-          )}/>
 
         <Route path="/homepage/:class" render={(match) => (
           <HomePage

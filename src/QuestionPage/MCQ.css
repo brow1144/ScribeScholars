@@ -23,8 +23,23 @@
     height: 2rem;
 }
 
-.Question
+.RadioTitle
 {
-    padding: 5rem;
+    font-size: 2rem;
 }
 
+.RadioLabel
+{
+    padding: 1.5rem;
+    padding-left: 2.5rem;
+    font-size: 1.5em;
+    text-indent: 1.25rem;
+
+}
+
+.RadioButton
+{
+    height: 2rem;
+    width: 2rem;
+    margin: 1rem;
+}
