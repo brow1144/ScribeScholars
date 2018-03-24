@@ -44,8 +44,6 @@ class LiveFeed extends Component {
       completed: 0,
       completionGraphMap: [{}],
 
-      letterGradeMap: [{}],
-
       classAverage: 0,
       classMedian: 0,
       numberOfQuestions: 0,
@@ -147,7 +145,6 @@ class LiveFeed extends Component {
           self.calculateAverage();
           self.calculateMedian();
           self.getCompletion();
-          self.getLetterGrades();
         });
       })
     })
@@ -252,45 +249,6 @@ class LiveFeed extends Component {
       completed: completed,
       completionGraphMap: object,
     })
-
-  };
-
-  getLetterGrades = () => {
-
-    let A = 0;
-    let B = 0;
-    let C = 0;
-    let D = 0;
-    let F = 0;
-
-    for (let i in this.state.scoresMap) {
-
-      if (this.state.scoresMap[i] >= 0 && this.state.scoresMap[i] < 60) {
-        // F
-      } else if (this.state.scoresMap[i] >= 60 && this.state.scoresMap[i] < 63) {
-        // D -
-      } else if (this.state.scoresMap[i] >= 63 && this.state.scoresMap[i] < 67) {
-        // D
-      } else if (this.state.scoresMap[i] >= 67 && this.state.scoresMap[i] < 70) {
-        // D +
-      } else if (this.state.scoresMap[i] >= 70 && this.state.scoresMap[i] < 80) {
-        // C -
-      } else if (this.state.scoresMap[i] >= 80 && this.state.scoresMap[i] < 90) {
-        // C
-      } else if (this.state.scoresMap[i] >= 90 && this.state.scoresMap[i] <= 100) {
-        // C +
-      } else if (this.state.scoresMap[i] >= 90 && this.state.scoresMap[i] <= 100) {
-        // B -
-      } else if (this.state.scoresMap[i] >= 90 && this.state.scoresMap[i] <= 100) {
-        // B
-      } else if (this.state.scoresMap[i] >= 90 && this.state.scoresMap[i] <= 100) {
-        // B +
-      } else if (this.state.scoresMap[i] >= 90 && this.state.scoresMap[i] <= 100) {
-        // A -
-      } else if (this.state.scoresMap[i] >= 90 && this.state.scoresMap[i] <= 100) {
-        // A
-      }
-    }
 
   };
 
