@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Row, Col, Card, CardTitle, CardText } from 'reactstrap';
 import { ResponsiveContainer, PieChart, Pie, Bar, BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
-class LineBreak extends Component {
+class LiveGraphs extends Component {
 
   constructor(props) {
     super(props);
@@ -25,11 +25,6 @@ class LineBreak extends Component {
       {name: 'Page B', Unanswered: 3000, Incorrect: 1398, Correct: 2210},
       {name: 'Page B', Unanswered: 3000, Incorrect: 1398, Correct: 2210},
     ];
-
-    const data01 =
-      [ {name: 'Not Started', value: this.props.notStarted},
-        {name: 'In Progress', value: this.props.inProgress},
-        {name: 'Completed', value: this.props.completed}];
 
     return (
       <Row>
@@ -72,7 +67,7 @@ class LineBreak extends Component {
           <b>Not Started / Working / Finished</b>
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
-              <Pie isAnimationActive={false} data={data01} dataKey="value" innerRadius={20} outerRadius={40} fill="#21CE99" label/>
+              <Pie isAnimationActive={false} data={this.props.completionGraphMap} dataKey="value" innerRadius={20} outerRadius={40} fill="#21CE99" label/>
               <Tooltip/>
             </PieChart>
           </ResponsiveContainer>
@@ -101,4 +96,4 @@ class LineBreak extends Component {
   }
 }
 
-export default LineBreak;
+export default LiveGraphs;

@@ -42,6 +42,7 @@ class LiveFeed extends Component {
       notStarted: 0,
       inProgress: 0,
       completed: 0,
+      completionGraphMap: [{}],
 
       classAverage: 0,
       classMedian: 0,
@@ -145,9 +146,6 @@ class LiveFeed extends Component {
           self.calculateMedian();
           self.getCompletion();
         });
-
-
-
       })
     })
   };
@@ -230,10 +228,26 @@ class LiveFeed extends Component {
       }
     }
 
+    let object = [{}];
+
+    if (notStarted !== 0) {
+      object.unshift({"name": "Not Started", "value": notStarted});
+    }
+
+    if (inProgress !== 0) {
+      object.unshift({"name": "In Progress", "value": inProgress});
+    }
+
+    if (completed !== 0) {
+      object.unshift({"name": "Completed", "value": completed});
+    }
+
+
     this.setState({
       notStarted: notStarted,
       inProgress: inProgress,
       completed: completed,
+      completionGraphMap: object,
     })
 
   };
@@ -385,6 +399,7 @@ class LiveFeed extends Component {
       notStarted: this.state.notStarted,
       inProgress: this.state.inProgress,
       completed: this.state.completed,
+      completionGraphMap: this.state.completionGraphMap,
     };
 
     const studentChartData = {
