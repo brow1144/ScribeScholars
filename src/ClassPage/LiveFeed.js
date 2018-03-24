@@ -244,7 +244,7 @@ class LiveFeed extends Component {
     let self = this;
 
 
-    docRef.onSnapshot(function (doc) {
+    docRef.get().then(function (doc) {
 
       if (doc.exists) {
         self.setState({
@@ -271,7 +271,7 @@ class LiveFeed extends Component {
     let docRef1 = firestore.collection("users").doc(this.state.lowUID);
     let self = this;
 
-    docRef1.onSnapshot(function (doc) {
+    docRef1.get().then(function (doc) {
 
       if (doc.exists) {
         self.setState({
