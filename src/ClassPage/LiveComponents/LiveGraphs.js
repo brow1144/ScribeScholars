@@ -27,9 +27,9 @@ class LineBreak extends Component {
     ];
 
     const data01 =
-      [ {name: 'Not Started', value: 1},
-        {name: 'In Progress', value: 4},
-        {name: 'Completed', value: 6}];
+      [ {name: 'Not Started', value: this.props.notStarted},
+        {name: 'In Progress', value: this.props.inProgress},
+        {name: 'Completed', value: this.props.completed}];
 
     return (
       <Row>
