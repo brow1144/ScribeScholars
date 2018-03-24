@@ -25,7 +25,7 @@ class LiveGraphs extends Component {
       {name: 'Page B', Unanswered: 3000, Incorrect: 1398, Correct: 2210},
       {name: 'Page B', Unanswered: 3000, Incorrect: 1398, Correct: 2210},
     ];
-
+    
     return (
       <Row>
         <Col xs="1" />
@@ -45,7 +45,7 @@ class LiveGraphs extends Component {
             <Col>
               <Card body outline color="info">
                 <CardTitle>Highest Score</CardTitle>
-                <CardText>{this.props.highFirstName} {this.props.highLastName} {this.props.highestScore}%</CardText>
+                <CardText>{this.props.highFirstName} {this.props.highLastName}: {this.props.highestScore}%</CardText>
               </Card>
             </Col>
           </Row>
@@ -56,7 +56,7 @@ class LiveGraphs extends Component {
             <Col>
               <Card body outline color="info">
                 <CardTitle>Lowest Score</CardTitle>
-                <CardText>{this.props.lowFirstName} {this.props.lowLastName} {this.props.lowestScore}%</CardText>
+                <CardText>{this.props.lowFirstName} {this.props.lowLastName}: {this.props.lowestScore}%</CardText>
               </Card>
             </Col>
           </Row>
