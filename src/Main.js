@@ -57,6 +57,7 @@ class Main extends Component {
       }],
 
       assignments: [{
+        lesson: null,
         code: null,
         maxscore: null,
         name: null,
@@ -288,28 +289,22 @@ class Main extends Component {
 
     let self = this;
 
-    let docRef = firestore.collection("classes").doc(classCode);
+    let docRef = firestore.collection("users").doc(this.state.uid).collection("inClass");
 
-    docRef.get().then(function (doc) {
-      if (doc.exists) {
-        let data = doc.data();
-        self.setState({
-          className: data.class,
-        });
-        for (let i in data.assignments) {
-          if (data.assignments.hasOwnProperty(i)) {
-            object.unshift({
-              code: data.assignments[i].code,
-              maxscore: data.assignments[i].maxscore,
-              name: data.assignments[i].name,
-            });
-            self.setState({
-              assignments: object,
-            })
-          }}
-      } else {
-        console.log("No such document!");
-      }
+    docRef.get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+
+        if (doc.data().class === classCode) {
+          object.unshift({
+            code: doc.id,
+            maxscore: doc.data().maxscore,
+            name: doc.data().name,
+          });
+          self.setState({
+            assignments: object,
+          })
+        }
+      })
     }).catch(function (error) {
       console.log("Error getting document:", error);
     });
@@ -327,37 +322,28 @@ class Main extends Component {
 
     let self = this;
 
-    let docRef = firestore.collection("classes").doc(classCode);
+      let docRef = firestore.collection("classes").doc(classCode).collection("Homework");
 
-    docRef.get().then(function (doc) {
-      if (doc.exists) {
-        let data = doc.data();
-        self.setState({
-          className: data.class,
-        });
-        for (let i in data.homeworks) {
-          if (data.homeworks.hasOwnProperty(i)) {
-            object.unshift({
-              code: data.homeworks[i].code,
-              maxscore: data.homeworks[i].maxscore,
-              name: data.homeworks[i].name,
-            });
-            self.setState({
-              homeworks: object,
-            })
-          }}
-      } else {
-        console.log("No such document!");
-      }
-    }).catch(function (error) {
-      console.log("Error getting document:", error);
-    });
+      docRef.get().then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          object.unshift({
+            maxscore: doc.data().maxscore,
+            name: doc.data().name,
+          });
+          self.setState({
+            homeworks: object,
+          })
+        })
+      }).catch(function (error) {
+        console.log("Error getting document:", error);
+      });
 
-    object.pop();
+      object.pop();
 
-    self.setState({
-      homeworks: object
-    });
+      self.setState({
+        homeworks: object
+      });
+
   };
 
 
@@ -394,13 +380,36 @@ class Main extends Component {
       <Switch>
 
         <Route path="/HomePage/:class/lessons/:lessonNumber" render={(match) => (
+
           <HomePage
             class={match.match.params.class}
             lessonNumber={match.match.params.lessonNumber}
-            page="liveFeed"
+            page="inclass"
             {...data}
             {...actions}
           />
+
+        )}/>
+
+        <Route path="/HomePage/:class/homework/:lessonNumber" render={(match) => (
+          this.state.role === "teacher"
+            ?
+            <HomePage
+              class={match.match.params.class}
+              lessonNumber={match.match.params.lessonNumber}
+              page="liveFeed"
+              {...data}
+              {...actions}
+            />
+            :
+            <HomePage
+              class={match.match.params.class}
+              lessonNumber={match.match.params.lessonNumber}
+              page="homeworks"
+              {...data}
+              {...actions}
+            />
+
         )}/>
 
         <Route path="/homepage/:class" render={(match) => (

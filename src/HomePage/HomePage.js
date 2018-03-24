@@ -88,6 +88,8 @@ class HomePage extends Component {
       mql: mql,
       docked: props.docked,
       open: props.open,
+
+      lessonNumber: null,
     };
   }
 
@@ -437,6 +439,7 @@ class HomePage extends Component {
       classImage: this.props.classImage,
       assignments: this.props.assignments,
       homeworks: this.props.homeworks,
+      lessonNumber: this.props.lessonNumber,
     };
 
     const actions = {
@@ -555,6 +558,38 @@ class HomePage extends Component {
           <Row>
             <Col>
               <LiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} uid={this.state.uid}/>
+            </Col>
+          </Row>
+        </Sidebar>
+      );
+
+    } else if (this.props.page === "homeworks") {
+
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={"Homework"} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <Row>
+            <Col>
+
+            </Col>
+          </Row>
+        </Sidebar>
+      );
+
+    } else if (this.props.page === "inclass") {
+
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={"InClass Lesson"} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <Row>
+            <Col>
+
             </Col>
           </Row>
         </Sidebar>
