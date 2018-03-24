@@ -46,6 +46,18 @@ class LiveFeed extends Component {
 
       gradeMap: [{}],
 
+      answerMap: [{
+        name: null,
+        Unanswered: 0,
+        Incorrect: 0,
+        Correct: 0,
+      }],
+
+      individualAnswerMap: [{
+        uid: null,
+        questions: [],
+      }],
+
       classAverage: 0,
       classMedian: 0,
       numberOfQuestions: 0,
@@ -72,6 +84,7 @@ class LiveFeed extends Component {
             self.getClassAverage();
             self.getHighLowScore();
             self.getProgress();
+            self.getQuestionProgress();
           });
         }
       } else {
@@ -381,6 +394,108 @@ class LiveFeed extends Component {
 
   };
 
+  getQuestionProgress = () => {
+
+    let individualAnswerMap = [{}];
+
+    let self = this;
+    self.state.students.forEach(function(element) {
+      let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
+
+      let object = {
+        uid: null,
+        questions: [],
+      };
+
+      lessonDataPerStudent.onSnapshot(function (doc) {
+        if (doc.exists) {
+
+          object.uid = element;
+          object.questions = doc.data().questions;
+
+          individualAnswerMap.unshift(object);
+
+        } else {
+          console.log("No such document!");
+        }
+        self.setState({
+          individualAnswerMap: individualAnswerMap,
+        }, () => {
+          self.removeEmptyElements();
+        })
+      })
+    })
+  };
+
+  removeEmptyElements = () => {
+
+    let individualAnswerMap = this.state.individualAnswerMap;
+    for (let i in individualAnswerMap) {
+      let data = individualAnswerMap[i];
+
+      if (Object.keys(data).length === 0) {
+        individualAnswerMap.pop();
+      }
+
+    }
+    this.setState({
+      individualAnswerMap: individualAnswerMap,
+    }, () => {
+      this.setAnswerMap();
+    })
+  };
+
+  setAnswerMap = () => {
+
+    let array = [];
+
+    let i;
+    for (i = 0; i < this.state.numberOfQuestions; i++) {
+
+      let data = {
+        name: "",
+        Unanswered: 0,
+        Incorrect: 0,
+        Correct: 0,
+      };
+
+
+      data.name = `Question ${i + 1}`;
+      data.Unanswered = 0;
+      data.Incorrect = 0;
+      data.Correct = 0;
+
+      array.push(data);
+    }
+
+
+    let size = Object.keys(this.state.individualAnswerMap).length;
+
+    let j;
+    for (j = 0; j < size; j++) {
+
+      let data = this.state.individualAnswerMap[j];
+
+      let k;
+      for (k = 0; k < data.questions.length; k++) {
+
+        console.log(array[k]);
+
+        if (data.questions[k] === "0") {
+          array[k].Incorrect++;
+        } else if (data.questions[k] === "1") {
+          array[k].Correct++;
+        } else if (data.questions[k] === "2") {
+          array[k].Unanswered++;
+        }
+      }
+
+    }
+    this.setState({
+      answerMap: array,
+    })
+  };
+
   getHighLowScore = () => {
     let self = this;
     self.state.students.forEach(function(element) {
@@ -529,6 +644,8 @@ class LiveFeed extends Component {
       inProgress: this.state.inProgress,
       completed: this.state.completed,
       completionGraphMap: this.state.completionGraphMap,
+
+      answerMap: this.state.answerMap,
     };
 
     const studentChartData = {
@@ -545,7 +662,6 @@ class LiveFeed extends Component {
 
         <LessonStats {...lesssonStatsData} />
 
-
         <LineBreak />
 
         <LiveGraphs {...liveGraphsData}  />
@@ -553,19 +669,6 @@ class LiveFeed extends Component {
         <LineBreak />
 
         <StudentsChart {...studentChartData} />
-
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-
 
         <br/>
         <br/>

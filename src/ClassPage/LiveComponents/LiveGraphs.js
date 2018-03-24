@@ -14,16 +14,10 @@ class LiveGraphs extends Component {
   render() {
 
     const data1 = [
-      {name: 'Page A', Unanswered: 4000, Incorrect: 2400, Correct: 2400},
-      {name: 'Page B', Unanswered: 3000, Incorrect: 1398, Correct: 2210},
-      {name: 'Page C', Unanswered: 2000, Incorrect: 9800, Correct: 2290},
-      {name: 'Page D', Unanswered: 2780, Incorrect: 3908, Correct: 2000},
-      {name: 'Page E', Unanswered: 1890, Incorrect: 4800, Correct: 2181},
-      {name: 'Page F', Unanswered: 2390, Incorrect: 3800, Correct: 2500},
-      {name: 'Page G', Unanswered: 3490, Incorrect: 4300, Correct: 2100},
-      {name: 'Page A', Unanswered: 4000, Incorrect: 2400, Correct: 2400},
-      {name: 'Page B', Unanswered: 3000, Incorrect: 1398, Correct: 2210},
-      {name: 'Page B', Unanswered: 3000, Incorrect: 1398, Correct: 2210},
+      {name: 'Question 1', Unanswered: 2, Incorrect: 0, Correct: 0},
+      {name: 'Question 2', Unanswered: 2, Incorrect: 0, Correct: 0},
+      {name: 'Question 3', Unanswered: 2, Incorrect: 0, Correct: 0},
+      {name: 'Question 4', Unanswered: 2, Incorrect: 0, Correct: 0},
     ];
 
     return (
@@ -75,7 +69,7 @@ class LiveGraphs extends Component {
 
         <Col sm="12" md="5">
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data1}
+            <BarChart data={this.props.answerMap}
                       margin={{top: 20, right: 30, left: 20, bottom: 5}}>
               <XAxis dataKey="name"/>
               <YAxis/>
