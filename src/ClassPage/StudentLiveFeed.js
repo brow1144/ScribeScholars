@@ -35,12 +35,15 @@ class StudentLiveFeed extends Component {
       promptObj: [{}],
       promptArr: [],
 
+      scoreHistory: [],
+
+      historyGraph: [{}],
+
     }
   }
 
   componentWillMount() {
     this.getStudentsInClass();
-    this.getPrompts();
   }
 
   getStudentsInClass = () => {
@@ -59,7 +62,8 @@ class StudentLiveFeed extends Component {
             self.getClassAverage();
             self.getProgress();
             self.getQuestionProgress();
-            //self.getPrompts();
+            self.getPrompts();
+            self.getScoreHistory();
           });
         }
       } else {
@@ -233,6 +237,52 @@ class StudentLiveFeed extends Component {
     });
   };
 
+  getScoreHistory = () => {
+
+    let temp = [];
+    let self = this;
+    let lessonDataPerStudent = firestore.collection("users").doc(self.props.studUid).collection("inClass").doc(self.props.lessonNumber);
+
+    lessonDataPerStudent.onSnapshot(function (doc) {
+      if (doc.exists) {
+
+        temp = doc.data().answerHistory;
+
+      } else {
+        console.log("No such document!");
+      }
+      self.setState({
+        scoreHistory: temp,
+      }, () => {
+        self.getGraphData();
+      })
+    })
+  };
+
+  getGraphData = () => {
+
+    let temp = [{}];
+
+    let j = 1;
+    for (let i in this.state.scoreHistory) {
+
+      let obj = {};
+      let data = this.state.scoreHistory[i];
+
+      obj.name = `Question ${j}`;
+      obj.ScoreHistory = data;
+
+      temp.push(obj);
+      j++;
+    }
+
+    temp.shift();
+    this.setState({
+      historyGraph: temp
+    });
+
+  };
+
 
   render() {
 
@@ -241,6 +291,10 @@ class StudentLiveFeed extends Component {
       score: this.state.scoresMap[this.props.studUid],
       aboveAverage: this.state.aboveAverage,
       comparedToAverage: this.state.comparedToAverage
+    };
+
+    const graphData = {
+      historyGraph: this.state.historyGraph,
     };
 
     const tableData = {
@@ -259,7 +313,7 @@ class StudentLiveFeed extends Component {
         <LineBreak/>
 
         <Row>
-          <StudentGraph/>
+          <StudentGraph {...graphData} />
           <StudentTable {...tableData}/>
         </Row>
 
