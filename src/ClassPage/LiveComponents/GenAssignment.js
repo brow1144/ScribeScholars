@@ -16,14 +16,12 @@ class GenAssignment extends Component {
     this.state = {
       uid: this.props.uid,
 
-      question: [{
-        option1: null,
-        option2: null,
-        option3: null,
-        option4: null,
-        prompt: null,
-        type: null,
-      }],
+      option1: null,
+      option2: null,
+      option3: null,
+      option4: null,
+      prompt: null,
+      type: null,
 
       lessonNumber: this.props.lessonNumber,
 
@@ -41,7 +39,6 @@ class GenAssignment extends Component {
 
   componentWillMount() {
     this.getAssignments(this.props.class)
-    this.getUserAssignment(this.props.class)
   }
 
   /*
@@ -49,8 +46,22 @@ class GenAssignment extends Component {
    */
   setQuestion = () => {
 
-    console.log(this.state.questions)
+    let self = this;
 
+    let quest = this.state.questions;
+    console.log(this.state.currentQuestion - 1);
+    console.log(quest[0].option1);
+
+    self.setState({
+      option1: "hello",
+      option2: quest[0].option2,
+      option3: quest[0].option3,
+      option4: quest[0].option4,
+      prompt: quest[0].prompt,
+      type: quest[0].type,
+    });
+
+    console.log(this.state.option1);
 
     //this.state.question: this.state.assignments[0].questions[index - 1]
 
@@ -71,7 +82,7 @@ class GenAssignment extends Component {
           class: classCode,
           questions: doc.data().questions,
         }, () => {
-          this.setQuestion();
+          self.getUserAssignment();
         })
       }
     }).catch((error) => {
@@ -95,7 +106,9 @@ class GenAssignment extends Component {
           currentQuestion: doc.data().currentQuestion,
           completed: doc.data().completed,
           answerHistory: doc.data().answerHistory,
-        });
+        }, () => {
+          self.setQuestion();
+        })
       }
     }).catch((error) => {
       console.log("Error getting document:", error);
