@@ -64,6 +64,7 @@ class LiveFeed extends Component {
       numberOfQuestions: 0,
 
       failingUID: [],
+      failingUIDMap: {},
       failingNames: [],
     };
   }
@@ -135,7 +136,7 @@ class LiveFeed extends Component {
 
     let scoresMap = {};
     let completionMap = {};
-    let temp = [];
+    let temp = {};
 
     let self = this;
     self.state.students.forEach(function(element) {
@@ -149,7 +150,9 @@ class LiveFeed extends Component {
 
           if (checkForProgress >= 0.5 && doc.data().currentScore <= 50) {
             //console.log(`${element} is failing!`)
-            temp.unshift(element);
+            temp[element] = false;
+          } else {
+            temp[element] = true;
           }
 
           scoresMap[element] = doc.data().currentScore;
@@ -167,7 +170,8 @@ class LiveFeed extends Component {
         self.setState({
           scoresMap: scoresMap,
           completionMap: completionMap,
-          failingUID: temp,
+          // failingUID: temp,
+          failingUIDMap: temp,
         }, () => {
           self.calculateAverage();
           self.calculateMedian();
@@ -413,13 +417,16 @@ class LiveFeed extends Component {
     let temp = [];
     //Find first name and last name
     let self = this;
-    self.state.failingUID.forEach(function(element) {
-      let lessonDataPerStudent = firestore.collection("users").doc(element);
+    // self.state.failingUIDMap.forEach(function(element) {
+    let size = Object.keys(this.state.failingUIDMap).length;
+    for (let i in this.state.failingUIDMap) {
+      let lessonDataPerStudent = firestore.collection("users").doc(i);
 
 
       lessonDataPerStudent.onSnapshot(function (doc) {
         if (doc.exists) {
-          temp.unshift(`${doc.data().firstName} ${doc.data().lastName}`);
+          if (!self.state.failingUIDMap[i])
+            temp.unshift(`${doc.data().firstName} ${doc.data().lastName}`);
         } else {
           console.log("No such document!");
         }
@@ -427,8 +434,7 @@ class LiveFeed extends Component {
           failingNames: temp
         })
       })
-    })
-
+    }
 
   };
 
@@ -717,10 +723,10 @@ class LiveFeed extends Component {
         <hr />
         <br />
 
-        {this.props.failingNames ?
-          this.props.failingNames.map((key, index) => {
+        {this.state.failingNames ?
+          this.state.failingNames.map((key, index) => {
             return (
-              <FailingStudent key={index} index={index}/>
+              <FailingStudent failingNames={this.state.failingNames[index]} key={index} index={index}/>
             );
           })
           :

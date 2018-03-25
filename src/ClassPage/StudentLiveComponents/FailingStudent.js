@@ -25,7 +25,7 @@ class FailingStudent extends Component {
         <Col sm='0' md='1'/>
         <Col sm='12' md='10'>
           <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
-            Walter is failing! Go Check on Him!
+            {this.props.failingNames} isn't doing well! You may want to check on them!
           </Alert>
         </Col>
         <Col sm='0' md='1'/>
