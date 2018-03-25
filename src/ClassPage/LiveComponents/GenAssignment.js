@@ -27,13 +27,10 @@ class GenAssignment extends Component {
 
       lessonNumber: this.props.lessonNumber,
 
-      assignments: [{
-        lessonCode: null,
-        maxscore: null,
-        name: null,
-        class: null,
-        questions: null,
-      }],
+      maxscore: null,
+      name: null,
+      class: null,
+      questions: null,
 
       currentScore: null,
       currentQuestion: null,
@@ -45,7 +42,7 @@ class GenAssignment extends Component {
   componentWillMount() {
     this.getAssignments(this.props.class)
     this.getUserAssignment(this.props.class)
-    //this.setQuestion()
+    this.setQuestion()
   }
 
   /*
@@ -53,18 +50,16 @@ class GenAssignment extends Component {
    */
   setQuestion = () => {
 
-    let index = this.state.currentQuestion;
-    let assign = this.state.assignments;
-    //if(this.state.currentQuestion < assign.questions.size()) {
-    console.log(this.state.assignments[0].questions[0]);
-    //this.state.question = assign[0].questions(index - 1)
+    let self = this;
+    console.log(self.state.questions)
+
+
+    //this.state.question: this.state.assignments[0].questions[index - 1]
 
   }
 
 
   getAssignments = (classCode) => {
-
-    let object = [{}];
 
     let self = this;
 
@@ -72,22 +67,17 @@ class GenAssignment extends Component {
 
     docRef.get().then(function (doc) {
       if (doc.exists) {
-        object.unshift({
-          lessonCode: doc.id,
+        self.setState({
           maxscore: doc.data().maxscore,
           name: doc.data().name,
           class: classCode,
           questions: doc.data().questions,
-        });
-        self.setState({
-          assignments: object,
         })
       }
     }).catch((error) => {
       console.log("Error getting document:", error);
     });
 
-  object.pop();
 
   };
 

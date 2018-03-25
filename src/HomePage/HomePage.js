@@ -669,7 +669,7 @@ class HomePage extends Component {
       return (
         <Sidebar {...sideData}>
 
-          <HomeNav firstName={"Homework"} lastName={"Here"} expand={this.dockSideBar}
+          <HomeNav firstName={"Homework"} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
           <div>
@@ -683,11 +683,11 @@ class HomePage extends Component {
       return (
         <Sidebar {...sideData}>
 
-          <HomeNav firstName={"InClass Lesson"} lastName={""} expand={this.dockSideBar}
+          <HomeNav firstName={"Inclass Assignment"} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
           <div>
-            <GenAssignment {...classData} {...actions} uid = {this.state.uid} class = {this.state.class} lessonNumber = {this.state.lessonNumber} />
+            <GenAssignment uid = {this.state.uid} class = {this.state.class} lessonNumber = {this.state.lessonNumber} />
           </div>
         </Sidebar>
       );
