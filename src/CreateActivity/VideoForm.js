@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import ReactPlayer from 'react-player'
+
+import {Form, FormGroup, Col, Input, Label, Button} from 'reactstrap';
 
 class VideoForm extends Component {
     constructor(props) {
@@ -8,13 +9,22 @@ class VideoForm extends Component {
     }
     render() {
         return(
-            <div className='player-wrapper'>
-                <ReactPlayer
-                    url='https://www.youtube.com/watch?v=VAB8ShsX1U4'
-                    className='react-player'
-                    controls
-                />
-            </div>
+            <Form onSubmit={this.onFormSubmit} style={{paddingLeft: '1rem'}}>
+                <br/>
+                <FormGroup row>
+                    <Label size="lg" for="exampleNumber" sm={2}>Question Prompt:</Label>
+
+                    <Col sm={6}>
+                        <Input bsSize="lg" type="username" name="promptQ" id="exampleNumber"/>
+                    </Col>
+                </FormGroup>
+                <br/>
+                <FormGroup check>
+                    <Col sm={{size: 10}}>
+                        <Button color={"secondary"} size={"lg"} block>Save Question</Button>
+                    </Col>
+                </FormGroup>
+            </Form>
         );
     }
 }

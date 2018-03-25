@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Col, FormGroup, Label, Input } from 'reactstrap';
+import { Col, FormGroup, Label, Input, Form, Button} from 'reactstrap';
 
 import './FRQForm.css';
 
@@ -14,15 +14,22 @@ class FRQForm extends Component {
 
     render() {
         return(
-            <FormGroup tag={"fieldset"}>
+            <Form onSubmit={this.onFormSubmit} style={{paddingLeft: '1rem'}}>
+                <br/>
                 <FormGroup row>
-                    <Col sm={"6"}>
-                        <Label className={"FRQTitle"} for="exampleText">#2 Free Response Question Goes Here</Label>
-                        <Input style={{height: '20rem'}} type="textarea" name="text" id="exampleText" />
+                    <Label size="lg" for="exampleNumber" sm={2}>Question Prompt:</Label>
+
+                    <Col sm={6}>
+                        <Input bsSize="lg" type="username" name="promptQ" id="exampleNumber"/>
                     </Col>
                 </FormGroup>
-            </FormGroup>
-
+                <br/>
+                <FormGroup check>
+                    <Col sm={{size: 10}}>
+                        <Button color={"secondary"} size={"lg"} block>Save Question</Button>
+                    </Col>
+                </FormGroup>
+            </Form>
         );
     }
 }
