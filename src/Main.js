@@ -328,23 +328,22 @@ class Main extends Component {
 
     let self = this;
 
-    let docRef = firestore.collection("users").doc(this.state.uid).collection("inClass");
+    let docRef = firestore.collection("classes").doc(classCode).collection("inClass");
 
     docRef.get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
 
-        if (doc.data().class === classCode) {
-          object.unshift({
-            lessonCode: doc.id,
-            maxscore: doc.data().maxscore,
-            name: doc.data().name,
-            class: classCode,
-            questions: doc.data().questions,
-          });
-          self.setState({
-            assignments: object,
-          })
-        }
+        object.unshift({
+          lessonCode: doc.id,
+          maxscore: doc.data().maxscore,
+          name: doc.data().name,
+          class: classCode,
+          questions: doc.data().questions,
+        });
+        self.setState({
+          assignments: object,
+        })
+
       })
     }).catch(function (error) {
       console.log("Error getting document:", error);
