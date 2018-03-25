@@ -79,6 +79,8 @@ class HomePage extends Component {
         class: null,
       }],
 
+      lessonNumber: this.props.lessonNumber,
+      class: this.props.class,
 
       personalPage: true,
 
@@ -685,7 +687,7 @@ class HomePage extends Component {
                    width={this.state.width}/>
 
           <div>
-            <GenAssignment {...classData} {...actions} />
+            <GenAssignment {...classData} {...actions} uid = {this.state.uid} class = {this.state.class} lessonNumber = {this.state.lessonNumber} />
           </div>
         </Sidebar>
       );

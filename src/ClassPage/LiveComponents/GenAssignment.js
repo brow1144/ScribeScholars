@@ -14,7 +14,7 @@ class GenAssignment extends Component {
     super(props);
 
     this.state = {
-      questions: null,
+      uid: this.props.uid,
 
       question: [{
         option1: null,
@@ -25,15 +25,92 @@ class GenAssignment extends Component {
         type: null,
       }],
 
-      assignments: this.props.assignments,
+      lessonNumber: this.props.lessonNumber,
 
-      curQuestion: null,
+      assignments: [{
+        lessonCode: null,
+        maxscore: null,
+        name: null,
+        class: null,
+        questions: null,
+      }],
+
+      currentScore: null,
+      currentQuestion: null,
+      completed: null,
+      answerHistory: null,
     }
   }
 
   componentWillMount() {
+    this.getAssignments(this.props.class)
+    this.getUserAssignment(this.props.class)
+    //this.setQuestion()
+  }
+
+  /*
+   *Decides which question will be picked based on currentQuestion variable
+   */
+  setQuestion = () => {
+
+    let index = this.state.currentQuestion;
+    let assign = this.state.assignments;
+    //if(this.state.currentQuestion < assign.questions.size()) {
+    console.log(this.state.assignments[0].questions[0]);
+    //this.state.question = assign[0].questions(index - 1)
 
   }
+
+
+  getAssignments = (classCode) => {
+
+    let object = [{}];
+
+    let self = this;
+
+    let docRef = firestore.collection("classes").doc(classCode).collection("inClass").doc(this.state.lessonNumber);
+
+    docRef.get().then(function (doc) {
+      if (doc.exists) {
+        object.unshift({
+          lessonCode: doc.id,
+          maxscore: doc.data().maxscore,
+          name: doc.data().name,
+          class: classCode,
+          questions: doc.data().questions,
+        });
+        self.setState({
+          assignments: object,
+        })
+      }
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+
+  object.pop();
+
+  };
+
+
+  getUserAssignment = () => {
+
+    let self = this;
+
+    let docRef = firestore.collection("users").doc(this.state.uid).collection("inClass").doc(this.state.lessonNumber)
+
+    docRef.get().then((doc) => {
+      if (doc.exists) {
+        self.setState({
+          currentScore: doc.data().currentScore,
+          currentQuestion: doc.data().currentQuestion,
+          completed: doc.data().completed,
+          answerHistory: doc.data().answerHistory,
+        });
+      }
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
 
   grabQuestion = (index) => {
     let self = this;
