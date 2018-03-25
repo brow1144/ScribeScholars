@@ -19,6 +19,7 @@ import Settings from '../Settings/Settings';
 
 import './HomePage.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import StudentLiveFeed from "../ClassPage/StudentLiveFeed";
 
 const mql = window.matchMedia(`(min-width: 600px)`);
 
@@ -638,12 +639,28 @@ class HomePage extends Component {
       return (
         <Sidebar {...sideData}>
 
-          <HomeNav firstName={"Personal Finance"} lastName={""} expand={this.dockSideBar}
+          <HomeNav firstName={"In-Class Live Feed"} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
           <Row>
             <Col>
               <LiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} uid={this.state.uid}/>
+            </Col>
+          </Row>
+        </Sidebar>
+      );
+
+    } else if (this.props.page === "studentLiveFeed") {
+
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={"Individual Student Live Feed"} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <Row>
+            <Col>
+              <StudentLiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} studUid={this.props.studUid}/>
             </Col>
           </Row>
         </Sidebar>
@@ -680,7 +697,6 @@ class HomePage extends Component {
           </Row>
         </Sidebar>
       );
-
     } else if (this.props.page === "inclass") {
 
       return (

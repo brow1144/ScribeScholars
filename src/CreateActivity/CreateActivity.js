@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row } from 'reactstrap';
 
 import './CreateActivity.css';
-import MCQ from './MCQForm';
-import VideoForm from './VideoForm';
-import FRQ from './FRQForm';
+//import MCQ from './MCQForm';
+// import VideoForm from './VideoForm';
+// import FRQ from './FRQForm';
 import Instruct from './Instruct';
 
 import {firestore} from "../base";
@@ -14,18 +14,19 @@ class CreateActivity extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            initialCreate: true,
             uid: props.uid,
             role: this.props.role,
             class: this.props.class,
             questions: [],
             question: {},
         };
-
-        //this.createHomework();
     }
 
-    createHomework = () => {
+    createHomework = (title, descript) => {
+
         let self = this;
+        this.flipComp();
         let code = this.getCode();
         //Create new document in "classes" collection
         let classRef = firestore.collection("classes").doc("668273").collection("Homework").doc(code);
@@ -33,7 +34,10 @@ class CreateActivity extends Component {
             if (doc.exists) {
                 self.setNewDoc();
             } else {
-                classRef.set({}).then(function() {
+                classRef.set({
+                    name: title,
+                    description: descript,
+                }).then(function() {
                     console.log("successfully written!");
                 }).catch(function(error) {
                     console.log(error);
@@ -111,6 +115,8 @@ class CreateActivity extends Component {
         });
     };
 
+    flipComp = () => { this.setState({initialCreate: false,})};
+
     //Generate New Homework code
     getCode = () => {
         let code = "";
@@ -127,7 +133,12 @@ class CreateActivity extends Component {
                     <hr style={{marginRight: '-20px', marginLeft: '-20px'}} />
                     <Row style={{}} className={"Filler"}> </Row>
 
-                    <Instruct/>
+                    {this.state.initialCreate
+                        ?
+                        <Instruct createHomework = {this.createHomework}/>
+                        :
+                        <div/>
+                    }
                     <Row className={"Filler"}> </Row>
                     <Row className={"Filler"}> </Row>
 
