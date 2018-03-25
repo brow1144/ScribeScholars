@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import FailingStudent from './StudentLiveComponents/FailingStudent'
 import LessonStats from './LiveComponents/LessonStats';
 import LineBreak from './LiveComponents/LineBreak';
 import LiveGraphs from './LiveComponents/LiveGraphs';
@@ -61,6 +62,9 @@ class LiveFeed extends Component {
       classAverage: 0,
       classMedian: 0,
       numberOfQuestions: 0,
+
+      failingUID: [],
+      failingNames: [],
     };
   }
 
@@ -131,6 +135,7 @@ class LiveFeed extends Component {
 
     let scoresMap = {};
     let completionMap = {};
+    let temp = [];
 
     let self = this;
     self.state.students.forEach(function(element) {
@@ -139,6 +144,13 @@ class LiveFeed extends Component {
 
       lessonDataPerStudent.onSnapshot(function (doc) {
         if (doc.exists) {
+
+          let checkForProgress = doc.data().currentQuestion / doc.data().numOfQuestions;
+
+          if (checkForProgress >= 0.5 && doc.data().currentScore <= 50) {
+            //console.log(`${element} is failing!`)
+            temp.unshift(element);
+          }
 
           scoresMap[element] = doc.data().currentScore;
           scoresMap[element] = Math.round(scoresMap[element] * 100) / 100;
@@ -155,11 +167,13 @@ class LiveFeed extends Component {
         self.setState({
           scoresMap: scoresMap,
           completionMap: completionMap,
+          failingUID: temp,
         }, () => {
           self.calculateAverage();
           self.calculateMedian();
           self.getCompletion();
           self.getLetterGrades();
+          self.getFailing();
         });
       })
     })
@@ -391,6 +405,30 @@ class LiveFeed extends Component {
     this.setState({
       gradeMap: object,
     })
+
+  };
+
+  getFailing = () => {
+
+    let temp = [];
+    //Find first name and last name
+    let self = this;
+    self.state.failingUID.forEach(function(element) {
+      let lessonDataPerStudent = firestore.collection("users").doc(element);
+
+
+      lessonDataPerStudent.onSnapshot(function (doc) {
+        if (doc.exists) {
+          temp.unshift(`${doc.data().firstName} ${doc.data().lastName}`);
+        } else {
+          console.log("No such document!");
+        }
+        self.setState({
+          failingNames: temp
+        })
+      })
+    })
+
 
   };
 
@@ -630,8 +668,11 @@ class LiveFeed extends Component {
 
   };
 
-
   render() {
+
+    const alertData = {
+
+    };
 
     const lesssonStatsData = {
       classProgress: this.state.classProgress,
@@ -675,6 +716,17 @@ class LiveFeed extends Component {
       <div>
         <hr />
         <br />
+
+        {this.props.failingNames ?
+          this.props.failingNames.map((key, index) => {
+            return (
+              <FailingStudent key={index} index={index}/>
+            );
+          })
+          :
+          null
+        }
+
 
         <LessonStats {...lesssonStatsData} />
 
