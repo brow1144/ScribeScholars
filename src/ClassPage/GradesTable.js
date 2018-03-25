@@ -37,7 +37,7 @@ const GradesTable = (props) => {
               </tr>
               </thead>
               <tbody>
-              {Object.keys(props.homeworks).map((key, index) => {
+              {Object.keys(props.grades).map((key, index) => {
                 return<tr key={key}>
                   <td>{props.homeworks[index].name}</td>
                   <td>{props.homeworks[index].maxscore}</td>
