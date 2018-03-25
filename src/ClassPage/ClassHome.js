@@ -18,8 +18,6 @@ class ClassHome extends Component {
 
     this.state = {
 
-      uid: localStorage.getItem('uid'),
-
       announcements: [{
         title: null,
         subtitle: null,
@@ -39,8 +37,6 @@ class ClassHome extends Component {
         maxscore: null,
       }],
 
-      role: null,
-
       classImage: null,
 
       announcementsActive: true,
@@ -50,8 +46,6 @@ class ClassHome extends Component {
       myStudentsActive: false,
       gradesActive: false,
     };
-
-    this.getRole();
   }
 
   componentWillMount() {
@@ -140,6 +134,7 @@ class ClassHome extends Component {
     };
 
   render() {
+
     const jumboStyle = {
       background: `url(${this.props.classImage}) no-repeat center center`,
     };
@@ -171,7 +166,7 @@ class ClassHome extends Component {
                 Board</NavLink>
             </RouterLink>
 
-            {this.state.role === "teacher"
+            {this.props.role === "teacher"
               ?
               <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/myStudents`}>
                 <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive}>My Students</NavLink>
@@ -224,7 +219,7 @@ class ClassHome extends Component {
             }
           {this.state.gradesActive
             ?
-            <GradesTable grades={this.props.grades} />
+            <GradesTable code={this.props.code} uid={this.props.uid}/>
             :
             <div>
             </div>

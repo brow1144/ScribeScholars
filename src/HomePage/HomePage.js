@@ -52,11 +52,11 @@ class HomePage extends Component {
       firstName: null,
       lastName: null,
 
-      uid: props.uid,
+      uid: this.props.uid,
 
       userImage: this.props.userImage,
 
-      role: this.props.role,
+      role: props.getRole(),
 
       classes: [{
         class: null,
@@ -91,6 +91,7 @@ class HomePage extends Component {
       docked: props.docked,
       open: props.open,
     };
+
   }
 
   // calculate GPA for a student
@@ -629,7 +630,7 @@ class HomePage extends Component {
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <ClassHome {...classData} {...actions} selectedClass={this.props.selectedClass}/>
+          <ClassHome {...classData} {...actions} selectedClass={this.props.selectedClass} uid={this.state.uid} role={this.state.role}/>
 
         </Sidebar>
       );
