@@ -25,7 +25,7 @@ class StudentTable extends Component {
                 <tbody key={index}>
                 <tr>
                   <th scope="row">{index+1}</th>
-                  <td>{`Question ${index+1}`}</td>
+                  <td>{`${this.props.promptArr[index]}`}</td>
                   <CorrectOrWrong ans={this.props.answerMap[index]} />
                 </tr>
                 </tbody>

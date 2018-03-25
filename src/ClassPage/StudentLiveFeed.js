@@ -32,11 +32,15 @@ class StudentLiveFeed extends Component {
 
       answerMap: {},
 
+      promptObj: [{}],
+      promptArr: [],
+
     }
   }
 
   componentWillMount() {
     this.getStudentsInClass();
+    this.getPrompts();
   }
 
   getStudentsInClass = () => {
@@ -55,6 +59,7 @@ class StudentLiveFeed extends Component {
             self.getClassAverage();
             self.getProgress();
             self.getQuestionProgress();
+            //self.getPrompts();
           });
         }
       } else {
@@ -193,8 +198,41 @@ class StudentLiveFeed extends Component {
         answerMap: object,
       })
     })
-
   };
+
+  getPrompts = () => {
+
+    let temp = [{}];
+    let self = this;
+    let lessonDataPerStudent = firestore.collection("classes").doc(self.props.class).collection("inClass").doc(self.props.lessonNumber);
+
+    lessonDataPerStudent.onSnapshot(function (doc) {
+      if (doc.exists) {
+
+        temp = doc.data().questions;
+
+      } else {
+        console.log("No such document!");
+      }
+      self.setState({
+        promptObj: temp,
+      }, () => {
+        self.walkPrompts();
+      })
+    })
+  };
+
+  walkPrompts = () => {
+    let temp = [];
+    for (let i in this.state.promptObj) {
+      let data = this.state.promptObj[i];
+      temp.unshift(data.prompt);
+    }
+    this.setState({
+      promptArr: temp,
+    });
+  };
+
 
   render() {
 
@@ -208,6 +246,7 @@ class StudentLiveFeed extends Component {
     const tableData = {
       numberOfQuestions: this.state.numberOfQuestions,
       answerMap: this.state.answerMap.questions,
+      promptArr: this.state.promptArr,
     };
 
     return (
