@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Nav, NavLink, Container, Row, Col, Button, FormGroup, Label, Input } from 'reactstrap';
+import { Nav, NavLink, Container, Row, Col, Button, Card, FormGroup, Label, Input } from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom'
 import {firestore} from "../../base";
 import MCQ from "./MCQ";
@@ -90,6 +90,7 @@ class GenAssignment extends Component {
 
   getUserAssignment = () => {
 
+    console.log("im in it");
     let self = this;
 
     let docRef = firestore.collection("users").doc(this.state.uid).collection("inClass").doc(this.state.lessonNumber)
@@ -119,14 +120,11 @@ class GenAssignment extends Component {
     user.get().then((doc) => {
       if (doc.exists) {
         if(doc.data().currentQuestion-1 > 0) {
-          //console.log("Pre dec: " + this.state.currentQuestion);
           user.update({
-            currentQuestion: this.state.currentQuestion - 1,
-          }, () => {
-            self.getAssignments(this.props.class)
-          })
-
-          //console.log("Post dec: " + doc.data().currentQuestion);
+            currentQuestion: self.state.currentQuestion - 1,
+          }).then(function() {
+            self.getUserAssignment(self.props.class)
+          });
         }
       }
     }).catch((error) => {
@@ -141,13 +139,12 @@ class GenAssignment extends Component {
 
     user.get().then((doc) => {
       if (doc.exists) {
-        if(doc.data().currentQuestion+1 <= this.state.numOfQuestions) {
-          //console.log("Pre inc: " + this.state.currentQuestion);
+        if(doc.data().currentQuestion+1 <= self.state.numOfQuestions) {
           user.update({
-            currentQuestion: this.state.currentQuestion + 1,
-          }, () => {
-            self.getAssignments(this.props.class)
-          })
+            currentQuestion: self.state.currentQuestion + 1,
+          }).then(function() {
+              self.getUserAssignment(self.props.class)
+          });
         }
       }
     }).catch((error) => {
@@ -158,21 +155,28 @@ class GenAssignment extends Component {
   render() {
     return (
       <div className={"center"}>
-        <Container fluid >
-          <Row>
-            <Col xs={12}>
-              <MCQ currentQuestion = {this.state.currentQuestion} name = {this.state.name} prompt = {this.state.prompt} option1 = {this.state.option1}
-                   option2 ={this.state.option2} option3 = {this.state.option3} option4 = {this.state.option4}/>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={6}>
-              <Button onClick={this.decPage}>Last Question</Button>
-            </Col>
-            <Col xs={6}>
-              <Button onClick={this.incPage}>Next Question</Button>
-            </Col>
-          </Row>
+        <Container fluid>
+          <Card style={{boxShadow: '8px 8px 3px rgba(0, 0, 0, 0.2)'}}>
+            <Row>
+              <Col sm={{size: 10, offset: 1}}>
+                <MCQ currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
+                     option1={this.state.option1}
+                     option2={this.state.option2} option3={this.state.option3} option4={this.state.option4}/>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={6}>
+                <Button onClick={this.decPage}>Last Question</Button>
+                <br/>
+              </Col>
+              <Col xs={6}>
+                <Button onClick={this.incPage}>Next Question</Button>
+                <br/>
+              </Col>
+            </Row>
+            <br/>
+          </Card>
+
         </Container>
       </div>
     )
