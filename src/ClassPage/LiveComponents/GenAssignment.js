@@ -59,13 +59,15 @@ class GenAssignment extends Component {
       option4: quest[0].option4,
       prompt: quest[0].prompt,
       type: quest[0].type,
-    });
+    }, () => {
 
-    console.log(this.state.option1);
+      console.log(this.state.option1);
+
+    });
 
     //this.state.question: this.state.assignments[0].questions[index - 1]
 
-  }
+  };
 
 
   getAssignments = (classCode) => {
