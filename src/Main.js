@@ -55,12 +55,16 @@ class Main extends Component {
         lessonCode: null,
         maxscore: null,
         name: null,
+        class: null,
+        questions: null,
       }],
 
       assignments: [{
         lessonCode: null,
         maxscore: null,
         name: null,
+        class: null,
+        questions: null,
       }],
 
       myAssignments: [],
@@ -331,9 +335,11 @@ class Main extends Component {
 
         if (doc.data().class === classCode) {
           object.unshift({
-            code: doc.id,
+            lessonCode: doc.id,
             maxscore: doc.data().maxscore,
             name: doc.data().name,
+            class: classCode,
+            questions: doc.data().questions,
           });
           self.setState({
             assignments: object,
@@ -362,8 +368,11 @@ class Main extends Component {
     docRef.get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
         object.unshift({
+          lessonCode: doc.id,
           maxscore: doc.data().maxscore,
           name: doc.data().name,
+          class: classCode,
+          questions: doc.data().questions,
         });
         self.setState({
           homeworks: object,

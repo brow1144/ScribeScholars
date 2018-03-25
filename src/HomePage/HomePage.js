@@ -19,6 +19,8 @@ import Settings from '../Settings/Settings';
 
 import './HomePage.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import GenHomework from "../ClassPage/HomeworkComponents/GenHomework";
+import GenAssignment from "../ClassPage/LiveComponents/GenAssignment";
 
 const mql = window.matchMedia(`(min-width: 600px)`);
 
@@ -77,11 +79,6 @@ class HomePage extends Component {
         class: null,
       }],
 
-      assignments: [{
-        code: null,
-        maxscore: null,
-        name: null,
-      }],
 
       personalPage: true,
 
@@ -670,14 +667,12 @@ class HomePage extends Component {
       return (
         <Sidebar {...sideData}>
 
-          <HomeNav firstName={"Homework"} lastName={""} expand={this.dockSideBar}
+          <HomeNav firstName={"Homework"} lastName={"Here"} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <Row>
-            <Col>
-
-            </Col>
-          </Row>
+          <div>
+            <GenHomework {...classData} {...actions} />
+          </div>
         </Sidebar>
       );
 
@@ -689,11 +684,9 @@ class HomePage extends Component {
           <HomeNav firstName={"InClass Lesson"} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <Row>
-            <Col>
-
-            </Col>
-          </Row>
+          <div>
+            <GenAssignment {...classData} {...actions} />
+          </div>
         </Sidebar>
       );
 
