@@ -30,6 +30,8 @@ class StudentLiveFeed extends Component {
       aboveAverage: true,
       comparedToAverage: 0,
 
+      answerMap: {},
+
     }
   }
 
@@ -52,6 +54,7 @@ class StudentLiveFeed extends Component {
             self.getStudentData();
             self.getClassAverage();
             self.getProgress();
+            self.getQuestionProgress();
           });
         }
       } else {
@@ -156,9 +159,6 @@ class StudentLiveFeed extends Component {
     let progress = this.state.progress;
     let self = this;
 
-    console.log(self.props.studUid);
-    console.log(self.props.lessonNumber);
-
     let lessonProgressPerStudent = firestore.collection("users").doc(self.props.studUid).collection("inClass").doc(self.props.lessonNumber);
 
     lessonProgressPerStudent.onSnapshot(function (doc) {
@@ -174,6 +174,28 @@ class StudentLiveFeed extends Component {
     )
   };
 
+  getQuestionProgress = () => {
+
+    let self = this;
+    let lessonDataPerStudent = firestore.collection("users").doc(self.props.studUid).collection("inClass").doc(self.props.lessonNumber);
+
+    let object = {
+      questions: [],
+    };
+
+    lessonDataPerStudent.onSnapshot(function (doc) {
+      if (doc.exists) {
+        object.questions = doc.data().questions;
+      } else {
+        console.log("No such document!");
+      }
+      self.setState({
+        answerMap: object,
+      })
+    })
+
+  };
+
   render() {
 
     const stats = {
@@ -181,6 +203,11 @@ class StudentLiveFeed extends Component {
       score: this.state.scoresMap[this.props.studUid],
       aboveAverage: this.state.aboveAverage,
       comparedToAverage: this.state.comparedToAverage
+    };
+
+    const tableData = {
+      numberOfQuestions: this.state.numberOfQuestions,
+      answerMap: this.state.answerMap.questions,
     };
 
     return (
@@ -194,7 +221,7 @@ class StudentLiveFeed extends Component {
 
         <Row>
           <StudentGraph/>
-          <StudentTable/>
+          <StudentTable {...tableData}/>
         </Row>
 
       </div>

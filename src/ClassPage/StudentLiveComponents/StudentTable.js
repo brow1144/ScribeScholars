@@ -1,10 +1,13 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
-import { Col, Table } from 'reactstrap';
+import {Col, Table} from 'reactstrap';
+
+import CorrectOrWrong from './CorrectOrWrong';
 
 class StudentTable extends Component {
 
   render() {
+
     return (
       <Col sm="12" md="4">
         <Table hover>
@@ -16,33 +19,20 @@ class StudentTable extends Component {
           </tr>
           </thead>
 
-          <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>First Question</td>
-            <td><i style={{color: '#F45531'}} className="fas fa-times"/></td>
-          </tr>
-          </tbody>
-          <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>First Question</td>
-            <td><i style={{color: '#21CE99'}} className="fas fa-check" /></td>
-          </tr>
-          </tbody>
-          <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>First Question</td>
-            <td><i style={{color: '#21CE99'}} className="fas fa-check"/></td>
-          </tr>
-          </tbody><tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>First Question</td>
-          <td><i style={{color: '#21CE99'}} className="fas fa-check"/></td>
-        </tr>
-        </tbody>
+          {this.props.answerMap ?
+            this.props.answerMap.map((key, index) => {
+              return (
+                <tbody key={index}>
+                <tr>
+                  <th scope="row">{index+1}</th>
+                  <td>{`Question ${index+1}`}</td>
+                  <CorrectOrWrong ans={this.props.answerMap[index]} />
+                </tr>
+                </tbody>
+              );
+            })
+            : null
+          }
 
 
         </Table>
