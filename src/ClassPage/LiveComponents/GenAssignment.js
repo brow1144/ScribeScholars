@@ -42,7 +42,6 @@ class GenAssignment extends Component {
   componentWillMount() {
     this.getAssignments(this.props.class)
     this.getUserAssignment(this.props.class)
-    this.setQuestion()
   }
 
   /*
@@ -50,8 +49,7 @@ class GenAssignment extends Component {
    */
   setQuestion = () => {
 
-    let self = this;
-    console.log(self.state.questions)
+    console.log(this.state.questions)
 
 
     //this.state.question: this.state.assignments[0].questions[index - 1]
@@ -72,6 +70,8 @@ class GenAssignment extends Component {
           name: doc.data().name,
           class: classCode,
           questions: doc.data().questions,
+        }, () => {
+          this.setQuestion();
         })
       }
     }).catch((error) => {
