@@ -9,19 +9,14 @@ class StudentsChart extends Component {
 
   render() {
 
-    const data = [
-      {name: 'A', value: 1},
-      {name: 'B', value: 2},
-      {name: 'C', value: 300},
-      {name: 'D', value: 200},
-      {name: 'E', value: 278},
-      {name: 'F', value: 189}
-    ];
-
     const tableElementData = {
       studentsData: this.props.studentsData,
       progressMap: this.props.progressMap,
       scoresMap: this.props.scoresMap,
+
+      class: this.props.class,
+      lessonNumber: this.props.lessonNumber,
+      uid: this.props.uid,
     };
 
     return (
@@ -54,7 +49,7 @@ class StudentsChart extends Component {
             <CardTitle>Grade Distribution</CardTitle>
             <ResponsiveContainer width="100%" height={150}>
               <PieChart>
-                <Pie isAnimationActive={false} data={data} dataKey="value" outerRadius={35} fill="#21CE99" label/>
+                <Pie isAnimationActive={false} data={this.props.gradeMap} dataKey="value" outerRadius={35} fill="#21CE99" label/>
                 <Tooltip />
               </PieChart>
             </ResponsiveContainer>

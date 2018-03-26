@@ -55,12 +55,16 @@ class Main extends Component {
         lessonCode: null,
         maxscore: null,
         name: null,
+        class: null,
+        questions: null,
       }],
 
       assignments: [{
         lessonCode: null,
         maxscore: null,
         name: null,
+        class: null,
+        questions: null,
       }],
 
       myAssignments: [],
@@ -206,18 +210,18 @@ class Main extends Component {
     updateDates = (dates) => {
       this.setState({
         dates: dates,
-      })
-    };
-
-    updateAnnouncements = (announcements) => {
-      this.setState({
-        announcements: announcements,
-      })
+      });
     };
 
     updateRole = (role) => {
       this.setState({
         role: role,
+      });
+    }
+
+    updateAnnouncements = (announcements) => {
+      this.setState({
+        announcements: announcements,
       })
     };
 
@@ -324,21 +328,22 @@ class Main extends Component {
 
     let self = this;
 
-    let docRef = firestore.collection("users").doc(this.state.uid).collection("inClass");
+    let docRef = firestore.collection("classes").doc(classCode).collection("inClass");
 
     docRef.get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
 
-        if (doc.data().class === classCode) {
-          object.unshift({
-            code: doc.id,
-            maxscore: doc.data().maxscore,
-            name: doc.data().name,
-          });
-          self.setState({
-            assignments: object,
-          })
-        }
+        object.unshift({
+          lessonCode: doc.id,
+          maxscore: doc.data().maxscore,
+          name: doc.data().name,
+          class: classCode,
+          questions: doc.data().questions,
+        });
+        self.setState({
+          assignments: object,
+        })
+
       })
     }).catch(function (error) {
       console.log("Error getting document:", error);
@@ -348,6 +353,21 @@ class Main extends Component {
 
     self.setState({
       assignments: object
+    });
+  };
+
+  getRole = () => {
+    let self = this;
+    let studentRef = firestore.collection("users").doc(this.state.uid);
+
+    studentRef.get().then((doc) => {
+      if (doc.exists) {
+        self.setState({
+          role: doc.data().role,
+        });
+      }
+    }).catch((error) => {
+      console.log("Error getting document:", error);
     });
   };
 
@@ -362,8 +382,11 @@ class Main extends Component {
     docRef.get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
         object.unshift({
+          lessonCode: doc.id,
           maxscore: doc.data().maxscore,
           name: doc.data().name,
+          class: classCode,
+          questions: doc.data().questions,
         });
         self.setState({
           homeworks: object,
@@ -385,6 +408,7 @@ class Main extends Component {
     {
       const data = {
         uid: this.state.uid,
+        role: this.state.role,
         classes: this.state.classes,
         showGPA: this.state.showGPA,
         dates: this.state.dates,
@@ -402,6 +426,7 @@ class Main extends Component {
         updateClasses: this.updateClasses,
         updateDates: this.updateDates,
         updateRole: this.updateRole,
+        getRole: this.getRole,
         updateAnnouncements: this.updateAnnouncements,
         updateUserImage: this.updateUserImage,
         getShowGPA: this.getShowGPA,
@@ -430,6 +455,18 @@ class Main extends Component {
             class={match.match.params.class}
             assType="Homework"
             page="createActivity"
+            {...data}
+            {...actions}
+          />
+        )}/>
+
+        <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber/:uid" render={(match) => (
+
+          <HomePage
+            studUid={match.match.params.uid}
+            class={match.match.params.class}
+            lessonNumber={match.match.params.lessonNumber}
+            page="studentLiveFeed"
             {...data}
             {...actions}
           />

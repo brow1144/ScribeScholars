@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import FailingStudent from './StudentLiveComponents/FailingStudent'
 import LessonStats from './LiveComponents/LessonStats';
 import LineBreak from './LiveComponents/LineBreak';
 import LiveGraphs from './LiveComponents/LiveGraphs';
@@ -44,9 +45,27 @@ class LiveFeed extends Component {
       completed: 0,
       completionGraphMap: [{}],
 
+      gradeMap: [{}],
+
+      answerMap: [{
+        name: null,
+        Unanswered: 0,
+        Incorrect: 0,
+        Correct: 0,
+      }],
+
+      individualAnswerMap: [{
+        uid: null,
+        questions: [],
+      }],
+
       classAverage: 0,
       classMedian: 0,
       numberOfQuestions: 0,
+
+      failingUID: [],
+      failingUIDMap: {},
+      failingNames: [],
     };
   }
 
@@ -70,7 +89,7 @@ class LiveFeed extends Component {
             self.getClassAverage();
             self.getHighLowScore();
             self.getProgress();
-
+            self.getQuestionProgress();
           });
         }
       } else {
@@ -117,6 +136,7 @@ class LiveFeed extends Component {
 
     let scoresMap = {};
     let completionMap = {};
+    let temp = {};
 
     let self = this;
     self.state.students.forEach(function(element) {
@@ -125,6 +145,15 @@ class LiveFeed extends Component {
 
       lessonDataPerStudent.onSnapshot(function (doc) {
         if (doc.exists) {
+
+          let checkForProgress = doc.data().currentQuestion / doc.data().numOfQuestions;
+
+          if (checkForProgress >= 0.5 && doc.data().currentScore <= 50) {
+            //console.log(`${element} is failing!`)
+            temp[element] = false;
+          } else {
+            temp[element] = true;
+          }
 
           scoresMap[element] = doc.data().currentScore;
           scoresMap[element] = Math.round(scoresMap[element] * 100) / 100;
@@ -141,10 +170,14 @@ class LiveFeed extends Component {
         self.setState({
           scoresMap: scoresMap,
           completionMap: completionMap,
+          // failingUID: temp,
+          failingUIDMap: temp,
         }, () => {
           self.calculateAverage();
           self.calculateMedian();
           self.getCompletion();
+          self.getLetterGrades();
+          self.getFailing();
         });
       })
     })
@@ -242,7 +275,7 @@ class LiveFeed extends Component {
       object.unshift({"name": "Completed", "value": completed});
     }
 
-
+    object.pop();
     this.setState({
       notStarted: notStarted,
       inProgress: inProgress,
@@ -250,6 +283,272 @@ class LiveFeed extends Component {
       completionGraphMap: object,
     })
 
+  };
+
+  getLetterGrades = () => {
+
+    let A = 0;
+    let AMinus = 0;
+    let BPlus = 0;
+    let B = 0;
+    let BMinus = 0;
+    let CPlus = 0;
+    let C = 0;
+    let CMinus = 0;
+    let DPlus = 0;
+    let D = 0;
+    let DMinus = 0;
+    let F = 0;
+
+    for (let i in this.state.scoresMap) {
+      let score = this.state.scoresMap[i];
+
+      if (score >= 0 && score < 60) {
+        // F
+        F++;
+      } else if (score >= 60 && score < 63) {
+        // D -
+        DMinus++;
+      } else if (score >= 63 && score < 67) {
+        // D
+        D++;
+      } else if (score >= 67 && score < 70) {
+        // D +
+        DPlus++;
+      } else if (score >= 70 && score < 73) {
+        // C -
+        CMinus++;
+      } else if (score >= 73 && score < 77) {
+        // C
+        C++;
+      } else if (score >= 77 && score < 80) {
+        // C +
+        CPlus++;
+      } else if (score >= 80 && score < 83) {
+        // B -
+        BMinus++;
+      } else if (score >= 83 && score < 87) {
+        // B
+        B++;
+      } else if (score >= 87 && score < 90) {
+        // B +
+        BPlus++;
+      } else if (score >= 90 && score < 93) {
+        // A -
+        AMinus++;
+      } else if (score >= 93 && score <= 100) {
+        // A
+        A++;
+      }
+    }
+
+    let object = [{}];
+
+    if (F !== 0) {
+      // F
+      object.unshift({"name": "F", "value": F});
+    }
+
+    if (DMinus !== 0) {
+      // D-
+      object.unshift({"name": "D-", "value": DMinus});
+    }
+
+    if (D !== 0) {
+      // D
+      object.unshift({"name": "D", "value": D});
+    }
+
+    if (DPlus !== 0) {
+      // D+
+      object.unshift({"name": "D+", "value": DPlus});
+    }
+
+    if (CMinus !== 0) {
+      // C-
+      object.unshift({"name": "C-", "value": CMinus});
+    }
+
+    if (C !== 0) {
+      // C
+      object.unshift({"name": "C", "value": C});
+    }
+
+    if (CPlus !== 0) {
+      // C+
+      object.unshift({"name": "C+", "value": CPlus});
+    }
+
+    if (BMinus !== 0) {
+      // B-
+      object.unshift({"name": "B-", "value": BMinus});
+    }
+
+    if (B !== 0) {
+      // B
+      object.unshift({"name": "B", "value": B});
+    }
+
+    if (BPlus !== 0) {
+      // B+
+      object.unshift({"name": "B+", "value": BPlus});
+    }
+
+    if (AMinus !== 0) {
+      // A-
+      object.unshift({"name": "A-", "value": AMinus});
+    }
+
+    if (A !== 0) {
+      // A
+      object.unshift({"name": "A", "value": A});
+    }
+
+
+    object.pop();
+    this.setState({
+      gradeMap: object,
+    })
+
+  };
+
+  getFailing = () => {
+
+    let temp = [];
+    //Find first name and last name
+    let self = this;
+    // self.state.failingUIDMap.forEach(function(element) {
+    let size = Object.keys(this.state.failingUIDMap).length;
+    for (let i in this.state.failingUIDMap) {
+      let lessonDataPerStudent = firestore.collection("users").doc(i);
+
+
+      lessonDataPerStudent.onSnapshot(function (doc) {
+        if (doc.exists) {
+          if (!self.state.failingUIDMap[i])
+            temp.unshift(`${doc.data().firstName} ${doc.data().lastName}`);
+        } else {
+          console.log("No such document!");
+        }
+        self.setState({
+          failingNames: temp
+        })
+      })
+    }
+
+  };
+
+  getQuestionProgress = () => {
+
+    let individualAnswerMap = [{}];
+
+    let self = this;
+    self.state.students.forEach(function(element) {
+      let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
+
+      let object = {
+        uid: null,
+        questions: [],
+      };
+
+      lessonDataPerStudent.onSnapshot(function (doc) {
+        if (doc.exists) {
+
+          object.uid = element;
+          object.questions = doc.data().questions;
+
+          individualAnswerMap.unshift(object);
+
+        } else {
+          console.log("No such document!");
+        }
+        self.setState({
+          individualAnswerMap: individualAnswerMap,
+          answerMap: [{}],
+        }, () => {
+          self.removeEmptyElements();
+        })
+      })
+    })
+  };
+
+  removeEmptyElements = () => {
+
+    let individualAnswerMap = this.state.individualAnswerMap;
+    for (let i in individualAnswerMap) {
+      let data = individualAnswerMap[i];
+      if (Object.keys(data).length === 0) {
+        individualAnswerMap.pop();
+      }
+    }
+
+    let data = [
+
+    ];
+
+    let size = Object.keys(individualAnswerMap).length;
+
+    let j;
+    for (j = 0; j < size; j++) {
+      if (data.indexOf(individualAnswerMap[j]) === -1){
+        data.push(individualAnswerMap[j])
+      }
+    }
+
+    this.setState({
+      individualAnswerMap: data,
+    }, () => {
+      this.setAnswerMap();
+    })
+  };
+
+  setAnswerMap = () => {
+
+    let array = [];
+
+    let i;
+    for (i = 0; i < this.state.numberOfQuestions; i++) {
+
+      let data = {
+        name: "",
+        Unanswered: 0,
+        Incorrect: 0,
+        Correct: 0,
+      };
+
+
+      data.name = `Question ${i + 1}`;
+      data.Unanswered = 0;
+      data.Incorrect = 0;
+      data.Correct = 0;
+
+      array.push(data);
+    }
+
+
+    let size = Object.keys(this.state.individualAnswerMap).length;
+
+    let j;
+    for (j = 0; j < size; j++) {
+
+      let data = this.state.individualAnswerMap[j];
+
+      let k;
+      for (k = 0; k < data.questions.length; k++) {
+
+        if (data.questions[k] === "0") {
+          array[k].Incorrect++;
+        } else if (data.questions[k] === "1") {
+          array[k].Correct++;
+        } else if (data.questions[k] === "2") {
+          array[k].Unanswered++;
+        }
+      }
+
+    }
+    this.setState({
+      answerMap: array,
+    })
   };
 
   getHighLowScore = () => {
@@ -367,6 +666,7 @@ class LiveFeed extends Component {
     }
     let size = Object.keys(this.state.progressMap).length;
     temp = temp / size;
+    temp = Math.round(temp * 100) / 100;
     //temp *= 100;
     this.setState({
       classProgress: temp,
@@ -374,8 +674,11 @@ class LiveFeed extends Component {
 
   };
 
-
   render() {
+
+    const alertData = {
+
+    };
 
     const lesssonStatsData = {
       classProgress: this.state.classProgress,
@@ -400,12 +703,19 @@ class LiveFeed extends Component {
       inProgress: this.state.inProgress,
       completed: this.state.completed,
       completionGraphMap: this.state.completionGraphMap,
+
+      answerMap: this.state.answerMap,
     };
 
     const studentChartData = {
       studentsData: this.state.studentsData,
       progressMap: this.state.progressMap,
       scoresMap: this.state.scoresMap,
+      gradeMap: this.state.gradeMap,
+
+      class: this.props.class,
+      lessonNumber: this.props.lessonNumber,
+      uid: this.props.uid,
     };
 
     return (
@@ -413,8 +723,18 @@ class LiveFeed extends Component {
         <hr />
         <br />
 
-        <LessonStats {...lesssonStatsData} />
+        {this.state.failingNames ?
+          this.state.failingNames.map((key, index) => {
+            return (
+              <FailingStudent failingNames={this.state.failingNames[index]} key={index} index={index}/>
+            );
+          })
+          :
+          null
+        }
 
+
+        <LessonStats {...lesssonStatsData} />
 
         <LineBreak />
 
@@ -423,19 +743,6 @@ class LiveFeed extends Component {
         <LineBreak />
 
         <StudentsChart {...studentChartData} />
-
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-        <LineBreak />
-
 
         <br/>
         <br/>

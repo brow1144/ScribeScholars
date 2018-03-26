@@ -19,6 +19,10 @@ import Settings from '../Settings/Settings';
 
 import './HomePage.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import GenHomework from "../ClassPage/HomeworkComponents/GenHomework";
+import GenAssignment from "../ClassPage/LiveComponents/GenAssignment";
+
+import StudentLiveFeed from "../ClassPage/StudentLiveFeed";
 
 const mql = window.matchMedia(`(min-width: 600px)`);
 
@@ -52,11 +56,11 @@ class HomePage extends Component {
       firstName: null,
       lastName: null,
 
-      uid: props.uid,
+      uid: this.props.uid,
 
       userImage: this.props.userImage,
 
-      role: this.props.role,
+      role: props.getRole(),
 
       classes: [{
         class: null,
@@ -77,11 +81,8 @@ class HomePage extends Component {
         class: null,
       }],
 
-      assignments: [{
-        code: null,
-        maxscore: null,
-        name: null,
-      }],
+      lessonNumber: this.props.lessonNumber,
+      class: this.props.class,
 
       personalPage: true,
 
@@ -91,6 +92,7 @@ class HomePage extends Component {
       docked: props.docked,
       open: props.open,
     };
+
   }
 
   // calculate GPA for a student
@@ -629,7 +631,7 @@ class HomePage extends Component {
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <ClassHome {...classData} {...actions} selectedClass={this.props.selectedClass}/>
+          <ClassHome {...classData} {...actions} selectedClass={this.props.selectedClass} uid={this.state.uid} role={this.state.role}/>
 
         </Sidebar>
       );
@@ -638,12 +640,28 @@ class HomePage extends Component {
       return (
         <Sidebar {...sideData}>
 
-          <HomeNav firstName={"Personal Finance"} lastName={""} expand={this.dockSideBar}
+          <HomeNav firstName={"In-Class Live Feed"} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
           <Row>
             <Col>
               <LiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} uid={this.state.uid}/>
+            </Col>
+          </Row>
+        </Sidebar>
+      );
+
+    } else if (this.props.page === "studentLiveFeed") {
+
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={"Individual Student Live Feed"} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <Row>
+            <Col>
+              <StudentLiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} studUid={this.props.studUid}/>
             </Col>
           </Row>
         </Sidebar>
@@ -673,27 +691,22 @@ class HomePage extends Component {
           <HomeNav firstName={"Homework"} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <Row>
-            <Col>
-
-            </Col>
-          </Row>
+          <div>
+            <GenHomework {...classData} {...actions} uid = {this.state.uid} code = {this.state.class} lessonNumber = {this.state.lessonNumber} />
+          </div>
         </Sidebar>
       );
-
     } else if (this.props.page === "inclass") {
 
       return (
         <Sidebar {...sideData}>
 
-          <HomeNav firstName={"InClass Lesson"} lastName={""} expand={this.dockSideBar}
+          <HomeNav firstName={"Inclass Assignment"} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <Row>
-            <Col>
 
-            </Col>
-          </Row>
+          <GenAssignment uid = {this.state.uid} class = {this.props.class} lessonNumber = {this.props.lessonNumber} />
+
         </Sidebar>
       );
 
