@@ -34,6 +34,7 @@ class CreateActivity extends Component {
             typeArray: [],
             question: {},
             hwCode: null,
+            title: "",
         };
     }
 
@@ -49,7 +50,7 @@ class CreateActivity extends Component {
         else
             classRef = firestore.collection("classes").doc(self.props.class).collection("Homework").doc(code);
 
-        self.setState({ hwCode: code, });
+        self.setState({ hwCode: code, title: title, });
 
         classRef.get().then(function (doc) {
             if (doc.exists) {
@@ -199,6 +200,7 @@ class CreateActivity extends Component {
         });
     };
 
+
     publishAss = () => {
         let self = this;
         let homeworkRef;// = firestore.collection("classes").doc(this.props.code).collection("Homework").doc("39489037");
@@ -217,6 +219,47 @@ class CreateActivity extends Component {
         }).catch(function (error) {
             console.log("Error updating document: ", error);
         });
+
+        let classRef = firestore.collection("classes").doc(self.props.class);
+
+        classRef.get().then(function(doc) {
+            if (doc.exists) {
+                let tempArr = doc.data().students;
+                for (let i = 0; i < tempArr.length; i++) {
+                    let studentRef;
+                    if (self.props.assType === "Lesson")
+                        studentRef = firestore.collection("users").doc(tempArr[i]).collection("inClass").doc(self.state.hwCode);
+                    else
+                        studentRef = firestore.collection("users").doc(tempArr[i]).collection("Homework").doc(self.state.hwCode);
+                    studentRef.get().then(function (doc) {
+                        if (doc.exists) {
+                            self.setNewDoc();
+                        } else {
+                            studentRef.set({
+                                answerHistory: [],
+                                class: self.props.class,
+                                completed: "",
+                                currentQuestion: 0,
+                                currentScore: 0,
+                                maxscore: self.state.questions.length,
+                                name: self.state.title,
+                                numOfQuestions: self.state.questions.length,
+                                questions: [],
+
+                            }).then(function () {
+                                console.log("successfully written!");
+                            }).catch(function (error) {
+                                console.log(error);
+                            });
+                        }
+                    }).catch(function (error) {
+                        console.log("Error getting document: ", error);
+                    });
+                }
+            }
+        })
+
+
     };
 
     render() {
