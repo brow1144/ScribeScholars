@@ -79,19 +79,6 @@ class Graphs extends Component {
     };
   };
 
-/* REFERENCE of props
-<SetClassroom
-updateClasses={ this.props.updateClasses }
-role={this.state.role}
-uid={this.state.uid}
-name={this.state.name}
-email={this.state.email}
-phoneN={this.state.phoneN}
-descript={this.state.descript}
-classes={this.state.classes}
-/>
-  */
-
   componentWillMount() {
     this.getMyAssignments();
     this.getClassInfo();
@@ -122,7 +109,7 @@ classes={this.state.classes}
           });
         }*/
 
-        self.getAllStudentInfo();
+        self.getMyAssignments();
       }
     }).catch((error) => {
       console.log("Error getting document:", error);
@@ -166,7 +153,7 @@ classes={this.state.classes}
           });
         }*/
 
-        self.getAllStudentInfo();
+        self.getAllAssignments();
       }
     }).catch((error) => {
       console.log("Error getting document: ", error);
@@ -199,7 +186,7 @@ classes={this.state.classes}
 
 
 
-  getAllStudentInfo = () => {
+  getAllAssignments = () => {
     let self = this;
 
     for (let i in this.state.students) {
@@ -211,25 +198,6 @@ classes={this.state.classes}
 
         let studentRef = firestore.collection("users").doc(this.state.students[i]);
         studentRef.get().then(() => {
-          //if (doc.exists) {
-            //self.getAssignmentsOfType(self.state.students[i], "homework", true);
-            //self.getAssignmentsOfType(self.state.students[i], "quizzes", true);
-            //self.getAssignmentsOfType(self.state.students[i], "tests", true);
-            //self.getAssignmentsOfType(self.state.students[i], "inClass", true);
-
-            /*if (doc.data().assignments != null) {
-              for (let j in doc.data().assignments) {
-                if (doc.data().assignments.hasOwnProperty(j)) {
-                  if (doc.data().assignments[j].code === self.state.code && doc.data().assignments[j].score != null) {
-                    self.setState({
-                      allAssignments: self.state.allAssignments.concat(doc.data().assignments[j]),
-                    });
-                  }
-                }
-              }
-            }*/
-          //}
-
           if (parseInt(i, 10) === self.state.students.length - 1) {
             let tempIndex = 1;  // temporary TODO
 
@@ -250,6 +218,26 @@ classes={this.state.classes}
       }
     }
   };
+
+  // old get all assignments
+  //if (doc.exists) {
+  //self.getAssignmentsOfType(self.state.students[i], "homework", true);
+  //self.getAssignmentsOfType(self.state.students[i], "quizzes", true);
+  //self.getAssignmentsOfType(self.state.students[i], "tests", true);
+  //self.getAssignmentsOfType(self.state.students[i], "inClass", true);
+
+  /*if (doc.data().assignments != null) {
+    for (let j in doc.data().assignments) {
+      if (doc.data().assignments.hasOwnProperty(j)) {
+        if (doc.data().assignments[j].code === self.state.code && doc.data().assignments[j].score != null) {
+          self.setState({
+            allAssignments: self.state.allAssignments.concat(doc.data().assignments[j]),
+          });
+        }
+      }
+    }
+  }*/
+  //}
 
   // calculate GPA for a student
   /*calcGPA = () => {
