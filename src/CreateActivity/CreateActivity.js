@@ -26,13 +26,14 @@ class CreateActivity extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            initialCreate: false,
+            initialCreate: true,
             uid: props.uid,
             role: this.props.role,
             class: this.props.class,
             questions: [],
             typeArray: [],
             question: {},
+            hwCode: null,
         };
     }
 
@@ -42,7 +43,14 @@ class CreateActivity extends Component {
         this.flipComp();
         let code = this.getCode();
         //Create new document in "classes" collection
-        let classRef = firestore.collection("classes").doc("668273").collection("Homework").doc(code);
+        let classRef;
+        if (self.props.assType === "Lesson")
+            classRef = firestore.collection("classes").doc(self.props.class).collection("inClass").doc(code);
+        else
+            classRef = firestore.collection("classes").doc(self.props.class).collection("Homework").doc(code);
+
+        self.setState({ hwCode: code, });
+
         classRef.get().then(function (doc) {
             if (doc.exists) {
                 self.setNewDoc();
@@ -193,7 +201,12 @@ class CreateActivity extends Component {
 
     publishAss = () => {
         let self = this;
-        let homeworkRef = firestore.collection("classes").doc("668273").collection("Homework").doc("39489037");
+        let homeworkRef;// = firestore.collection("classes").doc(this.props.code).collection("Homework").doc("39489037");
+        if (this.props.assType === "Lesson")
+            homeworkRef = firestore.collection("classes").doc(self.props.class).collection("inClass").doc(self.state.hwCode);
+        else
+            homeworkRef = firestore.collection("classes").doc(self.props.class).collection("Homework").doc(self.state.hwCode);
+
 
         homeworkRef.update({
             questions: self.state.questions,
