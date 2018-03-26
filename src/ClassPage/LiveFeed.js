@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import FailingStudent from './StudentLiveComponents/FailingStudent'
 import LessonStats from './LiveComponents/LessonStats';
 import LineBreak from './LiveComponents/LineBreak';
 import LiveGraphs from './LiveComponents/LiveGraphs';
@@ -61,6 +62,10 @@ class LiveFeed extends Component {
       classAverage: 0,
       classMedian: 0,
       numberOfQuestions: 0,
+
+      failingUID: [],
+      failingUIDMap: {},
+      failingNames: [],
     };
   }
 
@@ -131,6 +136,7 @@ class LiveFeed extends Component {
 
     let scoresMap = {};
     let completionMap = {};
+    let temp = {};
 
     let self = this;
     self.state.students.forEach(function(element) {
@@ -139,6 +145,15 @@ class LiveFeed extends Component {
 
       lessonDataPerStudent.onSnapshot(function (doc) {
         if (doc.exists) {
+
+          let checkForProgress = doc.data().currentQuestion / doc.data().numOfQuestions;
+
+          if (checkForProgress >= 0.5 && doc.data().currentScore <= 50) {
+            //console.log(`${element} is failing!`)
+            temp[element] = false;
+          } else {
+            temp[element] = true;
+          }
 
           scoresMap[element] = doc.data().currentScore;
           scoresMap[element] = Math.round(scoresMap[element] * 100) / 100;
@@ -155,11 +170,14 @@ class LiveFeed extends Component {
         self.setState({
           scoresMap: scoresMap,
           completionMap: completionMap,
+          // failingUID: temp,
+          failingUIDMap: temp,
         }, () => {
           self.calculateAverage();
           self.calculateMedian();
           self.getCompletion();
           self.getLetterGrades();
+          self.getFailing();
         });
       })
     })
@@ -394,6 +412,32 @@ class LiveFeed extends Component {
 
   };
 
+  getFailing = () => {
+
+    let temp = [];
+    //Find first name and last name
+    let self = this;
+    // self.state.failingUIDMap.forEach(function(element) {
+    let size = Object.keys(this.state.failingUIDMap).length;
+    for (let i in this.state.failingUIDMap) {
+      let lessonDataPerStudent = firestore.collection("users").doc(i);
+
+
+      lessonDataPerStudent.onSnapshot(function (doc) {
+        if (doc.exists) {
+          if (!self.state.failingUIDMap[i])
+            temp.unshift(`${doc.data().firstName} ${doc.data().lastName}`);
+        } else {
+          console.log("No such document!");
+        }
+        self.setState({
+          failingNames: temp
+        })
+      })
+    }
+
+  };
+
   getQuestionProgress = () => {
 
     let individualAnswerMap = [{}];
@@ -622,6 +666,7 @@ class LiveFeed extends Component {
     }
     let size = Object.keys(this.state.progressMap).length;
     temp = temp / size;
+    temp = Math.round(temp * 100) / 100;
     //temp *= 100;
     this.setState({
       classProgress: temp,
@@ -629,8 +674,11 @@ class LiveFeed extends Component {
 
   };
 
-
   render() {
+
+    const alertData = {
+
+    };
 
     const lesssonStatsData = {
       classProgress: this.state.classProgress,
@@ -664,12 +712,27 @@ class LiveFeed extends Component {
       progressMap: this.state.progressMap,
       scoresMap: this.state.scoresMap,
       gradeMap: this.state.gradeMap,
+
+      class: this.props.class,
+      lessonNumber: this.props.lessonNumber,
+      uid: this.props.uid,
     };
 
     return (
       <div>
         <hr />
         <br />
+
+        {this.state.failingNames ?
+          this.state.failingNames.map((key, index) => {
+            return (
+              <FailingStudent failingNames={this.state.failingNames[index]} key={index} index={index}/>
+            );
+          })
+          :
+          null
+        }
+
 
         <LessonStats {...lesssonStatsData} />
 
