@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import {Table, Container, Row, Col, Label, Button } from 'reactstrap';
-import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area, ReferenceLine } from 'recharts';
+import {Table, Container, Row, Col, Label } from 'reactstrap';
+import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area, ReferenceLine, ResponsiveContainer } from 'recharts';
 import { firestore } from "../base";
 import { NavLink as RouterLink } from 'react-router-dom'
 import './Table.css'
@@ -14,26 +14,14 @@ class GradesTable extends Component {
       uid: this.props.uid,
       code: this.props.code,
 
-      gradeData: [],
       doneLoading: false,
 
-
       myAssignments: [],  // all assignments from all the user's classes TODO GPA page
-      myScore: null,  // user's score on current assignment TODO remove hardcoding
+      myScore: null,  // user's score on current assignment
 
       classAssignments: [],   // assignments in the class
       students: [],   // all students in the class
       allAssignments: [],   // all assignments from every student
-
-      data: [
-        {name: 'HW 1', uv: 4000, pv: 2400, amt: 2400},
-        {name: 'HW 2', uv: 3000, pv: 1398, amt: 2210},
-        {name: 'Page C', uv: 2000, pv: 9800, amt: 2290},
-        {name: 'Page D', uv: 2780, pv: 3908, amt: 2000},
-        {name: 'Page E', uv: 1890, pv: 4800, amt: 2181},
-        {name: 'Page F', uv: 2390, pv: 3800, amt: 2500},
-        {name: 'Page G', uv: 3490, pv: 4300, amt: 2100},
-      ],
 
       yourGrades: [
         {name: 'HW 1', grade: 80, avg: 84, med: 80},
@@ -45,32 +33,8 @@ class GradesTable extends Component {
         {name: 'Quiz 2', grade: 76, avg: 46, med: 55},
       ],
 
-      assignmentDist: [
-        /*{name: 'HW 1', grades: [80, 74, 93, 98, 23, 53, 76]},*/
-        {grade: 80},
-        {grade: 74},
-        {grade: 93},
-        {grade: 98},
-        {grade: 23},
-        {grade: 53, avg: 43, med: 50},
-        {grade: 76, avg: 46, med: 55},
-        {grade: 80, avg: 84, med: 80},
-        {grade: 74, avg: 84, med: 82},
-        {grade: 93, avg: 65, med: 66},
-        {grade: 98, avg: 75, med: 83},
-        {grade: 23, avg: 90, med: 85},
-        {grade: 53, avg: 43, med: 50},
-        {grade: 76, avg: 46, med: 55},
-        {grade: 80, avg: 84, med: 80},
-        {grade: 74, avg: 84, med: 82},
-        {grade: 93, avg: 65, med: 66},
-        {grade: 98, avg: 75, med: 83},
-        {grade: 23, avg: 90, med: 85},
-        {grade: 53, avg: 43, med: 50},
-        {grade: 76, avg: 46, med: 55},
-      ],
-
       classScores: [],  // class scores for an individual assignment
+      assignmentComp: [],   // user's score, average, and median
       classOverallGrades: [],   // class overall grades
       assignmentScores: [],   // individual scores for each assignment
       assignmentGrades: [],   // individual grades for each assignment
@@ -79,22 +43,6 @@ class GradesTable extends Component {
 
       graphVisible: false,
     };
-
-
-
-    /*let self = this;
-    let docRef = firestore.collection("users").doc(this.props.uid).collection("assignments").doc(this.props.code);
-    docRef.get().then(function (doc) {
-
-      self.setState({ gradeData: doc.data().grades });
-
-    }).then( function () {
-
-      self.setState({ doneLoading: true });
-
-    }).catch(function (error) {
-      console.log("Error getting document:", error);
-    });*/
   }
 
   componentWillMount() {
@@ -189,7 +137,6 @@ class GradesTable extends Component {
     });
   };
 
-
   getAllAssignments = () => {
     let self = this;
 
@@ -205,15 +152,8 @@ class GradesTable extends Component {
           if (parseInt(i, 10) === self.state.students.length - 1) {
             self.setState({ doneLoading: true });
 
-            //console.log(self.state.allAssignments);
-            //console.log(self.state.classAssignments);
-            //self.setState({
-              //myScore: self.getStudentAssignment(self.state.classAssignments[0]).score,
-            //});
-
-            //self.buildClassScoresGraph(self.state.classAssignments[0]);  // temporary TODO
-            //self.buildAssignmentScoresGraph();
-            //self.buildAssignmentGradesGraph();  // temporary*/
+            self.buildAssignmentScoresGraph();
+            self.buildAssignmentGradesGraph();
           }
         }).catch(function(error) {
           console.log("Error getting document:", error);
@@ -221,7 +161,6 @@ class GradesTable extends Component {
       }
     }
   };
-
 
 // calculate average score for an assignment
   getAverageScore = (assignment, percentage) => {
@@ -246,6 +185,47 @@ class GradesTable extends Component {
       return grade;
     } else {  // return score
       let score = total / numStudents;
+
+      if (score % 1 !== 0)
+        score = Math.round(score * 100) / 100;
+
+      return score;
+    }
+  };
+
+  // get median score for an assignment
+  getMedianScore = (assignment, percentage) => {
+    let tmpScores = [];
+    let median = 0;
+
+    for (let i in this.state.allAssignments) {
+      if (this.state.allAssignments.hasOwnProperty(i)) {
+        if (this.state.allAssignments[i].name === assignment.name)
+          tmpScores = tmpScores.concat(this.state.allAssignments[i].score);
+      }
+    }
+
+    tmpScores.sort();
+
+    let size = tmpScores.length;
+    if ((size % 2) !== 0)   // odd
+      median += tmpScores[Math.floor(size / 2)];
+    else {  // even
+      median += tmpScores[Math.floor(size / 2)];
+      median += tmpScores[Math.floor(size / 2) - 1];
+
+      median = median / 2;
+    }
+
+    if (percentage) {   // return score as a percentage
+      let grade = (median / assignment.maxscore) * 100;
+
+      if (grade % 1 !== 0)
+        grade = Math.round(grade * 100) / 100;
+
+      return grade;
+    } else {  // return score
+      let score = median;
 
       if (score % 1 !== 0)
         score = Math.round(score * 100) / 100;
@@ -305,30 +285,42 @@ class GradesTable extends Component {
     // TODO fix
   };
 
+  getPercentage = (score, max) => {
+    let grade = (score / max) * 100;
+
+    if (grade % 1 !== 0)
+      grade = Math.round(grade * 100) / 100;
+
+    return grade;
+  };
+
   // build data for graph of classroom scores on a particular assignment
   buildClassScoresGraph = (assignment) => {
     let tmpClassScores = [];
 
     for (let i in this.state.allAssignments) {
       if (this.state.allAssignments.hasOwnProperty(i)) {
-        if (this.state.allAssignments[i].name === assignment.name) {
-          /*console.log(this.state.allAssignments[i]);
-          //if (this.state.allAssignments[i].score === 23)
-            //break;
-          console.log(this.state.classScores);
-          this.setState({
-            classScores: this.state.classScores.concat({score: this.state.allAssignments[i].score}),
-          }, () => {
-            console.log(this.state.allAssignments[i]);
-            console.log(this.state.classScores);
-          });*/
+        if (this.state.allAssignments[i].name === assignment.name)
           tmpClassScores = tmpClassScores.concat({score: this.state.allAssignments[i].score});
-        }
       }
     }
 
     this.setState({
       classScores: tmpClassScores,
+    });
+  };
+
+  // build data for assignmentComp
+  buildBenchmarkGraph = (classAssignment) => {
+    let assignment = this.getStudentAssignment(classAssignment);
+
+    let name = assignment.name;
+    let score = assignment.score;
+    let avg = this.getAverageScore(classAssignment, false);
+    let med = this.getMedianScore(classAssignment, false);
+
+    this.setState({
+      assignmentComp: [].concat({name: name, score: score, average: avg, median: med}),
     });
   };
 
@@ -344,8 +336,9 @@ class GradesTable extends Component {
           let name = assignment.name;
           let score = assignment.score;
           let avg = this.getAverageScore(this.state.classAssignments[i], false);
+          let med = this.getMedianScore(this.state.classAssignments[i], false);
 
-          tmpAssignmentScores = tmpAssignmentScores.concat({name: name, score: score, avg: avg});
+          tmpAssignmentScores = tmpAssignmentScores.concat({name: name, score: score, average: avg, median: med});
         }
       }
     }
@@ -367,8 +360,9 @@ class GradesTable extends Component {
           let name = assignment.name;
           let grade = (assignment.score / assignment.maxscore) * 100;
           let avg = this.getAverageScore(this.state.classAssignments[i], true);
+          let med = this.getMedianScore(this.state.classAssignments[i], true);
 
-          tmpAssignmentGrades = tmpAssignmentGrades.concat({name: name, grade: grade, avg: avg});
+          tmpAssignmentGrades = tmpAssignmentGrades.concat({name: name, grade: grade, average: avg, median: med});
         }
       }
     }
@@ -400,34 +394,14 @@ class GradesTable extends Component {
   }
 
   showGraph = (index) => {
-    //console.log(this.state.classAssignments);
-    //console.log(this.state.students);
-    //console.log(this.state.allAssignments);
-    //console.log(this.state.myAssignments);
-
-    //this.setState({
-      //myScore: this.getStudentAssignment(this.state.classAssignments[index]).score,
-    //});
-
-    this.buildClassScoresGraph(this.state.classAssignments[index]);  // temporary TODO
-    //this.buildAssignmentScoresGraph();
-    //this.buildAssignmentGradesGraph();  // temporary
-
     this.setState({
-      graph: "classScores",
+      myScore: this.getStudentAssignment(this.state.classAssignments[index]).score,
+      graphVisible: true,
     });
+
+    this.buildClassScoresGraph(this.state.classAssignments[index]);
+    this.buildBenchmarkGraph(this.state.classAssignments[index]);
   };
-
-
-
-
-
-
-
-
-
-
-
 
   render() {
     if (!this.state.doneLoading) {
@@ -439,52 +413,48 @@ class GradesTable extends Component {
         </div>
         )
     } else {
-      if (this.state.graph === "classScores") {
+      if (this.state.graphVisible) {
         this.state.classScores.sort(this.compareValues("score"));
         let pos = this.state.classScores.map((e) => {return e.score;}).indexOf(this.state.myScore);
 
         return (
-          <AreaChart width={730} height={250} data={this.state.classScores}
-                     margin={{top: 30, right: 30, left: 0, bottom: 0}}>
-            <defs>
-              <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-                <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
-              </linearGradient>
-            </defs>
-            <XAxis dataKey=""/>
-            <YAxis/>
-            <CartesianGrid strokeDasharray="3 3"/>
-            <Tooltip/>
-            <ReferenceLine x={pos} stroke="green" label={{value: "You", position: "top"}}/>
-            <Area type="monotone" dataKey="score" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)"/>
-          </AreaChart>
-        );
-      } else if (this.state.graph === "assignmentScores") {
-        return (
-          <BarChart width={600} height={300} data={this.state.assignmentScores}
-                    margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-            <XAxis dataKey="name"/>
-            <YAxis/>
-            <CartesianGrid strokeDasharray="3 3"/>
-            <Tooltip/>
-            <Legend />
-            <Bar dataKey="score" fill="#21CE99" />
-            <Bar dataKey="avg" fill="#bf8bff" />
-          </BarChart>
-        )
-      } else if (this.state.graph === "assignmentGrades") {
-        return (
-          <BarChart width={600} height={300} data={this.state.assignmentGrades}
-                    margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-            <XAxis dataKey="name"/>
-            <YAxis/>
-            <CartesianGrid strokeDasharray="3 3"/>
-            <Tooltip/>
-            <Legend />
-            <Bar dataKey="grade" fill="#21CE99" />
-            <Bar dataKey="avg" fill="#bf8bff" />
-          </BarChart>
+          <Row>
+            <Col xs={8}>
+              <ResponsiveContainer width="100%" height={250}>
+                <AreaChart data={this.state.classScores}
+                           margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                  <defs>
+                    <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <XAxis/>
+                  <YAxis/>
+                  <CartesianGrid strokeDasharray="3 3"/>
+                  <Tooltip/>
+                  <ReferenceLine x={pos} stroke="green" label={{value: "You", position: "top"}}/>
+                  <Area type="monotone" dataKey="score" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)"/>
+                </AreaChart>
+              </ResponsiveContainer>
+            </Col>
+
+            <Col xs={3}>
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={this.state.assignmentComp}
+                          margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                  <XAxis dataKey="name"/>
+                  <YAxis/>
+                  <CartesianGrid strokeDasharray="3 3"/>
+                  <Tooltip/>
+                  <Legend/>
+                  <Bar dataKey="score" fill="#21CE99" />
+                  <Bar dataKey="average" fill="#bf8bff" />
+                  <Bar dataKey="median" fill="#f1cbff" />
+                </BarChart>
+              </ResponsiveContainer>
+            </Col>
+          </Row>
         )
       } else {
         return (
@@ -512,6 +482,9 @@ class GradesTable extends Component {
                       <th>Assignment</th>
                       <th>Score</th>
                       <th>Max Score</th>
+                      <th>Percentage</th>
+                      <th>Average</th>
+                      <th>Median</th>
                       <th/>
                       <th>Request Regrade</th>
                     </tr>
@@ -522,6 +495,9 @@ class GradesTable extends Component {
                         <td>{this.state.myAssignmentsInClass[index].name}</td>
                         <td>{this.state.myAssignmentsInClass[index].score}</td>
                         <td>{this.state.myAssignmentsInClass[index].maxscore}</td>
+                        <td>{this.getPercentage(this.state.myAssignmentsInClass[index].score, this.state.myAssignmentsInClass[index].maxscore)}</td>
+                        <td>{this.getAverageScore(this.state.classAssignments[index], true)}</td>
+                        <td>{this.getMedianScore(this.state.classAssignments[index], true)}</td>
                         <td>
                           <span onClick={() => this.showGraph(index)} className="showGraphsButton">
                             <i className="fas fa-chart-bar picIcon"/>
@@ -540,7 +516,36 @@ class GradesTable extends Component {
                 </Col>
               </Row>
               <Row>
-                <Col className={"moreSpace"}>
+                <Col sm="12" md="5">
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={this.state.assignmentScores}
+                              margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+                      <XAxis dataKey="name"/>
+                      <YAxis/>
+                      <CartesianGrid strokeDasharray="3 3"/>
+                      <Tooltip/>
+                      <Legend/>
+                      <Bar dataKey="score" fill="#21CE99" />
+                      <Bar dataKey="average" fill="#bf8bff" />
+                      <Bar dataKey="median" fill="#f1cbff" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </Col>
+
+                <Col sm="12" md="5">
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={this.state.assignmentGrades}
+                              margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+                      <XAxis dataKey="name"/>
+                      <YAxis/>
+                      <CartesianGrid strokeDasharray="3 3"/>
+                      <Tooltip/>
+                      <Legend/>
+                      <Bar dataKey="grade" fill="#21CE99" />
+                      <Bar dataKey="average" fill="#bf8bff" />
+                      <Bar dataKey="median" fill="#f1cbff" />
+                    </BarChart>
+                  </ResponsiveContainer>
                 </Col>
               </Row>
               <Row>
@@ -548,7 +553,6 @@ class GradesTable extends Component {
                 </Col>
               </Row>
             </Container>
-
           </div>
         )
       }

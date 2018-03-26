@@ -91,8 +91,9 @@ class HomePage extends Component {
       mql: mql,
       docked: props.docked,
       open: props.open,
-    };
 
+      myAssignments: [],
+    };
   }
 
   // calculate GPA for a student
@@ -153,7 +154,7 @@ class HomePage extends Component {
 
     for (let i in this.state.myAssignments) {
       if (this.state.myAssignments.hasOwnProperty(i)) {
-        if (this.state.myAssignments[i].code === code && this.state.myAssignments[i].maxscore != null) {
+        if (this.state.myAssignments[i].code === code && this.state.myAssignments[i].score != null) {
           total += this.state.myAssignments[i].score;
           max += this.state.myAssignments[i].maxscore;
         }
@@ -168,8 +169,45 @@ class HomePage extends Component {
     return grade;
   };
 
+  // get all assignments for a student (GPA)
+  getMyAssignments = () => {
+    let self = this;
+    let studentRef = firestore.collection("users").doc(this.state.uid);
 
+    studentRef.get().then((doc) => {
+      if (doc.exists) {
+        self.getAssignmentsOfType("homework");
+        self.getAssignmentsOfType("quizzes");
+        self.getAssignmentsOfType("tests");
+        self.getAssignmentsOfType("inClass");
 
+        studentRef.get().then(() => {
+          let gpa = self.calcGPA();
+          self.setState({
+            gpa: gpa,
+          });
+        });
+      }
+    }).catch((error) => {
+      console.log("Error getting document: ", error);
+    });
+  };
+
+  getAssignmentsOfType = (type) => {
+    let self = this;
+
+    firestore.collection("users").doc(this.state.uid).collection(type).get().then((snapshot) => {
+      snapshot.forEach((doc) => {
+        if (doc.data().score != null) {
+          self.setState({
+            myAssignments: self.state.myAssignments.concat(doc.data()),
+          });
+        }
+      });
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
 
   componentDidUpdate() {
   }
@@ -239,17 +277,12 @@ class HomePage extends Component {
         if (doc.data().classes !== null) {
           self.setState({
             classes: doc.data().classes,
-            myAssignments: doc.data().assignments, // NEW *****************
-          });
-
-          let gpa = self.calcGPA();
-          self.setState({
-            gpa: gpa,
           });
 
           self.getUserImage();
           self.getDeadlines();
           self.getAnnouncements();
+          self.getMyAssignments();
         }
         if (doc.data().firstName !== null && doc.data().lastName !== null && doc.data().role !== null) {
           self.setState({
