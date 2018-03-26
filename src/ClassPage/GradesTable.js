@@ -203,20 +203,17 @@ class GradesTable extends Component {
         let studentRef = firestore.collection("users").doc(this.state.students[i]);
         studentRef.get().then(() => {
           if (parseInt(i, 10) === self.state.students.length - 1) {
-            let tempIndex = 1;  // temporary TODO
-
             self.setState({ doneLoading: true });
 
-            console.log(self.state.allAssignments);
-            console.log(self.state.classAssignments);
-            /*self.setState({
-              myScore: self.getStudentAssignment(self.state.classAssignments[tempIndex]).score,
-            });
+            //console.log(self.state.allAssignments);
+            //console.log(self.state.classAssignments);
+            //self.setState({
+              //myScore: self.getStudentAssignment(self.state.classAssignments[0]).score,
+            //});
 
-            //console.log(self.calcGPA());  // temporary
-            self.buildClassScoresGraph(self.state.classAssignments[tempIndex]);  // temporary TODO
-            self.buildAssignmentScoresGraph();
-            self.buildAssignmentGradesGraph();  // temporary*/
+            //self.buildClassScoresGraph(self.state.classAssignments[0]);  // temporary TODO
+            //self.buildAssignmentScoresGraph();
+            //self.buildAssignmentGradesGraph();  // temporary*/
           }
         }).catch(function(error) {
           console.log("Error getting document:", error);
@@ -310,19 +307,35 @@ class GradesTable extends Component {
 
   // build data for graph of classroom scores on a particular assignment
   buildClassScoresGraph = (assignment) => {
+    let tmpClassScores = [];
+
     for (let i in this.state.allAssignments) {
       if (this.state.allAssignments.hasOwnProperty(i)) {
         if (this.state.allAssignments[i].name === assignment.name) {
+          /*console.log(this.state.allAssignments[i]);
+          //if (this.state.allAssignments[i].score === 23)
+            //break;
+          console.log(this.state.classScores);
           this.setState({
             classScores: this.state.classScores.concat({score: this.state.allAssignments[i].score}),
-          });
+          }, () => {
+            console.log(this.state.allAssignments[i]);
+            console.log(this.state.classScores);
+          });*/
+          tmpClassScores = tmpClassScores.concat({score: this.state.allAssignments[i].score});
         }
       }
     }
+
+    this.setState({
+      classScores: tmpClassScores,
+    });
   };
 
   // build data for assignmentScores
   buildAssignmentScoresGraph = () => {
+    let tmpAssignmentScores = [];
+
     for (let i in this.state.classAssignments) {
       if (this.state.classAssignments.hasOwnProperty(i)) {
         let assignment = this.getStudentAssignment(this.state.classAssignments[i]);
@@ -332,16 +345,20 @@ class GradesTable extends Component {
           let score = assignment.score;
           let avg = this.getAverageScore(this.state.classAssignments[i], false);
 
-          this.setState({
-            assignmentScores: this.state.assignmentScores.concat({name: name, score: score, avg: avg}),
-          });
+          tmpAssignmentScores = tmpAssignmentScores.concat({name: name, score: score, avg: avg});
         }
       }
     }
+
+    this.setState({
+      assignmentScores: tmpAssignmentScores,
+    });
   };
 
   // build data for assignmentGrades
   buildAssignmentGradesGraph = () => {
+    let tmpAssignmentGrades = [];
+
     for (let i in this.state.classAssignments) {
       if (this.state.classAssignments.hasOwnProperty(i)) {
         let assignment = this.getStudentAssignment(this.state.classAssignments[i]);
@@ -351,12 +368,14 @@ class GradesTable extends Component {
           let grade = (assignment.score / assignment.maxscore) * 100;
           let avg = this.getAverageScore(this.state.classAssignments[i], true);
 
-          this.setState({
-            assignmentGrades: this.state.assignmentGrades.concat({name: name, grade: grade, avg: avg}),
-          });
+          tmpAssignmentGrades = tmpAssignmentGrades.concat({name: name, grade: grade, avg: avg});
         }
       }
     }
+
+    this.setState({
+      assignmentGrades: tmpAssignmentGrades,
+    });
   };
 
   // custom sorting function for the graphs
@@ -380,7 +399,20 @@ class GradesTable extends Component {
     };
   }
 
-  showGraph = () => {
+  showGraph = (index) => {
+    //console.log(this.state.classAssignments);
+    //console.log(this.state.students);
+    //console.log(this.state.allAssignments);
+    //console.log(this.state.myAssignments);
+
+    //this.setState({
+      //myScore: this.getStudentAssignment(this.state.classAssignments[index]).score,
+    //});
+
+    this.buildClassScoresGraph(this.state.classAssignments[index]);  // temporary TODO
+    //this.buildAssignmentScoresGraph();
+    //this.buildAssignmentGradesGraph();  // temporary
+
     this.setState({
       graph: "classScores",
     });
@@ -398,7 +430,6 @@ class GradesTable extends Component {
 
 
   render() {
-
     if (!this.state.doneLoading) {
       return (
         <div>
@@ -492,7 +523,7 @@ class GradesTable extends Component {
                         <td>{this.state.myAssignmentsInClass[index].score}</td>
                         <td>{this.state.myAssignmentsInClass[index].maxscore}</td>
                         <td>
-                          <span onClick={this.showGraph} className="showGraphsButton">
+                          <span onClick={() => this.showGraph(index)} className="showGraphsButton">
                             <i className="fas fa-chart-bar picIcon"/>
                           </span>
                         </td>
