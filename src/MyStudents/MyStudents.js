@@ -222,7 +222,7 @@ class MyStudents extends Component {
                                 </Col>
                             </Row>
                             <Row className="chartAlign">
-                                <Graphs code={this.props.code}/>
+                                <Graphs lessonNumber={this.props.lessonNumber} code={this.props.code}/>
                             </Row>
                         </Col>
                     </Row>

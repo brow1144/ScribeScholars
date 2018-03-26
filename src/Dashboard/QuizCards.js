@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {NavLink, Button,Card, CardTitle, CardText, Row, Col } from 'reactstrap';
+import {NavLink, Button, Row, Col } from 'reactstrap';
 
 import './AssignStyle.css'
 

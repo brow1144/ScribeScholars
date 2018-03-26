@@ -18,16 +18,20 @@ class Dashboard extends Component {
             //code: props.code,
 
 
-
+            completionMap: {},
+            scoresMap: {},
             students: [],
 
             studentsData: [{
-                gpa: "",
+                gpa: 0
             }],
 
             gpaMap: {},
 
             avgGpa: 0,
+
+            classAverage: 0,
+
 
             classes: [],  // TODO GPA page
             myAssignments: [],  // all assignments from all the user's classes TODO GPA page
@@ -45,10 +49,7 @@ class Dashboard extends Component {
                 {name: 'Page G', uv: 3490, pv: 4300, amt: 2100},
             ],
 
-            data01: [
-                {name: 'Pass', value: 95},
-                {name: 'Fail', value: 5},
-                ],
+            passFail: [],
 
             data02: [
                 {name: 'Group A', value: 2400},
@@ -59,9 +60,7 @@ class Dashboard extends Component {
                 {name: 'Group F', value: 4800}
                 ],
 
-            data03: [
-                {name: 'Group A', value: 400},
-                {name: 'Group B', value: 300},
+            gpaDis: [
 
             ],
 
@@ -136,17 +135,16 @@ class Dashboard extends Component {
         });
 
         studentsData.pop();
+
         self.setState({
             studentsData: studentsData
-        });
-
+        })
     };
 
     getClassAverage = () => {
 
 
         let gpaMap = {};
-        let completionMap = {};
 
         let self = this;
         self.state.students.forEach(function(element) {
@@ -173,19 +171,101 @@ class Dashboard extends Component {
     };
 
     getAvgGpa = () => {
+        let object;
+        let passing = 0;
+        let failing = 0;
         let temp = 0;
+        let pfArr = [];
+        let gpadArr = [];
+
+        let toFour = 0;
+        let fourHead = "3.0+";
+        let toThree = 0;
+        let threeHead = "2.0+";
+        let toTwo = 0;
+        let twoHead = "1.0+";
+        let toOne = 0;
+        let oneHead = "0.0+";
 
         for (let i in this.state.gpaMap) {
+            let thisGpa = this.state.gpaMap[i];
+            console.log(thisGpa);
+
+            if (thisGpa >= 3.0) {
+                toFour++;
+            } else if (thisGpa >= 2.0) {
+                toThree++;
+            } else if (thisGpa >= 1.0) {
+                toTwo++;
+            } else {
+                toOne++;
+            }
+
+            if (thisGpa < 1.7) {
+                failing++;
+            } else {
+                passing++;
+            }
+
             temp += this.state.gpaMap[i];
         }
+
         let size = Object.keys(this.state.gpaMap).length;
         temp = temp / size;
         temp = Math.round(temp * 100) / 100;
-        console.log(temp);
+
+        console.log(failing);
+        console.log(passing);
+
+
+        //FOR PASS FAIL
+        object = {
+            name : "Failing",
+            value : failing
+        };
+
+        pfArr.unshift(object);
+
+        object = {
+            name : "Passing",
+            value : passing
+        };
+        pfArr.unshift(object);
+        //END OF PASS FAIL
+
+        //FOR GPA DIS
+        object = {
+            name : "Group 3-4",
+            value : toFour
+        };
+
+        gpadArr.unshift(object);
+
+        object = {
+            name : "Group 2-3",
+            value : toThree
+        };
+        gpadArr.unshift(object);
+
+        object = {
+            name : "Group 1-2",
+            value : toTwo
+        };
+
+        gpadArr.unshift(object);
+
+        object = {
+            name : "Group 0-1",
+            value : toOne
+        };
+        gpadArr.unshift(object);
+        //END OF GPA DIS
+
         this.setState({
             avgGpa: temp,
+            passFail : pfArr,
+            gpaDis : gpadArr
         });
-
     };
 
 
@@ -203,9 +283,9 @@ class Dashboard extends Component {
                                 </Row>
                                 <Row className="chartAlign">
                                     <PieChart className="piePad" width={365} height={250}>
-                                        <Pie data={this.state.data01} dataKey="value" nameKey="name" cx="50%" cy="50%"
+                                        <Pie data={this.state.passFail} dataKey="value" nameKey="name" cx="50%" cy="50%"
                                              outerRadius={70} fill="#8884d8" label>{
-                                            this.state.data01.map((entry, index) => <Cell key={entry} fill={this.state.COLORS[index % this.state.COLORS.length]}/>)
+                                            this.state.passFail.map((entry, index) => <Cell key={entry} fill={this.state.COLORS[index % this.state.COLORS.length]}/>)
                                         } </Pie>
                                     </PieChart>
                                 </Row>
@@ -236,25 +316,11 @@ class Dashboard extends Component {
 
 
                                         <PieChart className="piePad" width={365} height={250}>
-                                            <Pie data={this.state.data03} dataKey="value" nameKey="name" cx="50%"
+                                            <Pie data={this.state.gpaDis} dataKey="value" nameKey="name" cx="50%"
                                                  cy="50%"
                                                  outerRadius={70} fill="#8884d8" label/>
                                             </PieChart>
 
-                                </Row>
-                            </Col>
-
-                            <Col className="dbGraphs">
-                                <Row className="dbGraphs">
-                                    <Col>
-                                        <h1>Recent Assignment</h1>
-                                    </Col>
-                                </Row>
-                                <Row className="dbGraphs piePad">
-                                    <Col className={"progPad"}>
-                                        <div className="text-center progText">74%</div>
-                                        <Progress color={"success"} value={74}/>
-                                    </Col>
                                 </Row>
                             </Col>
                         </Row>
