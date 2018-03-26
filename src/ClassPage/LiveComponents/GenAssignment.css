@@ -1,5 +1,8 @@
 .center {
     justify-content: center;
     align-content: center;
+}
 
+.space {
+    height: 4em;
 }

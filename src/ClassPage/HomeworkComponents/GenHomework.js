@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import { Nav, NavLink, Row, Col } from 'reactstrap';
-import { NavLink as RouterLink } from 'react-router-dom'
+import { Row, Col } from 'reactstrap';
+
 import {firestore} from "../../base";
 
 
