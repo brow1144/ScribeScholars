@@ -16,6 +16,7 @@ class GenAssignment extends Component {
     this.state = {
       uid: this.props.uid,
 
+      correctAns: null,
       option1: null,
       option2: null,
       option3: null,
@@ -25,19 +26,20 @@ class GenAssignment extends Component {
 
       lessonNumber: this.props.lessonNumber,
 
-      maxscore: null,
       name: null,
       class: null,
       questions: null,
 
+      maxscore: null,
       numOfQuestions: null,
       currentScore: null,
       currentQuestion: null,
-      completed: null,
       answerHistory: null,
+      completed: null,
+      history: [],
+      status: [],
 
       ans: null,
-      history: [],
 
       finalPage: false,
     }
@@ -54,19 +56,17 @@ class GenAssignment extends Component {
 
     let self = this;
 
-    let quest = this.state.questions;
+    let quest = this.state.questions[this.state.currentQuestion - 1];
 
     self.setState({
-      finalPage: false,
-      option1: quest[this.state.currentQuestion - 1].option1,
-      option2: quest[this.state.currentQuestion - 1].option2,
-      option3: quest[this.state.currentQuestion - 1].option3,
-      option4: quest[this.state.currentQuestion - 1].option4,
-      prompt: quest[this.state.currentQuestion - 1].prompt,
-      type: quest[this.state.currentQuestion - 1].type,
+      correctAns: quest.correctAns,
+      option1: quest.option1,
+      option2: quest.option2,
+      option3: quest.option3,
+      option4: quest.option4,
+      prompt: quest.prompt,
+      type: quest.type,
     });
-
-
   };
 
 
@@ -79,7 +79,6 @@ class GenAssignment extends Component {
     docRef.get().then(function (doc) {
       if (doc.exists) {
         self.setState({
-          maxscore: doc.data().maxscore,
           name: doc.data().name,
           class: classCode,
           questions: doc.data().questions,
@@ -90,10 +89,7 @@ class GenAssignment extends Component {
     }).catch((error) => {
       console.log("Error getting document:", error);
     });
-
-
   };
-
 
   getUserAssignment = () => {
 
@@ -104,12 +100,14 @@ class GenAssignment extends Component {
     docRef.get().then((doc) => {
       if (doc.exists) {
         self.setState({
+          maxscore: doc.data().maxscore,
           currentScore: doc.data().currentScore,
           currentQuestion: doc.data().currentQuestion,
           completed: doc.data().completed,
           answerHistory: doc.data().answerHistory,
           numOfQuestions: doc.data().numOfQuestions,
           history: doc.data().history,
+          status: doc.data().questions,
         }, () => {
           self.setQuestion();
         })
@@ -122,9 +120,7 @@ class GenAssignment extends Component {
   decPage = () => {
     let self = this;
 
-    let user = firestore.collection("users").doc(this.state.uid).collection("inClass").doc(this.state.lessonNumber)
-
-    console.log(this.state.currentQuestion);
+    let user = firestore.collection("users").doc(this.state.uid).collection("inClass").doc(this.state.lessonNumber);
 
     user.get().then((doc) => {
       if (doc.exists) {
@@ -132,7 +128,9 @@ class GenAssignment extends Component {
           user.update({
             history: self.state.history,
             currentQuestion: self.state.currentQuestion - 1,
+            questions: self.state.status,
           }).then(function() {
+            
             self.getUserAssignment(self.props.class)
           });
         }
@@ -140,7 +138,7 @@ class GenAssignment extends Component {
     }).catch((error) => {
       console.log("Error getting document:", error);
     });
-  }
+  };
 
   /*
    * Increment the page and send the history to fire base
@@ -152,14 +150,12 @@ class GenAssignment extends Component {
 
     user.get().then((doc) => {
       if (doc.exists) {
-        console.log(doc.data().currentQuestion+1);
-        console.log(self.state.numOfQuestions);
-        console.log(doc.data().currentQuestion+1 == self.state.numOfQuestions+1);
-
         if(doc.data().currentQuestion+1 <= self.state.numOfQuestions) {
+
           user.update({
             history: self.state.history,
             currentQuestion: self.state.currentQuestion + 1,
+            questions: self.state.status,
           }).then(function() {
             self.getUserAssignment(self.props.class)
           });
@@ -168,23 +164,20 @@ class GenAssignment extends Component {
           user.update({
             currentQuestion: self.state.currentQuestion + 1,
             history: self.state.history,
+            questions: self.state.status,
           }).then(function() {
             self.setState({
               history: self.state.history,
               currentQuestion: self.state.currentQuestion + 1,
+              status: self.props.status,
               finalPage: true,
-              option1: null,
-              option2: null,
-              option3: null,
-              option4: null,
-              prompt: null,
-              type: null,
             });
           });
         }
         else{
           user.update({
             history: self.state.history,
+            questions: self.state.status,
           }).then(function() {
             self.getUserAssignment(self.props.class)
           });
@@ -196,21 +189,62 @@ class GenAssignment extends Component {
   };
 
   /*
-   * When the next button is clicked, send the ans saved to firebase
+   * Sets the answer to current selected answer, updates the history array with the new answer, and checks if the answer given is right
    */
-  sendAns = () => {
+  setAns = (answer) => {
+
+    //let self = this;
+    let tmpHis = this.state.history;
+    let tmpStat = this.state.status;
+
+    for(let i in tmpHis) {
+      if(i == this.state.currentQuestion-1)
+      {
+        tmpHis[i] = answer
+      }
+    }
+
+    let check = 0;
+    for(let i in tmpStat) {
+      if(i == this.state.currentQuestion-1)
+      {
+        if(answer === this.state.correctAns){
+          tmpStat[i] = "1";
+        }
+        else{
+          tmpStat[i] = "0";
+        }
+      }
+
+        check = 1;
+    }
+
+    this.checkCompletion(check)
+
+    this.setState({
+      ans: answer,
+      history: tmpHis,
+      status: tmpStat,
+    })
+
+  };
+
+  /*
+   *
+   */
+  checkCompletion = (num) => {
     let self = this;
 
     let user = firestore.collection("users").doc(this.state.uid).collection("inClass").doc(this.state.lessonNumber)
 
     user.get().then((doc) => {
       if (doc.exists) {
-        console.log("About to update");
         user.update({
-          history: self.state.history,
+          completed: num,
         }).then(function () {
-          console.log("I updated and now moving pages");
-          self.getUserAssignment(self.props.class)
+          self.setState({
+            completed: self.state.completed,
+          });
         });
       }
     }).catch((error) => {
@@ -219,25 +253,26 @@ class GenAssignment extends Component {
   };
 
   /*
-   * Sets the answer to current selected answer, also updates the history array with the new answer
+   * Reset the currentQuestion to 1 when you return to the homepage
    */
-  setAns = (answer) => {
-
+  resetQuest = () => {
     let self = this;
-    let tmp = self.state.history;
 
-    for(let i in tmp) {
-      if(i == self.state.currentQuestion-1)
-      {
-        tmp[i] = answer
+    let user = firestore.collection("users").doc(this.state.uid).collection("inClass").doc(this.state.lessonNumber)
+
+    user.get().then((doc) => {
+      if (doc.exists) {
+        user.update({
+          currentQuestion: 1,
+        }).then(function () {
+          self.setState({
+            currentQuestions: self.state.currentQuestions
+          });
+        });
       }
-    }
-
-    this.setState({
-      ans: answer,
-      history: tmp,
-    })
-
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
   }
 
   render() {
@@ -262,7 +297,7 @@ class GenAssignment extends Component {
                   <div className={"space"}/>
                   <Nav pills>
                     <RouterLink className="navLinks" to={`/HomePage/${this.state.class}/announcements`}>
-                      <NavLink>Return to the classroom page</NavLink>
+                      <NavLink onClick={this.resetQuest}>Return to the classroom page</NavLink>
                     </RouterLink>
                   </Nav>
                 </Col>
