@@ -19,3 +19,10 @@
 .borderC {
 //border: solid 1px red;
 }
+
+.modal-content {
+    display: block;
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+}

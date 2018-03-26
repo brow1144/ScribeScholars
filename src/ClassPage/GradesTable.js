@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import {Table, Container, Row, Col, Label } from 'reactstrap';
+import {Table, Container, Row, Col, Label, Button } from 'reactstrap';
 import { firestore } from "../base";
-import { Modal } from 'react-modal';
-import { NavLink as RouterLink } from 'react-router-dom'
+import Modal from 'react-modal';
 import './Table.css'
 
 class GradesTable extends Component {
@@ -16,6 +15,7 @@ class GradesTable extends Component {
       score: 0,
       max_score: 0,
       gradeData: [],
+      regrade_open: false,
       doneLoading: false
     };
 
@@ -36,6 +36,16 @@ class GradesTable extends Component {
     }).catch(function (error) {
       console.log("Error getting document:", error);
     });
+  }
+
+  openRegrade = () => {
+    let self = this;
+    self.setState({ regrade_open: true });
+  }
+
+  closeRegrade = () => {
+    let self = this;
+    self.setState({ regrade_open: false });
   }
 
   addScore = (score, maxscore) => {
@@ -100,9 +110,10 @@ class GradesTable extends Component {
                       <td>{this.state.gradeData[index].score}</td>
                       <td>{this.state.gradeData[index].maxscore}</td>
                       <td>
-                        <RouterLink to={`practiceQuestion`}>
+                        <Button onClick={this.openRegrade}
+                                style={{backgroundColor: 'white', color: '#21CE99'}}>
                           Request Regrade
-                        </RouterLink>
+                        </Button>
                       </td>
                     </tr>
                   })
@@ -111,6 +122,20 @@ class GradesTable extends Component {
                 </Table>
               </Col>
             </Row>
+
+            <Row>
+              <Col>
+                <Modal
+                  style={"modal-content"}
+                  onRequestClose={this.closeRegrade}
+                  isOpen={this.state.regrade_open}>
+                  <h2 className={"homeworkTitle"}>
+                    Request Regrade
+                  </h2>
+                </Modal>
+              </Col>
+            </Row>
+
             <Row>
               <Col className={"moreSpace"}>
               </Col>
