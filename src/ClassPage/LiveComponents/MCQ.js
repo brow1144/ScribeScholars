@@ -28,28 +28,28 @@ class MCQ extends Component {
             <Col sm={{size: 10, offset: 1}}>
               <FormGroup>
                 <Label className={"RadioLabel"}>
-                  <Input onClick={() => this.props.setAns(this.state.opt1)} className={"RadioButton"} type="radio"
+                  <Input onClick={() => this.props.setAns(this.state.opt1)} checked={this.props.oldAns === "option1"} className={"RadioButton"} type="radio"
                          name="radio1"/>{' '}
                   <p className={"textSize"}>{this.props.option1}</p>
                 </Label>
               </FormGroup>
               <FormGroup>
                 <Label className={"RadioLabel"}>
-                  <Input onClick={() => this.props.setAns(this.state.opt2)} className={"RadioButton"} type="radio"
+                  <Input onClick={() => this.props.setAns(this.state.opt2)} checked={this.props.oldAns === "option2"} className={"RadioButton"} type="radio"
                          name="radio1"/>{' '}
                   <p className={"textSize"}>{this.props.option2}</p>
                 </Label>
               </FormGroup>
               <FormGroup>
                 <Label className={"RadioLabel"}>
-                  <Input onClick={() => this.props.setAns(this.state.opt3)} className={"RadioButton textSize"}
+                  <Input onClick={() => this.props.setAns(this.state.opt3)} checked={this.props.oldAns === "option3"} className={"RadioButton textSize"}
                          type="radio" name="radio1"/>
                   <p className={"textSize"}>{this.props.option3}</p>
                 </Label>
               </FormGroup>
               <FormGroup>
                 <Label className={"RadioLabel"}>
-                  <Input onClick={() => this.props.setAns(this.state.opt4)} className={"RadioButton"} type="radio"
+                  <Input onClick={() => this.props.setAns(this.state.opt4)} checked={this.props.oldAns === "option3"} className={"RadioButton"} type="radio"
                          name="radio1"/>
                   <p className={"textSize"}>{this.props.option4}</p>
                 </Label>
@@ -62,8 +62,7 @@ class MCQ extends Component {
     else {
       return (
       <Col sm={{size: 10, offset: 1}}>
-        <h3>Finished the assignment!</h3>
-        <h5>Make sure you answered all the questions </h5>
+        <h3>End of the assignment</h3>
       </Col>
       )
     }
