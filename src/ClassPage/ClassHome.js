@@ -182,18 +182,18 @@ class ClassHome extends Component {
             </div>
           }
 
-            {this.state.myStudentsActive
-                ?
-                <div>
-                  <MyStudents code={this.props.code}/>
-                </div>
-                :
-                <div>
-                </div>
-            }
+          {this.state.myStudentsActive
+            ?
+            <div>
+              <MyStudents code={this.props.code}/>
+            </div>
+            :
+            <div>
+            </div>
+          }
           {this.state.gradesActive
             ?
-            <GradesTable grades={this.props.grades} />
+            <GradesTable grades={this.props.grades}/>
             :
             <div>
             </div>

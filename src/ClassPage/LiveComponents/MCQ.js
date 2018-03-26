@@ -49,7 +49,7 @@ class MCQ extends Component {
               </FormGroup>
               <FormGroup>
                 <Label className={"RadioLabel"}>
-                  <Input onClick={() => this.props.setAns(this.state.opt4)} checked={this.props.oldAns === "option3"} className={"RadioButton"} type="radio"
+                  <Input onClick={() => this.props.setAns(this.state.opt4)} checked={this.props.oldAns === "option4"} className={"RadioButton"} type="radio"
                          name="radio1"/>
                   <p className={"textSize"}>{this.props.option4}</p>
                 </Label>

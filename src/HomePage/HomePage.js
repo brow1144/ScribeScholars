@@ -673,7 +673,7 @@ class HomePage extends Component {
                    width={this.state.width}/>
 
           <div>
-            <GenHomework {...classData} {...actions} />
+            <GenHomework {...classData} {...actions} uid = {this.state.uid} code = {this.state.class} lessonNumber = {this.state.lessonNumber} />
           </div>
         </Sidebar>
       );
@@ -686,9 +686,9 @@ class HomePage extends Component {
           <HomeNav firstName={"Inclass Assignment"} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <div>
-            <GenAssignment uid = {this.state.uid} class = {this.state.class} lessonNumber = {this.state.lessonNumber} />
-          </div>
+
+          <GenAssignment uid = {this.state.uid} class = {this.props.class} lessonNumber = {this.props.lessonNumber} />
+
         </Sidebar>
       );
 

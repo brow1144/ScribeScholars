@@ -22,7 +22,7 @@ class GenHomework extends Component {
       }],
 
       curQuestion: null,
-  }
+    }
   }
 
   grabQuestion = () => {
