@@ -55,12 +55,16 @@ class Main extends Component {
         lessonCode: null,
         maxscore: null,
         name: null,
+        class: null,
+        questions: null,
       }],
 
       assignments: [{
         lessonCode: null,
         maxscore: null,
         name: null,
+        class: null,
+        questions: null,
       }],
 
       myAssignments: [],
@@ -324,21 +328,22 @@ class Main extends Component {
 
     let self = this;
 
-    let docRef = firestore.collection("users").doc(this.state.uid).collection("inClass");
+    let docRef = firestore.collection("classes").doc(classCode).collection("inClass");
 
     docRef.get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
 
-        if (doc.data().class === classCode) {
-          object.unshift({
-            code: doc.id,
-            maxscore: doc.data().maxscore,
-            name: doc.data().name,
-          });
-          self.setState({
-            assignments: object,
-          })
-        }
+        object.unshift({
+          lessonCode: doc.id,
+          maxscore: doc.data().maxscore,
+          name: doc.data().name,
+          class: classCode,
+          questions: doc.data().questions,
+        });
+        self.setState({
+          assignments: object,
+        })
+
       })
     }).catch(function (error) {
       console.log("Error getting document:", error);
@@ -377,8 +382,11 @@ class Main extends Component {
     docRef.get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
         object.unshift({
+          lessonCode: doc.id,
           maxscore: doc.data().maxscore,
           name: doc.data().name,
+          class: classCode,
+          questions: doc.data().questions,
         });
         self.setState({
           homeworks: object,
