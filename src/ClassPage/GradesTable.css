@@ -1,5 +1,10 @@
-.picIcon {
+.graphIcon {
     cursor: pointer;
-    color: grey;
+    color: #21CE99;
+    font-size: 1.3rem;
+}
+
+.total {
+    color: #21CE99;
     font-size: 1.3rem;
 }
