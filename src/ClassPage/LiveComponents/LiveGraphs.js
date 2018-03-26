@@ -13,13 +13,6 @@ class LiveGraphs extends Component {
   }
   render() {
 
-    // const data1 = [
-    //   {name: 'Question 1', Unanswered: 2, Incorrect: 0, Correct: 0},
-    //   {name: 'Question 2', Unanswered: 2, Incorrect: 0, Correct: 0},
-    //   {name: 'Question 3', Unanswered: 2, Incorrect: 0, Correct: 0},
-    //   {name: 'Question 4', Unanswered: 2, Incorrect: 0, Correct: 0},
-    // ];
-
     return (
       <Row>
         <Col xs="1" />

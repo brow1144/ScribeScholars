@@ -86,7 +86,7 @@ class CreateClass extends Component {
         let classRef = firestore.collection("classes").doc(code);
         classRef.get().then(function(doc) {
             if (doc.exists) {
-                self.setNewDoc();
+                self.createNewClassDoc();
             } else {
                 classRef.set({
                     class: self.state.className,

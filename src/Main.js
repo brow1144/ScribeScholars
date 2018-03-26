@@ -210,18 +210,18 @@ class Main extends Component {
     updateDates = (dates) => {
       this.setState({
         dates: dates,
-      })
-    };
-
-    updateAnnouncements = (announcements) => {
-      this.setState({
-        announcements: announcements,
-      })
+      });
     };
 
     updateRole = (role) => {
       this.setState({
         role: role,
+      });
+    }
+
+    updateAnnouncements = (announcements) => {
+      this.setState({
+        announcements: announcements,
       })
     };
 
@@ -356,6 +356,21 @@ class Main extends Component {
     });
   };
 
+  getRole = () => {
+    let self = this;
+    let studentRef = firestore.collection("users").doc(this.state.uid);
+
+    studentRef.get().then((doc) => {
+      if (doc.exists) {
+        self.setState({
+          role: doc.data().role,
+        });
+      }
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
+
   getHomeworks = (classCode) => {
 
     let object = [{}];
@@ -393,6 +408,7 @@ class Main extends Component {
     {
       const data = {
         uid: this.state.uid,
+        role: this.state.role,
         classes: this.state.classes,
         showGPA: this.state.showGPA,
         dates: this.state.dates,
@@ -410,6 +426,7 @@ class Main extends Component {
         updateClasses: this.updateClasses,
         updateDates: this.updateDates,
         updateRole: this.updateRole,
+        getRole: this.getRole,
         updateAnnouncements: this.updateAnnouncements,
         updateUserImage: this.updateUserImage,
         getShowGPA: this.getShowGPA,
@@ -438,6 +455,18 @@ class Main extends Component {
             class={match.match.params.class}
             assType="Homework"
             page="createActivity"
+            {...data}
+            {...actions}
+          />
+        )}/>
+
+        <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber/:uid" render={(match) => (
+
+          <HomePage
+            studUid={match.match.params.uid}
+            class={match.match.params.class}
+            lessonNumber={match.match.params.lessonNumber}
+            page="studentLiveFeed"
             {...data}
             {...actions}
           />
