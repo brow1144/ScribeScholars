@@ -19,6 +19,8 @@ import Instruct from './Instruct';
 
 import {firestore} from "../base";
 import MCQForm from "./MCQForm";
+import FRQForm from "./FRQForm";
+import VideoForm from "./VideoForm";
 
 class CreateActivity extends Component {
     constructor(props) {
@@ -141,7 +143,6 @@ class CreateActivity extends Component {
 
     onFormSubmit = (ev) => {
         ev.preventDefault();
-        console.log(ev.target.select.value);
         let tempArr = this.state.questions;
         let tempQ;
         switch (ev.target.select.value) {
@@ -176,6 +177,32 @@ class CreateActivity extends Component {
         }
         this.setState({
             questions: tempArr,
+        });
+    };
+
+    recordQuestion = (quest, index) => {
+
+        let tempArr = this.state.questions;
+
+        tempArr.splice(index,1,quest);
+
+        this.setState({
+            questions: tempArr,
+        });
+    };
+
+    publishAss = () => {
+        let self = this;
+        let homeworkRef = firestore.collection("classes").doc("668273").collection("Homework").doc("39489037");
+
+        homeworkRef.update({
+            questions: self.state.questions,
+            maxscore: self.state.questions.length,
+        }).then(function () {
+            console.log("Successfully added a question");
+
+        }).catch(function (error) {
+            console.log("Error updating document: ", error);
         });
     };
 
@@ -223,12 +250,12 @@ class CreateActivity extends Component {
                                                     <AccordionItemBody className={"accordBody"}>
                                                         {quest.type === "MCQ"
                                                             ?
-                                                            <MCQForm question={quest}/>
+                                                            <MCQForm question={quest} index={index} recordQuestion={this.recordQuestion}/>
                                                             : (quest.type === "FRQ")
                                                                 ?
-                                                                console.log(2)
+                                                                <FRQForm question={quest} index={index} recordQuestion={this.recordQuestion}/>
                                                                 :
-                                                                console.log(3)
+                                                                <VideoForm question={quest} index={index} recordQuestion={this.recordQuestion}/>
                                                         }
                                                     </AccordionItemBody>
                                                 </AccordionItem>
@@ -239,6 +266,10 @@ class CreateActivity extends Component {
                                     :
                                     <div/>
                             }
+                        </Col>
+                        <br/>
+                        <Col xs={{size: 4, offset: 3}} lg={{size: 4, offset: 3}}>
+                            <Button color={"secondary"} size={"lg"} block onClick={this.publishAss}>Publish</Button>
                         </Col>
                     </div>
                 }
