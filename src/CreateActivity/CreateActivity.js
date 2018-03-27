@@ -347,11 +347,18 @@ class CreateActivity extends Component {
                                 <FormGroup row>
                                     <Col xs={7}>
                                         <Label for="exampleSelect">Select a Question Type</Label>
-                                        <Input bsSize="lg" type="select" name="select" id="exampleSelect">
-                                            <option>Multiple Choice</option>
-                                            <option>Free Response</option>
-                                            <option>Video Page</option>
-                                        </Input>
+                                        {this.props.assType === "Homework"
+                                            ?
+                                            <Input bsSize="lg" type="select" name="select" id="exampleSelect">
+                                                <option>Multiple Choice</option>
+                                                <option>Free Response</option>
+                                                <option>Video Page</option>
+                                            </Input>
+                                            :
+                                            <Input bsSize="lg" type="select" name="select" id="exampleSelect">
+                                                <option>Multiple Choice</option>
+                                            </Input>
+                                        }
                                     </Col>
                                     <Col xs={4}>
                                         <br/>
@@ -377,11 +384,11 @@ class CreateActivity extends Component {
                                                             ?
                                                             <MCQForm question={quest} index={index}
                                                                      recordQuestion={this.recordQuestion}/>
-                                                            : (quest.type === "FRQ" && this.props.assType !== "Lesson")
+                                                            : (quest.type === "FRQ")
                                                                 ?
                                                                 <FRQForm question={quest} index={index}
                                                                          recordQuestion={this.recordQuestion}/>
-                                                                : (quest.type === "VIDEO" && this.props.assType !== "Lesson")
+                                                                : (quest.type === "VIDEO")
                                                                     ?
                                                                     <VideoForm question={quest} index={index}
                                                                                recordQuestion={this.recordQuestion}/>
