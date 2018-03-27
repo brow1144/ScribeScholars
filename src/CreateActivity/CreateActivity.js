@@ -252,7 +252,7 @@ class CreateActivity extends Component {
                                     answerHistory: tempAnsHis,
                                     class: self.props.class,
 
-                                    completed: "0",
+                                    completed: 0,
                                     currentQuestion: 1,
                                     currentScore: 0,
                                     maxscore: self.state.questions.length,
