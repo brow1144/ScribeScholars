@@ -30,7 +30,6 @@ class MyStudents extends Component {
 
     this.state = {
 
-
       students: [{
         name: null,
         email: null,
@@ -67,10 +66,7 @@ class MyStudents extends Component {
       studentsList: [],   // all students in the class
       allAssignments: [],   // all assignments from every student
 
-      classScores: [],  // class scores for an individual assignment
-      assignmentComp: [],   // user's score, average, and median
       classOverallGrades: [],   // class overall grades
-      assignmentScores: [],   // individual scores for each assignment
       assignmentGrades: [],   // individual grades for each assignment
 
 
@@ -125,7 +121,7 @@ class MyStudents extends Component {
 
     firestore.collection("users").doc(uid).collection(type).get().then((snapshot) => {
       snapshot.forEach((doc) => {
-        if (doc.data().code === self.state.code && doc.data().score != null) {
+        if (doc.data().class === self.state.code && doc.data().score != null) {
           self.setState({
             allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid}),
           });
@@ -159,9 +155,7 @@ class MyStudents extends Component {
         let studentRef = firestore.collection("users").doc(this.state.studentsList[i]);
         studentRef.get().then(() => {
           if (parseInt(i, 10) === self.state.studentsList.length - 1) {
-            self.getClassAverage();
-            //self.buildAssignmentScoresGraph();
-            //self.buildAssignmentGradesGraph();
+            self.getStudents();
           }
         }).catch(function (error) {
           console.log("Error getting document:", error);
@@ -192,121 +186,13 @@ class MyStudents extends Component {
     return grade;
   };
 
-  // get average overall grade in a class
-  getClassAverage = () => {
-    let tmpClassOverallGrades = [];
-    let totalGrade = 0;
-    let numStudents = 0;
-
-    for (let i in this.state.studentsList) {
-      if (this.state.studentsList.hasOwnProperty(i)) {
-        let grade = this.getGrade(this.state.studentsList[i]);
-        tmpClassOverallGrades.push(grade);
-
-        totalGrade += grade;
-        numStudents++;
-      }
-    }
-
-    let classAverage = totalGrade / numStudents;
-
-    if (classAverage % 1 !== 0)
-      classAverage = Math.round(classAverage * 100) / 100;
-
-    this.setState({
-      classOverallGrades: tmpClassOverallGrades,
-      classAverage: classAverage,
-    });
-
-    return classAverage;
-  };
-
-  getRank = (uid) => {
-    let classGrades = this.state.classOverallGrades;
-
-    if (classGrades === undefined || classGrades.length === 0)
-      return "--";
-
-    classGrades.sort().reverse();
-
-    let studentGrade = this.getGrade(uid);
-    return classGrades.indexOf(studentGrade) + 1;
-  };
-
-  getPercentage = (score, max) => {
-    let grade = (score / max) * 100;
-
-    if (grade % 1 !== 0)
-      grade = Math.round(grade * 100) / 100;
-
-    if (!isNaN(grade))
-      return grade;
-    else
-      return "--";
-  };
-
-  // build data for graph of classroom scores on a particular assignment
-  buildClassScoresGraph = (assignment) => {
-    let tmpClassScores = [];
-
-    for (let i in this.state.allAssignments) {
-      if (this.state.allAssignments.hasOwnProperty(i)) {
-        if (this.state.allAssignments[i].data.name === assignment.data.name)
-          tmpClassScores = tmpClassScores.concat({score: this.state.allAssignments[i].data.score});
-      }
-    }
-
-    this.setState({
-      classScores: tmpClassScores,
-    });
-  };
-
-  // build data for assignmentComp
-  buildBenchmarkGraph = (classAssignment) => {
-    let assignment = this.getStudentAssignment(classAssignment);
-
-    let name = assignment.data.name;
-    let score = assignment.data.score;
-    let avg = this.getAverageScore(classAssignment, false);
-    let med = this.getMedianScore(classAssignment, false);
-    let max = assignment.data.maxscore;
-
-    this.setState({
-      assignmentComp: [].concat({name: name, score: score, average: avg, median: med, max: max}),
-    });
-  };
-
-  // build data for assignmentScores
-  buildAssignmentScoresGraph = (uid) => {
-    let tmpAssignmentScores = [];
-
-    for (let i in this.state.classAssignments) {
-      if (this.state.classAssignments.hasOwnProperty(i)) {
-        let assignment = this.getStudentAssignment(uid, this.state.classAssignments[i]);
-
-        if (assignment.data.score != null) {
-          let name = assignment.data.name;
-          let score = assignment.data.score;
-          let avg = this.getAverageScore(this.state.classAssignments[i], false);
-          let med = this.getMedianScore(this.state.classAssignments[i], false);
-
-          tmpAssignmentScores = tmpAssignmentScores.concat({name: name, score: score, average: avg, median: med});
-        }
-      }
-    }
-
-    this.setState({
-      assignmentScores: tmpAssignmentScores,
-    });
-  };
-
   // build data for assignmentGrades
-  buildAssignmentGradesGraph = () => {
+  buildAssignmentGradesGraph = (uid) => {
     let tmpAssignmentGrades = [];
 
     for (let i in this.state.classAssignments) {
       if (this.state.classAssignments.hasOwnProperty(i)) {
-        let assignment = this.getStudentAssignment(this.state.classAssignments[i]);
+        let assignment = this.getStudentAssignment(uid, this.state.classAssignments[i]);
 
         if (assignment.data.score != null) {
           let name = assignment.data.name;
@@ -327,10 +213,87 @@ class MyStudents extends Component {
     });
   };
 
+  // calculate average score for an assignment
+  getAverageScore = (assignment, percentage) => {
+    let total = 0;
+    let numStudents = 0;
+
+    for (let i in this.state.allAssignments) {
+      if (this.state.allAssignments.hasOwnProperty(i)) {
+        if (this.state.allAssignments[i].data.name === assignment.data.name) {
+          total += this.state.allAssignments[i].data.score;
+          numStudents++;
+        }
+      }
+    }
+
+    if (numStudents === 0)
+      return "--";
+
+    if (percentage) {   // return score as a percentage
+      let grade = ((total / numStudents) / assignment.data.maxscore) * 100;
+
+      if (grade % 1 !== 0)
+        grade = Math.round(grade * 100) / 100;
+
+      return grade;
+    } else {  // return score
+      let score = total / numStudents;
+
+      if (score % 1 !== 0)
+        score = Math.round(score * 100) / 100;
+
+      return score;
+    }
+  };
+
+  // get median score for an assignment
+  getMedianScore = (assignment, percentage) => {
+    let tmpScores = [];
+    let median = 0;
+
+    for (let i in this.state.allAssignments) {
+      if (this.state.allAssignments.hasOwnProperty(i)) {
+        if (this.state.allAssignments[i].data.name === assignment.data.name)
+          tmpScores = tmpScores.concat(this.state.allAssignments[i].data.score);
+      }
+    }
+
+    if (tmpScores === undefined || tmpScores.length === 0)
+      return "--";
+
+    tmpScores.sort();
+
+    let size = tmpScores.length;
+    if ((size % 2) !== 0)   // odd
+      median += tmpScores[Math.floor(size / 2)];
+    else {  // even
+      median += tmpScores[Math.floor(size / 2)];
+      median += tmpScores[Math.floor(size / 2) - 1];
+
+      median = median / 2;
+    }
+
+    if (percentage) {   // return score as a percentage
+      let grade = (median / assignment.data.maxscore) * 100;
+
+      if (grade % 1 !== 0)
+        grade = Math.round(grade * 100) / 100;
+
+      return grade;
+    } else {  // return score
+      let score = median;
+
+      if (score % 1 !== 0)
+        score = Math.round(score * 100) / 100;
+
+      return score;
+    }
+  };
+
   componentWillMount() {
     this.getClassInfo();
     this.getHomeworks();
-    this.getStudents();
     this.getInClass();
     this.getQuizzes();
   };
@@ -390,7 +353,7 @@ class MyStudents extends Component {
           id: doc.id,
           colRef: colRef.id,
           name: doc.data().name,
-          max: doc.data().questions.length
+          //max: doc.data().questions.length  TODO
         });
         self.setState({
           inclass: object,
@@ -427,7 +390,7 @@ class MyStudents extends Component {
           id: doc.id,
           colRef: colRef.id,
           name: doc.data().name,
-          max: doc.data().questions.length
+          //max: doc.data().questions.length  TODO
         });
         self.setState({
           quizzes: object,
@@ -475,7 +438,6 @@ class MyStudents extends Component {
                   uid: id,
                   gpa: 0,
                   grade: self.getGrade(id),
-                  rank: self.getRank(id),
                 });
               } else {
                 object.unshift({
@@ -484,16 +446,14 @@ class MyStudents extends Component {
                   uid: id,
                   gpa: data.gpa,
                   grade: self.getGrade(id),
-                  rank: self.getRank(id),
                 });
               }
 
               self.setState({
                 students: object,
               }, () => {
-                self.state.students.sort(self.compareValues("grade")).reverse();
+                // TODO sort here
               });
-
             });
           }
         }
@@ -537,9 +497,7 @@ class MyStudents extends Component {
       graphVisible: true,
     });
 
-    this.buildAssignmentScoresGraph(uid);
-    //this.buildClassScoresGraph(this.state.classAssignments[0]);
-    //this.buildBenchmarkGraph(this.state.classAssignments[0]);
+    this.buildAssignmentGradesGraph(uid);
   };
 
   hideGraph = () => {
@@ -550,12 +508,14 @@ class MyStudents extends Component {
 
 
   render() {
+    this.state.students.sort(this.compareValues("grade")).reverse();
+
     return (
       <div>
         <Container fluid>
 
         </Container>
-        <Container fluid className={"mainPage"}>
+        <Container fluid >
           <Row>
             <Col className={"mainPage"}>
               <p>My Students</p>
@@ -576,7 +536,9 @@ class MyStudents extends Component {
           <Row>
             <Col>
               <Col>
-                <h1>Students</h1>
+                <div className="mainPage">
+                  <h1>Students</h1>
+                </div>
                 <Row>
                   <Col>
                     {this.state.graphVisible
@@ -587,16 +549,16 @@ class MyStudents extends Component {
                             <i className="fas fa-arrow-left graphIcon"/>
                           </Button>
                         </Col>
-                        <Col>
+                        <Col xs={12} className="graph">
                           <ResponsiveContainer width="100%" height={300}>
-                            <BarChart data={this.state.assignmentScores}
+                            <BarChart data={this.state.assignmentGrades}
                                       margin={{top: 30, right: 30, left: 30, bottom: 30}}>
                               <XAxis dataKey="name"/>
                               <YAxis/>
                               <CartesianGrid strokeDasharray="3 3"/>
-                              <Tooltip/>
+                              <Tooltip className="graph"/>
                               <Legend verticalAlign="top" height={36}/>
-                              <Bar dataKey="score" fill="#21CE99"/>
+                              <Bar dataKey="grade" fill="#21CE99"/>
                               <Bar dataKey="average" fill="#bf8bff"/>
                               <Bar dataKey="median" fill="#f1cbff"/>
                             </BarChart>
@@ -626,7 +588,7 @@ class MyStudents extends Component {
                 </Row>
               </Col>
             </Col>
-            <Col>
+            <Col className="mainPage">
               <Col>
                 <h1>Homework</h1>
                 <HomeCards code={this.props.code} homeworks={this.state.homeworks}/>
