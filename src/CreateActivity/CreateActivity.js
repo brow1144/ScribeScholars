@@ -48,7 +48,7 @@ class CreateActivity extends Component {
         if (self.props.assType === "Lesson")
             classRef = firestore.collection("classes").doc(self.props.class).collection("inClass").doc(code);
         else
-            classRef = firestore.collection("classes").doc(self.props.class).collection("homework").doc(code);
+            classRef = firestore.collection("classes").doc(self.props.class).collection("Homework").doc(code);
 
         self.setState({ hwCode: code, title: title, });
 
@@ -207,7 +207,7 @@ class CreateActivity extends Component {
         if (this.props.assType === "Lesson")
             homeworkRef = firestore.collection("classes").doc(self.props.class).collection("inClass").doc(self.state.hwCode);
         else
-            homeworkRef = firestore.collection("classes").doc(self.props.class).collection("homework").doc(self.state.hwCode);
+            homeworkRef = firestore.collection("classes").doc(self.props.class).collection("Homework").doc(self.state.hwCode);
 
 
         homeworkRef.update({
@@ -245,7 +245,7 @@ class CreateActivity extends Component {
                     if (self.props.assType === "Lesson")
                         studentRef = firestore.collection("users").doc(tempArr[i]).collection("inClass").doc(self.state.hwCode);
                     else
-                        studentRef = firestore.collection("users").doc(tempArr[i]).collection("homework").doc(self.state.hwCode);
+                        studentRef = firestore.collection("users").doc(tempArr[i]).collection("Homework").doc(self.state.hwCode);
                     studentRef.get().then(function (doc) {
                         if (doc.exists) {
                             self.setNewDoc();
