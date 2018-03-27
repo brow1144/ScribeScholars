@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 
 import { Nav, NavLink } from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom'
+import { firestore } from '../base.js'
 
 import AssignTable from "./AssignTable";
 import HomeworkTable from './HomeworkTable';
+import GradesTable from './GradesTable';
 import Cards from '../HomePage/Cards';
 import './ClassHome.css';
 import MyStudents from '../MyStudents/MyStudents';
@@ -15,6 +17,7 @@ class ClassHome extends Component {
     super(props);
 
     this.state = {
+
       announcements: [{
         title: null,
         subtitle: null,
@@ -28,20 +31,41 @@ class ClassHome extends Component {
         maxscore: null,
       }],
 
+      homeworks: [{
+        code: null,
+        name: null,
+        maxscore: null,
+      }],
+
       classImage: null,
 
       announcementsActive: true,
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: false,
-        myStudentsActive: false,
+      myStudentsActive: false,
+      gradesActive: false,
     };
   }
 
   componentWillMount() {
     this.props.selectClass(this.props.path);
     this.props.updateClassPicture(this.props.path);
-  }
+  };
+
+  getRole = () => {
+    let self = this;
+    let userRef = firestore.collection("users").doc(this.state.uid);
+    userRef.get().then(function (doc){
+      if(doc.exists){
+        self.setState({
+          role: doc.data().role,
+        });
+      }else{
+        console.log("Error: doc does not exist!")
+      }
+    });
+  };
 
   switchAnnouncement = () => {
     this.setState({
@@ -49,7 +73,8 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: false,
-        myStudentsActive: false,
+      myStudentsActive: false,
+      gradesActive: false,
     })
   };
 
@@ -59,7 +84,8 @@ class ClassHome extends Component {
       lessonsActive: true,
       homeworkActive: false,
       discussionActive: false,
-        myStudentsActive: false,
+      myStudentsActive: false,
+      gradesActive: false,
     })
   };
 
@@ -69,9 +95,9 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: true,
       discussionActive: false,
-        myStudentsActive: false,
+      myStudentsActive: false,
+      gradesActive: false,
     });
-
   };
 
   switchDiscussions = () => {
@@ -80,7 +106,8 @@ class ClassHome extends Component {
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: true,
-        myStudentsActive: false,
+      myStudentsActive: false,
+      gradesActive: false,
     })
   };
 
@@ -91,10 +118,23 @@ class ClassHome extends Component {
             homeworkActive: false,
             discussionActive: false,
             myStudentsActive: true,
+            gradesActive: false,
         })
     };
 
+    switchGrades = () => {
+      this.setState({
+        announcementsActive: false,
+        lessonsActive: false,
+        homeworkActive: false,
+        discussionActive: false,
+        myStudentsActive: false,
+        gradesActive: true,
+      })
+    };
+
   render() {
+
     const jumboStyle = {
       background: `url(${this.props.classImage}) no-repeat center center`,
     };
@@ -107,23 +147,40 @@ class ClassHome extends Component {
           </div>
 
           <Nav horizontal="center" tabs>
+
             <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/announcements`}>
               <NavLink onClick={this.switchAnnouncement}
                        active={this.state.announcementsActive}>Announcements</NavLink>
             </RouterLink>
+
             <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/lessons`}>
               <NavLink onClick={this.switchLessons} active={this.state.lessonsActive}>In-Class Lessons</NavLink>
             </RouterLink>
+
             <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/homework`}>
               <NavLink onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
             </RouterLink>
+
             <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/discussion`}>
               <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
                 Board</NavLink>
             </RouterLink>
+
+            {this.props.role === "teacher"
+              ?
               <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/myStudents`}>
+
                   <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive} code={this.props.code} lessonNumber={this.props.lessonNumber}>My Students</NavLink>
+
+                
               </RouterLink>
+              :
+              <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/grades`}>
+                <NavLink onClick={this.switchGrades} active={this.state.gradesActive}>Grades</NavLink>
+
+              </RouterLink>
+            }
+
           </Nav>
 
           {this.state.announcementsActive
@@ -141,7 +198,7 @@ class ClassHome extends Component {
           {this.state.homeworkActive
             ?
             <div>
-              <HomeworkTable homeworks={this.props.homeworks} />
+              <HomeworkTable code = {this.props.code} lessonNumber = {this.props.lessonNumber} homeworks={this.props.homeworks} />
             </div>
             :
             <div>
@@ -149,20 +206,28 @@ class ClassHome extends Component {
           }
           {this.state.lessonsActive
             ?
-            <AssignTable code={this.props.code} assignments={this.props.assignments} />
+            <AssignTable uid={this.props.uid} code={this.props.code} lessonNumber={this.props.lessonNumber} assignments={this.props.assignments} />
             :
             <div>
             </div>
           }
-            {this.state.myStudentsActive
-                ?
-                <div>
-                  <MyStudents code={this.props.code}/>
-                </div>
-                :
-                <div>
-                </div>
-            }
+
+          {this.state.myStudentsActive
+            ?
+            <div>
+              <MyStudents code={this.props.code}/>
+            </div>
+            :
+            <div>
+            </div>
+          }
+          {this.state.gradesActive
+            ?
+            <GradesTable code={this.props.code} uid={this.props.uid}/>
+            :
+            <div>
+            </div>
+          }
         </div>
       )
   }

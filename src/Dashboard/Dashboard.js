@@ -84,9 +84,11 @@ class Dashboard extends Component {
 
     };
 
+
     componentWillMount() {
         this.getStudentsInClass();
     }
+
 
     getStudentsInClass = () => {
         let docRef = firestore.collection("classes").doc(this.props.code);

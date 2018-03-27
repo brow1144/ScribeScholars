@@ -56,7 +56,6 @@ class Settings extends Component {
     }).catch(function(error) {
       console.log("Error getting document:", error);
     });
-
   };
 
     getName = () => {
@@ -151,14 +150,12 @@ class Settings extends Component {
 
     };
 
-
     updatePersonal = (mail, number, descriptText) => {
         this.setState({
             email: mail,
             phoneN: number,
             descript: descriptText,
         });
-
     };
 
     render() {
@@ -168,6 +165,7 @@ class Settings extends Component {
         updateRole: this.props.updateRole,
         updateAnnouncements: this.props.updateAnnouncements,
         updateUserImage: this.props.updateUserImage,
+        toggleGPA: this.props.toggleGPA,
         selectClass: this.props.selectClass,
         updateClassPicture: this.props.updateClassPicture,
         getClassAnnouncments: this.props.getClassAnnouncments,
@@ -182,13 +180,16 @@ class Settings extends Component {
                 {this.props.personalPage
                         ?
                         <SetPersonal
+                            {...actions}
                             updateUserImage={ this.props.updateUserImage }
                             userImage={ this.props.userImage }
                             uid={this.state.uid}
                             name={this.state.name}
+                            role={this.state.role}
                             email={this.state.email}
                             phoneN={this.state.phoneN}
                             descript={this.state.descript}
+                            showGPA={this.props.showGPA}
                             updateP={this.updatePersonal.bind(this)}
                         />
                         :

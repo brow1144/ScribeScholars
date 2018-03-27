@@ -6,27 +6,29 @@ import './HomeNav.css'
 class HomeNav extends Component {
 
   render() {
-    if (this.props.width < 600) {
+    let gpa;
+    if (this.props.role === "student" && this.props.showGPA)
+      gpa = " - GPA: " + this.props.gpa;
 
+    if (this.props.width < 600) {
       return (
         <div>
           <Navbar color="faded" light>
-            <NavbarBrand className="userName mr-auto">{this.props.firstName} {this.props.lastName}</NavbarBrand>
+            <NavbarBrand className="userName mr-auto">{this.props.firstName} {this.props.lastName} {gpa}</NavbarBrand>
             <NavbarToggler onClick={this.props.expand} className="mr-2"/>
           </Navbar>
         </div>
       );
     } else {
-
       return (
         <div>
           <Navbar color="faded" light>
-            <NavbarBrand className="userName mr-auto">{this.props.firstName} {this.props.lastName}</NavbarBrand>
+            <NavbarBrand className="userName mr-auto">{this.props.firstName} {this.props.lastName} {gpa}</NavbarBrand>
           </Navbar>
         </div>
       );
     }
   }
-};
+}
 
 export default HomeNav
