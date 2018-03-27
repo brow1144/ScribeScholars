@@ -449,11 +449,11 @@ class MyStudents extends Component {
                                         <thead>
                                         <tr>
 
-                                            <th>GPA</th>
 
-                                            <th/>
+
+                                            <th>Rank</th>
                                             <th>Grade</th>
-
+                                            <th>GPA</th>
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th/>
