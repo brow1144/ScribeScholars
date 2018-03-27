@@ -3,11 +3,6 @@
     text-align: center;
 }
 
-.modalText {
-    font-size: 1.5em;
-    text-align: center;
-}
-
 .makeSpace {
     height: 4em;
 }
@@ -45,5 +40,4 @@
 .submitButton {
     background-color: #21CE99 !important;
     border-color: #21CE99 !important;
-    text-align: center;
 }
