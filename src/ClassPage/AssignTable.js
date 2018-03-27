@@ -104,9 +104,14 @@ class AssignTable extends Component {
           </Row>
           <Row>
             <Col className={"moreSpace"}>
-              <RouterLink to={`/HomePage/${this.props.code}/lessons/create-activity`}>
-                Create New In Class Lesson
-              </RouterLink>
+                {this.state.role === "teacher"
+                    ?
+                    <RouterLink to={`/HomePage/${this.props.code}/homework/create-activity`}>
+                        Create New In Class Lesson
+                    </RouterLink>
+                    :
+                    <div/>
+                }
             </Col>
           </Row>
           <Row>
