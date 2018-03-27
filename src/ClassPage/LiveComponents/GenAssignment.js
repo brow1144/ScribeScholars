@@ -336,7 +336,6 @@ class GenAssignment extends Component {
         <Container fluid>
           <Card style={{boxShadow: '8px 8px 3px rgba(0, 0, 0, 0.2)'}}>
             <Row>
-              {console.log(this.state.history[this.state.currentQuestion-1])}
               <MCQ currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
                    setAns = {this.setAns} finalPage = {this.state.finalPage} oldAns = {this.state.history[this.state.currentQuestion-1]}
                    option1={this.state.option1} option2={this.state.option2} option3={this.state.option3} option4={this.state.option4}/>
