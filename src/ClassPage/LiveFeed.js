@@ -303,40 +303,40 @@ class LiveFeed extends Component {
     for (let i in this.state.scoresMap) {
       let score = this.state.scoresMap[i];
 
-      if (score >= 0 && score < 60) {
+      if (score >= 0 && score < 59.5) {
         // F
         F++;
-      } else if (score >= 60 && score < 63) {
+      } else if (score >= 59.5 && score < 62.5) {
         // D -
         DMinus++;
-      } else if (score >= 63 && score < 67) {
+      } else if (score >= 62.5 && score < 66.5) {
         // D
         D++;
-      } else if (score >= 67 && score < 70) {
+      } else if (score >= 66.5 && score < 69.5) {
         // D +
         DPlus++;
-      } else if (score >= 70 && score < 73) {
+      } else if (score >= 69.5 && score < 72.5) {
         // C -
         CMinus++;
-      } else if (score >= 73 && score < 77) {
+      } else if (score >= 72.5 && score < 76.5) {
         // C
         C++;
-      } else if (score >= 77 && score < 80) {
+      } else if (score >= 76.5 && score < 79.5) {
         // C +
         CPlus++;
-      } else if (score >= 80 && score < 83) {
+      } else if (score >= 79.5 && score < 82.5) {
         // B -
         BMinus++;
-      } else if (score >= 83 && score < 87) {
+      } else if (score >= 82.5 && score < 86.5) {
         // B
         B++;
-      } else if (score >= 87 && score < 90) {
+      } else if (score >= 86.5 && score < 89.5) {
         // B +
         BPlus++;
-      } else if (score >= 90 && score < 93) {
+      } else if (score >= 89.5 && score < 92.5) {
         // A -
         AMinus++;
-      } else if (score >= 93 && score <= 100) {
+      } else if (score >= 92.5 && score <= 100) {
         // A
         A++;
       }

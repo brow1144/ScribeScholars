@@ -49,6 +49,10 @@ class SetClassroom extends Component {
       };
     }
 
+    componentWillMount = () => {
+      console.log(this.state.classes);
+    };
+
     checkClasses = () => {
       let self = this;
 
@@ -323,7 +327,6 @@ class SetClassroom extends Component {
         self.setState({modal: false,});
         let classRef = firestore.collection("classes").doc(classCode);
         let studentRef = firestore.collection("users").doc(self.state.uid);
-
 
         classRef.get().then(function(doc) {
             self.setState({
