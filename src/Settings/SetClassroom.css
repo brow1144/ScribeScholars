@@ -80,3 +80,8 @@ option {
     visibility: hidden;
 }
 
+.skinnyFont {
+    font-size: 1.5em !important;
+    font-family: 'Roboto', sans-serif;
+}
+
