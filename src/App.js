@@ -44,8 +44,7 @@ class App extends Component {
           this.authHandler(user)
         } else {
           // finished signing out
-          this.setState({ uid: null })
-          Window.reload();
+          this.setState({ uid: null }, () => {window.location.reload();});
         }
       }
     )

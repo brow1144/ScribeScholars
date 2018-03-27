@@ -50,10 +50,6 @@ class SetClassroom extends Component {
       };
     }
 
-    componentWillMount = () => {
-      console.log(this.state.classes);
-    };
-
     checkClasses = () => {
       let self = this;
 
@@ -530,14 +526,9 @@ class SetClassroom extends Component {
                                                 <h5 className={"codeText"}>
                                                     Class Code: {this.props.classes[index].code}
                                                 </h5>
-                                                {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
-                                                    {/*Notifications</Button>*/}
-                                                {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
-                                                    {/*Announcements</Button>*/}
                                                 <span onClick={ () => this.toggle(this.props.classes[index].code)} className={"clickableIcon float-right"}>
-                                                    <i className="fas fa-trash-alt deleteIcon float-right"/>
+                                                    <i style={{cursor: 'pointer'}} className="fas fa-trash-alt" />
                                                 </span>
-
                                             </div>
                                         </AccordionItemBody>
                                     </AccordionItem>
