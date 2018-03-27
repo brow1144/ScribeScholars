@@ -33,6 +33,7 @@ class GenHomework extends Component {
       code: null,
       questions: null,
 
+      score: null,
       mcq: null,
       maxscore: null,
       numOfQuestions: null,
@@ -54,7 +55,7 @@ class GenHomework extends Component {
 
     let self = this;
 
-    let docRef = firestore.collection("classes").doc(self.props.code).collection("Homework").doc(self.props.homeworkNumber);
+    let docRef = firestore.collection("classes").doc(self.props.code).collection("homework").doc(self.props.homeworkNumber);
 
     docRef.get().then(function (doc) {
       if (doc.exists) {
@@ -76,10 +77,26 @@ class GenHomework extends Component {
 
     let self = this;
 
-    let docRef = firestore.collection("users").doc(this.state.uid).collection("Homework").doc(this.props.homeworkNumber)
+    let docRef = firestore.collection("users").doc(this.state.uid).collection("homework").doc(this.props.homeworkNumber)
 
     docRef.get().then((doc) => {
       if (doc.exists) {
+        if(self.state.score !== null) {
+          self.setState({
+            maxscore: doc.data().maxscore,
+            currentScore: doc.data().currentScore,
+            currentQuestion: doc.data().currentQuestion,
+            completed: doc.data().completed,
+            numOfQuestions: doc.data().numOfQuestions,
+            history: doc.data().history,
+            answers: doc.data().answers,
+            score: doc.data().score,
+            mcq: doc.data().mcq,
+          }, () => {
+            self.setQuestion();
+            self.checkCompletion();
+          })
+        }
         self.setState({
           maxscore: doc.data().maxscore,
           currentScore: doc.data().currentScore,
@@ -140,7 +157,7 @@ class GenHomework extends Component {
   incPage = () => {
     let self = this;
 
-    let user = firestore.collection("users").doc(this.state.uid).collection("Homework").doc(this.state.homeworkNumber)
+    let user = firestore.collection("users").doc(this.state.uid).collection("homework").doc(this.state.homeworkNumber)
 
     if(self.state.type !== "MCQ") {
       self.fillArray()
@@ -148,33 +165,64 @@ class GenHomework extends Component {
 
     user.get().then((doc) => {
       if (doc.exists) {
-        if(doc.data().currentQuestion+1 <= self.state.numOfQuestions) {
-          user.update({
-            history: self.state.history,
-            currentQuestion: self.state.currentQuestion + 1,
-            completed: self.state.completed,
-            currentScore: self.state.currentScore,
-            answers: self.state.answers,
-            mcq: self.state.mcq,
-          }).then(function() {
-            self.getUserAssignment(self.props.code)
-          });
-        }
-        else if(doc.data().currentQuestion+1 == self.state.numOfQuestions+1) {
-          user.update({
-            history: self.state.history,
-            completed: self.state.completed,
-            currentScore: self.state.currentScore,
-            answers: self.state.answers,
-            mcq: self.state.mcq,
-          }).then(function() {
-            self.setState({
-              finalPage: true,
+        if (self.state.score) {
+          if (doc.data().currentQuestion + 1 <= self.state.numOfQuestions) {
+            user.update({
+              history: self.state.history,
+              currentQuestion: self.state.currentQuestion + 1,
+              completed: self.state.completed,
+              currentScore: self.state.currentScore,
+              answers: self.state.answers,
+              score: self.state.score,
+              mcq: self.state.mcq,
+            }).then(function () {
+              self.getUserAssignment(self.props.code)
             });
-            self.getUserAssignment(self.props.code)
-          });
+          }
+          else if (doc.data().currentQuestion + 1 == self.state.numOfQuestions + 1) {
+            user.update({
+              history: self.state.history,
+              completed: self.state.completed,
+              currentScore: self.state.currentScore,
+              answers: self.state.answers,
+              mcq: self.state.mcq,
+              score: self.state.score,
+            }).then(function () {
+              self.setState({
+                finalPage: true,
+              });
+              self.getUserAssignment(self.props.code)
+            });
+          }
         }
-
+        else {
+          if (doc.data().currentQuestion + 1 <= self.state.numOfQuestions) {
+            user.update({
+              history: self.state.history,
+              currentQuestion: self.state.currentQuestion + 1,
+              completed: self.state.completed,
+              currentScore: self.state.currentScore,
+              answers: self.state.answers,
+              mcq: self.state.mcq,
+            }).then(function () {
+              self.getUserAssignment(self.props.code)
+            });
+          }
+          else if (doc.data().currentQuestion + 1 == self.state.numOfQuestions + 1) {
+            user.update({
+              history: self.state.history,
+              completed: self.state.completed,
+              currentScore: self.state.currentScore,
+              answers: self.state.answers,
+              mcq: self.state.mcq,
+            }).then(function () {
+              self.setState({
+                finalPage: true,
+              });
+              self.getUserAssignment(self.props.code)
+            });
+          }
+        }
       }
     }).catch((error) => {
       console.log("Error getting document:", error);
@@ -194,7 +242,7 @@ class GenHomework extends Component {
         self.fillArray()
       }
 
-      let user = firestore.collection("users").doc(this.state.uid).collection("Homework").doc(this.state.homeworkNumber);
+      let user = firestore.collection("users").doc(this.state.uid).collection("homework").doc(this.state.homeworkNumber);
 
       user.get().then((doc) => {
         if (doc.exists) {
@@ -291,6 +339,7 @@ class GenHomework extends Component {
     let self = this;
     let complete = 0;
     let score = 0;
+    let s  = 0;
     let mcqQuestion = 0;
 
     let tmpHis = self.state.history;
@@ -303,8 +352,10 @@ class GenHomework extends Component {
         if(ansArr[i] !== "ungraded")                  //Increment the complete variable if its not empty string
         {
           mcqQuestion += 1;
-          if(ansArr[i] === tmpHis[i])
-            score += 1
+          if(ansArr[i] === tmpHis[i]) {
+            s += 1
+            console.log(s);
+          }
         }
       }
       else
@@ -313,15 +364,19 @@ class GenHomework extends Component {
 
     if(complete)
       complete = 0;
-    else
-      complete = 1;
-
-
+    else {
+      complete = 2;
+      //score = s;
+      self.setState({
+        score: s,
+      })
+    }
+    console.log(s);
     //Set the states
     self.setState({
       mcq: mcqQuestion,
       completed: complete,
-      currentScore: score,
+      currentScore: s,
     })
   }
 
@@ -355,9 +410,10 @@ class GenHomework extends Component {
                 : this.state.type === "FRQ"
                   ?
                   <FRQ {...action} name={this.state.name} currentQuestion={this.state.currentQuestion}
-                       prompt = {this.state.prompt} frqResponse = {this.state.frqResponse}/>
+                       prompt = {this.state.prompt} frqResponse = {this.state.frqResponse} finalPage = {this.state.finalPage}/>
                   :
-                  <Video name={this.state.name} currentQuestion={this.state.currentQuestion} url = {this.state.url}/>
+                  <Video name={this.state.name} currentQuestion={this.state.currentQuestion} url = {this.state.url}
+                         finalPage = {this.state.finalPage}/>
               }
 
             </Row>
@@ -370,12 +426,12 @@ class GenHomework extends Component {
                   <Button onClick={this.decPage}>Last Question</Button>
                   <br/>
                 </Col>
-                {this.state.completed === 1
+                {this.state.completed === 2
                   ?
                   <Col xs={6}>
                     <div className={"space"}/>
                     <Nav pills>
-                      <RouterLink className="navLinks" to={`/HomePage/${this.state.class}/announcements`}>
+                      <RouterLink className="navLinks" to={`/HomePage/${this.state.code}/announcements`}>
                         <NavLink >Return to the classroom page</NavLink>
                       </RouterLink>
                     </Nav>

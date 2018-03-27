@@ -381,7 +381,7 @@ class Main extends Component {
 
     let self = this;
 
-    let docRef = firestore.collection("classes").doc(classCode).collection("Homework");
+    let docRef = firestore.collection("classes").doc(classCode).collection("homework");
 
     docRef.get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
