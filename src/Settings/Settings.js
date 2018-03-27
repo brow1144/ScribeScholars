@@ -56,6 +56,7 @@ class Settings extends Component {
     }).catch(function(error) {
       console.log("Error getting document:", error);
     });
+
   };
 
     getName = () => {
@@ -150,12 +151,18 @@ class Settings extends Component {
 
     };
 
+    toggleTest = () => {
+      console.log("toggle test");
+      this.props.toggleGPA();
+    };
+
     updatePersonal = (mail, number, descriptText) => {
         this.setState({
             email: mail,
             phoneN: number,
             descript: descriptText,
         });
+
     };
 
     render() {
@@ -185,7 +192,6 @@ class Settings extends Component {
                             userImage={ this.props.userImage }
                             uid={this.state.uid}
                             name={this.state.name}
-                            role={this.state.role}
                             email={this.state.email}
                             phoneN={this.state.phoneN}
                             descript={this.state.descript}

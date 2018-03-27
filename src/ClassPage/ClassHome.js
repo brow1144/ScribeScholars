@@ -181,21 +181,6 @@ class ClassHome extends Component {
             <NavLink onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
           </RouterLink>
 
-            {this.props.role === "teacher"
-              ?
-              <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/myStudents`}>
-
-                  <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive} code={this.props.code} lessonNumber={this.props.lessonNumber}>My Students</NavLink>
-
-                
-              </RouterLink>
-              :
-              <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/grades`}>
-                <NavLink onClick={this.switchGrades} active={this.state.gradesActive}>Grades</NavLink>
-
-              </RouterLink>
-            }
-
           <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/discussion`}>
             <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
               Board</NavLink>
@@ -218,16 +203,22 @@ class ClassHome extends Component {
               <NavLink onClick={this.switchRegradeRequests} active={this.state.regradeRequestsActive}>Regrade Requests</NavLink>
             </RouterLink>
             :
-            <div>
-            </div>
+            <div/>
           }
-      </Nav>
+
+        </Nav>
 
         {this.state.announcementsActive
           ?
           <div>
             <div className="announcementsDiv">
               <Cards announcements={this.props.classAnnouncements}/>
+            </div>
+          </div>
+          :
+          <div>
+          </div>
+        }
 
         {this.state.homeworkActive
           ?
@@ -255,7 +246,6 @@ class ClassHome extends Component {
           <div>
           </div>
         }
-      
         {this.state.regradeRequestsActive
           ?
           <div>

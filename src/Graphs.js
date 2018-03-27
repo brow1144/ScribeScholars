@@ -15,7 +15,7 @@ class Graphs extends Component {
       uid: props.uid,
 
       //code: props.code,
-      code: "newGraphs",   // TODO temporary
+      code: "Graphs",   // TODO temporary
 
       classes: [],  // TODO GPA page
       myAssignments: [],  // all assignments from all the user's classes TODO GPA page
@@ -79,8 +79,20 @@ class Graphs extends Component {
     };
   };
 
+/* REFERENCE of props
+<SetClassroom
+updateClasses={ this.props.updateClasses }
+role={this.state.role}
+uid={this.state.uid}
+name={this.state.name}
+email={this.state.email}
+phoneN={this.state.phoneN}
+descript={this.state.descript}
+classes={this.state.classes}
+/>
+  */
+
   componentWillMount() {
-    this.getMyAssignments();
     this.getClassInfo();
   };
 
@@ -89,44 +101,19 @@ class Graphs extends Component {
     let self = this;
     let classRef = firestore.collection("classes").doc(this.state.code);
 
-    classRef.get().then((doc) => {
+    classRef.get().then(function(doc) {
       if (doc.exists) {
-        if (doc.data().students != null) {
-          self.setState({
-            students: doc.data().students,
-          });
-        }
-
-        self.getClassAssignmentsOfType("homework");
-        self.getClassAssignmentsOfType("quizzes");
-        self.getClassAssignmentsOfType("tests");
-        self.getClassAssignmentsOfType("inClass");
-
-        /*if (doc.data().assignments != null && doc.data().students != null) {
+        if (doc.data().assignments != null && doc.data().students != null) {
           self.setState({
             classAssignments: doc.data().assignments,
             students: doc.data().students,
           });
-        }*/
+        }
 
         self.getMyAssignments();
       }
-    }).catch((error) => {
-      console.log("Error getting document:", error);
-    });
-  };
-
-  getClassAssignmentsOfType = (type) => {
-    let self = this;
-
-    firestore.collection("classes").doc(this.state.code).collection(type).get().then((snapshot) => {
-      snapshot.forEach((doc) => {
-        self.setState({
-          classAssignments: self.state.classAssignments.concat(doc.data()),
-        });
-      });
-    }).catch((error) => {
-      console.log("Error getting document:", error);
+    }).catch(function(error) {
+      console.log("Error getting document: ", error);
     });
   };
 
@@ -135,79 +122,52 @@ class Graphs extends Component {
     let self = this;
     let studentRef = firestore.collection("users").doc(this.state.uid);
 
-    studentRef.get().then((doc) => {
+    studentRef.get().then(function(doc) {
       if (doc.exists) {
-        self.setState({
-          classes: doc.data().classes,  // temporary TODO
-        });
-
-        self.getAssignmentsOfType(this.state.uid, "homework", false);
-        self.getAssignmentsOfType(this.state.uid, "quizzes", false);
-        self.getAssignmentsOfType(this.state.uid, "tests", false);
-        self.getAssignmentsOfType(this.state.uid, "inClass", false);
-
-        /*if (doc.data().assignments != null) {
+        if (doc.data().assignments != null) {
           self.setState({
             myAssignments: doc.data().assignments,
             classes: doc.data().classes,  // temporary TODO
           });
-        }*/
 
-        self.getAllAssignments();
+          self.getAllStudentInfo();
+        }
       }
-    }).catch((error) => {
+    }).catch(function(error) {
       console.log("Error getting document: ", error);
     });
   };
 
-  getAssignmentsOfType = (uid, type, all) => {
-    let self = this;
-
-    firestore.collection("users").doc(uid).collection(type).get().then((snapshot) => {
-      snapshot.forEach((doc) => {
-        if (!all) {
-          if (doc.data().score != null) {
-            self.setState({
-              myAssignments: self.state.myAssignments.concat(doc.data()),
-            });
-          }
-        } else {
-          if (doc.data().code === self.state.code && doc.data().score != null) {
-            self.setState({
-              allAssignments: self.state.allAssignments.concat(doc.data()),
-            });
-          }
-        }
-      });
-    }).catch((error) => {
-      console.log("Error getting document:", error);
-    });
-  };
-
-
-
-  getAllAssignments = () => {
+  getAllStudentInfo = () => {
     let self = this;
 
     for (let i in this.state.students) {
       if (this.state.students.hasOwnProperty(i)) {
-        self.getAssignmentsOfType(self.state.students[i], "homework", true);
-        self.getAssignmentsOfType(self.state.students[i], "quizzes", true);
-        self.getAssignmentsOfType(self.state.students[i], "tests", true);
-        self.getAssignmentsOfType(self.state.students[i], "inClass", true);
-
         let studentRef = firestore.collection("users").doc(this.state.students[i]);
-        studentRef.get().then(() => {
-          if (parseInt(i, 10) === self.state.students.length - 1) {
-            let tempIndex = 1;  // temporary TODO
 
-            console.log(self.state.allAssignments);
-            console.log(self.state.classAssignments);
+        studentRef.get().then(function(doc) {
+          if (doc.exists) {
+            if (doc.data().assignments != null) {
+              for (let j in doc.data().assignments) {
+                if (doc.data().assignments.hasOwnProperty(j)) {
+                  if (doc.data().assignments[j].code === self.state.code && doc.data().assignments[j].score != null) {
+                    self.setState({
+                      allAssignments: self.state.allAssignments.concat(doc.data().assignments[j]),
+                    });
+                  }
+                }
+              }
+            }
+          }
+
+          if (parseInt(i, 10) === self.state.students.length - 1) {
+            let tempIndex = 2;  // temporary TODO
+
             self.setState({
               myScore: self.getStudentAssignment(self.state.classAssignments[tempIndex]).score,
             });
 
-            //console.log(self.calcGPA());  // temporary
+            console.log(self.calcGPA());  // temporary
             self.buildClassScoresGraph(self.state.classAssignments[tempIndex]);  // temporary TODO
             self.buildAssignmentScoresGraph();
             self.buildAssignmentGradesGraph();  // temporary
@@ -219,28 +179,8 @@ class Graphs extends Component {
     }
   };
 
-  // old get all assignments
-  //if (doc.exists) {
-  //self.getAssignmentsOfType(self.state.students[i], "homework", true);
-  //self.getAssignmentsOfType(self.state.students[i], "quizzes", true);
-  //self.getAssignmentsOfType(self.state.students[i], "tests", true);
-  //self.getAssignmentsOfType(self.state.students[i], "inClass", true);
-
-  /*if (doc.data().assignments != null) {
-    for (let j in doc.data().assignments) {
-      if (doc.data().assignments.hasOwnProperty(j)) {
-        if (doc.data().assignments[j].code === self.state.code && doc.data().assignments[j].score != null) {
-          self.setState({
-            allAssignments: self.state.allAssignments.concat(doc.data().assignments[j]),
-          });
-        }
-      }
-    }
-  }*/
-  //}
-
   // calculate GPA for a student
-  /*calcGPA = () => {
+  calcGPA = () => {
     let grades = [];
 
     for (let i in this.state.classes) {
@@ -310,7 +250,7 @@ class Graphs extends Component {
       grade = Math.round(grade * 100) / 100;
 
     return grade;
-  };*/
+  };
 
   // calculate average score for an assignment
   getAverageScore = (assignment, percentage) => {
@@ -468,7 +408,7 @@ class Graphs extends Component {
 
   showGraph = () => {
     this.setState({
-      graph: "classScores",
+      graph: "assignmentScores",
     });
   };
 

@@ -13,10 +13,6 @@ class StudentsChart extends Component {
       studentsData: this.props.studentsData,
       progressMap: this.props.progressMap,
       scoresMap: this.props.scoresMap,
-
-      class: this.props.class,
-      lessonNumber: this.props.lessonNumber,
-      uid: this.props.uid,
     };
 
     return (

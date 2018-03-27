@@ -6,6 +6,7 @@ import DashboardInfoBar from "./DashboardInfoBar";
 import c1 from './pics/component1.png'
 import c2 from './pics/component2.png'
 import c3 from './pics/component3.png'
+import c4 from './pics/component4.png'
 
 class DashboardInfoPage extends Component {
     render() {
@@ -87,6 +88,23 @@ class DashboardInfoPage extends Component {
                         </Col>
                         <Col xs={12} lg={6} className="compBg3">
                             <img src={c3} className="picture" alt=""/>
+                        </Col>
+
+                    </Row>
+                    <Row>
+                        <a name="Component4"><Col className={"fillerCol"} xs={12}></Col></a>
+                    </Row>
+                    <Row className="compBg1">
+
+                        <Col xs={12} lg={6} className="text compBg1">
+                            <h1 className={"componentHeader"}>Recent Assignment</h1>
+                            <p className="componentText">This component will show
+                                the average grade on the most recent graded assignment
+                                or test for the teacher's class.
+                            </p>
+                        </Col>
+                        <Col xs={12} lg={6} className="compBg3">
+                            <img src={c4} className="picture" alt=""/>
                         </Col>
 
                     </Row>

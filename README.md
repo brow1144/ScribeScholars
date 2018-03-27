@@ -8,10 +8,6 @@
 * [Code Repository Setup](https://docs.google.com/document/d/13LSVg4G2cMyUz8bLSyp4DuyX_siBgqqaxNRlFp25WIo/edit?usp=sharing "Code Repository Setup")
 * [Design Document](https://docs.google.com/document/d/14O7Y7iUnMbdKpfP351IBvpko4Sjz3i7CBKBjFg_ovEo/edit?usp=sharing")
 * [Sprint One Planning Document](https://docs.google.com/document/d/1g6hue1YXV_LCmL4IvRSkukYwyH4taZjaCf-zcEth-Kw/edit?usp=sharing")
-* [Sprint One Manual Testing](https://docs.google.com/document/d/15XzdiYvawANnqWEykKqODWgI6uHAVHFULrSYlWkMH6Y/edit?usp=sharing)
-* [Sprint One Retrospective](https://docs.google.com/document/d/1yMVFxJHI-4-e0wsalpkqN_lhRHtu4SOmGs5g9iRtiHY/edit?usp=sharing)
-* [Sprint Two Planning Document](https://docs.google.com/document/d/1E95wpwxAkO4JMBk9_e1CfbztLuDWOejOz_JOIvg5QNs/edit?usp=sharing)
-* [Sprint Two Manual Testing Document](https://docs.google.com/document/d/1gyjJ_W_TerqAMYJy49DdXuhuEmemlseDFPhD-ovzHJ4/edit?usp=sharing)
 
 
 

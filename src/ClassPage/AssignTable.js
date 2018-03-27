@@ -1,130 +1,80 @@
-import React, { Component } from 'react';
-
+import React from 'react'
 import {Table, Container, Row, Col } from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom'
-
-import { firestore } from '../base.js'
-
 import './Table.css'
 
-class AssignTable extends Component {
+const AssignTable = (props) => {
 
-  constructor(props) {
-    super(props);
+  return (
+    <div>
+      <Container fluid>
+        <Row>
+          <Col className={"makeSpace"}>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <p className={"homeworkTitle"}>In-class Assignments</p>
+          </Col>
+        </Row>
+        <Row>
+          <Col className={"makeSpace"}>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12}>
+            <p className={"pText"}>Available Assignments</p>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12}>
+            <Table>
+              <thead>
+              <tr>
+                <th>Assignment</th>
+                <th>Max Score</th>
+                <th>Links</th>
+              </tr>
+              </thead>
+              {props.assignments
+                ?
+                <tbody>
+                {Object.keys(props.assignments).map((key, index) => {
+                  return<tr key={key}>
+                    <td>{props.assignments[index].name}</td>
+                    <td>{props.assignments[index].maxscore}</td>
+                    <td>
+                      <RouterLink to={`/HomePage/${props.code}/lessons/${props.assignments[index].code}`}>
+                        Link
+                      </RouterLink>
+                    </td>
+                  </tr>
+                })}
+                </tbody>
+                :
+                <tbody>
+                </tbody>
+              }
 
-    this.state = {
-      role: null,
-    }
-  }
+            </Table>
+          </Col>
+        </Row>
+        <Row>
+          <Col className={"moreSpace"}>
+            <RouterLink to={`/HomePage/${props.code}/lessons/create-activity`}>
+              Create New In Class Lesson
+            </RouterLink>
+          </Col>
+        </Row>
+        <Row>
+          <Col className={"moreSpace"}>
+          </Col>
+        </Row>
+      </Container>
 
-  componentWillMount() {
-    this.getRole();
-  }
-
-  getRole = () => {
-    let docRef = firestore.collection("users").doc(this.props.uid);
-    let self = this;
-
-    docRef.get().then(function(doc) {
-      if (doc.exists) {
-        self.setState({
-          role: doc.data().role,
-        });
-      } else {
-        console.log("No such document!");
-      }
-    }).catch(function(error) {
-      console.log("Error getting document:", error);
-    });
-
-  };
-
-  render() {
-    return (
-      <div>
-        <Container fluid>
-          <Row>
-            <Col className={"makeSpace"}>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <p className={"homeworkTitle"}>In-class Assignments</p>
-            </Col>
-          </Row>
-          <Row>
-            <Col className={"makeSpace"}>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <p className={"pText"}>Available Assignments</p>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <Table>
-                <thead>
-                <tr>
-                  <th>Assignment</th>
-                  <th>Max Score</th>
-                  <th>Links</th>
-                </tr>
-                </thead>
-                {this.props.assignments
-                  ?
-                  <tbody>
-                  {Object.keys(this.props.assignments).map((key, index) => {
-                    return <tr key={key}>
-                      <td>{this.props.assignments[index].name}</td>
-                      <td>{this.props.assignments[index].maxscore}</td>
-                      <td>
-                        {this.state.role === "teacher" ?
-                          <RouterLink
-                            to={`/HomePage/${this.props.code}/lessons/liveFeed/${this.props.assignments[index].lessonCode}`}>
-                            Link
-                          </RouterLink>
-                          :
-                          <RouterLink
-                            to={`/HomePage/${this.props.code}/lessons/${this.props.assignments[index].lessonCode}`}>
-                            Link
-                          </RouterLink>
-                        }
-                      </td>
-                    </tr>
-                  })}
-                  </tbody>
-                  :
-                  <tbody>
-                  </tbody>
-                }
-
-              </Table>
-            </Col>
-          </Row>
-          <Row>
-            <Col className={"moreSpace"}>
-                {this.state.role === "teacher"
-                    ?
-                    <RouterLink to={`/HomePage/${this.props.code}/lesson/create-activity`}>
-                        Create New In Class Lesson
-                    </RouterLink>
-                    :
-                    <div/>
-                }
-            </Col>
-          </Row>
-          <Row>
-            <Col className={"moreSpace"}>
-            </Col>
-          </Row>
-        </Container>
-
-      </div>
-    )
-  }
-}
-
+    </div>
+  )
+};
 
 export default AssignTable
 
@@ -140,8 +90,8 @@ import React, { Component } from 'react';
 import ReactPlayer from 'react-player'
 
 class VideoActivity extends Component {
-    constructor(this.props) {
-        super(this.props);
+    constructor(props) {
+        super(props);
         this.state = {}
     }
     render() {
@@ -171,11 +121,11 @@ import { Col, FormGroup, Label, Input} from 'reactstrap';
 import './MCQ.css';
 
 class MCQ extends Component {
-    constructor(this.props) {
-        super(this.props);
+    constructor(props) {
+        super(props);
         this.state = {
             selectedOption: "",
-            question: this.this.props.question,
+            question: this.props.question,
         }
 
     }
@@ -224,8 +174,8 @@ import { Col, FormGroup, Label, Input } from 'reactstrap';
 import './FRQ.css';
 
 class FRQ extends Component {
-    constructor(this.props) {
-        super(this.props);
+    constructor(props) {
+        super(props);
         this.state = {
         }
     }

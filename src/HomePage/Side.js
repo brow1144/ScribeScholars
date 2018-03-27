@@ -59,15 +59,13 @@ class Side extends Component {
 
   handleSignOut = () => {
     localStorage.removeItem('uid');
-    this.setState({uid: null});
+    this.setState({uid: null,});
     this.firebaseOut();
     window.location.reload();
   };
 
   render() {
-
-    if (this.props.page === "home" || this.props.page === "classes" || this.props.page === "liveFeed" || this.props.page === "createActivity" || this.props.page === "gradingPage" || this.props.page === "homeworks" || this.props.page === "inclass" || this.props.page === "studentLiveFeed") {
-
+    if (this.props.page === "home" || this.props.page === "classes" || this.props.page === "liveFeed" || this.props.page === "createActivity" || this.props.page === "homeworks" || this.props.page === "inclass") {
       return (
         <div>
             <NavLink style={{textDecoration: 'none'}} to={`/HomePage`}>

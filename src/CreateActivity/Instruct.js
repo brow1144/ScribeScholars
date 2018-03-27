@@ -26,7 +26,7 @@ class Instruct extends Component {
                 <br/>
                 <Row>
                     <Col xs={10} lg={5} style={{paddingRight: '4rem'}}>
-                        <Card style={{boxShadow: '8px 8px 3px rgba(0, 0, 0, 0.2)'}}>
+                        <Card style={{boxShadow: '8px 8px 3px grey'}}>
                             <CardHeader tag="h2" className={"cardTitleText"}>Instructions</CardHeader>
                             <CardBody >
                                 <br/>
