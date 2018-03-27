@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import {Table, Container, Row, Col, Label, Button, Input } from 'reactstrap';
+import {Table, Container, Row, Col, Label, Button } from 'reactstrap';
 import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area, ReferenceLine, ResponsiveContainer } from 'recharts';
 import { firestore } from "../base";
-import Modal from 'react-modal';
+import { NavLink as RouterLink } from 'react-router-dom'
 import './Table.css'
 import './GradesTable.css'
 
@@ -193,7 +193,7 @@ class GradesTable extends Component {
   //Regrade request handling
   onRegradeSubmit = () => {
     let self = this;
-    self.setState({submit_status: "writing"});
+    self.setState({ submit_status: "writing" });
 
     let request = {
       name: this.state.modal_assignment.name,
@@ -235,17 +235,15 @@ class GradesTable extends Component {
 
       classRef.update({
         regrades: allRequests
-      }).then(function () {
+      }).then(function() {
 
         self.setState({
           submit_status: "submitted",
         });
 
-      }).catch(function (error) {
+      }).catch(function(error) {
         console.log("Error updating document: ", error);
       });
-    });
-  };
 
   getAssignmentsOfType = (uid, type, all) => {
     let self = this;
@@ -569,7 +567,7 @@ class GradesTable extends Component {
 
       return comparison;
     };
-  };
+  }
     
   //Function for calculating total score
   addScore = (score, maxscore) => {
@@ -787,7 +785,6 @@ class GradesTable extends Component {
                     </thead>
                     <tbody>
                     {Object.keys(this.state.myAssignments).map((key, index) => {
-                      let boundButtonClick = this.openRegradeModal.bind(this, index);
                       return <tr key={key}>
                         <td>{this.state.myAssignments[index].data.name}</td>
                         <td>{this.state.myAssignments[index].data.score != null ? this.state.myAssignments[index].data.score : "--"}</td>
