@@ -122,7 +122,7 @@ class ClassHome extends Component {
                 Board</NavLink>
             </RouterLink>
               <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/myStudents`}>
-                  <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive} lessonNumber={this.props.lessonNumber}>My Students</NavLink>
+                  <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive} code={this.props.code} lessonNumber={this.props.lessonNumber}>My Students</NavLink>
               </RouterLink>
           </Nav>
 

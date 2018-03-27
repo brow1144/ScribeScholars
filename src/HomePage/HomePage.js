@@ -12,6 +12,7 @@ import HomeNav from './HomeNav';
 import Cards from './Cards';
 import ClassHome from '../ClassPage/ClassHome';
 import LiveFeed from '../ClassPage/LiveFeed';
+import GradingPage from '../MyStudents/GradingPage';
 
 import CreateActivity from '../CreateActivity/CreateActivity';
 
@@ -90,6 +91,7 @@ class HomePage extends Component {
       mql: mql,
       docked: props.docked,
       open: props.open,
+        gradeName : null
     };
   }
 
@@ -577,6 +579,30 @@ class HomePage extends Component {
           </Row>
         </Sidebar>
       );
+
+    }else if (this.props.page === "gradingPage") {
+        let assRef = firestore.collection("classes").doc(this.props.class).collection(this.props.assCol).doc(this.props.assKey);
+        let self = this;
+
+        assRef.get().then(function (doc) {
+          self.setState({
+              gradeName : doc.data().name
+          })
+        });
+
+        return (
+            <Sidebar {...sideData}>
+                <HomeNav firstName={"Currently grading: " + this.state.gradeName} lastName={""} expand={this.dockSideBar}
+                         width={this.state.width}/>
+
+                <Row>
+                    <Col>
+                        <GradingPage {...classData} class={this.props.class} assCol={this.props.assCol}
+                                     assKey={this.props.assKey} uid={this.state.uid}/>
+                    </Col>
+                </Row>
+            </Sidebar>
+        );
 
     }  else {
       return (

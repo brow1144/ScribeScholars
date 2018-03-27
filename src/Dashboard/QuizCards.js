@@ -1,6 +1,8 @@
 import React from 'react'
 
-import {NavLink, Button, Row, Col } from 'reactstrap';
+import {Button, Row, Col } from 'reactstrap';
+
+import { NavLink as RouterLink } from 'react-router-dom';
 
 import './AssignStyle.css'
 
@@ -10,14 +12,14 @@ const QuizCards = (props) => {
         <Row>
             {Object.keys(props.quizzes).map((key, index) => {
                 return<Col xs={12} key={key} className={"assPad"}>
-                    <NavLink style={{ textDecoration: 'none' }} to="/#">
+                    <RouterLink to={"/HomePage/"+props.code+"/myStudents/"+props.quizzes[index].colRef+"/"+props.quizzes[index].id}>
                         <Button size="lg" className={"assButt"} key={key} block>
                             <h1 className={"assTitle"}>
                                 {props.quizzes[index].name}
                             </h1>
                             <h2 className={"assText"}>Max Score: {props.quizzes[index].max}</h2>
                         </Button>
-                    </NavLink>
+                    </RouterLink>
                 </Col>
             })}
         </Row>

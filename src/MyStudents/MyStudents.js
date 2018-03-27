@@ -24,16 +24,19 @@ class MyStudents extends Component {
             }],
 
             homeworks : [{
+                id: null,
                name: null,
                max: null
             }],
 
             inclass : [{
+                id: null,
                 name: null,
                 max: null
             }],
 
             quizzes : [{
+                id: null,
                 name: null,
                 max: null
             }]
@@ -63,6 +66,8 @@ class MyStudents extends Component {
                 // doc.data() is never undefined for query doc snapshots
 
                 object.unshift({
+                    id: doc.id,
+                    colRef: colRef.id,
                     name: doc.data().name,
                     max: doc.data().questions.length
                 });
@@ -98,6 +103,8 @@ class MyStudents extends Component {
                 // doc.data() is never undefined for query doc snapshots
 
                 object.unshift({
+                    id: doc.id,
+                    colRef: colRef.id,
                     name: doc.data().name,
                     max: doc.data().questions.length
                 });
@@ -133,6 +140,8 @@ class MyStudents extends Component {
                 // doc.data() is never undefined for query doc snapshots
 
                 object.unshift({
+                    id: doc.id,
+                    colRef: colRef.id,
                     name: doc.data().name,
                     max: doc.data().questions.length
                 });
@@ -251,15 +260,15 @@ class MyStudents extends Component {
                         <Col>
                         <Col>
                             <h1>Homework</h1>
-                            <HomeCards homeworks={this.state.homeworks}/>
+                            <HomeCards code={this.props.code} homeworks={this.state.homeworks}/>
                         </Col>
                         <Col>
                             <h1>In-Class Lessons</h1>
-                            <InClassCards inclass={this.state.inclass}/>
+                            <InClassCards code={this.props.code} inclass={this.state.inclass}/>
                         </Col>
                         <Col>
                             <h1>Quizzes</h1>
-                            <QuizCards quizzes={this.state.quizzes}/>
+                            <QuizCards code={this.props.code} quizzes={this.state.quizzes}/>
                         </Col>
                         </Col>
                     </Row>

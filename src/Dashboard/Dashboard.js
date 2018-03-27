@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import { PieChart, Cell,Pie } from 'recharts';
 
 
-import {Progress, Row, Col } from 'reactstrap';
+import {Row, Col } from 'reactstrap';
 import './Dashboard.css';
 import {firestore} from "../base";
 
@@ -179,17 +179,16 @@ class Dashboard extends Component {
         let gpadArr = [];
 
         let toFour = 0;
-        let fourHead = "3.0+";
+        //let fourHead = "3.0+";
         let toThree = 0;
-        let threeHead = "2.0+";
+        //let threeHead = "2.0+";
         let toTwo = 0;
-        let twoHead = "1.0+";
+        //let twoHead = "1.0+";
         let toOne = 0;
-        let oneHead = "0.0+";
+        //let oneHead = "0.0+";
 
         for (let i in this.state.gpaMap) {
             let thisGpa = this.state.gpaMap[i];
-            console.log(thisGpa);
 
             if (thisGpa >= 3.0) {
                 toFour++;
@@ -213,10 +212,6 @@ class Dashboard extends Component {
         let size = Object.keys(this.state.gpaMap).length;
         temp = temp / size;
         temp = Math.round(temp * 100) / 100;
-
-        console.log(failing);
-        console.log(passing);
-
 
         //FOR PASS FAIL
         object = {
@@ -313,14 +308,11 @@ class Dashboard extends Component {
                                     </Col>
                                 </Row>
                                 <Row className="chartAlign">
-
-
                                         <PieChart className="piePad" width={365} height={250}>
                                             <Pie data={this.state.gpaDis} dataKey="value" nameKey="name" cx="50%"
                                                  cy="50%"
                                                  outerRadius={70} fill="#8884d8" label/>
                                             </PieChart>
-
                                 </Row>
                             </Col>
                         </Row>
