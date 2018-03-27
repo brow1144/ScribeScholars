@@ -27,7 +27,7 @@ class GenAssignment extends Component {
       lessonNumber: this.props.lessonNumber,
 
       name: null,
-      class: null,
+      code: null,
       questions: null,
 
       maxscore: null,
@@ -46,20 +46,20 @@ class GenAssignment extends Component {
   }
 
   componentWillMount() {
-    this.getAssignments(this.props.class)
+    this.getAssignments(this.props.code)
   }
 
   getAssignments = (classCode) => {
 
     let self = this;
 
-    let docRef = firestore.collection("classes").doc(self.props.class).collection("inClass").doc(self.props.lessonNumber);
+    let docRef = firestore.collection("classes").doc(self.props.code).collection("inClass").doc(self.props.lessonNumber);
 
     docRef.get().then(function (doc) {
       if (doc.exists) {
         self.setState({
           name: doc.data().name,
-          class: self.props.class,
+          code: self.props.code,
           questions: doc.data().questions,
         }, () => {
           self.getUserAssignment();
@@ -74,7 +74,7 @@ class GenAssignment extends Component {
 
     let self = this;
 
-    let docRef = firestore.collection("users").doc(this.state.uid).collection("inClass").doc(this.props.lessonNumber)
+    let docRef = firestore.collection("users").doc(self.props.uid).collection("inClass").doc(self.props.lessonNumber)
 
     docRef.get().then((doc) => {
       if (doc.exists) {
@@ -137,7 +137,7 @@ class GenAssignment extends Component {
             answerHistory: self.state.answerHistory,
             currentScore: self.state.currentScore,
           }).then(function() {
-            self.getUserAssignment(self.props.class)
+            self.getUserAssignment(self.props.code)
           });
         }
         else if(doc.data().currentQuestion+1 == self.state.numOfQuestions+1) {
@@ -151,7 +151,7 @@ class GenAssignment extends Component {
             self.setState({
               finalPage: true,
             });
-            self.getUserAssignment(self.props.class)
+            self.getUserAssignment(self.props.code)
           });
         }
 
@@ -183,7 +183,7 @@ class GenAssignment extends Component {
               answerHistory: self.state.answerHistory,
               currentScore: self.state.currentScore,
             }).then(function () {
-              self.getUserAssignment(self.props.class)
+              self.getUserAssignment(self.props.code)
             });
           }
         }
@@ -219,11 +219,9 @@ class GenAssignment extends Component {
       {
         if(answer === self.state.correctAns){
           tmpStat[i] = "1";
-          console.log("Right answer");
         }
         else{
           tmpStat[i] = "0";
-          console.log("Wrong answer");
         }
       }
     }
@@ -307,7 +305,7 @@ class GenAssignment extends Component {
     this.setState({
       completed: num,
     });
-  }
+  };
 
   /*
    * Reset the currentQuestion to 1 when you return to the homepage
@@ -338,6 +336,7 @@ class GenAssignment extends Component {
         <Container fluid>
           <Card style={{boxShadow: '8px 8px 3px rgba(0, 0, 0, 0.2)'}}>
             <Row>
+              {console.log(this.state.history[this.state.currentQuestion-1])}
               <MCQ currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
                    setAns = {this.setAns} finalPage = {this.state.finalPage} oldAns = {this.state.history[this.state.currentQuestion-1]}
                    option1={this.state.option1} option2={this.state.option2} option3={this.state.option3} option4={this.state.option4}/>
@@ -356,7 +355,7 @@ class GenAssignment extends Component {
                   <Col xs={6}>
                     <div className={"space"}/>
                     <Nav pills>
-                      <RouterLink className="navLinks" to={`/HomePage/${this.state.class}/announcements`}>
+                      <RouterLink className="navLinks" to={`/HomePage/${this.state.code}/announcements`}>
                         <NavLink >Return to the classroom page</NavLink>
                       </RouterLink>
                     </Nav>
