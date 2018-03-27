@@ -20,20 +20,24 @@ class MyStudents extends Component {
 
             students : [{
                 name: null,
-                email: null
+                email: null,
+                gpa: null,
             }],
 
             homeworks : [{
+                id: null,
                name: null,
                max: null
             }],
 
             inclass : [{
+                id: null,
                 name: null,
                 max: null
             }],
 
             quizzes : [{
+                id: null,
                 name: null,
                 max: null
             }],
@@ -242,13 +246,15 @@ class MyStudents extends Component {
 
 
         let colRef = firestore.collection("classes").doc(this.props.code)
-            .collection("Homework");
+            .collection("homework");
 
         colRef.get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 // doc.data() is never undefined for query doc snapshots
 
                 object.unshift({
+                    id: doc.id,
+                    colRef: colRef.id,
                     name: doc.data().name,
                     max: doc.data().questions.length
                 });
@@ -277,13 +283,15 @@ class MyStudents extends Component {
 
 
         let colRef = firestore.collection("classes").doc(this.props.code)
-            .collection("InClass");
+            .collection("inClass");
 
         colRef.get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 // doc.data() is never undefined for query doc snapshots
 
                 object.unshift({
+                    id: doc.id,
+                    colRef: colRef.id,
                     name: doc.data().name,
                     max: doc.data().questions.length
                 });
@@ -312,13 +320,15 @@ class MyStudents extends Component {
 
 
         let colRef = firestore.collection("classes").doc(this.props.code)
-            .collection("Quizzes");
+            .collection("quizzes");
 
         colRef.get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 // doc.data() is never undefined for query doc snapshots
 
                 object.unshift({
+                    id: doc.id,
+                    colRef: colRef.id,
                     name: doc.data().name,
                     max: doc.data().questions.length
                 });
@@ -359,12 +369,27 @@ class MyStudents extends Component {
 
                         studRef.get().then(function (doc) {
                             let data = doc.data();
-                            object.unshift({
-                                name: data.firstName + " " + data.lastName,
-                                email: data.email,
-                                grade: self.getGrade(id),
+
+                            if (isNaN(data.gpa)) {
+                                console.log(data.firstName + " did not have a valid GPA.");
+                                object.unshift({
+                                    name: data.firstName + " " + data.lastName,
+                                    email: data.email,
+                                    gpa: 0,
+                                  grade: self.getGrade(id),
                                 rank: self.getRank(id),
-                            });
+                                });
+                            } else {
+                                object.unshift({
+                                    name: data.firstName + " " + data.lastName,
+                                    email: data.email,
+                                    gpa: data.gpa,
+                                  grade: self.getGrade(id),
+                                rank: self.getRank(id),
+                                });
+                            }
+
+
                             self.setState({
                                 students: object,
                             }, () => {
@@ -410,7 +435,7 @@ class MyStudents extends Component {
                                 </Col>
                             </Row>
                             <Row className="chartAlign">
-                                <Graphs code={this.props.code}/>
+                                <Graphs lessonNumber={this.props.lessonNumber} code={this.props.code}/>
                             </Row>
                         </Col>
                     </Row>
@@ -423,8 +448,12 @@ class MyStudents extends Component {
                                     <Table striped>
                                         <thead>
                                         <tr>
+
+                                            <th>GPA</th>
+
                                             <th/>
                                             <th>Grade</th>
+
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th/>
@@ -441,15 +470,15 @@ class MyStudents extends Component {
                         <Col>
                         <Col>
                             <h1>Homework</h1>
-                            <HomeCards homeworks={this.state.homeworks}/>
+                            <HomeCards code={this.props.code} homeworks={this.state.homeworks}/>
                         </Col>
                         <Col>
                             <h1>In-Class Lessons</h1>
-                            <InClassCards inclass={this.state.inclass}/>
+                            <InClassCards code={this.props.code} inclass={this.state.inclass}/>
                         </Col>
                         <Col>
                             <h1>Quizzes</h1>
-                            <QuizCards quizzes={this.state.quizzes}/>
+                            <QuizCards code={this.props.code} quizzes={this.state.quizzes}/>
                         </Col>
                         </Col>
                     </Row>
