@@ -19,6 +19,9 @@ import Settings from '../Settings/Settings';
 
 import './HomePage.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import GenHomework from "../ClassPage/HomeworkComponents/GenHomework";
+import GenAssignment from "../ClassPage/LiveComponents/GenAssignment";
+
 import StudentLiveFeed from "../ClassPage/StudentLiveFeed";
 
 const mql = window.matchMedia(`(min-width: 600px)`);
@@ -78,11 +81,8 @@ class HomePage extends Component {
         class: null,
       }],
 
-      assignments: [{
-        code: null,
-        maxscore: null,
-        name: null,
-      }],
+      lessonNumber: this.props.lessonNumber,
+      class: this.props.class,
 
       personalPage: true,
 
@@ -724,11 +724,9 @@ class HomePage extends Component {
           <HomeNav firstName={"Homework"} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <Row>
-            <Col>
-
-            </Col>
-          </Row>
+          <div>
+            <GenHomework {...classData} {...actions} uid = {this.state.uid} code = {this.state.class} lessonNumber = {this.state.lessonNumber} />
+          </div>
         </Sidebar>
       );
     } else if (this.props.page === "inclass") {
@@ -736,14 +734,12 @@ class HomePage extends Component {
       return (
         <Sidebar {...sideData}>
 
-          <HomeNav firstName={"InClass Lesson"} lastName={""} expand={this.dockSideBar}
+          <HomeNav firstName={"Inclass Assignment"} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <Row>
-            <Col>
 
-            </Col>
-          </Row>
+          <GenAssignment uid = {this.state.uid} class = {this.props.class} lessonNumber = {this.props.lessonNumber} />
+
         </Sidebar>
       );
 

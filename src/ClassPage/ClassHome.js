@@ -202,21 +202,21 @@ class ClassHome extends Component {
           }
           {this.state.lessonsActive
             ?
-            <AssignTable code = {this.props.code} lessonNumber = {this.props.lessonNumber} assignments={this.props.assignments} />
+            <AssignTable uid={this.props.uid} code={this.props.code} lessonNumber={this.props.lessonNumber} assignments={this.props.assignments} />
             :
             <div>
             </div>
           }
 
-            {this.state.myStudentsActive
-                ?
-                <div>
-                  <MyStudents code={this.props.code}/>
-                </div>
-                :
-                <div>
-                </div>
-            }
+          {this.state.myStudentsActive
+            ?
+            <div>
+              <MyStudents code={this.props.code}/>
+            </div>
+            :
+            <div>
+            </div>
+          }
           {this.state.gradesActive
             ?
             <GradesTable code={this.props.code} uid={this.props.uid}/>
