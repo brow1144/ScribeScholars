@@ -7,7 +7,7 @@ const StudList = (props) => {
             {Object.keys(props.students).map((key, index) => {
                 return (
                     <tr key={key}>
-                        <th scope="row">{index + 1}</th>
+                        <th scope="row">{props.students[index].gpa}</th>
                         <td>{props.students[index].name}</td>
                         <td>{props.students[index].email}</td>
 

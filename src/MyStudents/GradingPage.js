@@ -67,8 +67,6 @@ class GradingPage extends Component {
                                 self.setState({
                                     students: object,
                                 });
-                                console.log(self.state.students)
-                                console.log(curScore)
                             }, () => {
 
                             });
@@ -106,10 +104,6 @@ class GradingPage extends Component {
     };
 
     updateGrades = (student, collection, document, score ) => {
-        console.log(student);
-        console.log(collection);
-        console.log(document);
-        console.log(score);
         if (score === "") {
             score = "0";
         }

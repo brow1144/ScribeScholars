@@ -20,7 +20,8 @@ class MyStudents extends Component {
 
             students : [{
                 name: null,
-                email: null
+                email: null,
+                gpa: null,
             }],
 
             homeworks : [{
@@ -182,10 +183,21 @@ class MyStudents extends Component {
 
                         studRef.get().then(function (doc) {
                             let data = doc.data();
-                            object.unshift({
-                                name: data.firstName + " " + data.lastName,
-                                email: data.email
-                            });
+                            if (isNaN(data.gpa)) {
+                                console.log(data.firstName + " did not have a valid GPA.");
+                                object.unshift({
+                                    name: data.firstName + " " + data.lastName,
+                                    email: data.email,
+                                    gpa: 0,
+                                });
+                            } else {
+                                object.unshift({
+                                    name: data.firstName + " " + data.lastName,
+                                    email: data.email,
+                                    gpa: data.gpa,
+                                });
+                            }
+
                             self.setState({
                                 students: object,
                             }, () => {
@@ -244,7 +256,7 @@ class MyStudents extends Component {
                                     <Table striped>
                                         <thead>
                                         <tr>
-                                            <th>Rank</th>
+                                            <th>GPA</th>
                                             <th>Name</th>
                                             <th>Email</th>
                                         </tr>
