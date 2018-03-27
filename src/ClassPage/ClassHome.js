@@ -181,6 +181,11 @@ class ClassHome extends Component {
             <NavLink onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
           </RouterLink>
 
+          <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/discussion`}>
+            <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
+              Board</NavLink>
+          </RouterLink>
+
             {this.props.role === "teacher"
               ?
               <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/myStudents`}>
@@ -195,22 +200,6 @@ class ClassHome extends Component {
 
               </RouterLink>
             }
-
-          <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/discussion`}>
-            <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
-              Board</NavLink>
-          </RouterLink>
-
-          {this.props.role === "teacher"
-            ?
-            <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/myStudents`}>
-              <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive}>My Students</NavLink>
-            </RouterLink>
-            :
-            <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/grades`}>
-              <NavLink onClick={this.switchGrades} active={this.state.gradesActive}>Grades</NavLink>
-            </RouterLink>
-          }
 
           {this.props.role === "teacher"
             ?
@@ -228,6 +217,12 @@ class ClassHome extends Component {
           <div>
             <div className="announcementsDiv">
               <Cards announcements={this.props.classAnnouncements}/>
+            </div>
+          </div>
+          :
+          <div>
+          </div>
+        }
 
         {this.state.homeworkActive
           ?
