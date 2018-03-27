@@ -691,9 +691,8 @@ class HomePage extends Component {
           <HomeNav firstName={"Homework"} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <div>
-            <GenHomework {...classData} {...actions} uid = {this.state.uid} code = {this.state.class} lessonNumber = {this.state.lessonNumber} />
-          </div>
+          <GenHomework {...classData} {...actions} uid = {this.state.uid} code = {this.props.class} homeworkNumber = {this.props.lessonNumber} />
+
         </Sidebar>
       );
     } else if (this.props.page === "inclass") {
@@ -705,7 +704,7 @@ class HomePage extends Component {
                    width={this.state.width}/>
 
 
-          <GenAssignment uid = {this.state.uid} class = {this.props.class} lessonNumber = {this.props.lessonNumber} />
+          <GenAssignment uid = {this.state.uid}  code = {this.props.class} lessonNumber = {this.props.lessonNumber} />
 
         </Sidebar>
       );
