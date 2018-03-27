@@ -48,9 +48,9 @@ class CreateActivity extends Component {
         if (self.props.assType === "Lesson")
             classRef = firestore.collection("classes").doc(self.props.class).collection("inClass").doc(code);
         else
-            classRef = firestore.collection("classes").doc(self.props.class).collection("Homework").doc(code);
+            classRef = firestore.collection("classes").doc(self.props.class).collection("homework").doc(code);
 
-        self.setState({ hwCode: code, title: title, });
+        self.setState({hwCode: code, title: title,});
 
         classRef.get().then(function (doc) {
             if (doc.exists) {
@@ -193,7 +193,7 @@ class CreateActivity extends Component {
 
         let tempArr = this.state.questions;
 
-        tempArr.splice(index,1,quest);
+        tempArr.splice(index, 1, quest);
 
         this.setState({
             questions: tempArr,
@@ -207,7 +207,7 @@ class CreateActivity extends Component {
         if (this.props.assType === "Lesson")
             homeworkRef = firestore.collection("classes").doc(self.props.class).collection("inClass").doc(self.state.hwCode);
         else
-            homeworkRef = firestore.collection("classes").doc(self.props.class).collection("Homework").doc(self.state.hwCode);
+            homeworkRef = firestore.collection("classes").doc(self.props.class).collection("homework").doc(self.state.hwCode);
 
 
         homeworkRef.update({
@@ -222,7 +222,7 @@ class CreateActivity extends Component {
 
         let classRef = firestore.collection("classes").doc(self.props.class);
 
-        classRef.get().then(function(doc) {
+        classRef.get().then(function (doc) {
             if (doc.exists) {
                 let tempArr = doc.data().students;
 
@@ -242,35 +242,87 @@ class CreateActivity extends Component {
                 }
                 for (let i = 0; i < tempArr.length; i++) {
                     let studentRef;
-                    if (self.props.assType === "Lesson")
+                    if (self.props.assType === "Lesson") {
                         studentRef = firestore.collection("users").doc(tempArr[i]).collection("inClass").doc(self.state.hwCode);
-                    else
-                        studentRef = firestore.collection("users").doc(tempArr[i]).collection("Homework").doc(self.state.hwCode);
-                    studentRef.get().then(function (doc) {
-                        if (doc.exists) {
-                            self.setNewDoc();
-                        } else {
-                            studentRef.set({
-                                answerHistory: tempAnsHis,
-                                class: self.props.class,
-                                completed: "",
-                                currentQuestion: 1,
-                                currentScore: 0,
-                                maxscore: self.state.questions.length,
-                                name: self.state.title,
-                                numOfQuestions: self.state.questions.length,
-                                questions: tempQuests,
-                                history: tempHist,
+                        studentRef.get().then(function (doc) {
+                            if (doc.exists) {
+                                self.setNewDoc();
+                            } else {
+                                studentRef.set({
+                                    answerHistory: tempAnsHis,
+                                    class: self.props.class,
+                                    completed: "",
+                                    currentQuestion: 1,
+                                    currentScore: 0,
+                                    maxscore: self.state.questions.length,
+                                    name: self.state.title,
+                                    numOfQuestions: self.state.questions.length,
+                                    questions: tempQuests,
+                                    history: tempHist,
 
-                            }).then(function () {
-                                console.log("successfully written!");
-                            }).catch(function (error) {
-                                console.log(error);
-                            });
-                        }
-                    }).catch(function (error) {
-                        console.log("Error getting document: ", error);
-                    });
+                                }).then(function () {
+                                    console.log("successfully written!");
+                                }).catch(function (error) {
+                                    console.log(error);
+                                });
+                            }
+                        }).catch(function (error) {
+                            console.log("Error getting document: ", error);
+                        });
+                    }
+                    else {
+                        studentRef = firestore.collection("users").doc(tempArr[i]).collection("homework").doc(self.state.hwCode);
+                        studentRef.get().then(function (doc) {
+                            if (doc.exists) {
+                                self.setNewDoc();
+                            } else {
+                                studentRef.set({
+                                    answers: tempHist,
+                                    class: self.props.class,
+                                    completed: 0,
+                                    currentQuestion: 1,
+                                    currentScore: 0,
+                                    mcq: 0,
+                                    maxscore: self.state.questions.length,
+                                    name: self.state.title,
+                                    numOfQuestions: self.state.questions.length,
+                                    history: tempHist,
+
+                                }).then(function () {
+                                    console.log("successfully written!");
+                                }).catch(function (error) {
+                                    console.log(error);
+                                });
+                            }
+                        }).catch(function (error) {
+                            console.log("Error getting document: ", error);
+                        });
+                    }
+                    /*                    studentRef.get().then(function (doc) {
+                                            if (doc.exists) {
+                                                self.setNewDoc();
+                                            } else {
+                                                studentRef.set({
+                                                    answerHistory: tempAnsHis,
+                                                    class: self.props.class,
+                                                    completed: "",
+                                                    currentQuestion: 1,
+                                                    currentScore: 0,
+                                                    maxscore: self.state.questions.length,
+                                                    name: self.state.title,
+                                                    numOfQuestions: self.state.questions.length,
+                                                    questions: tempQuests,
+                                                    history: tempHist,
+
+                                                }).then(function () {
+                                                    console.log("successfully written!");
+                                                }).catch(function (error) {
+                                                    console.log(error);
+                                                });
+                                            }
+                                        }).catch(function (error) {
+                                            console.log("Error getting document: ", error);
+                                        });*/
                 }
             }
         })
@@ -295,11 +347,18 @@ class CreateActivity extends Component {
                                 <FormGroup row>
                                     <Col xs={7}>
                                         <Label for="exampleSelect">Select a Question Type</Label>
-                                        <Input bsSize="lg" type="select" name="select" id="exampleSelect">
-                                            <option>Multiple Choice</option>
-                                            <option>Free Response</option>
-                                            <option>Video Page</option>
-                                        </Input>
+                                        {this.props.assType === "Homework"
+                                            ?
+                                            <Input bsSize="lg" type="select" name="select" id="exampleSelect">
+                                                <option>Multiple Choice</option>
+                                                <option>Free Response</option>
+                                                <option>Video Page</option>
+                                            </Input>
+                                            :
+                                            <Input bsSize="lg" type="select" name="select" id="exampleSelect">
+                                                <option>Multiple Choice</option>
+                                            </Input>
+                                        }
                                     </Col>
                                     <Col xs={4}>
                                         <br/>
@@ -318,16 +377,23 @@ class CreateActivity extends Component {
                                     <Accordion>
                                         {this.state.questions.map((quest, index) => {
                                             return (<AccordionItem key={index}>
-                                                    <AccordionItemTitle><h3> Question {index + 1}:</h3></AccordionItemTitle>
+                                                    <AccordionItemTitle><h3> Question {index + 1}:</h3>
+                                                    </AccordionItemTitle>
                                                     <AccordionItemBody className={"accordBody"}>
                                                         {quest.type === "MCQ"
                                                             ?
-                                                            <MCQForm question={quest} index={index} recordQuestion={this.recordQuestion}/>
+                                                            <MCQForm question={quest} index={index}
+                                                                     recordQuestion={this.recordQuestion}/>
                                                             : (quest.type === "FRQ")
                                                                 ?
-                                                                <FRQForm question={quest} index={index} recordQuestion={this.recordQuestion}/>
-                                                                :
-                                                                <VideoForm question={quest} index={index} recordQuestion={this.recordQuestion}/>
+                                                                <FRQForm question={quest} index={index}
+                                                                         recordQuestion={this.recordQuestion}/>
+                                                                : (quest.type === "VIDEO")
+                                                                    ?
+                                                                    <VideoForm question={quest} index={index}
+                                                                               recordQuestion={this.recordQuestion}/>
+                                                                    :
+                                                                    <div/>
                                                         }
                                                     </AccordionItemBody>
                                                 </AccordionItem>
