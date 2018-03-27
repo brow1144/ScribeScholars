@@ -310,7 +310,7 @@ class Main extends Component {
       });
     };
 
-    toggleGPA = () => {
+  toggleGPA = () => {
       let old_state = this.state.showGPA;
 
       this.setState({

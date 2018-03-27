@@ -583,6 +583,7 @@ class HomePage extends Component {
             <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} gpa={this.state.gpa}
                      expand={this.dockSideBar}
                      showGPA={this.props.showGPA}
+                     role={this.props.role}
                      width={this.state.width}/>
             <Row>
               <Col md="1"/>
@@ -615,6 +616,7 @@ class HomePage extends Component {
             <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} gpa={this.state.gpa}
                      expand={this.dockSideBar}
                      showGPA={this.props.showGPA}
+                     role={this.props.role}
                      width={this.state.width}/>
 
             <Row>
@@ -652,7 +654,8 @@ class HomePage extends Component {
 
           <Settings {...actions} classes={this.props.classes} userImage={this.state.userImage}
                     updateUserImage={this.props.updateUserImage} updateClasses={this.props.updateClasses}
-                    role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid} showGPA={this.props.showGPA}/>
+                    role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid}
+                    showGPA={this.props.showGPA}/>
         </Sidebar>
       );
 

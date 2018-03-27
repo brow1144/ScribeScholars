@@ -13,7 +13,6 @@ class GradesTable extends Component {
     this.state = {
       uid: this.props.uid,
       code: this.props.code,
-      showRank: this.props.showRank,
 
       doneLoading: false,
 
@@ -545,13 +544,14 @@ class GradesTable extends Component {
                 </Col>
               </Row>
               <Col>
-              <Row className="total">Total Grade:  {this.getGrade(this.state.uid)}</Row>
-              <Row className="total" hidden={this.state.showRank}>
-                Class Average:  {this.state.classAverage}
+              <Row className="total">Total Grade: {this.getGrade(this.state.uid)}</Row>
+              <Row className="rank">
+                Class Average: {this.state.classAverage}
               </Row>
-              <Row className="total" hidden={this.state.showRank}>
-                Rank:  {this.getRank(this.state.uid)}
+              <Row className="rank">
+                Rank: {this.getRank(this.state.uid)}
               </Row>
+              <br/>
               </Col>
               <Row>
                 <Col sm="12" md="5">
