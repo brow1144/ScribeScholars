@@ -1,6 +1,18 @@
 import React, {Component} from 'react';
 import {Container, Row, Col, Table, Button} from 'reactstrap';
-import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area, ReferenceLine, ResponsiveContainer } from 'recharts';
+import {
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  BarChart,
+  Bar,
+  AreaChart,
+  Area,
+  ReferenceLine,
+  ResponsiveContainer
+} from 'recharts';
 
 import './MyStudents.css';
 import Graphs from '../Dashboard/Dashboard';
@@ -13,61 +25,61 @@ import {firestore} from "../base";
 
 class MyStudents extends Component {
 
-    constructor (props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-
-
-            students : [{
-                name: null,
-                email: null,
-                gpa: null,
-            }],
-
-            homeworks : [{
-                id: null,
-               name: null,
-               max: null
-            }],
-
-            inclass : [{
-                id: null,
-                name: null,
-                max: null
-            }],
-
-            quizzes : [{
-                id: null,
-                name: null,
-                max: null
-            }],
-
-          uid: this.props.uid,
-          code: this.props.code,
-
-          doneLoading: false,
-
-          myAssignments: [],  // all the user's assignments from this class
-          myScore: null,  // user's score on current assignment
-
-          classAssignments: [],   // assignments in the class
-          studentsList: [],   // all students in the class
-          allAssignments: [],   // all assignments from every student
-
-          classScores: [],  // class scores for an individual assignment
-          assignmentComp: [],   // user's score, average, and median
-          classOverallGrades: [],   // class overall grades
-          assignmentScores: [],   // individual scores for each assignment
-          assignmentGrades: [],   // individual grades for each assignment
+    this.state = {
 
 
-          classAverage: null,
+      students: [{
+        name: null,
+        email: null,
+        gpa: null,
+      }],
 
-          graphVisible: false,
-        }
+      homeworks: [{
+        id: null,
+        name: null,
+        max: null
+      }],
 
+      inclass: [{
+        id: null,
+        name: null,
+        max: null
+      }],
+
+      quizzes: [{
+        id: null,
+        name: null,
+        max: null
+      }],
+
+      uid: this.props.uid,
+      code: this.props.code,
+
+      doneLoading: false,
+
+      myAssignments: [],  // all the user's assignments from this class
+      myScore: null,  // user's score on current assignment
+
+      classAssignments: [],   // assignments in the class
+      studentsList: [],   // all students in the class
+      allAssignments: [],   // all assignments from every student
+
+      classScores: [],  // class scores for an individual assignment
+      assignmentComp: [],   // user's score, average, and median
+      classOverallGrades: [],   // class overall grades
+      assignmentScores: [],   // individual scores for each assignment
+      assignmentGrades: [],   // individual grades for each assignment
+
+
+      classAverage: null,
+
+      graphVisible: false,
     }
+
+  }
 
   // get assignments and students for a particular class
   getClassInfo = () => {
@@ -108,23 +120,15 @@ class MyStudents extends Component {
     });
   };
 
-  getAssignmentsOfType = (uid, type, all) => {
+  getAssignmentsOfType = (uid, type) => {
     let self = this;
 
     firestore.collection("users").doc(uid).collection(type).get().then((snapshot) => {
       snapshot.forEach((doc) => {
-        if (!all) {
-          if (doc.data().code === self.state.code) {
-            self.setState({
-              myAssignments: self.state.myAssignments.concat({data: doc.data(), uid: uid}),
-            });
-          }
-        } else {
-          if (doc.data().code === self.state.code && doc.data().score != null) {
-            self.setState({
-              allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid}),
-            });
-          }
+        if (doc.data().code === self.state.code && doc.data().score != null) {
+          self.setState({
+            allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid}),
+          });
         }
       });
     }).catch((error) => {
@@ -132,15 +136,25 @@ class MyStudents extends Component {
     });
   };
 
+  // get user's assignment from class list of assignments
+  getStudentAssignment = (uid, assignment) => {
+    for (let i in this.state.allAssignments) {
+      if (this.state.allAssignments.hasOwnProperty(i)) {
+        if (this.state.allAssignments[i].uid === uid && this.state.allAssignments[i].data.name === assignment.data.name)
+          return this.state.allAssignments[i];
+      }
+    }
+  };
+
   getAllAssignments = () => {
     let self = this;
 
     for (let i in this.state.studentsList) {
       if (this.state.studentsList.hasOwnProperty(i)) {
-        self.getAssignmentsOfType(self.state.studentsList[i], "homework", true);
-        self.getAssignmentsOfType(self.state.studentsList[i], "quizzes", true);
-        self.getAssignmentsOfType(self.state.studentsList[i], "tests", true);
-        self.getAssignmentsOfType(self.state.studentsList[i], "inClass", true);
+        self.getAssignmentsOfType(self.state.studentsList[i], "homework");
+        self.getAssignmentsOfType(self.state.studentsList[i], "quizzes");
+        self.getAssignmentsOfType(self.state.studentsList[i], "tests");
+        self.getAssignmentsOfType(self.state.studentsList[i], "inClass");
 
         let studentRef = firestore.collection("users").doc(this.state.studentsList[i]);
         studentRef.get().then(() => {
@@ -149,7 +163,7 @@ class MyStudents extends Component {
             //self.buildAssignmentScoresGraph();
             //self.buildAssignmentGradesGraph();
           }
-        }).catch(function(error) {
+        }).catch(function (error) {
           console.log("Error getting document:", error);
         });
       }
@@ -249,7 +263,7 @@ class MyStudents extends Component {
 
   // build data for assignmentComp
   buildBenchmarkGraph = (classAssignment) => {
-    let assignment = this.getMyAssignment(classAssignment);
+    let assignment = this.getStudentAssignment(classAssignment);
 
     let name = assignment.data.name;
     let score = assignment.data.score;
@@ -263,12 +277,12 @@ class MyStudents extends Component {
   };
 
   // build data for assignmentScores
-  buildAssignmentScoresGraph = () => {
+  buildAssignmentScoresGraph = (uid) => {
     let tmpAssignmentScores = [];
 
     for (let i in this.state.classAssignments) {
       if (this.state.classAssignments.hasOwnProperty(i)) {
-        let assignment = this.getMyAssignment(this.state.classAssignments[i]);
+        let assignment = this.getStudentAssignment(uid, this.state.classAssignments[i]);
 
         if (assignment.data.score != null) {
           let name = assignment.data.name;
@@ -292,7 +306,7 @@ class MyStudents extends Component {
 
     for (let i in this.state.classAssignments) {
       if (this.state.classAssignments.hasOwnProperty(i)) {
-        let assignment = this.getMyAssignment(this.state.classAssignments[i]);
+        let assignment = this.getStudentAssignment(this.state.classAssignments[i]);
 
         if (assignment.data.score != null) {
           let name = assignment.data.name;
@@ -313,124 +327,117 @@ class MyStudents extends Component {
     });
   };
 
-    componentWillMount() {
-      this.getClassInfo();
-        this.getHomeworks();
-        this.getStudents();
-        this.getInClass();
-        this.getQuizzes();
-    };
+  componentWillMount() {
+    this.getClassInfo();
+    this.getHomeworks();
+    this.getStudents();
+    this.getInClass();
+    this.getQuizzes();
+  };
 
-    getHomeworks = () => {
+  getHomeworks = () => {
 
-        let object = [{}];
+    let object = [{}];
 
-        let self = this;
+    let self = this;
 
 
-        let colRef = firestore.collection("classes").doc(this.props.code)
-            .collection("homework");
+    let colRef = firestore.collection("classes").doc(this.props.code)
+      .collection("homework");
 
-        colRef.get().then(function (querySnapshot) {
-            querySnapshot.forEach(function (doc) {
-                // doc.data() is never undefined for query doc snapshots
+    colRef.get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        // doc.data() is never undefined for query doc snapshots
 
-                object.unshift({
-                    id: doc.id,
-                    colRef: colRef.id,
-                    name: doc.data().name,
-                    max: doc.data().questions.length
-                });
-                self.setState({
-                    homeworks: object,
-                });
-            });
-
-        }).catch(function (error) {
-            console.log("Error getting document:", error);
+        object.unshift({
+          id: doc.id,
+          colRef: colRef.id,
+          name: doc.data().name,
+          //max: doc.data().questions.length TODO
         });
-
-        object.pop();
-
         self.setState({
-            homeworks: object
+          homeworks: object,
         });
+      });
 
-    };
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
 
-    getInClass = () => {
+    object.pop();
 
-        let object = [{}];
+    self.setState({
+      homeworks: object
+    });
 
-        let self = this;
+  };
+
+  getInClass = () => {
+
+    let object = [{}];
+
+    let self = this;
 
 
-        let colRef = firestore.collection("classes").doc(this.props.code)
-            .collection("inClass");
+    let colRef = firestore.collection("classes").doc(this.props.code)
+      .collection("inClass");
 
-        colRef.get().then(function (querySnapshot) {
-            querySnapshot.forEach(function (doc) {
-                // doc.data() is never undefined for query doc snapshots
+    colRef.get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        // doc.data() is never undefined for query doc snapshots
 
-                object.unshift({
-                    id: doc.id,
-                    colRef: colRef.id,
-                    name: doc.data().name,
-                    max: doc.data().questions.length
-                });
-                self.setState({
-                    inclass: object,
-                });
-            });
-
-        }).catch(function (error) {
-            console.log("Error getting document:", error);
+        object.unshift({
+          id: doc.id,
+          colRef: colRef.id,
+          name: doc.data().name,
+          max: doc.data().questions.length
         });
-
-        object.pop();
-
         self.setState({
-            inclass: object
+          inclass: object,
         });
+      });
 
-    };
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
 
-    getQuizzes = () => {
+    object.pop();
 
-        let object = [{}];
+    self.setState({
+      inclass: object
+    });
 
-        let self = this;
+  };
+
+  getQuizzes = () => {
+
+    let object = [{}];
+
+    let self = this;
 
 
-        let colRef = firestore.collection("classes").doc(this.props.code)
-            .collection("quizzes");
+    let colRef = firestore.collection("classes").doc(this.props.code)
+      .collection("quizzes");
 
-        colRef.get().then(function (querySnapshot) {
-            querySnapshot.forEach(function (doc) {
-                // doc.data() is never undefined for query doc snapshots
+    colRef.get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        // doc.data() is never undefined for query doc snapshots
 
-                object.unshift({
-                    id: doc.id,
-                    colRef: colRef.id,
-                    name: doc.data().name,
-                    max: doc.data().questions.length
-                });
-                self.setState({
-                    quizzes: object,
-                });
-            });
-
-        }).catch(function (error) {
-            console.log("Error getting document:", error);
+        object.unshift({
+          id: doc.id,
+          colRef: colRef.id,
+          name: doc.data().name,
+          max: doc.data().questions.length
         });
-
-        object.pop();
-
         self.setState({
-            quizzes: object
+          quizzes: object,
         });
+      });
 
-    };
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+
 
     getStudents = () => {
 
@@ -488,18 +495,85 @@ class MyStudents extends Component {
             console.log("Error getting document:", error);
         });
 
-        object.pop();
+    object.pop();
 
-        self.setState({
-            students: object
-        });
-    };
+
+    self.setState({
+      quizzes: object
+    });
+
+  };
+
+  getStudents = () => {
+
+    let object = [{}];
+
+    let self = this;
+
+
+    let docRef = firestore.collection("classes").doc(this.props.code);
+
+    docRef.get().then(function (doc) {
+      if (doc.exists) {
+        let data = doc.data();
+        for (let i in data.students) {
+
+          if (data.students.hasOwnProperty(i)) {
+            let id = data.students[i];
+            let studRef = firestore.collection("users").doc(id);
+
+            studRef.get().then(function (doc) {
+              let data = doc.data();
+
+              if (isNaN(data.gpa)) {
+                console.log(data.firstName + " did not have a valid GPA.");
+                object.unshift({
+                  name: data.firstName + " " + data.lastName,
+                  email: data.email,
+                  uid: id,
+                  gpa: 0,
+                  grade: self.getGrade(id),
+                  rank: self.getRank(id),
+                });
+              } else {
+                object.unshift({
+                  name: data.firstName + " " + data.lastName,
+                  email: data.email,
+                  uid: id,
+                  gpa: data.gpa,
+                  grade: self.getGrade(id),
+                  rank: self.getRank(id),
+                });
+              }
+
+              self.setState({
+                students: object,
+              }, () => {
+                self.state.students.sort(self.compareValues("grade")).reverse();
+              });
+
+            });
+          }
+        }
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+
+    object.pop();
+
+    self.setState({
+      students: object
+    });
+  };
 
   // custom sorting function for the graphs
   compareValues(key) {
-    return function(a, b) {
+    return function (a, b) {
       // check that input is valid
-      if(!a.hasOwnProperty(key) || !b.hasOwnProperty(key))
+      if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key))
         return 0;
 
       let val1 = a[key];
@@ -516,12 +590,13 @@ class MyStudents extends Component {
     };
   }
 
-  showGraph = () => {
+  showGraph = (uid) => {
     this.setState({
       graphVisible: true,
     });
 
-    this.buildClassScoresGraph(this.state.classAssignments[0]);
+    this.buildAssignmentScoresGraph(uid);
+    //this.buildClassScoresGraph(this.state.classAssignments[0]);
     //this.buildBenchmarkGraph(this.state.classAssignments[0]);
   };
 
@@ -532,107 +607,102 @@ class MyStudents extends Component {
   };
 
 
+  render() {
+    return (
+      <div>
+        <Container fluid>
 
-    render() {
-        return (
-            <div>
-                <Container fluid>
+        </Container>
+        <Container fluid className={"mainPage"}>
+          <Row>
+            <Col className={"mainPage"}>
+              <p>My Students</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col className={"mainPage"}>
+              <Row>
+                <Col className={"mainPage"}>
+                  <h1>Dashboard</h1>
+                </Col>
+              </Row>
+              <Row className="chartAlign">
+                <Graphs lessonNumber={this.props.lessonNumber} code={this.props.code}/>
+              </Row>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Col>
+                <h1>Students</h1>
+                <Row>
+                  <Col>
+                    {this.state.graphVisible
+                      ?
+                      <Row>
+                        <Col xs={{size: 1, offset: 0}}>
+                          <Button onClick={this.hideGraph}>
+                            <i className="fas fa-arrow-left graphIcon"/>
+                          </Button>
+                        </Col>
+                        <Col>
+                          <ResponsiveContainer width="100%" height={300}>
+                            <BarChart data={this.state.assignmentScores}
+                                      margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                              <XAxis dataKey="name"/>
+                              <YAxis/>
+                              <CartesianGrid strokeDasharray="3 3"/>
+                              <Tooltip/>
+                              <Legend verticalAlign="top" height={36}/>
+                              <Bar dataKey="score" fill="#21CE99"/>
+                              <Bar dataKey="average" fill="#bf8bff"/>
+                              <Bar dataKey="median" fill="#f1cbff"/>
+                            </BarChart>
+                          </ResponsiveContainer>
+                        </Col>
+                        <Col>
+                        </Col>
+                      </Row>
+                      :
+                      <Table striped>
+                        <thead>
+                        <tr>
+                          <th>Rank</th>
+                          <th>Grade</th>
+                          <th>GPA</th>
+                          <th>Name</th>
+                          <th>Email</th>
+                          <th/>
+                        </tr>
+                        </thead>
 
-                </Container>
-                <Container fluid className={"mainPage"}>
-                    <Row>
-                        <Col className={"mainPage"}>
-                            <p>My Students</p>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col className={"mainPage"}>
-                            <Row>
-                                <Col className={"mainPage"}>
-                                    <h1>Dashboard</h1>
-                                </Col>
-                            </Row>
-                            <Row className="chartAlign">
-                                <Graphs lessonNumber={this.props.lessonNumber} code={this.props.code}/>
-                            </Row>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                        <Col>
-                            <h1>Students</h1>
-                            <Row>
-                              <Col>
-                                {this.state.graphVisible
-                                  ?
-                                  <Row>
-                                    <Col xs={{size: 1, offset: 0}}>
-                                      <Button onClick={this.hideGraph}>
-                                        <i className="fas fa-arrow-left graphIcon"/>
-                                      </Button>
-                                    </Col>
-                                    <Col>
-                                      <ResponsiveContainer width="100%" height={150}>
-                                        <AreaChart data={this.state.classScores}
-                                                   margin={{top: 30, right: 30, left: 30, bottom: 30}}>
-                                          <defs>
-                                            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                                              <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-                                              <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
-                                            </linearGradient>
-                                          </defs>
-                                          <XAxis/>
-                                          <YAxis/>
-                                          <CartesianGrid strokeDasharray="3 3"/>
-                                          <Tooltip/>
-                                          <ReferenceLine stroke="green" label={{value: "You", position: "top"}}/>
-                                          <Area type="monotone" dataKey="score" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)"/>
-                                        </AreaChart>
-                                      </ResponsiveContainer>
-                                    </Col>
-                                    <Col>
-                                    </Col>
-                                  </Row>
-                                  :
-                                  <Table striped>
-                                    <thead>
-                                    <tr>
-                                      <th>Rank</th>
-                                      <th>Grade</th>
-                                        <th>GPA</th>
-                                      <th>Name</th>
-                                      <th>Email</th>
-                                      <th/>
-                                    </tr>
-                                    </thead>
+                        <StudList students={this.state.students} showGraph={this.showGraph}/>
 
-                                    <StudList students={this.state.students} showGraph={this.showGraph}/>
-
-                                  </Table>
-                                }
-                              </Col>
-                            </Row>
-                        </Col>
-                        </Col>
-                        <Col>
-                        <Col>
-                            <h1>Homework</h1>
-                            <HomeCards code={this.props.code} homeworks={this.state.homeworks}/>
-                        </Col>
-                        <Col>
-                            <h1>In-Class Lessons</h1>
-                            <InClassCards code={this.props.code} inclass={this.state.inclass}/>
-                        </Col>
-                        <Col>
-                            <h1>Quizzes</h1>
-                            <QuizCards code={this.props.code} quizzes={this.state.quizzes}/>
-                        </Col>
-                        </Col>
-                    </Row>
-                </Container>
-            </div>
-        )
-    }
+                      </Table>
+                    }
+                  </Col>
+                </Row>
+              </Col>
+            </Col>
+            <Col>
+              <Col>
+                <h1>Homework</h1>
+                <HomeCards code={this.props.code} homeworks={this.state.homeworks}/>
+              </Col>
+              <Col>
+                <h1>In-Class Lessons</h1>
+                <InClassCards code={this.props.code} inclass={this.state.inclass}/>
+              </Col>
+              <Col>
+                <h1>Quizzes</h1>
+                <QuizCards code={this.props.code} quizzes={this.state.quizzes}/>
+              </Col>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+    )
+  }
 }
 
 export default MyStudents

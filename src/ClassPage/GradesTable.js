@@ -15,6 +15,7 @@ class GradesTable extends Component {
       code: this.props.code,
 
       doneLoading: false,
+      hidden: true,
 
       myAssignments: [],  // all the user's assignments from this class
       myScore: null,  // user's score on current assignment
@@ -114,13 +115,19 @@ class GradesTable extends Component {
     firestore.collection("users").doc(uid).collection(type).get().then((snapshot) => {
       snapshot.forEach((doc) => {
         if (!all) {
-          if (doc.data().code === self.state.code) {
+          if (doc.data().class === self.state.code) {
               self.setState({
                 myAssignments: self.state.myAssignments.concat({data: doc.data(), uid: uid}),
               });
+
+              if (doc.data().score != null) {
+                self.setState({
+                  hidden: false,
+                });
+              }
             }
         } else {
-          if (doc.data().code === self.state.code && doc.data().score != null) {
+          if (doc.data().class === self.state.code && doc.data().score != null) {
             self.setState({
               allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid}),
             });
@@ -267,10 +274,12 @@ class GradesTable extends Component {
     for (let i in this.state.students) {
       if (this.state.students.hasOwnProperty(i)) {
         let grade = this.getGrade(this.state.students[i]);
-        tmpClassOverallGrades.push(grade);
 
-        totalGrade += grade;
-        numStudents++;
+        if (!isNaN(grade)) {
+          tmpClassOverallGrades.push(grade);
+          totalGrade += grade;
+          numStudents++;
+        }
       }
     }
 
@@ -563,12 +572,12 @@ class GradesTable extends Component {
                 </Col>
               </Row>
               <Col>
-              <Row className="total" hidden={this.state.myAssignments.length === 0}>Total Grade: {this.getGrade(this.state.uid)}</Row>
-              <Row className="rank" hidden={this.state.myAssignments.length === 0}>Class Average: {this.state.classAverage}</Row>
-              <Row className="rank" hidden={this.state.myAssignments.length === 0}>Rank: {this.getRank(this.state.uid)}</Row>
+              <Row className="total" hidden={this.state.hidden}>Total Grade: {this.getGrade(this.state.uid)}</Row>
+              <Row className="rank" hidden={this.state.hidden}>Class Average: {this.state.classAverage}</Row>
+              <Row className="rank" hidden={this.state.hidden}>Rank: {this.getRank(this.state.uid)}</Row>
               <br/>
               </Col>
-              <Row hidden={this.state.myAssignments.length === 0}>
+              <Row hidden={this.state.hidden}>
                 <Col xs={{size: 5, offset: 1}}>
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={this.state.assignmentScores}
