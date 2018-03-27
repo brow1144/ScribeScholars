@@ -438,7 +438,65 @@ class MyStudents extends Component {
       console.log("Error getting document:", error);
     });
 
+
+    getStudents = () => {
+
+        let object = [{}];
+
+        let self = this;
+
+
+        let docRef = firestore.collection("classes").doc(this.props.code);
+
+        docRef.get().then(function (doc) {
+            if (doc.exists) {
+                let data = doc.data();
+                for (let i in data.students) {
+
+                    if (data.students.hasOwnProperty(i)) {
+                        let id = data.students[i];
+                        let studRef = firestore.collection("users").doc(id);
+
+                        studRef.get().then(function (doc) {
+                            let data = doc.data();
+
+                            if (data.gpa == null) {
+                                console.log(data.firstName + " did not have a valid GPA.");
+                                object.unshift({
+                                    name: data.firstName + " " + data.lastName,
+                                    email: data.email,
+                                    gpa: "Invalid",
+                                  grade: self.getGrade(id),
+                                rank: self.getRank(id),
+                                });
+                            } else {
+                                object.unshift({
+                                    name: data.firstName + " " + data.lastName,
+                                    email: data.email,
+                                    gpa: data.gpa,
+                                  grade: self.getGrade(id),
+                                rank: self.getRank(id),
+                                });
+                            }
+
+                            self.setState({
+                                students: object,
+                            }, () => {
+                                self.state.students.sort(self.compareValues("grade")).reverse();
+                            });
+
+                        });
+                    }
+                }
+            } else {
+                console.log("No such document!");
+            }
+        }).catch(function (error) {
+            console.log("Error getting document:", error);
+        });
+
     object.pop();
+
 
     self.setState({
       quizzes: object

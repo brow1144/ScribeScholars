@@ -251,6 +251,7 @@ class CreateActivity extends Component {
                                 studentRef.set({
                                     answerHistory: tempAnsHis,
                                     class: self.props.class,
+
                                     completed: "0",
                                     currentQuestion: 1,
                                     currentScore: 0,
