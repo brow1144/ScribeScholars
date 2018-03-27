@@ -44,6 +44,8 @@ class SetClassroom extends Component {
 
         errorCode: "",
         visible: false,
+
+        kyleVisible: false,
       };
     }
 
@@ -150,6 +152,18 @@ class SetClassroom extends Component {
 
       let code = ev.target.classCode.value;
       let newName = ev.target.className.value;
+
+      if (newName === "") {
+        this.setState({
+          kyleVisible: true,
+        });
+        return;
+      } else {
+        this.setState({
+          kyleVisible: false,
+        })
+      }
+
 
       let docRef = firestore.collection("classes").doc(code);
 
@@ -356,7 +370,7 @@ class SetClassroom extends Component {
     handlePicture = (ev) => {
       ev.preventDefault();
 
-      let classCode = ev.target.className.value;
+      let classCode = ev.target.className;
       classCode = classCode.substring(0, 6);
 
       let self = this;
@@ -462,6 +476,10 @@ class SetClassroom extends Component {
         });
     };
 
+  onKyleDismiss = () => {
+    this.setState({ visible: false });
+  };
+
     render() {
 
       if (this.state.file !== null) {
@@ -555,6 +573,13 @@ class SetClassroom extends Component {
 
                                               <FormGroup row>
                                                 <Col xs="7">
+                                                  {this.state.kyleVisible ?
+                                                    <Alert color="danger" isOpen={this.state.kyleVisible}>
+                                                      Please Enter a valid class name
+                                                    </Alert>
+                                                  :
+                                                    null
+                                                  }
                                                   <InputGroup size="10">
                                                     <InputGroupAddon addonType="prepend">Class Name</InputGroupAddon>
                                                     <Input bsSize="md" type="username" name="className" id="exampleClassName" defaultValue={this.props.classes[index].class} />
