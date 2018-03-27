@@ -563,6 +563,18 @@ class Main extends Component {
             />
         )}/>
 
+          <Route path="/HomePage/:class/myStudents/:assCol/:assKey" render={(match) => (
+
+              <HomePage
+                  class={match.match.params.class}
+                  assCol={match.match.params.assCol}
+                  assKey={match.match.params.assKey}
+                  page="gradingPage"
+                  {...data}
+                  {...actions}
+              />
+          )}/>
+
         <Route path="/homepage/:class" render={(match) => (
           <HomePage
             path={match.match.params.class}

@@ -46,12 +46,9 @@ class SetClassroom extends Component {
         visible: false,
 
         kyleVisible: false,
+        annVisible: false,
       };
     }
-
-    componentWillMount = () => {
-      console.log(this.state.classes);
-    };
 
     checkClasses = () => {
       let self = this;
@@ -413,6 +410,17 @@ class SetClassroom extends Component {
       let title = ev.target.title.value;
       let message = ev.target.message.value;
 
+      if (subtitle === "" || title === ""  || message === "") {
+        this.setState({
+          annVisible: true,
+        });
+        return;
+      } else {
+        this.setState({
+          annVisible: false,
+        })
+      }
+
       let classRef = firestore.collection("classes").doc(classCode);
 
       classRef.get().then(function(doc) {
@@ -518,14 +526,9 @@ class SetClassroom extends Component {
                                                 <h5 className={"codeText"}>
                                                     Class Code: {this.props.classes[index].code}
                                                 </h5>
-                                                {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
-                                                    {/*Notifications</Button>*/}
-                                                {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
-                                                    {/*Announcements</Button>*/}
                                                 <span onClick={ () => this.toggle(this.props.classes[index].code)} className={"clickableIcon float-right"}>
-                                                    <i className="fas fa-trash-alt deleteIcon float-right"/>
+                                                    <i style={{cursor: 'pointer'}} className="fas fa-trash-alt" />
                                                 </span>
-
                                             </div>
                                         </AccordionItemBody>
                                     </AccordionItem>
@@ -548,26 +551,26 @@ class SetClassroom extends Component {
                                   <AccordionItemBody className={"accordBody"}>
                                     <div className="inside">
                                       <Row>
-                                        <Col className="codeText" xs="8">
+                                        <Col className="codeText" xs="12" md="12">
                                           Class Code: {this.props.classes[index].code}
                                         </Col>
-
-                                        <Col className="picIcon" xs="3">
-                                          <Input onChange={this.handlePicture} type="file" name="file" id="exampleFile" className={this.props.classes[index].code} />
-                                        </Col>
-
-                                        <Col className="picIcon" xs="1">
-                                          <span onClick={this.handleNewAnn}>
-                                            <i className="fas fa-bullhorn" />
-                                          </span>
-                                        </Col>
-
                                       </Row>
 
-                                      {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
-                                        {/*Notifications</Button>*/}
-                                      {/*<Button className={"classroomButton"} size={"lg"} color={"info"}>Disable*/}
-                                        {/*Announcements</Button>*/}
+                                      <hr/>
+
+                                      <p className="skinnyFont">Upload Class Image</p>
+
+                                      <Alert color="info" >
+                                        Only PNG and JPEG Images Accepted!
+                                      </Alert>
+                                      <Row>
+                                        <Col className="picIcon" xs="12" md="12">
+                                          <Input onChange={this.handlePicture} type="file" name="file" id="exampleFile" className={this.props.classes[index].code} />
+                                        </Col>
+                                      </Row>
+
+                                      <hr/>
+                                      <p className="skinnyFont">Change Class Name</p>
 
                                         <Row>
                                           <Col sm="12">
@@ -600,7 +603,13 @@ class SetClassroom extends Component {
                                           </Col>
                                         </Row>
                                       <hr />
-                                        <Form onSubmit={(ev) => this.handleNewAnn(ev, this.props.classes[index].code)}>
+                                      <p className="skinnyFont">Add an Announcement</p>
+
+                                      <Form onSubmit={(ev) => this.handleNewAnn(ev, this.props.classes[index].code)}>
+
+                                          <Alert color="danger" isOpen={this.state.annVisible}>
+                                            Please Enter a valid announcement name
+                                          </Alert>
 
                                           <Row className={"rowt"}>
                                             <Col>
@@ -637,7 +646,7 @@ class SetClassroom extends Component {
                                           </Button>
                                         </Form>
                                         <hr/>
-                                        <h4>Dashboard Information</h4>
+                                      <p className="skinnyFont">Dashboard Info</p>
                                         <NavLink style={{textDecoration: 'none'}} to={`/DashboardInfo`}>
                                             <Button type="submit" outline color="success" size={"lg"}>
                                                 <i className="far fa-arrow-alt-circle-right" />

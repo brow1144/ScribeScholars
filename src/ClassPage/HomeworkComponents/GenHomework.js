@@ -33,6 +33,7 @@ class GenHomework extends Component {
       code: null,
       questions: null,
 
+      mcq: null,
       maxscore: null,
       numOfQuestions: null,
       currentScore: null,
@@ -87,6 +88,7 @@ class GenHomework extends Component {
           numOfQuestions: doc.data().numOfQuestions,
           history: doc.data().history,
           answers: doc.data().answers,
+          mcq: doc.data().mcq,
         }, () => {
           self.setQuestion();
           self.checkCompletion();
@@ -153,6 +155,7 @@ class GenHomework extends Component {
             completed: self.state.completed,
             currentScore: self.state.currentScore,
             answers: self.state.answers,
+            mcq: self.state.mcq,
           }).then(function() {
             self.getUserAssignment(self.props.code)
           });
@@ -163,6 +166,7 @@ class GenHomework extends Component {
             completed: self.state.completed,
             currentScore: self.state.currentScore,
             answers: self.state.answers,
+            mcq: self.state.mcq,
           }).then(function() {
             self.setState({
               finalPage: true,
@@ -287,6 +291,7 @@ class GenHomework extends Component {
     let self = this;
     let complete = 0;
     let score = 0;
+    let mcqQuestion = 0;
 
     let tmpHis = self.state.history;
     let ansArr = self.state.answers;
@@ -297,6 +302,7 @@ class GenHomework extends Component {
       {
         if(ansArr[i] !== "ungraded")                  //Increment the complete variable if its not empty string
         {
+          mcqQuestion += 1;
           if(ansArr[i] === tmpHis[i])
             score += 1
         }
@@ -313,6 +319,7 @@ class GenHomework extends Component {
 
     //Set the states
     self.setState({
+      mcq: mcqQuestion,
       completed: complete,
       currentScore: score,
     })

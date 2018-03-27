@@ -418,7 +418,6 @@ class LiveFeed extends Component {
     //Find first name and last name
     let self = this;
     // self.state.failingUIDMap.forEach(function(element) {
-    let size = Object.keys(this.state.failingUIDMap).length;
     for (let i in this.state.failingUIDMap) {
       let lessonDataPerStudent = firestore.collection("users").doc(i);
 
@@ -675,10 +674,6 @@ class LiveFeed extends Component {
   };
 
   render() {
-
-    const alertData = {
-
-    };
 
     const lesssonStatsData = {
       classProgress: this.state.classProgress,
