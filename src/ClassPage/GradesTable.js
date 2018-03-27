@@ -17,6 +17,10 @@ class GradesTable extends Component {
       gradeData: [],
       regrade_open: false,
 
+      submit_status: null,
+
+      reason_input: "",
+
       modal_assignment: {
         name: null,
         score: null,
@@ -27,6 +31,8 @@ class GradesTable extends Component {
     };
 
     let self = this;
+
+    //Get data on grades
     let docRef = firestore.collection("users").doc(this.props.uid).collection("assignments").doc(this.props.code);
     docRef.get().then(function (doc) {
 
@@ -47,6 +53,7 @@ class GradesTable extends Component {
     });
   }
 
+  //Modal handling
   openRegradeModal = (index) => {
     let self = this;
     self.setState({
@@ -57,13 +64,60 @@ class GradesTable extends Component {
 
   closeRegradeModal = () => {
     let self = this;
-    self.setState({ regrade_open: false });
+    self.setState({
+      regrade_open: false,
+      submit_status: "closed",
+    });
   }
 
+  updateReasonValue = (evt) => {
+    let self = this;
+    self.setState({ reason_input: evt.target.value });
+  }
+
+  //Regrade request handling
   onRegradeSubmit = () => {
+    let self = this;
+    self.setState({ submit_status: "writing" });
 
+    let request = {
+      assignment: this.state.modal_assignment.name,
+      maxscore: this.state.modal_assignment.maxscore,
+      reason: this.state.reason_input,
+      score: this.state.modal_assignment.score,
+      student: this.state.uid,
+    }
+
+
+    let classRef = firestore.collection("classes").doc(this.props.code);
+    classRef.get().then(function (doc) {
+
+      let allRequests = doc.data().regrades;
+
+      if (allRequests != null) {
+        allRequests.push(request);
+      } else {
+        allRequests = request;
+      }
+
+      classRef.update({
+        regrades: allRequests
+      }).then(function() {
+
+        self.setState({
+          submit_status: "submitted",
+        });
+
+      }).catch(function(error) {
+        console.log("Error updating document: ", error);
+      });
+
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
   }
 
+  //Function for calculating total score
   addScore = (score, maxscore) => {
     let self = this;
     let sc = +self.state.score;
@@ -77,6 +131,62 @@ class GradesTable extends Component {
       max_score: m_sc,
     });
   };
+
+  getModalContent() {
+    switch(this.state.submit_status){
+
+      case "writing":
+        return (
+          <Modal
+            className={"modalStyle"}
+            onRequestClose={this.closeRegradeModal}
+            isOpen={this.state.regrade_open}
+            ariaHideApp={false}>
+            <h2 className={"homeworkTitle"}>
+              Submitting request...
+            </h2>
+          </Modal>
+        );
+
+      case "submitted":
+        return (
+          <Modal
+            className={"modalStyle"}
+            onRequestClose={this.closeRegradeModal}
+            isOpen={this.state.regrade_open}
+            ariaHideApp={false}>
+            <h2 className={"homeworkTitle"}>
+              Successfully submitted request!
+            </h2>
+          </Modal>
+        );
+
+      default:
+        return (
+          <Modal
+            className={"modalStyle"}
+            onRequestClose={this.closeRegradeModal}
+            isOpen={this.state.regrade_open}
+            ariaHideApp={false}>
+
+            <h2 className={"homeworkTitle"}>
+              Request Regrade
+            </h2>
+            <h2>Assignment: {this.state.modal_assignment.name}</h2>
+            <h2>Score: {this.state.modal_assignment.score}/{this.state.modal_assignment.maxscore}</h2>
+
+            <div className={"makeSpace"}/>
+
+            <h2>Reason for Regrade:</h2>
+            <Input className={"modalInput"} type={"text"} value={this.state.reason_input} onChange={this.updateReasonValue}/>
+
+            <div className={"makeSpace"}/>
+
+            <Button type="submit" className="submitButton" size="lg" onClick={this.onRegradeSubmit}>Submit Request</Button>
+          </Modal>
+        );
+    }
+  }
 
   render() {
 
@@ -142,26 +252,7 @@ class GradesTable extends Component {
 
             <Row>
               <Col>
-                <Modal
-                  className={"modalStyle"}
-                  onRequestClose={this.closeRegradeModal}
-                  isOpen={this.state.regrade_open}
-                  ariaHideApp={false}>
-                  <h2 className={"homeworkTitle"}>
-                    Request Regrade
-                  </h2>
-                  <h2>Assignment: {this.state.modal_assignment.name}</h2>
-                  <h2>Score: {this.state.modal_assignment.score}/{this.state.modal_assignment.maxscore}</h2>
-
-                  <div className={"makeSpace"}/>
-
-                  <h2>Reason for Regrade:</h2>
-                  <Input className={"modalInput"} type={"text"}/>
-
-                  <div className={"makeSpace"}/>
-
-                  <Button className="submitButton" size="lg" type="submit" onClick={this.onRegradeSubmit}>Submit Request</Button>
-                </Modal>
+                {this.getModalContent()}
               </Col>
             </Row>
 
