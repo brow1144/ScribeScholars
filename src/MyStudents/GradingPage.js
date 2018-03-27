@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, Table} from 'reactstrap';
+import {Container, Row, Col, Table, Button} from 'reactstrap';
 
 import './MyStudents.css';
 import {firestore} from "../base";
@@ -14,13 +14,20 @@ class GradingPage extends Component {
         this.state = {
             students : [{
                 name: null,
-                email: null
+                email: null,
+                key: null,
+                currentScore: null
             }],
-        }
+
+            maxScore : 0
+        };
+
+
     }
 
     componentWillMount() {
         this.getStudents();
+        this.setMaxScore();
     };
 
 
@@ -44,14 +51,31 @@ class GradingPage extends Component {
 
                         studRef.get().then(function (doc) {
                             let data = doc.data();
-                            object.unshift({
-                                name: data.firstName + " " + data.lastName,
-                                email: data.email
-                            });
-                            self.setState({
-                                students: object,
+
+                            let curScore = 1;
+
+
+                            studRef.collection(self.props.assCol).doc(self.props.assKey).get().then(function (deepDoc) {
+                               curScore = deepDoc.data().currentScore;
+                                object.unshift({
+                                    name: data.firstName + " " + data.lastName,
+                                    email: data.email,
+                                    key: id,
+                                    currentScore : curScore
+                                });
+
+                                self.setState({
+                                    students: object,
+                                });
+                                console.log(self.state.students)
+                                console.log(curScore)
                             }, () => {
+
                             });
+
+
+
+
 
                         });
                     }
@@ -71,9 +95,53 @@ class GradingPage extends Component {
 
     };
 
+    setMaxScore = () => {
+        let assRef = this.props.assRef;
+        let self = this;
+        assRef.get().then(function (doc) {
+            self.setState({
+                maxScore : doc.data().questions.length
+            })
+        });
+    };
+
+    updateGrades = (student, collection, document, score ) => {
+        console.log(student);
+        console.log(collection);
+        console.log(document);
+        console.log(score);
+        if (score === "") {
+            score = "0";
+        }
+        firestore.collection("users").doc(student).collection(collection).doc(document).update({
+            currentScore: score
+        })
+    };
+
+    getCurrScore = (student, collection, document) => {
+        let score;
+        firestore.collection("users").doc(student).collection(collection).doc(document).get().then(function (doc) {
+            score = doc.data().currentScore;
+            console.log(score)
+        }, () => {
+            console.log(score)
+            return score;
+        });
+
+
+    };
+
+
+
 
 
     render() {
+
+        const actions = {
+            updateGrades: this.updateGrades,
+            getCurrScore: this.getCurrScore
+        };
+
         return (
             <div>
                 <Container fluid>
@@ -87,26 +155,7 @@ class GradingPage extends Component {
                     </Row>
                     <Row>
                         <Col>
-                            <Col>
-                                <h1>Students</h1>
-                                <Row>
-                                    <Col>
-                                        <Table striped>
-                                            <thead>
-                                            <tr>
-                                                <th>Rank</th>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Grade</th>
-                                            </tr>
-                                            </thead>
-
-                                            <StudListGrade students={this.state.students}/>
-
-                                        </Table>
-                                    </Col>
-                                </Row>
-                            </Col>
+                            <StudListGrade code={this.props.class} assKey={this.props.assKey} assCol={this.props.assCol} maxScore={this.state.maxScore} students={this.state.students} {...actions}/>
                         </Col>
                     </Row>
                 </Container>

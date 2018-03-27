@@ -91,7 +91,8 @@ class HomePage extends Component {
       mql: mql,
       docked: props.docked,
       open: props.open,
-        gradeName : null
+        gradeName : null,
+        gradeMax : null
     };
   }
 
@@ -586,7 +587,7 @@ class HomePage extends Component {
 
         assRef.get().then(function (doc) {
           self.setState({
-              gradeName : doc.data().name
+              gradeName : doc.data().name,
           })
         });
 
@@ -597,8 +598,8 @@ class HomePage extends Component {
 
                 <Row>
                     <Col>
-                        <GradingPage {...classData} class={this.props.class} assCol={this.props.assCol}
-                                     assKey={this.props.assKey} uid={this.state.uid}/>
+                        <GradingPage {...classData} assRef={assRef} class={this.props.class} assCol={this.props.assCol}
+                                     assKey={this.props.assKey} maxScore={this.props.gradeMax} uid={this.state.uid}/>
                     </Col>
                 </Row>
             </Sidebar>
