@@ -225,6 +225,21 @@ class CreateActivity extends Component {
         classRef.get().then(function(doc) {
             if (doc.exists) {
                 let tempArr = doc.data().students;
+
+                let tempAnsHis = new Array(self.state.questions.length);
+                for (let i = 0; i < tempAnsHis.length; i++) {
+                    tempAnsHis[i] = 0;
+                }
+
+                let tempHist = new Array(self.state.questions.length);
+                for (let i = 0; i < tempHist.length; i++) {
+                    tempHist[i] = "";
+                }
+
+                let tempQuests = new Array(self.state.questions.length);
+                for (let i = 0; i < tempQuests.length; i++) {
+                    tempQuests[i] = "2";
+                }
                 for (let i = 0; i < tempArr.length; i++) {
                     let studentRef;
                     if (self.props.assType === "Lesson")
@@ -236,15 +251,16 @@ class CreateActivity extends Component {
                             self.setNewDoc();
                         } else {
                             studentRef.set({
-                                answerHistory: [],
+                                answerHistory: tempAnsHis,
                                 class: self.props.class,
                                 completed: "",
-                                currentQuestion: 0,
+                                currentQuestion: 1,
                                 currentScore: 0,
                                 maxscore: self.state.questions.length,
                                 name: self.state.title,
                                 numOfQuestions: self.state.questions.length,
-                                questions: [],
+                                questions: tempQuests,
+                                history: tempHist,
 
                             }).then(function () {
                                 console.log("successfully written!");
