@@ -411,32 +411,33 @@ class MyStudents extends Component {
 
   getQuizzes = () => {
 
-    let object = [{}];
+      let object = [{}];
 
-    let self = this;
+      let self = this;
 
 
-    let colRef = firestore.collection("classes").doc(this.props.code)
-      .collection("quizzes");
+      let colRef = firestore.collection("classes").doc(this.props.code)
+          .collection("quizzes");
 
-    colRef.get().then(function (querySnapshot) {
-      querySnapshot.forEach(function (doc) {
-        // doc.data() is never undefined for query doc snapshots
+      colRef.get().then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+              // doc.data() is never undefined for query doc snapshots
 
-        object.unshift({
-          id: doc.id,
-          colRef: colRef.id,
-          name: doc.data().name,
-          max: doc.data().questions.length
-        });
-        self.setState({
-          quizzes: object,
-        });
+              object.unshift({
+                  id: doc.id,
+                  colRef: colRef.id,
+                  name: doc.data().name,
+                  max: doc.data().questions.length
+              });
+              self.setState({
+                  quizzes: object,
+              });
+          });
+
+      }).catch(function (error) {
+          console.log("Error getting document:", error);
       });
-
-    }).catch(function (error) {
-      console.log("Error getting document:", error);
-    });
+  }
 
 
     getStudents = () => {
@@ -502,71 +503,6 @@ class MyStudents extends Component {
       quizzes: object
     });
 
-  };
-
-  getStudents = () => {
-
-    let object = [{}];
-
-    let self = this;
-
-
-    let docRef = firestore.collection("classes").doc(this.props.code);
-
-    docRef.get().then(function (doc) {
-      if (doc.exists) {
-        let data = doc.data();
-        for (let i in data.students) {
-
-          if (data.students.hasOwnProperty(i)) {
-            let id = data.students[i];
-            let studRef = firestore.collection("users").doc(id);
-
-            studRef.get().then(function (doc) {
-              let data = doc.data();
-
-              if (isNaN(data.gpa)) {
-                console.log(data.firstName + " did not have a valid GPA.");
-                object.unshift({
-                  name: data.firstName + " " + data.lastName,
-                  email: data.email,
-                  uid: id,
-                  gpa: 0,
-                  grade: self.getGrade(id),
-                  rank: self.getRank(id),
-                });
-              } else {
-                object.unshift({
-                  name: data.firstName + " " + data.lastName,
-                  email: data.email,
-                  uid: id,
-                  gpa: data.gpa,
-                  grade: self.getGrade(id),
-                  rank: self.getRank(id),
-                });
-              }
-
-              self.setState({
-                students: object,
-              }, () => {
-                self.state.students.sort(self.compareValues("grade")).reverse();
-              });
-
-            });
-          }
-        }
-      } else {
-        console.log("No such document!");
-      }
-    }).catch(function (error) {
-      console.log("Error getting document:", error);
-    });
-
-    object.pop();
-
-    self.setState({
-      students: object
-    });
   };
 
   // custom sorting function for the graphs
