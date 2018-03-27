@@ -282,6 +282,7 @@ class CreateActivity extends Component {
                                     completed: 0,
                                     currentQuestion: 1,
                                     currentScore: 0,
+                                    mcq: 0,
                                     maxscore: self.state.questions.length,
                                     name: self.state.title,
                                     numOfQuestions: self.state.questions.length,
