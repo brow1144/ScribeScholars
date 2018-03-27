@@ -15,3 +15,27 @@
     padding: 5rem;
 }
 
+.accordBody {
+    margin-bottom: 4rem;
+}
+
+.accordion {
+    border: 3px solid rgba(0, 0, 0, .1);
+    border-radius: 10px;
+}
+
+.accordion__title {
+    background-color: #ddd;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+}
+
+.accordion__title:hover {
+    background-color: #21CE99;
+    background-color: rgba(33, 206, 153, 0.2);
+}

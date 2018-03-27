@@ -1,6 +1,15 @@
 import React, {Component} from 'react';
 
-import { Container, Row } from 'reactstrap';
+import {Container, Row, Col, Input, Label, Form, FormGroup, Button} from 'reactstrap';
+
+import {
+    Accordion,
+    AccordionItem,
+    AccordionItemTitle,
+    AccordionItemBody,
+} from 'react-accessible-accordion';
+import 'react-accessible-accordion/dist/react-accessible-accordion.css';
+
 
 import './CreateActivity.css';
 //import MCQ from './MCQForm';
@@ -9,6 +18,9 @@ import './CreateActivity.css';
 import Instruct from './Instruct';
 
 import {firestore} from "../base";
+import MCQForm from "./MCQForm";
+import FRQForm from "./FRQForm";
+import VideoForm from "./VideoForm";
 
 class CreateActivity extends Component {
     constructor(props) {
@@ -19,7 +31,10 @@ class CreateActivity extends Component {
             role: this.props.role,
             class: this.props.class,
             questions: [],
+            typeArray: [],
             question: {},
+            hwCode: null,
+            title: "",
         };
     }
 
@@ -29,21 +44,28 @@ class CreateActivity extends Component {
         this.flipComp();
         let code = this.getCode();
         //Create new document in "classes" collection
-        let classRef = firestore.collection("classes").doc("668273").collection("Homework").doc(code);
-        classRef.get().then(function(doc) {
+        let classRef;
+        if (self.props.assType === "Lesson")
+            classRef = firestore.collection("classes").doc(self.props.class).collection("inClass").doc(code);
+        else
+            classRef = firestore.collection("classes").doc(self.props.class).collection("homework").doc(code);
+
+        self.setState({hwCode: code, title: title,});
+
+        classRef.get().then(function (doc) {
             if (doc.exists) {
                 self.setNewDoc();
             } else {
                 classRef.set({
                     name: title,
                     description: descript,
-                }).then(function() {
+                }).then(function () {
                     console.log("successfully written!");
-                }).catch(function(error) {
+                }).catch(function (error) {
                     console.log(error);
                 });
             }
-        }).catch(function(error) {
+        }).catch(function (error) {
             console.log("Error getting document: ", error);
         });
     };
@@ -69,10 +91,10 @@ class CreateActivity extends Component {
             }, () => {
                 homeworkRef.update({
                     questions: self.state.questions,
-                }).then(function() {
+                }).then(function () {
                     console.log("Successfully added a question");
 
-                }).catch(function(error) {
+                }).catch(function (error) {
                     console.log("Error updating document: ", error);
                 });
             });
@@ -82,10 +104,10 @@ class CreateActivity extends Component {
             }, () => {
                 homeworkRef.update({
                     questions: self.state.questions,
-                }).then(function() {
+                }).then(function () {
                     console.log("Successfully added a question");
 
-                }).catch(function(error) {
+                }).catch(function (error) {
                     console.log("Error updating document: ", error);
                 });
             });
@@ -98,7 +120,7 @@ class CreateActivity extends Component {
 
         // the classes' assignment collection reference
         let homeworkRef = firestore.collection("classes").doc("668273").collection("Homework").doc("12345678");
-        homeworkRef.get().then(function(doc) {
+        homeworkRef.get().then(function (doc) {
             if (doc.exists) {
                 if (doc.data().questions != null) {
                     self.setState({
@@ -110,43 +132,334 @@ class CreateActivity extends Component {
             }
 
 
-        }).catch(function(error) {
+        }).catch(function (error) {
             console.log("Error getting document: ", error);
         });
     };
 
-    flipComp = () => { this.setState({initialCreate: false,})};
+    flipComp = () => {
+        this.setState({initialCreate: false,})
+    };
 
     //Generate New Homework code
     getCode = () => {
         let code = "";
         for (let i = 0; i < 8; i++) {
-            code += Math.floor(Math.random()*10);
+            code += Math.floor(Math.random() * 10);
         }
         return code;
     };
 
+    onFormSubmit = (ev) => {
+        ev.preventDefault();
+        let tempArr = this.state.questions;
+        let tempQ;
+        switch (ev.target.select.value) {
+            case "Multiple Choice":
+                tempQ = {
+                    correctAns: "",
+                    option1: "",
+                    option2: "",
+                    option3: "",
+                    option4: "",
+                    prompt: "",
+                    type: "MCQ",
+                };
+                tempArr.push(tempQ);
+                break;
+            case "Free Response":
+                tempQ = {
+                    prompt: "",
+                    type: "FRQ",
+                };
+                tempArr.push(tempQ);
+                break;
+            case "Video Page":
+                tempQ = {
+                    url: "",
+                    type: "VIDEO",
+                };
+                tempArr.push(tempQ);
+                break;
+            default:
+                console.log("Error");
+        }
+        this.setState({
+            questions: tempArr,
+        });
+    };
+
+    recordQuestion = (quest, index) => {
+
+        let tempArr = this.state.questions;
+
+        tempArr.splice(index, 1, quest);
+
+        this.setState({
+            questions: tempArr,
+        });
+    };
+
+
+    publishAss = () => {
+        let self = this;
+        let homeworkRef;// = firestore.collection("classes").doc(this.props.code).collection("Homework").doc("39489037");
+        if (this.props.assType === "Lesson")
+            homeworkRef = firestore.collection("classes").doc(self.props.class).collection("inClass").doc(self.state.hwCode);
+        else
+            homeworkRef = firestore.collection("classes").doc(self.props.class).collection("homework").doc(self.state.hwCode);
+
+
+        homeworkRef.update({
+            questions: self.state.questions,
+            maxscore: self.state.questions.length,
+        }).then(function () {
+            console.log("Successfully added a question");
+
+        }).catch(function (error) {
+            console.log("Error updating document: ", error);
+        });
+
+        let classRef = firestore.collection("classes").doc(self.props.class);
+
+        classRef.get().then(function (doc) {
+            if (doc.exists) {
+                let tempArr = doc.data().students;
+
+                let tempAnsHis = new Array(self.state.questions.length);
+                for (let i = 0; i < tempAnsHis.length; i++) {
+                    tempAnsHis[i] = 0;
+                }
+
+                let tempHist = new Array(self.state.questions.length);
+                for (let i = 0; i < tempHist.length; i++) {
+                    tempHist[i] = "";
+                }
+
+                let tempQuests = new Array(self.state.questions.length);
+                for (let i = 0; i < tempQuests.length; i++) {
+                    tempQuests[i] = "2";
+                }
+                for (let i = 0; i < tempArr.length; i++) {
+                    let studentRef;
+                    if (self.props.assType === "Lesson") {
+                        studentRef = firestore.collection("users").doc(tempArr[i]).collection("inClass").doc(self.state.hwCode);
+                        studentRef.get().then(function (doc) {
+                            if (doc.exists) {
+                                self.setNewDoc();
+                            } else {
+                                studentRef.set({
+                                    answerHistory: tempAnsHis,
+                                    class: self.props.class,
+
+                                    completed: 0,
+                                    currentQuestion: 1,
+                                    currentScore: 0,
+                                    maxscore: self.state.questions.length,
+                                    name: self.state.title,
+                                    numOfQuestions: self.state.questions.length,
+                                    questions: tempQuests,
+                                    history: tempHist,
+
+                                }).then(function () {
+                                    console.log("successfully written!");
+                                }).catch(function (error) {
+                                    console.log(error);
+                                });
+                            }
+                        }).catch(function (error) {
+                            console.log("Error getting document: ", error);
+                        });
+                    }
+                    else {
+                        studentRef = firestore.collection("users").doc(tempArr[i]).collection("homework").doc(self.state.hwCode);
+                        studentRef.get().then(function (doc) {
+                            if (doc.exists) {
+                                self.setNewDoc();
+                            } else {
+                                studentRef.set({
+                                    answers: tempHist,
+                                    class: self.props.class,
+                                    completed: 0,
+                                    currentQuestion: 1,
+                                    currentScore: 0,
+                                    mcq: 0,
+                                    maxscore: self.state.questions.length,
+                                    name: self.state.title,
+                                    numOfQuestions: self.state.questions.length,
+                                    history: tempHist,
+
+                                }).then(function () {
+                                    console.log("successfully written!");
+                                }).catch(function (error) {
+                                    console.log(error);
+                                });
+                            }
+                        }).catch(function (error) {
+                            console.log("Error getting document: ", error);
+                        });
+                    }
+                    /*                    studentRef.get().then(function (doc) {
+                                            if (doc.exists) {
+                                                self.setNewDoc();
+                                            } else {
+                                                studentRef.set({
+                                                    answerHistory: tempAnsHis,
+                                                    class: self.props.class,
+                                                    completed: "",
+                                                    currentQuestion: 1,
+                                                    currentScore: 0,
+                                                    maxscore: self.state.questions.length,
+                                                    name: self.state.title,
+                                                    numOfQuestions: self.state.questions.length,
+                                                    questions: tempQuests,
+                                                    history: tempHist,
+
+                                                }).then(function () {
+                                                    console.log("successfully written!");
+                                                }).catch(function (error) {
+                                                    console.log(error);
+                                                });
+                                            }
+                                        }).catch(function (error) {
+                                            console.log("Error getting document: ", error);
+                                        });*/
+                }
+            }
+        })
+
+
+    };
+
     render() {
 
-            return(
-                <Container fluid className={"ContainerRules"}>
-                    <hr style={{marginRight: '-20px', marginLeft: '-20px'}} />
-                    <Row style={{}} className={"Filler"}> </Row>
+        return (
+            <Container fluid className={"ContainerRules"}>
+                <hr style={{marginRight: '-20px', marginLeft: '-20px'}}/>
+                <Row className={"Filler"}> </Row>
 
-                    {this.state.initialCreate
-                        ?
-                        <Instruct createHomework = {this.createHomework}/>
-                        :
-                        <div/>
-                    }
-                    <Row className={"Filler"}> </Row>
-                    <Row className={"Filler"}> </Row>
+                {this.state.initialCreate
+                    ?
+                    <Instruct createHomework={this.createHomework}/>
+                    :
+                    <div>
+                        <Row>
+                            <Form style={{marginLeft: '2rem'}} onSubmit={this.onFormSubmit}>
+                                <FormGroup row>
+                                    <Col xs={7}>
+                                        <Label for="exampleSelect">Select a Question Type</Label>
+                                        {this.props.assType === "Homework"
+                                            ?
+                                            <Input bsSize="lg" type="select" name="select" id="exampleSelect">
+                                                <option>Multiple Choice</option>
+                                                <option>Free Response</option>
+                                                <option>Video Page</option>
+                                            </Input>
+                                            :
+                                            <Input bsSize="lg" type="select" name="select" id="exampleSelect">
+                                                <option>Multiple Choice</option>
+                                            </Input>
+                                        }
+                                    </Col>
+                                    <Col xs={4}>
+                                        <br/>
+                                        <Button color={"info"} size={"lg"}>Add Question</Button>
+                                    </Col>
+                                </FormGroup>
+                            </Form>
+                        </Row>
 
-                </Container>
-            );
+                        <br/>
+                        <br/>
+                        <Col xs={10} lg={8}>
+                            {
+                                this.state.questions.length !== 0
+                                    ?
+                                    <Accordion>
+                                        {this.state.questions.map((quest, index) => {
+                                            return (<AccordionItem key={index}>
+                                                    <AccordionItemTitle><h3> Question {index + 1}:</h3>
+                                                    </AccordionItemTitle>
+                                                    <AccordionItemBody className={"accordBody"}>
+                                                        {quest.type === "MCQ"
+                                                            ?
+                                                            <MCQForm question={quest} index={index}
+                                                                     recordQuestion={this.recordQuestion}/>
+                                                            : (quest.type === "FRQ")
+                                                                ?
+                                                                <FRQForm question={quest} index={index}
+                                                                         recordQuestion={this.recordQuestion}/>
+                                                                : (quest.type === "VIDEO")
+                                                                    ?
+                                                                    <VideoForm question={quest} index={index}
+                                                                               recordQuestion={this.recordQuestion}/>
+                                                                    :
+                                                                    <div/>
+                                                        }
+                                                    </AccordionItemBody>
+                                                </AccordionItem>
+
+                                            )
+                                        })}
+                                    </Accordion>
+                                    :
+                                    <div/>
+                            }
+                        </Col>
+                        <br/>
+                        <Col xs={{size: 4, offset: 3}} lg={{size: 4, offset: 3}}>
+                            <Button color={"secondary"} size={"lg"} block onClick={this.publishAss}>Publish</Button>
+                        </Col>
+                    </div>
+                }
+                <Row className={"Filler"}> </Row>
+                <Row className={"Filler"}> </Row>
+
+            </Container>
+        );
 
 
     }
 }
 
 export default CreateActivity
+
+
+/*
+<Accordion>
+{this.states.questions != null && Object.keys(this.state.questions).map((key, index) => {
+    return <AccordionItem key={key}>
+        <AccordionItemTitle>
+            <h3>
+                {this.props.classes[index].class}
+            </h3>
+        </AccordionItemTitle>
+        <AccordionItemBody className={"accordBody"}>
+            <div className="inside">
+                <Row>
+                    <Col sm="12">
+                        <Form onSubmit={this.onFormSubmit}>
+
+                            <FormGroup row>
+                                <Col xs="7">
+                                    <InputGroup size="10">
+                                        <InputGroupAddon addonType="prepend">Class Name</InputGroupAddon>
+                                        <Input bsSize="md" type="username" name="className" id="exampleClassName" defaultValue={this.props.classes[index].class} />
+                                    </InputGroup>
+
+                                </Col>
+                            </FormGroup>
+                            <Button outline color="success" size={"lg"}>
+                                <i className="far fa-save" />
+                            </Button>
+                            <span className="deleteIcon" onClick={ () => this.toggle(this.props.classes[index].code)}>
+                                                <i className="fas fa-trash-alt picIcon"/>
+                                              </span>
+                        </Form>
+                    </Col>
+                </Row>
+                </div>
+        </AccordionItemBody>
+    </AccordionItem>
+})}
+</Accordion>*/

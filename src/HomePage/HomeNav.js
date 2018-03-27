@@ -6,11 +6,11 @@ import './HomeNav.css'
 class HomeNav extends Component {
 
   render() {
-    if (this.props.width < 600) {
-      let gpa;
-      if (this.props.showGPA)
-        gpa = " - GPA: " + this.props.gpa;
+    let gpa;
+    if (this.props.role === "student" && this.props.showGPA && !isNaN(this.props.gpa))
+      gpa = " - GPA: " + this.props.gpa;
 
+    if (this.props.width < 600) {
       return (
         <div>
           <Navbar color="faded" light>
@@ -20,10 +20,6 @@ class HomeNav extends Component {
         </div>
       );
     } else {
-      let gpa;
-      if (this.props.showGPA)
-        gpa = " - GPA: " + this.props.gpa;
-
       return (
         <div>
           <Navbar color="faded" light>

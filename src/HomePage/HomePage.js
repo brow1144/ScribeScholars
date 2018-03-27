@@ -12,6 +12,7 @@ import HomeNav from './HomeNav';
 import Cards from './Cards';
 import ClassHome from '../ClassPage/ClassHome';
 import LiveFeed from '../ClassPage/LiveFeed';
+import GradingPage from '../MyStudents/GradingPage';
 
 import CreateActivity from '../CreateActivity/CreateActivity';
 
@@ -19,6 +20,10 @@ import Settings from '../Settings/Settings';
 
 import './HomePage.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import GenHomework from "../ClassPage/HomeworkComponents/GenHomework";
+import GenAssignment from "../ClassPage/LiveComponents/GenAssignment";
+
+import StudentLiveFeed from "../ClassPage/StudentLiveFeed";
 
 const mql = window.matchMedia(`(min-width: 600px)`);
 
@@ -77,11 +82,8 @@ class HomePage extends Component {
         class: null,
       }],
 
-      assignments: [{
-        code: null,
-        maxscore: null,
-        name: null,
-      }],
+      lessonNumber: this.props.lessonNumber,
+      class: this.props.class,
 
       personalPage: true,
 
@@ -90,8 +92,14 @@ class HomePage extends Component {
       mql: mql,
       docked: props.docked,
       open: props.open,
-    };
 
+        gradeName : null,
+        gradeMax : null,
+
+
+      myAssignments: [],
+
+    };
   }
 
   // calculate GPA for a student
@@ -142,6 +150,16 @@ class HomePage extends Component {
     if (gpa % 1 !== 0)
       gpa = Math.round(gpa * 100) / 100;
 
+
+    if (!isNaN(gpa)) {
+      let studentRef = firestore.collection("users").doc(this.state.uid);
+      studentRef.update({
+        gpa: gpa,
+      }).catch((error) => {
+        console.log("Error getting document:", error);
+      });
+    }
+
     return gpa;
   };
 
@@ -152,7 +170,7 @@ class HomePage extends Component {
 
     for (let i in this.state.myAssignments) {
       if (this.state.myAssignments.hasOwnProperty(i)) {
-        if (this.state.myAssignments[i].code === code && this.state.myAssignments[i].maxscore != null) {
+        if (this.state.myAssignments[i].class === code && this.state.myAssignments[i].score != null) {
           total += this.state.myAssignments[i].score;
           max += this.state.myAssignments[i].maxscore;
         }
@@ -167,8 +185,45 @@ class HomePage extends Component {
     return grade;
   };
 
+  // get all assignments for a student (GPA)
+  getMyAssignments = () => {
+    let self = this;
+    let studentRef = firestore.collection("users").doc(this.state.uid);
 
+    studentRef.get().then((doc) => {
+      if (doc.exists) {
+        self.getAssignmentsOfType("homework");
+        self.getAssignmentsOfType("quizzes");
+        self.getAssignmentsOfType("tests");
+        self.getAssignmentsOfType("inClass");
 
+        studentRef.get().then(() => {
+          let gpa = self.calcGPA();
+          self.setState({
+            gpa: gpa,
+          });
+        });
+      }
+    }).catch((error) => {
+      console.log("Error getting document: ", error);
+    });
+  };
+
+  getAssignmentsOfType = (type) => {
+    let self = this;
+
+    firestore.collection("users").doc(this.state.uid).collection(type).get().then((snapshot) => {
+      snapshot.forEach((doc) => {
+        if (doc.data().score != null) {
+          self.setState({
+            myAssignments: self.state.myAssignments.concat(doc.data()),
+          });
+        }
+      });
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
 
   componentDidUpdate() {
   }
@@ -238,12 +293,6 @@ class HomePage extends Component {
         if (doc.data().classes !== null) {
           self.setState({
             classes: doc.data().classes,
-            myAssignments: doc.data().assignments, // NEW *****************
-          });
-
-          let gpa = self.calcGPA();
-          self.setState({
-            gpa: gpa,
           });
 
           self.getUserImage();
@@ -255,6 +304,9 @@ class HomePage extends Component {
             firstName: doc.data().firstName,
             lastName: doc.data().lastName,
             role: doc.data().role,
+          }, () => {
+            if (self.state.role === "student")
+              self.getMyAssignments();
           });
         }
       } else {
@@ -549,6 +601,7 @@ class HomePage extends Component {
             <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} gpa={this.state.gpa}
                      expand={this.dockSideBar}
                      showGPA={this.props.showGPA}
+                     role={this.props.role}
                      width={this.state.width}/>
             <Row>
               <Col md="1"/>
@@ -581,6 +634,7 @@ class HomePage extends Component {
             <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} gpa={this.state.gpa}
                      expand={this.dockSideBar}
                      showGPA={this.props.showGPA}
+                     role={this.props.role}
                      width={this.state.width}/>
 
             <Row>
@@ -618,7 +672,8 @@ class HomePage extends Component {
 
           <Settings {...actions} classes={this.props.classes} userImage={this.state.userImage}
                     updateUserImage={this.props.updateUserImage} updateClasses={this.props.updateClasses}
-                    role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid} showGPA={this.props.showGPA}/>
+                    role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid}
+                    showGPA={this.props.showGPA}/>
         </Sidebar>
       );
 
@@ -630,7 +685,8 @@ class HomePage extends Component {
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <ClassHome {...classData} {...actions} selectedClass={this.props.selectedClass} uid={this.state.uid} role={this.state.role}/>
+          <ClassHome {...classData} {...actions} lessonNumber={this.props.lessonNumber} selectedClass={this.props.selectedClass} uid={this.state.uid} role={this.state.role}/>
+
 
         </Sidebar>
       );
@@ -650,8 +706,23 @@ class HomePage extends Component {
         </Sidebar>
       );
 
-    } else if (this.props.page === "createActivity") {
+    } else if (this.props.page === "studentLiveFeed") {
 
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={"Individual Student Live Feed"} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <Row>
+            <Col>
+              <StudentLiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} studUid={this.props.studUid}/>
+            </Col>
+          </Row>
+        </Sidebar>
+      );
+
+    } else if (this.props.page === "createActivity") {
       return (
         <Sidebar {...sideData}>
 
@@ -666,6 +737,31 @@ class HomePage extends Component {
         </Sidebar>
       );
 
+
+    }else if (this.props.page === "gradingPage") {
+        let assRef = firestore.collection("classes").doc(this.props.class).collection(this.props.assCol).doc(this.props.assKey);
+        let self = this;
+
+        assRef.get().then(function (doc) {
+          self.setState({
+              gradeName : doc.data().name,
+          })
+        });
+
+        return (
+            <Sidebar {...sideData}>
+                <HomeNav firstName={"Currently grading: " + this.state.gradeName} lastName={""} expand={this.dockSideBar}
+                         width={this.state.width}/>
+
+                <Row>
+                    <Col>
+                        <GradingPage {...classData} assRef={assRef} class={this.props.class} assCol={this.props.assCol}
+                                     assKey={this.props.assKey} maxScore={this.props.gradeMax} uid={this.state.uid}/>
+                    </Col>
+                </Row>
+            </Sidebar>
+        );
+
     } else if (this.props.page === "homeworks") {
 
       return (
@@ -674,31 +770,26 @@ class HomePage extends Component {
           <HomeNav firstName={"Homework"} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <Row>
-            <Col>
+          <GenHomework {...classData} {...actions} uid = {this.state.uid} code = {this.props.class} homeworkNumber = {this.props.lessonNumber} />
 
-            </Col>
-          </Row>
         </Sidebar>
       );
-
     } else if (this.props.page === "inclass") {
 
       return (
         <Sidebar {...sideData}>
 
-          <HomeNav firstName={"InClass Lesson"} lastName={""} expand={this.dockSideBar}
+          <HomeNav firstName={"Inclass Assignment"} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <Row>
-            <Col>
 
-            </Col>
-          </Row>
+          <GenAssignment uid = {this.state.uid}  code = {this.props.class} lessonNumber = {this.props.lessonNumber} />
+
         </Sidebar>
       );
 
     } else {
+
       return (
         <p>UH OH!</p>
       );
