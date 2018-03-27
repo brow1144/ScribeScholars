@@ -145,12 +145,14 @@ class HomePage extends Component {
       gpa = Math.round(gpa * 100) / 100;
 
 
-    let studentRef = firestore.collection("users").doc(this.state.uid);
-    studentRef.update({
-      gpa: gpa,
-    }).catch((error) => {
-      console.log("Error getting document:", error);
-    });
+    if (!isNaN(gpa)) {
+      let studentRef = firestore.collection("users").doc(this.state.uid);
+      studentRef.update({
+        gpa: gpa,
+      }).catch((error) => {
+        console.log("Error getting document:", error);
+      });
+    }
 
     return gpa;
   };
