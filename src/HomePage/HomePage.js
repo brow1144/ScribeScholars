@@ -94,7 +94,7 @@ class HomePage extends Component {
       open: props.open,
 
         gradeName : null,
-        gradeMax : null
+        gradeMax : null,
 
 
       myAssignments: [],
