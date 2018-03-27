@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import { PieChart, Cell,Pie } from 'recharts';
+import { PieChart, Cell,Pie, Tooltip } from 'recharts';
 
 
 import {Row, Col } from 'reactstrap';
@@ -71,7 +71,11 @@ class Dashboard extends Component {
             ],
 
             COLORS: ['#00C49F',
-                '#FF8042'],
+                '#FF8042',
+                '#55B8D9',
+                '#B855D9',
+                '#E8F576',
+            ],
 
 
             classScores: [],  // class scores for an individual assignment
@@ -287,7 +291,7 @@ class Dashboard extends Component {
                                         <Pie data={this.state.passFail} dataKey="value" nameKey="name" cx="50%" cy="50%"
                                              outerRadius={70} fill="#8884d8" label>{
                                             this.state.passFail.map((entry, index) => <Cell key={entry} fill={this.state.COLORS[index % this.state.COLORS.length]}/>)
-                                        } </Pie>
+                                        } </Pie><Tooltip/>
                                     </PieChart>
                                 </Row>
                             </Col>
@@ -317,7 +321,10 @@ class Dashboard extends Component {
                                         <PieChart className="piePad" width={365} height={250}>
                                             <Pie data={this.state.gpaDis} dataKey="value" nameKey="name" cx="50%"
                                                  cy="50%"
-                                                 outerRadius={70} fill="#8884d8" label/>
+                                                 outerRadius={70} fill="#8884d8" label>{
+                                                this.state.gpaDis.map((entry, index) => <Cell key={entry} fill={this.state.COLORS[index % this.state.COLORS.length]}/>)
+                                            }</Pie>
+                                            <Tooltip/>
                                             </PieChart>
                                 </Row>
                             </Col>
