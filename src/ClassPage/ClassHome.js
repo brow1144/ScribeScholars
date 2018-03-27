@@ -10,6 +10,7 @@ import GradesTable from './GradesTable';
 import Cards from '../HomePage/Cards';
 import './ClassHome.css';
 import MyStudents from '../MyStudents/MyStudents';
+import RegradeTable from "./RegradeTable";
 
 class ClassHome extends Component {
 
@@ -240,6 +241,15 @@ class ClassHome extends Component {
           ?
           <div>
             <MyStudents code={this.props.code}/>
+          </div>
+          :
+          <div>
+          </div>
+        }
+        {this.state.regradeRequestsActive
+          ?
+          <div>
+            <RegradeTable code={this.props.code} uid={this.props.uid}/>
           </div>
           :
           <div>

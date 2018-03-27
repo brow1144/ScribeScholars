@@ -25,6 +25,7 @@ class GradesTable extends Component {
         score: null,
         maxscore: null,
       },
+      studentName: null,
       modal_index: null,
 
       doneLoading: false,
@@ -46,12 +47,20 @@ class GradesTable extends Component {
         self.addScore(self.state.gradeData[i].score, self.state.gradeData[i].maxscore);
       }
 
-      self.setState({ doneLoading: true });
-
     }).catch(function (error) {
       console.log("Error getting document:", error);
     });
-  }
+
+    //Get students full name
+    let studentRef = firestore.collection("users").doc(this.props.uid);
+    studentRef.get().then(function (doc) {
+      self.setState({ studentName: GradesTable.getFullName(doc.data().firstName, doc.data().lastName)})
+    }).then(function (){
+      self.setState({ doneLoading: true });
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+  };
 
   //Modal handling
   openRegradeModal = (index) => {
@@ -61,7 +70,7 @@ class GradesTable extends Component {
       modal_index: index,
       regrade_open: true,
     });
-  }
+  };
 
   closeRegradeModal = () => {
     let self = this;
@@ -76,12 +85,17 @@ class GradesTable extends Component {
       submit_status: "closed",
       reason_input: "",
     });
-  }
+  };
 
   updateReasonValue = (evt) => {
     let self = this;
     self.setState({ reason_input: evt.target.value });
-  }
+  };
+
+  //Gets students full name
+  static getFullName(first, last){
+    return first + " " + last;
+  };
 
   //Regrade request handling
   onRegradeSubmit = () => {
@@ -89,11 +103,12 @@ class GradesTable extends Component {
     self.setState({ submit_status: "writing" });
 
     let request = {
-      assignment: this.state.modal_assignment.name,
+      name: this.state.modal_assignment.name,
       maxscore: this.state.modal_assignment.maxscore,
       reason: this.state.reason_input,
       score: this.state.modal_assignment.score,
-      student: this.state.uid,
+      student: this.state.studentName,
+      studentCode: this.props.uid,
     }
 
     //Get student's assignment list for updating regrade_status
@@ -183,6 +198,10 @@ class GradesTable extends Component {
             <h2 className={"homeworkTitle"}>
               Successfully submitted request!
             </h2>
+            <div/>
+            <h4 className={"homeworkTitle"}>Your request is pending instructor review.</h4>
+            <div/>
+            <Button type="text" className="submitButton" size="lg" onClick={this.closeRegradeModal}>Return to Assignments</Button>
           </Modal>
         );
 
@@ -207,7 +226,7 @@ class GradesTable extends Component {
 
             <div className={"makeSpace"}/>
 
-            <Button type="submit" className="submitButton" size="lg" onClick={this.onRegradeSubmit}>Submit Request</Button>
+            <Button type="text" className="submitButton" size="lg" onClick={this.onRegradeSubmit}>Submit Request</Button>
           </Modal>
         );
     }
