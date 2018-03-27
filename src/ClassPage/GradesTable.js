@@ -390,6 +390,9 @@ class GradesTable extends Component {
           let avg = this.getAverageScore(this.state.classAssignments[i], true);
           let med = this.getMedianScore(this.state.classAssignments[i], true);
 
+          if (grade % 1 !== 0)
+            grade = Math.round(grade * 100) / 100;
+
           tmpAssignmentGrades = tmpAssignmentGrades.concat({name: name, grade: grade, average: avg, median: med});
         }
       }
@@ -560,12 +563,12 @@ class GradesTable extends Component {
                 </Col>
               </Row>
               <Col>
-              <Row className="total">Total Grade: {this.getGrade(this.state.uid)}</Row>
-              <Row className="rank">Class Average: {this.state.classAverage}</Row>
-              <Row className="rank">Rank: {this.getRank(this.state.uid)}</Row>
+              <Row className="total" hidden={this.state.myAssignments.length === 0}>Total Grade: {this.getGrade(this.state.uid)}</Row>
+              <Row className="rank" hidden={this.state.myAssignments.length === 0}>Class Average: {this.state.classAverage}</Row>
+              <Row className="rank" hidden={this.state.myAssignments.length === 0}>Rank: {this.getRank(this.state.uid)}</Row>
               <br/>
               </Col>
-              <Row>
+              <Row hidden={this.state.myAssignments.length === 0}>
                 <Col xs={{size: 5, offset: 1}}>
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={this.state.assignmentScores}

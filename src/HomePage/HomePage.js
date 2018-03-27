@@ -290,13 +290,15 @@ class HomePage extends Component {
           self.getUserImage();
           self.getDeadlines();
           self.getAnnouncements();
-          self.getMyAssignments();
         }
         if (doc.data().firstName !== null && doc.data().lastName !== null && doc.data().role !== null) {
           self.setState({
             firstName: doc.data().firstName,
             lastName: doc.data().lastName,
             role: doc.data().role,
+          }, () => {
+            if (self.state.role === "student")
+              self.getMyAssignments();
           });
         }
       } else {
