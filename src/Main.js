@@ -71,6 +71,10 @@ class Main extends Component {
     }
   }
 
+  componentWillMount() {
+    this.getRole();
+  }
+
     /**
      *
      * Now that we have the teacher uid and the students
@@ -450,6 +454,7 @@ class Main extends Component {
             {...actions}
           />
         )}/>
+
         <Route path="/HomePage/:class/homework/create-activity" render={(match) => (
           <HomePage
             class={match.match.params.class}
@@ -460,28 +465,49 @@ class Main extends Component {
           />
         )}/>
 
-        <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber/:uid" render={(match) => (
+          <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber/:uid" render={(match) => (
+            this.state.role  === "teacher"
+              ?
+                <HomePage
+                  studUid={match.match.params.uid}
+                  class={match.match.params.class}
+                  lessonNumber={match.match.params.lessonNumber}
+                  page="studentLiveFeed"
+                  {...data}
+                  {...actions}
+                />
+              :
+                <Route path="/homepage/:class" render={(match) => (
+                  <HomePage
+                    path={match.match.params.class}
+                    page="classes"
+                    {...data}
+                    {...actions}
+                  />
+                )}/>
+          )}/>
 
-          <HomePage
-            studUid={match.match.params.uid}
-            class={match.match.params.class}
-            lessonNumber={match.match.params.lessonNumber}
-            page="studentLiveFeed"
-            {...data}
-            {...actions}
-          />
-        )}/>
-
-        <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber" render={(match) => (
-
-          <HomePage
-            class={match.match.params.class}
-            lessonNumber={match.match.params.lessonNumber}
-            page="liveFeed"
-            {...data}
-            {...actions}
-          />
-        )}/>
+          <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber" render={(match) => (
+            this.state.role  === "teacher"
+              ?
+            <HomePage
+              class={match.match.params.class}
+              lessonNumber={match.match.params.lessonNumber}
+              page="liveFeed"
+              {...data}
+              {...actions}
+            />
+              :
+              <Route path="/homepage/:class" render={(match) => (
+                <HomePage
+                  path={match.match.params.class}
+                  page="classes"
+                  {...data}
+                  {...actions}
+                />
+              )}/>
+          )}/>
+        }
 
         <Route path="/HomePage/:class/lessons/:lessonNumber" render={(match) => (
 
