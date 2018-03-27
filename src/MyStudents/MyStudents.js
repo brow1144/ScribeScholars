@@ -453,12 +453,12 @@ class MyStudents extends Component {
                         studRef.get().then(function (doc) {
                             let data = doc.data();
 
-                            if (isNaN(data.gpa)) {
+                            if (data.gpa == null) {
                                 console.log(data.firstName + " did not have a valid GPA.");
                                 object.unshift({
                                     name: data.firstName + " " + data.lastName,
                                     email: data.email,
-                                    gpa: 0,
+                                    gpa: "Invalid",
                                   grade: self.getGrade(id),
                                 rank: self.getRank(id),
                                 });
