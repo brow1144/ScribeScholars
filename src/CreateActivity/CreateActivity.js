@@ -277,7 +277,7 @@ class CreateActivity extends Component {
                                 self.setNewDoc();
                             } else {
                                 studentRef.set({
-                                    answer: tempHist,
+                                    answers: tempHist,
                                     class: self.props.class,
                                     completed: 0,
                                     currentQuestion: 1,
@@ -298,31 +298,31 @@ class CreateActivity extends Component {
                             console.log("Error getting document: ", error);
                         });
                     }
-/*                    studentRef.get().then(function (doc) {
-                        if (doc.exists) {
-                            self.setNewDoc();
-                        } else {
-                            studentRef.set({
-                                answerHistory: tempAnsHis,
-                                class: self.props.class,
-                                completed: "",
-                                currentQuestion: 1,
-                                currentScore: 0,
-                                maxscore: self.state.questions.length,
-                                name: self.state.title,
-                                numOfQuestions: self.state.questions.length,
-                                questions: tempQuests,
-                                history: tempHist,
+                    /*                    studentRef.get().then(function (doc) {
+                                            if (doc.exists) {
+                                                self.setNewDoc();
+                                            } else {
+                                                studentRef.set({
+                                                    answerHistory: tempAnsHis,
+                                                    class: self.props.class,
+                                                    completed: "",
+                                                    currentQuestion: 1,
+                                                    currentScore: 0,
+                                                    maxscore: self.state.questions.length,
+                                                    name: self.state.title,
+                                                    numOfQuestions: self.state.questions.length,
+                                                    questions: tempQuests,
+                                                    history: tempHist,
 
-                            }).then(function () {
-                                console.log("successfully written!");
-                            }).catch(function (error) {
-                                console.log(error);
-                            });
-                        }
-                    }).catch(function (error) {
-                        console.log("Error getting document: ", error);
-                    });*/
+                                                }).then(function () {
+                                                    console.log("successfully written!");
+                                                }).catch(function (error) {
+                                                    console.log(error);
+                                                });
+                                            }
+                                        }).catch(function (error) {
+                                            console.log("Error getting document: ", error);
+                                        });*/
                 }
             }
         })
@@ -347,11 +347,18 @@ class CreateActivity extends Component {
                                 <FormGroup row>
                                     <Col xs={7}>
                                         <Label for="exampleSelect">Select a Question Type</Label>
-                                        <Input bsSize="lg" type="select" name="select" id="exampleSelect">
-                                            <option>Multiple Choice</option>
-                                            <option>Free Response</option>
-                                            <option>Video Page</option>
-                                        </Input>
+                                        {this.props.assType === "Homework"
+                                            ?
+                                            <Input bsSize="lg" type="select" name="select" id="exampleSelect">
+                                                <option>Multiple Choice</option>
+                                                <option>Free Response</option>
+                                                <option>Video Page</option>
+                                            </Input>
+                                            :
+                                            <Input bsSize="lg" type="select" name="select" id="exampleSelect">
+                                                <option>Multiple Choice</option>
+                                            </Input>
+                                        }
                                     </Col>
                                     <Col xs={4}>
                                         <br/>
@@ -381,9 +388,12 @@ class CreateActivity extends Component {
                                                                 ?
                                                                 <FRQForm question={quest} index={index}
                                                                          recordQuestion={this.recordQuestion}/>
-                                                                :
-                                                                <VideoForm question={quest} index={index}
-                                                                           recordQuestion={this.recordQuestion}/>
+                                                                : (quest.type === "VIDEO")
+                                                                    ?
+                                                                    <VideoForm question={quest} index={index}
+                                                                               recordQuestion={this.recordQuestion}/>
+                                                                    :
+                                                                    <div/>
                                                         }
                                                     </AccordionItemBody>
                                                 </AccordionItem>

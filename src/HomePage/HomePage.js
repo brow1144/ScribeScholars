@@ -723,7 +723,6 @@ class HomePage extends Component {
       );
 
     } else if (this.props.page === "createActivity") {
-
       return (
         <Sidebar {...sideData}>
 

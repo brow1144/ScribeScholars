@@ -381,7 +381,7 @@ class Main extends Component {
 
     let self = this;
 
-    let docRef = firestore.collection("classes").doc(classCode).collection("Homework");
+    let docRef = firestore.collection("classes").doc(classCode).collection("homework");
 
     docRef.get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
@@ -445,7 +445,7 @@ class Main extends Component {
     return (
       <Switch>
 
-        <Route path="/HomePage/:class/lessons/create-activity" render={(match) => (
+        <Route path="/HomePage/:class/lesson/create-activity" render={(match) => (
           <HomePage
             class={match.match.params.class}
             assType="Lesson"
