@@ -69,7 +69,6 @@ class MyStudents extends Component {
       classOverallGrades: [],   // class overall grades
       assignmentGrades: [],   // individual grades for each assignment
 
-
       classAverage: null,
 
       graphVisible: false,
@@ -121,7 +120,7 @@ class MyStudents extends Component {
 
     firestore.collection("users").doc(uid).collection(type).get().then((snapshot) => {
       snapshot.forEach((doc) => {
-        if (doc.data().class === self.state.code && doc.data().score != null) {
+        if (doc.data().code === self.state.code && doc.data().score != null) {
           self.setState({
             allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid}),
           });
@@ -295,7 +294,7 @@ class MyStudents extends Component {
     this.getClassInfo();
     this.getHomeworks();
     this.getInClass();
-    this.getQuizzes();
+    //this.getQuizzes();
   };
 
   getHomeworks = () => {
@@ -372,7 +371,7 @@ class MyStudents extends Component {
 
   };
 
-  getQuizzes = () => {
+  /*getQuizzes = () => {
 
     let object = [{}];
 
@@ -407,11 +406,11 @@ class MyStudents extends Component {
       quizzes: object
     });
 
-  };
+  };*/
 
   getStudents = () => {
 
-    let object = [{}];
+    let object = [];
 
     let self = this;
 
@@ -452,8 +451,9 @@ class MyStudents extends Component {
               self.setState({
                 students: object,
               }, () => {
-                // TODO sort here
+                // TODO sort here maybe?
               });
+              console.log(self.state.students);
             });
           }
         }
@@ -462,12 +462,6 @@ class MyStudents extends Component {
       }
     }).catch(function (error) {
       console.log("Error getting document:", error);
-    });
-
-    object.pop();
-
-    self.setState({
-      students: object
     });
   };
 
