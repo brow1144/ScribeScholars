@@ -14,6 +14,7 @@ class SetPersonal extends Component {
         this.state = {
             uid: props.uid,
             name: props.name,
+            role: props.role,
             email: props.email,
             phoneN: props.phoneN,
             descript: props.descript,
@@ -161,7 +162,7 @@ class SetPersonal extends Component {
                             </FormGroup>
                             <FormGroup row>
                                 <Col sm={6}>
-                                  <FormGroup check inline>
+                                  <FormGroup check inline hidden={this.props.role === "teacher"}>
                                     <Label check size="lg">
                                       <Input onChange={this.props.toggleGPA} type="checkbox" id="checkbox" checked={this.props.showGPA === true}/> Show GPA
                                     </Label>

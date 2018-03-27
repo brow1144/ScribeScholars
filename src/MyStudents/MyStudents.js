@@ -36,12 +36,198 @@ class MyStudents extends Component {
             quizzes : [{
                 name: null,
                 max: null
-            }]
+            }],
+
+          uid: this.props.uid,
+          code: this.props.code,
+
+          doneLoading: false,
+
+          myAssignments: [],  // all the user's assignments from this class
+          myScore: null,  // user's score on current assignment
+
+          classAssignments: [],   // assignments in the class
+          studentsList: [],   // all students in the class
+          allAssignments: [],   // all assignments from every student
+
+          classScores: [],  // class scores for an individual assignment
+          assignmentComp: [],   // user's score, average, and median
+          classOverallGrades: [],   // class overall grades
+          assignmentScores: [],   // individual scores for each assignment
+          assignmentGrades: [],   // individual grades for each assignment
+
+
+          classAverage: null,
+
+          graphVisible: false,
         }
 
     }
 
+  // get assignments and students for a particular class
+  getClassInfo = () => {
+    let self = this;
+    let classRef = firestore.collection("classes").doc(this.state.code);
+
+    classRef.get().then((doc) => {
+      if (doc.exists) {
+        if (doc.data().students != null) {
+          self.setState({
+            studentsList: doc.data().students,
+          });
+        }
+
+        self.getClassAssignmentsOfType("homework");
+        self.getClassAssignmentsOfType("quizzes");
+        self.getClassAssignmentsOfType("tests");
+        self.getClassAssignmentsOfType("inClass");
+
+        self.getAllAssignments();
+      }
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
+
+  getClassAssignmentsOfType = (type) => {
+    let self = this;
+
+    firestore.collection("classes").doc(this.state.code).collection(type).get().then((snapshot) => {
+      snapshot.forEach((doc) => {
+        self.setState({
+          classAssignments: self.state.classAssignments.concat({data: doc.data()}),
+        });
+      });
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
+
+  getAssignmentsOfType = (uid, type, all) => {
+    let self = this;
+
+    firestore.collection("users").doc(uid).collection(type).get().then((snapshot) => {
+      snapshot.forEach((doc) => {
+        if (!all) {
+          if (doc.data().code === self.state.code) {
+            self.setState({
+              myAssignments: self.state.myAssignments.concat({data: doc.data(), uid: uid}),
+            });
+          }
+        } else {
+          if (doc.data().code === self.state.code && doc.data().score != null) {
+            self.setState({
+              allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid}),
+            });
+          }
+        }
+      });
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
+
+  getAllAssignments = () => {
+    let self = this;
+
+    for (let i in this.state.studentsList) {
+      if (this.state.studentsList.hasOwnProperty(i)) {
+        self.getAssignmentsOfType(self.state.studentsList[i], "homework", true);
+        self.getAssignmentsOfType(self.state.studentsList[i], "quizzes", true);
+        self.getAssignmentsOfType(self.state.studentsList[i], "tests", true);
+        self.getAssignmentsOfType(self.state.studentsList[i], "inClass", true);
+
+        let studentRef = firestore.collection("users").doc(this.state.studentsList[i]);
+        studentRef.get().then(() => {
+          if (parseInt(i, 10) === self.state.studentsList.length - 1) {
+            self.getClassAverage();
+            //self.buildAssignmentScoresGraph();
+            //self.buildAssignmentGradesGraph();
+          }
+        }).catch(function(error) {
+          console.log("Error getting document:", error);
+        });
+      }
+    }
+  };
+
+  // get overall grade in class
+  getGrade = (uid) => {
+    let total = 0;
+    let max = 0;
+
+    for (let i in this.state.allAssignments) {
+      if (this.state.allAssignments.hasOwnProperty(i)) {
+        if (this.state.allAssignments[i].uid === uid && this.state.allAssignments[i].data.score != null) {
+          total += this.state.allAssignments[i].data.score;
+          max += this.state.allAssignments[i].data.maxscore;
+        }
+      }
+    }
+
+    let grade = (total / max) * 100;
+
+    if (grade % 1 !== 0)
+      grade = Math.round(grade * 100) / 100;
+
+    return grade;
+  };
+
+  // get average overall grade in a class
+  getClassAverage = () => {
+    let tmpClassOverallGrades = [];
+    let totalGrade = 0;
+    let numStudents = 0;
+
+    for (let i in this.state.studentsList) {
+      if (this.state.studentsList.hasOwnProperty(i)) {
+        let grade = this.getGrade(this.state.studentsList[i]);
+        tmpClassOverallGrades.push(grade);
+
+        totalGrade += grade;
+        numStudents++;
+      }
+    }
+
+    let classAverage = totalGrade / numStudents;
+
+    if (classAverage % 1 !== 0)
+      classAverage = Math.round(classAverage * 100) / 100;
+
+    this.setState({
+      classOverallGrades: tmpClassOverallGrades,
+      classAverage: classAverage,
+    });
+
+    return classAverage;
+  };
+
+  getRank = (uid) => {
+    let classGrades = this.state.classOverallGrades;
+
+    if (classGrades === undefined || classGrades.length === 0)
+      return "--";
+
+    classGrades.sort().reverse();
+
+    let studentGrade = this.getGrade(uid);
+    return classGrades.indexOf(studentGrade) + 1;
+  };
+
+  getPercentage = (score, max) => {
+    let grade = (score / max) * 100;
+
+    if (grade % 1 !== 0)
+      grade = Math.round(grade * 100) / 100;
+
+    if (!isNaN(grade))
+      return grade;
+    else
+      return "--";
+  };
+
     componentWillMount() {
+      this.getClassInfo();
         this.getHomeworks();
         this.getStudents();
         this.getInClass();
@@ -175,7 +361,9 @@ class MyStudents extends Component {
                             let data = doc.data();
                             object.unshift({
                                 name: data.firstName + " " + data.lastName,
-                                email: data.email
+                                email: data.email,
+                                grade: self.getGrade(id),
+                                rank: self.getRank(id),
                             });
                             self.setState({
                                 students: object,
@@ -235,9 +423,11 @@ class MyStudents extends Component {
                                     <Table striped>
                                         <thead>
                                         <tr>
-                                            <th>Rank</th>
+                                            <th/>
+                                            <th>Grade</th>
                                             <th>Name</th>
                                             <th>Email</th>
+                                            <th/>
                                         </tr>
                                         </thead>
 

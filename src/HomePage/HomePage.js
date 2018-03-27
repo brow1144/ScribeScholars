@@ -91,8 +91,9 @@ class HomePage extends Component {
       mql: mql,
       docked: props.docked,
       open: props.open,
-    };
 
+      myAssignments: [],
+    };
   }
 
   // calculate GPA for a student
@@ -143,6 +144,14 @@ class HomePage extends Component {
     if (gpa % 1 !== 0)
       gpa = Math.round(gpa * 100) / 100;
 
+
+    let studentRef = firestore.collection("users").doc(this.state.uid);
+    studentRef.update({
+      gpa: gpa,
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+
     return gpa;
   };
 
@@ -153,7 +162,7 @@ class HomePage extends Component {
 
     for (let i in this.state.myAssignments) {
       if (this.state.myAssignments.hasOwnProperty(i)) {
-        if (this.state.myAssignments[i].code === code && this.state.myAssignments[i].maxscore != null) {
+        if (this.state.myAssignments[i].code === code && this.state.myAssignments[i].score != null) {
           total += this.state.myAssignments[i].score;
           max += this.state.myAssignments[i].maxscore;
         }
@@ -168,8 +177,45 @@ class HomePage extends Component {
     return grade;
   };
 
+  // get all assignments for a student (GPA)
+  getMyAssignments = () => {
+    let self = this;
+    let studentRef = firestore.collection("users").doc(this.state.uid);
 
+    studentRef.get().then((doc) => {
+      if (doc.exists) {
+        self.getAssignmentsOfType("homework");
+        self.getAssignmentsOfType("quizzes");
+        self.getAssignmentsOfType("tests");
+        self.getAssignmentsOfType("inClass");
 
+        studentRef.get().then(() => {
+          let gpa = self.calcGPA();
+          self.setState({
+            gpa: gpa,
+          });
+        });
+      }
+    }).catch((error) => {
+      console.log("Error getting document: ", error);
+    });
+  };
+
+  getAssignmentsOfType = (type) => {
+    let self = this;
+
+    firestore.collection("users").doc(this.state.uid).collection(type).get().then((snapshot) => {
+      snapshot.forEach((doc) => {
+        if (doc.data().score != null) {
+          self.setState({
+            myAssignments: self.state.myAssignments.concat(doc.data()),
+          });
+        }
+      });
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
 
   componentDidUpdate() {
   }
@@ -239,12 +285,6 @@ class HomePage extends Component {
         if (doc.data().classes !== null) {
           self.setState({
             classes: doc.data().classes,
-            myAssignments: doc.data().assignments, // NEW *****************
-          });
-
-          let gpa = self.calcGPA();
-          self.setState({
-            gpa: gpa,
           });
 
           self.getUserImage();
@@ -256,6 +296,9 @@ class HomePage extends Component {
             firstName: doc.data().firstName,
             lastName: doc.data().lastName,
             role: doc.data().role,
+          }, () => {
+            if (self.state.role === "student")
+              self.getMyAssignments();
           });
         }
       } else {
@@ -550,6 +593,7 @@ class HomePage extends Component {
             <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} gpa={this.state.gpa}
                      expand={this.dockSideBar}
                      showGPA={this.props.showGPA}
+                     role={this.props.role}
                      width={this.state.width}/>
             <Row>
               <Col md="1"/>
@@ -582,6 +626,7 @@ class HomePage extends Component {
             <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} gpa={this.state.gpa}
                      expand={this.dockSideBar}
                      showGPA={this.props.showGPA}
+                     role={this.props.role}
                      width={this.state.width}/>
 
             <Row>
@@ -619,7 +664,8 @@ class HomePage extends Component {
 
           <Settings {...actions} classes={this.props.classes} userImage={this.state.userImage}
                     updateUserImage={this.props.updateUserImage} updateClasses={this.props.updateClasses}
-                    role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid} showGPA={this.props.showGPA}/>
+                    role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid}
+                    showGPA={this.props.showGPA}/>
         </Sidebar>
       );
 

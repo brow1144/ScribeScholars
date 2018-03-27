@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
-import { Route, Switch, Redirect } from 'react-router-dom';
+import {Route, Switch, Redirect} from 'react-router-dom';
 import './App.css';
 
 import firebase from './base.js';
@@ -18,6 +18,7 @@ import SetRoomPic from "./Announcements/SetRoomPicture";
 import DashboardInfo from "./DashboardInfo/DashboardInfoPage";
 import MyStudents from "./MyStudents/MyStudents";
 import MakeWork from "./WorkForm/MakeWork";
+import ForgotPassword from './Sigin/ForgotPassword';
 
 import Graphs from "./Graphs";
 
@@ -44,8 +45,9 @@ class App extends Component {
           this.authHandler(user)
         } else {
           // finished signing out
-          this.setState({ uid: null })
-          Window.reload();
+          this.setState({uid: null}, () => {
+            // window.location.reload();
+          });
         }
       }
     )
@@ -54,13 +56,13 @@ class App extends Component {
   getUserFromLocalStorage() {
     const uid = localStorage.getItem('uid');
     if (!uid) return;
-    this.setState({ uid })
+    this.setState({uid})
   }
 
   authHandler = (user) => {
     localStorage.setItem('uid', user.uid);
     this.setState(
-      { uid: user.uid },
+      {uid: user.uid},
     )
   };
 
@@ -75,99 +77,105 @@ class App extends Component {
         <Route path='/HomePage' render={() => (
           this.signedIn()
             ? <Main page={"home"} uid={this.state.uid}/>
-            : <Redirect to="/About" />
-        )} />
+            : <Redirect to="/About"/>
+        )}/>
 
         <Route path='/LiveFeed' render={() => (
-        this.signedIn()
-          ? <LiveFeed uid={this.state.uid}/>
-          : <Redirect to="/About" />
-      )} />
+          this.signedIn()
+            ? <LiveFeed uid={this.state.uid}/>
+            : <Redirect to="/About"/>
+        )}/>
 
         <Route exact path='/sign-in' render={() => (
           !this.signedIn()
-            ? <SignIn />
-            : <Redirect to="/HomePage" />
-        )} />
+            ? <SignIn/>
+            : <Redirect to="/HomePage"/>
+        )}/>
 
-          <Route path='/About' render={() => (
-              <About />
-          )} />
+        <Route exact path='/forgotPassword' render={() => (
+          !this.signedIn()
+            ? <ForgotPassword />
+            : <Redirect to="/HomePage"/>
+        )}/>
 
-          <Route path='/DashboardInfo' render={() => (
-              this.signedIn()
-                  ? <DashboardInfo/>
-                  : <Redirect to="/About" />
-          )} />
+        <Route path='/About' render={() => (
+          <About/>
+        )}/>
 
-          <Route path='/MyStudents' render={() => (
-              this.signedIn()
-                  ? <MyStudents/>
-                  : <Redirect to="/About" />
-          )} />
+        <Route path='/DashboardInfo' render={() => (
+          this.signedIn()
+            ? <DashboardInfo/>
+            : <Redirect to="/About"/>
+        )}/>
 
-          <Route path='/Announcements' render={() => (
-              this.signedIn()
-                  ? <Announcements />
-                  : <Redirect to="/About" />
-          )} />
+        <Route path='/MyStudents' render={() => (
+          this.signedIn()
+            ? <MyStudents/>
+            : <Redirect to="/About"/>
+        )}/>
 
-          <Route path='/CreateAnnouncements' render={() => (
-              this.signedIn()
-                  ? <CreateAnn/>
-                  : <Redirect to="/About" />
-          )} />
+        <Route path='/Announcements' render={() => (
+          this.signedIn()
+            ? <Announcements/>
+            : <Redirect to="/About"/>
+        )}/>
 
-          <Route path='/SetRoomPicture' render={() => (
-              this.signedIn()
-                  ? <SetRoomPic/>
-                  : <Redirect to="/About" />
-          )} />
+        <Route path='/CreateAnnouncements' render={() => (
+          this.signedIn()
+            ? <CreateAnn/>
+            : <Redirect to="/About"/>
+        )}/>
 
-          <Route path='/MakeWork' render={() => (
-              this.signedIn()
-                  ? <MakeWork/>
-                  : <Redirect to="/About" />
-          )} />
+        <Route path='/SetRoomPicture' render={() => (
+          this.signedIn()
+            ? <SetRoomPic/>
+            : <Redirect to="/About"/>
+        )}/>
+
+        <Route path='/MakeWork' render={() => (
+          this.signedIn()
+            ? <MakeWork/>
+            : <Redirect to="/About"/>
+        )}/>
 
         <Route exact path='/create-account' render={() => (
-            !this.signedIn()
-                ? <CreateAccount />
-                :<Redirect to="/HomePage" />
-        )} />
+          !this.signedIn()
+            ? <CreateAccount/>
+            : <Redirect to="/HomePage"/>
+        )}/>
 
         <Route exact path='/create-class' render={() => (
           this.signedIn()
             ? <CreateClass uid={this.state.uid}/>
-            : <Redirect to="/About" />
-        )} />
-                                                       
+            : <Redirect to="/About"/>
+        )}/>
+
         <Route exact path='/create-class-success' render={() => (
           this.signedIn()
             ? <ClassSuccess uid={this.state.uid}/>
-            : <Redirect to="/About" />
+            : <Redirect to="/About"/>
 
-        )} />
+        )}/>
 
         <Route path='/settings' render={() => (
           this.signedIn()
             ? <Main page={"settings"} uid={this.state.uid}/>
-            : <Redirect to="/sign-in" />
-        )} />
+            : <Redirect to="/sign-in"/>
+        )}/>
 
         <Route path='/graphs' render={() => (
           <Graphs uid={this.state.uid}/>
-        )} />
+        )}/>
 
-        <Route render={() => <Redirect to="/HomePage" />} />
+        <Route render={() => <Redirect to="/HomePage"/>}/>
 
-          <Route exact path='/create-activity' render={() => (
-              this.signedIn()
-                  ? <CreateActivity uid={this.state.uid}/>
-                  : <Redirect to="/About" />
-          )} />
+        <Route exact path='/create-activity' render={() => (
+          this.signedIn()
+            ? <CreateActivity uid={this.state.uid}/>
+            : <Redirect to="/About"/>
+        )}/>
 
-        <Route render={() => <Redirect to='/HomePage' />} />
+        <Route render={() => <Redirect to='/HomePage'/>}/>
 
 
       </Switch>
