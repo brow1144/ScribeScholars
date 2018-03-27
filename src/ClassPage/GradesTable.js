@@ -12,22 +12,22 @@ class GradesTable extends Component {
     this.state = {
       uid: this.props.uid,
       code: this.props.code,
+
+      gradeData: [],
       score: 0,
       max_score: 0,
-      gradeData: [],
+
       regrade_open: false,
-
-      submit_status: null,
-
       reason_input: "",
-
+      submit_status: null,
       modal_assignment: {
         name: null,
         score: null,
         maxscore: null,
       },
+      modal_index: null,
 
-      doneLoading: false
+      doneLoading: false,
     };
 
     let self = this;
@@ -58,6 +58,7 @@ class GradesTable extends Component {
     let self = this;
     self.setState({
       modal_assignment: this.state.gradeData[index],
+      modal_index: index,
       regrade_open: true,
     });
   }
@@ -65,8 +66,15 @@ class GradesTable extends Component {
   closeRegradeModal = () => {
     let self = this;
     self.setState({
+      modal_assignment: {
+        name: null,
+        score: null,
+        maxscore: null,
+      },
+      modal_index: null,
       regrade_open: false,
       submit_status: "closed",
+      reason_input: "",
     });
   }
 
@@ -88,7 +96,24 @@ class GradesTable extends Component {
       student: this.state.uid,
     }
 
+    //Get student's assignment list for updating regrade_status
+    let docRef = firestore.collection("users").doc(this.props.uid).collection("assignments").doc(this.props.code);
+    docRef.get().then(function () {
 
+      let assignment = self.state.gradeData[self.state.modal_index];
+      assignment.regrade_status = "pending";
+
+      docRef.update({
+        grades: self.state.gradeData,
+      }).catch(function (error) {
+        console.log("Error updating document:", error);
+      });
+
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+
+    //Get class reference for updating all pending requests
     let classRef = firestore.collection("classes").doc(this.props.code);
     classRef.get().then(function (doc) {
 
@@ -188,6 +213,34 @@ class GradesTable extends Component {
     }
   }
 
+  getButton(index, clickBind){
+    let buttonText = "Request Regrade";
+    let regrade_status = this.state.gradeData[index].regrade_status;
+    if(regrade_status != null){
+      clickBind = null;
+      switch(regrade_status){
+        case "pending":
+          buttonText = "Regrade Pending";
+          break;
+        case "accepted":
+          buttonText = "Regrade Accepted";
+          break;
+        case "declined":
+          buttonText = "Regrade Declined";
+          break;
+        default:
+          break;
+      }
+    }
+
+    return (
+      <Button onClick={clickBind}
+              style={{backgroundColor: 'white', color: '#21CE99'}}>
+        {buttonText}
+      </Button>
+    );
+  }
+
   render() {
 
     if(!this.state.doneLoading){
@@ -237,10 +290,7 @@ class GradesTable extends Component {
                       <td>{this.state.gradeData[index].score}</td>
                       <td>{this.state.gradeData[index].maxscore}</td>
                       <td>
-                        <Button onClick={boundButtonClick}
-                                style={{backgroundColor: 'white', color: '#21CE99'}}>
-                          Request Regrade
-                        </Button>
+                        {this.getButton(index, boundButtonClick)}
                       </td>
                     </tr>
                   })
