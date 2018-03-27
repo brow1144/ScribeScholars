@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Table, Container, Row, Col, Label } from 'reactstrap';
+import {Table, Container, Row, Col, Label, Button } from 'reactstrap';
 import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area, ReferenceLine, ResponsiveContainer } from 'recharts';
 import { firestore } from "../base";
 import { NavLink as RouterLink } from 'react-router-dom'
@@ -345,9 +345,10 @@ class GradesTable extends Component {
     let score = assignment.data.score;
     let avg = this.getAverageScore(classAssignment, false);
     let med = this.getMedianScore(classAssignment, false);
+    let max = assignment.data.maxscore;
 
     this.setState({
-      assignmentComp: [].concat({name: name, score: score, average: avg, median: med}),
+      assignmentComp: [].concat({name: name, score: score, average: avg, median: med, max: max}),
     });
   };
 
@@ -420,6 +421,12 @@ class GradesTable extends Component {
     };
   }
 
+  hideGraph = () => {
+    this.setState({
+      graphVisible: false,
+    });
+  };
+
   showGraph = (index) => {
     this.setState({
       myScore: this.getMyAssignment(this.state.classAssignments[index]).data.score,
@@ -445,43 +452,52 @@ class GradesTable extends Component {
         let pos = this.state.classScores.map((e) => {return e.score;}).indexOf(this.state.myScore);
 
         return (
-          <Row>
-            <Col xs={8}>
-              <ResponsiveContainer width="100%" height={250}>
-                <AreaChart data={this.state.classScores}
-                           margin={{top: 30, right: 30, left: 30, bottom: 30}}>
-                  <defs>
-                    <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <XAxis/>
-                  <YAxis/>
-                  <CartesianGrid strokeDasharray="3 3"/>
-                  <Tooltip/>
-                  <ReferenceLine x={pos} stroke="green" label={{value: "You", position: "top"}}/>
-                  <Area type="monotone" dataKey="score" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)"/>
-                </AreaChart>
-              </ResponsiveContainer>
-            </Col>
+          <div>
+            <Row>
+              <Col xs={{size: 1, offset: 0}}>
+                <Button onClick={this.hideGraph}>
+                  <i className="fas fa-arrow-left graphIcon"/>
+                </Button>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={8}>
+                <ResponsiveContainer width="100%" height={250}>
+                  <AreaChart data={this.state.classScores}
+                             margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                    <defs>
+                      <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <XAxis/>
+                    <YAxis/>
+                    <CartesianGrid strokeDasharray="3 3"/>
+                    <Tooltip/>
+                    <ReferenceLine x={pos} stroke="green" label={{value: "You", position: "top"}}/>
+                    <Area type="monotone" dataKey="score" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)"/>
+                  </AreaChart>
+                </ResponsiveContainer>
+              </Col>
 
-            <Col xs={3}>
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={this.state.assignmentComp}
-                          margin={{top: 30, right: 30, left: 30, bottom: 30}}>
-                  <XAxis dataKey="name"/>
-                  <YAxis/>
-                  <CartesianGrid strokeDasharray="3 3"/>
-                  <Tooltip/>
-                  <Legend/>
-                  <Bar dataKey="score" fill="#21CE99" />
-                  <Bar dataKey="average" fill="#bf8bff" />
-                  <Bar dataKey="median" fill="#f1cbff" />
-                </BarChart>
-              </ResponsiveContainer>
-            </Col>
-          </Row>
+              <Col xs={3}>
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart data={this.state.assignmentComp}
+                            margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                    <XAxis dataKey="name"/>
+                    <YAxis/>
+                    <CartesianGrid strokeDasharray="3 3"/>
+                    <Tooltip/>
+                    <Bar dataKey="score" fill="#21CE99" />
+                    <Bar dataKey="average" fill="#bf8bff" />
+                    <Bar dataKey="median" fill="#f1cbff" />
+                    <Bar dataKey="max" fill="#b967ff" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </Col>
+            </Row>
+          </div>
         )
       } else {
         return (
@@ -527,7 +543,7 @@ class GradesTable extends Component {
                         <td>{this.getMedianScore(this.state.classAssignments[index], true)}</td>
                         <td>
                           <span style={this.state.myAssignments[index].data.score != null ? {} : {display: "none"}}
-                                onClick={() => this.showGraph(index)} className="showGraphsButton">
+                                onClick={() => this.showGraph(index)}>
                             <i className="fas fa-chart-bar graphIcon"/>
                           </span>
                         </td>
@@ -545,24 +561,20 @@ class GradesTable extends Component {
               </Row>
               <Col>
               <Row className="total">Total Grade: {this.getGrade(this.state.uid)}</Row>
-              <Row className="rank">
-                Class Average: {this.state.classAverage}
-              </Row>
-              <Row className="rank">
-                Rank: {this.getRank(this.state.uid)}
-              </Row>
+              <Row className="rank">Class Average: {this.state.classAverage}</Row>
+              <Row className="rank">Rank: {this.getRank(this.state.uid)}</Row>
               <br/>
               </Col>
               <Row>
-                <Col sm="12" md="5">
+                <Col xs={{size: 5, offset: 1}}>
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={this.state.assignmentScores}
-                              margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+                              margin={{top: 30, right: 30, left: 30, bottom: 30}}>
                       <XAxis dataKey="name"/>
                       <YAxis/>
                       <CartesianGrid strokeDasharray="3 3"/>
                       <Tooltip/>
-                      <Legend/>
+                      <Legend verticalAlign="top" height={36}/>
                       <Bar dataKey="score" fill="#21CE99" />
                       <Bar dataKey="average" fill="#bf8bff" />
                       <Bar dataKey="median" fill="#f1cbff" />
@@ -570,15 +582,15 @@ class GradesTable extends Component {
                   </ResponsiveContainer>
                 </Col>
 
-                <Col sm="12" md="5">
+                <Col xs={{size: 5}}>
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={this.state.assignmentGrades}
-                              margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+                              margin={{top: 30, right: 30, left: 30, bottom: 30}}>
                       <XAxis dataKey="name"/>
                       <YAxis/>
                       <CartesianGrid strokeDasharray="3 3"/>
                       <Tooltip/>
-                      <Legend/>
+                      <Legend verticalAlign="top" height={36}/>
                       <Bar dataKey="grade" fill="#21CE99" />
                       <Bar dataKey="average" fill="#bf8bff" />
                       <Bar dataKey="median" fill="#f1cbff" />
