@@ -114,13 +114,13 @@ class MyStudents extends Component {
     firestore.collection("users").doc(uid).collection(type).get().then((snapshot) => {
       snapshot.forEach((doc) => {
         if (!all) {
-          if (doc.data().code === self.state.code) {
+          if (doc.data().class === self.state.code) {
             self.setState({
               myAssignments: self.state.myAssignments.concat({data: doc.data(), uid: uid}),
             });
           }
         } else {
-          if (doc.data().code === self.state.code && doc.data().score != null) {
+          if (doc.data().class === self.state.code && doc.data().score != null) {
             self.setState({
               allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid}),
             });
