@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, FormGroup, Input } from 'reactstrap';
+import { Col, FormGroup } from 'reactstrap';
 import ReactPlayer from 'react-player'
 
 class Video extends Component {

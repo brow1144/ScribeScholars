@@ -311,9 +311,6 @@ class GenHomework extends Component {
       complete = 1;
 
 
-    console.log(score);
-    console.log(complete);
-
     //Set the states
     self.setState({
       completed: complete,

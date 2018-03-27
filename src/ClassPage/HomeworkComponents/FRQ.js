@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Col, FormGroup, Label, Input } from 'reactstrap';
+import { Col, FormGroup, Input } from 'reactstrap';
 
 
 class FRQ extends Component {
