@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Table, Container, Row, Col, Label, Button } from 'reactstrap';
+import {Table, Container, Row, Col, Label, Button, Input } from 'reactstrap';
 import { firestore } from "../base";
 import Modal from 'react-modal';
 import './Table.css'
@@ -16,6 +16,13 @@ class GradesTable extends Component {
       max_score: 0,
       gradeData: [],
       regrade_open: false,
+
+      modal_assignment: {
+        name: null,
+        score: null,
+        maxscore: null,
+      },
+
       doneLoading: false
     };
 
@@ -23,7 +30,9 @@ class GradesTable extends Component {
     let docRef = firestore.collection("users").doc(this.props.uid).collection("assignments").doc(this.props.code);
     docRef.get().then(function (doc) {
 
-      self.setState({ gradeData: doc.data().grades });
+      self.setState({
+        gradeData: doc.data().grades
+      });
 
     }).then( function () {
 
@@ -38,14 +47,21 @@ class GradesTable extends Component {
     });
   }
 
-  openRegrade = () => {
+  openRegradeModal = (index) => {
     let self = this;
-    self.setState({ regrade_open: true });
+    self.setState({
+      modal_assignment: this.state.gradeData[index],
+      regrade_open: true,
+    });
   }
 
-  closeRegrade = () => {
+  closeRegradeModal = () => {
     let self = this;
     self.setState({ regrade_open: false });
+  }
+
+  onRegradeSubmit = () => {
+
   }
 
   addScore = (score, maxscore) => {
@@ -105,12 +121,13 @@ class GradesTable extends Component {
                   </thead>
                   <tbody>
                   {Object.keys(this.state.gradeData).map((key, index) => {
+                    let boundButtonClick = this.openRegradeModal.bind(this, index);
                     return <tr key={key}>
                       <td>{this.state.gradeData[index].name}</td>
                       <td>{this.state.gradeData[index].score}</td>
                       <td>{this.state.gradeData[index].maxscore}</td>
                       <td>
-                        <Button onClick={this.openRegrade}
+                        <Button onClick={boundButtonClick}
                                 style={{backgroundColor: 'white', color: '#21CE99'}}>
                           Request Regrade
                         </Button>
@@ -126,12 +143,24 @@ class GradesTable extends Component {
             <Row>
               <Col>
                 <Modal
-                  style={"modal-content"}
-                  onRequestClose={this.closeRegrade}
-                  isOpen={this.state.regrade_open}>
+                  className={"modalStyle"}
+                  onRequestClose={this.closeRegradeModal}
+                  isOpen={this.state.regrade_open}
+                  ariaHideApp={false}>
                   <h2 className={"homeworkTitle"}>
                     Request Regrade
                   </h2>
+                  <h2>Assignment: {this.state.modal_assignment.name}</h2>
+                  <h2>Score: {this.state.modal_assignment.score}/{this.state.modal_assignment.maxscore}</h2>
+
+                  <div className={"makeSpace"}/>
+
+                  <h2>Reason for Regrade:</h2>
+                  <Input className={"modalInput"} type={"text"}/>
+
+                  <div className={"makeSpace"}/>
+
+                  <Button className="submitButton" size="lg" type="submit" onClick={this.onRegradeSubmit}>Submit Request</Button>
                 </Modal>
               </Col>
             </Row>
