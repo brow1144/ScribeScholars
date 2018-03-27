@@ -170,7 +170,7 @@ class HomePage extends Component {
 
     for (let i in this.state.myAssignments) {
       if (this.state.myAssignments.hasOwnProperty(i)) {
-        if (this.state.myAssignments[i].code === code && this.state.myAssignments[i].score != null) {
+        if (this.state.myAssignments[i].class === code && this.state.myAssignments[i].score != null) {
           total += this.state.myAssignments[i].score;
           max += this.state.myAssignments[i].maxscore;
         }

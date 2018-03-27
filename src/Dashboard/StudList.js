@@ -16,7 +16,7 @@ const StudList = (props) => {
                         <td>{props.students[index].name}</td>
                         <td>{props.students[index].email}</td>
                         <td>
-                          <span onClick={() => props.showGraph(index)}>
+                          <span onClick={() => props.showGraph(props.students[index].uid)}>
                             <i className="fas fa-chart-bar graphIcon"/>
                           </span>
                         </td>
