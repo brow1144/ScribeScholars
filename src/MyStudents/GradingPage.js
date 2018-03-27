@@ -16,7 +16,8 @@ class GradingPage extends Component {
                 name: null,
                 email: null,
                 key: null,
-                currentScore: null
+                currentScore: null,
+                mcq: null
             }],
 
             maxScore : 0
@@ -56,13 +57,54 @@ class GradingPage extends Component {
 
 
                             studRef.collection(self.props.assCol).doc(self.props.assKey).get().then(function (deepDoc) {
-                               curScore = deepDoc.data().currentScore;
-                                object.unshift({
-                                    name: data.firstName + " " + data.lastName,
-                                    email: data.email,
-                                    key: id,
-                                    currentScore : curScore
-                                });
+                                curScore = deepDoc.data().currentScore;
+
+                                if (self.props.assCol === "homework") {
+                                    if (isNaN(data.gpa)) {
+                                        console.log(data.firstName + " did not have a valid GPA.");
+                                        object.unshift({
+                                            name: data.firstName + " " + data.lastName,
+                                            email: data.email,
+                                            key: id,
+                                            currentScore: curScore,
+                                            gpa: 0,
+                                            mcq: deepDoc.data().mcq
+                                        });
+                                    } else {
+                                        object.unshift({
+                                            name: data.firstName + " " + data.lastName,
+                                            email: data.email,
+                                            key: id,
+                                            currentScore: curScore,
+                                            gpa: data.gpa,
+                                            mcq: deepDoc.data().mcq
+                                        });
+                                    }
+                                }
+                                else if (self.props.assCol === "inClass") {
+                                    if (isNaN(data.gpa)) {
+                                        console.log(data.firstName + " did not have a valid GPA.");
+                                        object.unshift({
+                                            name: data.firstName + " " + data.lastName,
+                                            email: data.email,
+                                            key: id,
+                                            currentScore: curScore,
+                                            gpa: 0,
+                                            mcq: curScore
+                                        });
+                                    } else {
+                                        object.unshift({
+                                            name: data.firstName + " " + data.lastName,
+                                            email: data.email,
+                                            key: id,
+                                            currentScore: curScore,
+                                            gpa: data.gpa,
+                                            mcq: curScore
+                                        });
+                                    }
+                                }
+
+
 
                                 self.setState({
                                     students: object,
@@ -106,6 +148,9 @@ class GradingPage extends Component {
     updateGrades = (student, collection, document, score ) => {
         if (score === "") {
             score = "0";
+        }
+        if (score > this.state.maxScore) {
+            score = this.state.maxScore;
         }
         firestore.collection("users").doc(student).collection(collection).doc(document).update({
             currentScore: score

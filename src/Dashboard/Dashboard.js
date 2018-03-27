@@ -153,8 +153,12 @@ class Dashboard extends Component {
 
             stud.onSnapshot(function (doc) {
                 if (doc.exists) {
-
-                    gpaMap[element] = doc.data().gpa;
+                    if (isNaN(doc.data().gpa)) {
+                        gpaMap[element] = 0;
+                    } else {
+                        gpaMap[element] = doc.data().gpa;
+                    }
+                    //gpaMap[element] = doc.data().gpa;
                     gpaMap[element] = Math.round(gpaMap[element] * 100) / 100;
 
 

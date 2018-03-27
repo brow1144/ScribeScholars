@@ -16,9 +16,10 @@ const StudListGrade = (props) => {
                     <Table striped>
                         <thead>
                         <tr>
-                            <th>Rank</th>
+                            <th>GPA</th>
                             <th>Name</th>
                             <th>Current Score</th>
+                            <th>Multi-Choice Score</th>
                             <th>Grade ( out of {props.maxScore} )</th>
                         </tr>
                         </thead>
@@ -26,9 +27,10 @@ const StudListGrade = (props) => {
                         {Object.keys(props.students).map((key, index) => {
                             return (
                                 <tr key={key}>
-                                    <th scope="row">{index + 1}</th>
+                                    <th scope="row">{props.students[index].gpa}</th>
                                     <td>{props.students[index].name}</td>
                                     <td>{props.students[index].currentScore}</td>
+                                    <td>{props.students[index].mcq}</td>
                                     <td>
                                         <FormGroup>
                                             <Row>

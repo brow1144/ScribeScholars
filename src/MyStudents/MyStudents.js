@@ -60,7 +60,7 @@ class MyStudents extends Component {
 
 
         let colRef = firestore.collection("classes").doc(this.props.code)
-            .collection("Homework");
+            .collection("homework");
 
         colRef.get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
@@ -97,7 +97,7 @@ class MyStudents extends Component {
 
 
         let colRef = firestore.collection("classes").doc(this.props.code)
-            .collection("InClass");
+            .collection("inClass");
 
         colRef.get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
@@ -134,7 +134,7 @@ class MyStudents extends Component {
 
 
         let colRef = firestore.collection("classes").doc(this.props.code)
-            .collection("Quizzes");
+            .collection("quizzes");
 
         colRef.get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
