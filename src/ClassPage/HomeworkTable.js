@@ -55,9 +55,14 @@ const HomeworkTable = (props) => {
         </Row>
         <Row>
           <Col className={"moreSpace"}>
+              {props.role === "teacher"
+                  ?
               <RouterLink to={`/HomePage/${props.code}/homework/create-activity`}>
-                  Create New In Class Lesson
+                  Create New Class Homework
               </RouterLink>
+              :
+              <div/>
+              }
           </Col>
         </Row>
         <Row>
