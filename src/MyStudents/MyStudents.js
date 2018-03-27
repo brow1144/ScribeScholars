@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, Table} from 'reactstrap';
+import {Container, Row, Col, Table, Button} from 'reactstrap';
+import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area, ReferenceLine, ResponsiveContainer } from 'recharts';
 
 import './MyStudents.css';
 import Graphs from '../Dashboard/Dashboard';
@@ -230,6 +231,88 @@ class MyStudents extends Component {
       return "--";
   };
 
+  // build data for graph of classroom scores on a particular assignment
+  buildClassScoresGraph = (assignment) => {
+    let tmpClassScores = [];
+
+    for (let i in this.state.allAssignments) {
+      if (this.state.allAssignments.hasOwnProperty(i)) {
+        if (this.state.allAssignments[i].data.name === assignment.data.name)
+          tmpClassScores = tmpClassScores.concat({score: this.state.allAssignments[i].data.score});
+      }
+    }
+
+    this.setState({
+      classScores: tmpClassScores,
+    });
+  };
+
+  // build data for assignmentComp
+  buildBenchmarkGraph = (classAssignment) => {
+    let assignment = this.getMyAssignment(classAssignment);
+
+    let name = assignment.data.name;
+    let score = assignment.data.score;
+    let avg = this.getAverageScore(classAssignment, false);
+    let med = this.getMedianScore(classAssignment, false);
+    let max = assignment.data.maxscore;
+
+    this.setState({
+      assignmentComp: [].concat({name: name, score: score, average: avg, median: med, max: max}),
+    });
+  };
+
+  // build data for assignmentScores
+  buildAssignmentScoresGraph = () => {
+    let tmpAssignmentScores = [];
+
+    for (let i in this.state.classAssignments) {
+      if (this.state.classAssignments.hasOwnProperty(i)) {
+        let assignment = this.getMyAssignment(this.state.classAssignments[i]);
+
+        if (assignment.data.score != null) {
+          let name = assignment.data.name;
+          let score = assignment.data.score;
+          let avg = this.getAverageScore(this.state.classAssignments[i], false);
+          let med = this.getMedianScore(this.state.classAssignments[i], false);
+
+          tmpAssignmentScores = tmpAssignmentScores.concat({name: name, score: score, average: avg, median: med});
+        }
+      }
+    }
+
+    this.setState({
+      assignmentScores: tmpAssignmentScores,
+    });
+  };
+
+  // build data for assignmentGrades
+  buildAssignmentGradesGraph = () => {
+    let tmpAssignmentGrades = [];
+
+    for (let i in this.state.classAssignments) {
+      if (this.state.classAssignments.hasOwnProperty(i)) {
+        let assignment = this.getMyAssignment(this.state.classAssignments[i]);
+
+        if (assignment.data.score != null) {
+          let name = assignment.data.name;
+          let grade = (assignment.data.score / assignment.data.maxscore) * 100;
+          let avg = this.getAverageScore(this.state.classAssignments[i], true);
+          let med = this.getMedianScore(this.state.classAssignments[i], true);
+
+          if (grade % 1 !== 0)
+            grade = Math.round(grade * 100) / 100;
+
+          tmpAssignmentGrades = tmpAssignmentGrades.concat({name: name, grade: grade, average: avg, median: med});
+        }
+      }
+    }
+
+    this.setState({
+      assignmentGrades: tmpAssignmentGrades,
+    });
+  };
+
     componentWillMount() {
       this.getClassInfo();
         this.getHomeworks();
@@ -389,10 +472,10 @@ class MyStudents extends Component {
                                 });
                             }
 
-
                             self.setState({
                                 students: object,
                             }, () => {
+                                self.state.students.sort(self.compareValues("grade")).reverse();
                             });
 
                         });
@@ -410,8 +493,43 @@ class MyStudents extends Component {
         self.setState({
             students: object
         });
-
     };
+
+  // custom sorting function for the graphs
+  compareValues(key) {
+    return function(a, b) {
+      // check that input is valid
+      if(!a.hasOwnProperty(key) || !b.hasOwnProperty(key))
+        return 0;
+
+      let val1 = a[key];
+      let val2 = b[key];
+
+      let comparison = 0;
+
+      if (val1 > val2)
+        comparison = 1;
+      else if (val1 < val2)
+        comparison = -1;
+
+      return comparison;
+    };
+  }
+
+  showGraph = () => {
+    this.setState({
+      graphVisible: true,
+    });
+
+    this.buildClassScoresGraph(this.state.classAssignments[0]);
+    //this.buildBenchmarkGraph(this.state.classAssignments[0]);
+  };
+
+  hideGraph = () => {
+    this.setState({
+      graphVisible: false,
+    });
+  };
 
 
 
@@ -444,26 +562,54 @@ class MyStudents extends Component {
                         <Col>
                             <h1>Students</h1>
                             <Row>
-                                <Col>
-                                    <Table striped>
-                                        <thead>
-                                        <tr>
+                              <Col>
+                                {this.state.graphVisible
+                                  ?
+                                  <Row>
+                                    <Col xs={{size: 1, offset: 0}}>
+                                      <Button onClick={this.hideGraph}>
+                                        <i className="fas fa-arrow-left graphIcon"/>
+                                      </Button>
+                                    </Col>
+                                    <Col>
+                                      <ResponsiveContainer width="100%" height={150}>
+                                        <AreaChart data={this.state.classScores}
+                                                   margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                                          <defs>
+                                            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                                              <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                                              <stop offset="95%" stopColor="#8884d8" stopOpacity={0}/>
+                                            </linearGradient>
+                                          </defs>
+                                          <XAxis/>
+                                          <YAxis/>
+                                          <CartesianGrid strokeDasharray="3 3"/>
+                                          <Tooltip/>
+                                          <ReferenceLine stroke="green" label={{value: "You", position: "top"}}/>
+                                          <Area type="monotone" dataKey="score" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)"/>
+                                        </AreaChart>
+                                      </ResponsiveContainer>
+                                    </Col>
+                                    <Col>
+                                    </Col>
+                                  </Row>
+                                  :
+                                  <Table striped>
+                                    <thead>
+                                    <tr>
+                                      <th>Rank</th>
+                                      <th>Grade</th>
+                                      <th>Name</th>
+                                      <th>Email</th>
+                                      <th/>
+                                    </tr>
+                                    </thead>
 
-                                            <th>GPA</th>
+                                    <StudList students={this.state.students} showGraph={this.showGraph}/>
 
-                                            <th/>
-                                            <th>Grade</th>
-
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th/>
-                                        </tr>
-                                        </thead>
-
-                                        <StudList students={this.state.students}/>
-
-                                    </Table>
-                                </Col>
+                                  </Table>
+                                }
+                              </Col>
                             </Row>
                         </Col>
                         </Col>

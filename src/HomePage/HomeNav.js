@@ -7,7 +7,7 @@ class HomeNav extends Component {
 
   render() {
     let gpa;
-    if (this.props.role === "student" && this.props.showGPA)
+    if (this.props.role === "student" && this.props.showGPA && !isNaN(this.props.gpa))
       gpa = " - GPA: " + this.props.gpa;
 
     if (this.props.width < 600) {
