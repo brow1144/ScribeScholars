@@ -169,11 +169,15 @@ class ClassHome extends Component {
             {this.props.role === "teacher"
               ?
               <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/myStudents`}>
-                <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive}>My Students</NavLink>
+
+                  <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive} code={this.props.code} lessonNumber={this.props.lessonNumber}>My Students</NavLink>
+
+                
               </RouterLink>
               :
               <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/grades`}>
                 <NavLink onClick={this.switchGrades} active={this.state.gradesActive}>Grades</NavLink>
+
               </RouterLink>
             }
 

@@ -65,7 +65,9 @@ class Side extends Component {
   };
 
   render() {
-    if (this.props.page === "home" || this.props.page === "classes" || this.props.page === "liveFeed" || this.props.page === "createActivity" || this.props.page === "homeworks" || this.props.page === "inclass" || this.props.page === "studentLiveFeed") {
+
+    if (this.props.page === "home" || this.props.page === "classes" || this.props.page === "liveFeed" || this.props.page === "createActivity" || this.props.page === "gradingPage" || this.props.page === "homeworks" || this.props.page === "inclass" || this.props.page === "studentLiveFeed") {
+
       return (
         <div>
             <NavLink style={{textDecoration: 'none'}} to={`/HomePage`}>

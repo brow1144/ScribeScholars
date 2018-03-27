@@ -12,6 +12,7 @@ import HomeNav from './HomeNav';
 import Cards from './Cards';
 import ClassHome from '../ClassPage/ClassHome';
 import LiveFeed from '../ClassPage/LiveFeed';
+import GradingPage from '../MyStudents/GradingPage';
 
 import CreateActivity from '../CreateActivity/CreateActivity';
 
@@ -92,7 +93,12 @@ class HomePage extends Component {
       docked: props.docked,
       open: props.open,
 
+        gradeName : null,
+        gradeMax : null
+
+
       myAssignments: [],
+
     };
   }
 
@@ -145,12 +151,14 @@ class HomePage extends Component {
       gpa = Math.round(gpa * 100) / 100;
 
 
-    let studentRef = firestore.collection("users").doc(this.state.uid);
-    studentRef.update({
-      gpa: gpa,
-    }).catch((error) => {
-      console.log("Error getting document:", error);
-    });
+    if (!isNaN(gpa)) {
+      let studentRef = firestore.collection("users").doc(this.state.uid);
+      studentRef.update({
+        gpa: gpa,
+      }).catch((error) => {
+        console.log("Error getting document:", error);
+      });
+    }
 
     return gpa;
   };
@@ -677,7 +685,8 @@ class HomePage extends Component {
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <ClassHome {...classData} {...actions} selectedClass={this.props.selectedClass} uid={this.state.uid} role={this.state.role}/>
+          <ClassHome {...classData} {...actions} lessonNumber={this.props.lessonNumber} selectedClass={this.props.selectedClass} uid={this.state.uid} role={this.state.role}/>
+
 
         </Sidebar>
       );
@@ -729,6 +738,31 @@ class HomePage extends Component {
         </Sidebar>
       );
 
+
+    }else if (this.props.page === "gradingPage") {
+        let assRef = firestore.collection("classes").doc(this.props.class).collection(this.props.assCol).doc(this.props.assKey);
+        let self = this;
+
+        assRef.get().then(function (doc) {
+          self.setState({
+              gradeName : doc.data().name,
+          })
+        });
+
+        return (
+            <Sidebar {...sideData}>
+                <HomeNav firstName={"Currently grading: " + this.state.gradeName} lastName={""} expand={this.dockSideBar}
+                         width={this.state.width}/>
+
+                <Row>
+                    <Col>
+                        <GradingPage {...classData} assRef={assRef} class={this.props.class} assCol={this.props.assCol}
+                                     assKey={this.props.assKey} maxScore={this.props.gradeMax} uid={this.state.uid}/>
+                    </Col>
+                </Row>
+            </Sidebar>
+        );
+
     } else if (this.props.page === "homeworks") {
 
       return (
@@ -756,6 +790,7 @@ class HomePage extends Component {
       );
 
     } else {
+
       return (
         <p>UH OH!</p>
       );
