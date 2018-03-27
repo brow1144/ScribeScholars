@@ -40,7 +40,6 @@ class AssignTable extends Component {
   };
 
   render() {
-    console.log(this.state.role);
     return (
       <div>
         <Container fluid>
