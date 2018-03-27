@@ -599,6 +599,7 @@ class MyStudents extends Component {
                                     <tr>
                                       <th>Rank</th>
                                       <th>Grade</th>
+                                        <th>GPA</th>
                                       <th>Name</th>
                                       <th>Email</th>
                                       <th/>
