@@ -354,7 +354,6 @@ class GenHomework extends Component {
           mcqQuestion += 1;
           if(ansArr[i] === tmpHis[i]) {
             s += 1
-            console.log(s);
           }
         }
       }
@@ -371,7 +370,7 @@ class GenHomework extends Component {
         score: s,
       })
     }
-    console.log(s);
+
     //Set the states
     self.setState({
       mcq: mcqQuestion,

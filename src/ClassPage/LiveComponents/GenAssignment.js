@@ -30,6 +30,7 @@ class GenAssignment extends Component {
       code: null,
       questions: null,
 
+      score: null,
       maxscore: null,
       numOfQuestions: null,
       currentScore: null,
@@ -128,31 +129,63 @@ class GenAssignment extends Component {
 
     user.get().then((doc) => {
       if (doc.exists) {
-        if(doc.data().currentQuestion+1 <= self.state.numOfQuestions) {
-          user.update({
-            history: self.state.history,
-            currentQuestion: self.state.currentQuestion + 1,
-            questions: self.state.status,
-            completed: self.state.completed,
-            answerHistory: self.state.answerHistory,
-            currentScore: self.state.currentScore,
-          }).then(function() {
-            self.getUserAssignment(self.props.code)
-          });
-        }
-        else if(doc.data().currentQuestion+1 == self.state.numOfQuestions+1) {
-          user.update({
-            history: self.state.history,
-            questions: self.state.status,
-            completed: self.state.completed,
-            answerHistory: self.state.answerHistory,
-            currentScore: self.state.currentScore,
-          }).then(function() {
-            self.setState({
-              finalPage: true,
+        if(self.state.score) {
+          if (doc.data().currentQuestion + 1 <= self.state.numOfQuestions) {
+            user.update({
+              history: self.state.history,
+              currentQuestion: self.state.currentQuestion + 1,
+              questions: self.state.status,
+              completed: self.state.completed,
+              answerHistory: self.state.answerHistory,
+              currentScore: self.state.currentScore,
+              score: self.state.score,
+            }).then(function () {
+              self.getUserAssignment(self.props.code)
             });
-            self.getUserAssignment(self.props.code)
-          });
+          }
+          else if (doc.data().currentQuestion + 1 == self.state.numOfQuestions + 1) {
+            user.update({
+              history: self.state.history,
+              questions: self.state.status,
+              completed: self.state.completed,
+              answerHistory: self.state.answerHistory,
+              currentScore: self.state.currentScore,
+              score: self.state.score,
+            }).then(function () {
+              self.setState({
+                finalPage: true,
+              });
+              self.getUserAssignment(self.props.code)
+            });
+          }
+        }
+        else {
+          if (doc.data().currentQuestion + 1 <= self.state.numOfQuestions) {
+            user.update({
+              history: self.state.history,
+              currentQuestion: self.state.currentQuestion + 1,
+              questions: self.state.status,
+              completed: self.state.completed,
+              answerHistory: self.state.answerHistory,
+              currentScore: self.state.currentScore,
+            }).then(function () {
+              self.getUserAssignment(self.props.code)
+            });
+          }
+          else if (doc.data().currentQuestion + 1 == self.state.numOfQuestions + 1) {
+            user.update({
+              history: self.state.history,
+              questions: self.state.status,
+              completed: self.state.completed,
+              answerHistory: self.state.answerHistory,
+              currentScore: self.state.currentScore,
+            }).then(function () {
+              self.setState({
+                finalPage: true,
+              });
+              self.getUserAssignment(self.props.code)
+            });
+          }
         }
 
       }
@@ -229,29 +262,18 @@ class GenAssignment extends Component {
     //Check for completion variable
     let check = 0;
     for(let i in self.state.status) {
-      if(self.state.status[i] !== "2"){
+      if(self.state.status[i] !== 2){
         check += 1;
       }
     }
 
-    let num = 0;
-    if(check === self.state.numOfQuestions)
-      num = 2;
-    else if(check === 0)
-      num = 0;
-    else
-      num = 1;
-
     //Calc the grade
     self.updateGrade();
-
 
     //Set the states
     self.setState({
       ans: answer,
       history: tmpHis,
-      status: tmpStat,
-      completed: num,
     })
 
 
@@ -293,13 +315,16 @@ class GenAssignment extends Component {
     let num = 0;
 
     if(check === this.state.numOfQuestions) {
-      num = "2";
+      num = 2;
+      this.setState({
+        score: (this.state.currentScore/100 * this.state.maxscore),
+      })
     }
     else if(check === 0) {
-      num = "0";
+      num = 0;
     }
     else {
-      num = "1";
+      num = 1;
     }
 
     this.setState({
@@ -349,7 +374,7 @@ class GenAssignment extends Component {
                   <Button onClick={this.decPage}>Last Question</Button>
                   <br/>
                 </Col>
-                {this.state.completed === "2"
+                {this.state.completed === 2
                   ?
                   <Col xs={6}>
                     <div className={"space"}/>
