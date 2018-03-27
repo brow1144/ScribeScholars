@@ -156,7 +156,7 @@ class CreateClass extends Component {
         teacherRef.update({
             classes: self.state.classes,
         }).then(function() {
-            console.log("Successfully updated classes list");
+            //console.log("Successfully updated classes list");
 
             self.setState({
                 done: true,
