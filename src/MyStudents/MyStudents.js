@@ -512,7 +512,7 @@ class MyStudents extends Component {
 
 
         self.setState({
-            quizzes: object
+            students: object
         });
 
     };
