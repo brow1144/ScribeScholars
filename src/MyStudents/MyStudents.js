@@ -1,18 +1,6 @@
 import React, {Component} from 'react';
 import {Container, Row, Col, Table, Button} from 'reactstrap';
-import {
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  BarChart,
-  Bar,
-  AreaChart,
-  Area,
-  ReferenceLine,
-  ResponsiveContainer
-} from 'recharts';
+import {XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, ResponsiveContainer } from 'recharts';
 
 import './MyStudents.css';
 import Graphs from '../Dashboard/Dashboard';
@@ -69,11 +57,8 @@ class MyStudents extends Component {
       classOverallGrades: [],   // class overall grades
       assignmentGrades: [],   // individual grades for each assignment
 
-      classAverage: null,
-
       graphVisible: false,
     }
-
   }
 
   // get assignments and students for a particular class
@@ -120,7 +105,7 @@ class MyStudents extends Component {
 
     firestore.collection("users").doc(uid).collection(type).get().then((snapshot) => {
       snapshot.forEach((doc) => {
-        if (doc.data().code === self.state.code && doc.data().score != null) {
+        if (doc.data().class === self.state.code && doc.data().score != null) {
           self.setState({
             allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid}),
           });
@@ -294,34 +279,29 @@ class MyStudents extends Component {
     this.getClassInfo();
     this.getHomeworks();
     this.getInClass();
-    //this.getQuizzes();
+    this.getQuizzes();
   };
 
   getHomeworks = () => {
-
     let object = [{}];
 
     let self = this;
 
-
-    let colRef = firestore.collection("classes").doc(this.props.code)
-      .collection("homework");
+    let colRef = firestore.collection("classes").doc(this.props.code).collection("homework");
 
     colRef.get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
         // doc.data() is never undefined for query doc snapshots
-
         object.unshift({
           id: doc.id,
           colRef: colRef.id,
           name: doc.data().name,
-          //max: doc.data().questions.length TODO
+          max: doc.data().questions.length
         });
         self.setState({
           homeworks: object,
         });
       });
-
     }).catch(function (error) {
       console.log("Error getting document:", error);
     });
@@ -331,34 +311,28 @@ class MyStudents extends Component {
     self.setState({
       homeworks: object
     });
-
   };
 
   getInClass = () => {
-
     let object = [{}];
 
     let self = this;
 
-
-    let colRef = firestore.collection("classes").doc(this.props.code)
-      .collection("inClass");
+    let colRef = firestore.collection("classes").doc(this.props.code).collection("inClass");
 
     colRef.get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
         // doc.data() is never undefined for query doc snapshots
-
         object.unshift({
           id: doc.id,
           colRef: colRef.id,
           name: doc.data().name,
-          //max: doc.data().questions.length  TODO
+          max: doc.data().questions.length
         });
         self.setState({
           inclass: object,
         });
       });
-
     }).catch(function (error) {
       console.log("Error getting document:", error);
     });
@@ -368,34 +342,28 @@ class MyStudents extends Component {
     self.setState({
       inclass: object
     });
-
   };
 
-  /*getQuizzes = () => {
-
+  getQuizzes = () => {
     let object = [{}];
 
     let self = this;
 
-
-    let colRef = firestore.collection("classes").doc(this.props.code)
-      .collection("quizzes");
+    let colRef = firestore.collection("classes").doc(this.props.code).collection("quizzes");
 
     colRef.get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
         // doc.data() is never undefined for query doc snapshots
-
         object.unshift({
           id: doc.id,
           colRef: colRef.id,
           name: doc.data().name,
-          //max: doc.data().questions.length  TODO
+          max: doc.data().questions.length
         });
         self.setState({
           quizzes: object,
         });
       });
-
     }).catch(function (error) {
       console.log("Error getting document:", error);
     });
@@ -405,31 +373,29 @@ class MyStudents extends Component {
     self.setState({
       quizzes: object
     });
-
-  };*/
+  };
 
   getStudents = () => {
-
     let object = [];
 
     let self = this;
-
 
     let docRef = firestore.collection("classes").doc(this.props.code);
 
     docRef.get().then(function (doc) {
       if (doc.exists) {
         let data = doc.data();
-        for (let i in data.students) {
 
+        for (let i in data.students) {
           if (data.students.hasOwnProperty(i)) {
             let id = data.students[i];
+
             let studRef = firestore.collection("users").doc(id);
 
             studRef.get().then(function (doc) {
               let data = doc.data();
 
-              if (isNaN(data.gpa)) {
+              if (data.gpa == null) {
                 console.log(data.firstName + " did not have a valid GPA.");
                 object.unshift({
                   name: data.firstName + " " + data.lastName,
@@ -453,7 +419,6 @@ class MyStudents extends Component {
               }, () => {
                 // TODO sort here maybe?
               });
-              console.log(self.state.students);
             });
           }
         }
@@ -499,7 +464,6 @@ class MyStudents extends Component {
       graphVisible: false,
     });
   };
-
 
   render() {
     this.state.students.sort(this.compareValues("grade")).reverse();
