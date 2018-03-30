@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import {Table, Container, Row, Col, Label, Button } from 'reactstrap';
+import {Table, Container, Row, Col, Label, Button ,Input } from 'reactstrap';
 import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area, ReferenceLine, ResponsiveContainer } from 'recharts';
 import { firestore } from "../base";
-import { NavLink as RouterLink } from 'react-router-dom'
+import Modal from 'react-modal';
 import './GradesTable.css'
 
 class GradesTable extends Component {
@@ -24,32 +24,34 @@ class GradesTable extends Component {
       students: [],   // all students in the class
       allAssignments: [],   // all assignments from every student
 
-      yourGrades: [
-        {name: 'HW 1', grade: 80, avg: 84, med: 80},
-        {name: 'HW 2', grade: 74, avg: 84, med: 82},
-        {name: 'HW 3', grade: 93, avg: 65, med: 66},
-        {name: 'Quiz 1', grade: 98, avg: 75, med: 83},
-        {name: 'Exam 1', grade: 23, avg: 90, med: 85},
-        {name: 'HW 4', grade: 53, avg: 43, med: 50},
-        {name: 'Quiz 2', grade: 76, avg: 46, med: 55},
-      ],
-
       classScores: [],  // class scores for an individual assignment
       assignmentComp: [],   // user's score, average, and median
       classOverallGrades: [],   // class overall grades
       assignmentScores: [],   // individual scores for each assignment
       assignmentGrades: [],   // individual grades for each assignment
 
-
       classAverage: null,
 
       graphVisible: false,
+
+      modal_assignment: null,
+      modal_index : null,
+      modal_assignment_type: null,
+      modal_assignment_code: null,
+      regrade_open: false,
+      reason_input: "",
+      submit_status: null,
+
+      studentName: null,
     };
+
+    this.setFullName();
+    this.getClassInfo();
   }
 
-  componentWillMount() {
-    this.getClassInfo();
-  };
+  //componentWillUpdate(){
+  //  this.getClassInfo();
+  //}
 
   // get assignments and students for a particular class
   getClassInfo = () => {
@@ -116,16 +118,16 @@ class GradesTable extends Component {
       snapshot.forEach((doc) => {
         if (!all) {
           if (doc.data().class === self.state.code) {
-              self.setState({
-                myAssignments: self.state.myAssignments.concat({data: doc.data(), uid: uid}),
-              });
+            self.setState({
+              myAssignments: self.state.myAssignments.concat({data: doc.data(), uid: uid, type: type, assignment_code: doc.id}),
+            });
 
-              if (doc.data().score != null) {
-                self.setState({
-                  hidden: false,
-                });
-              }
+            if (doc.data().score != null) {
+              self.setState({
+                hidden: false,
+              });
             }
+          }
         } else {
           if (doc.data().class === self.state.code && doc.data().score != null) {
             self.setState({
@@ -369,7 +371,7 @@ class GradesTable extends Component {
       if (this.state.classAssignments.hasOwnProperty(i)) {
         let assignment = this.getMyAssignment(this.state.classAssignments[i]);
 
-        if (assignment.data.score != null) {
+        if (assignment != null && assignment.data.score != null) {
           let name = assignment.data.name;
           let score = assignment.data.score;
           let avg = this.getAverageScore(this.state.classAssignments[i], false);
@@ -393,7 +395,7 @@ class GradesTable extends Component {
       if (this.state.classAssignments.hasOwnProperty(i)) {
         let assignment = this.getMyAssignment(this.state.classAssignments[i]);
 
-        if (assignment.data.score != null) {
+        if (assignment != null && assignment.data.score != null) {
           let name = assignment.data.name;
           let grade = (assignment.data.score / assignment.data.maxscore) * 100;
           let avg = this.getAverageScore(this.state.classAssignments[i], true);
@@ -440,13 +442,207 @@ class GradesTable extends Component {
   };
 
   showGraph = (index) => {
+    let assignment = this.state.classAssignments[index];
     this.setState({
-      myScore: this.getMyAssignment(this.state.classAssignments[index]).data.score,
+      myScore: this.getMyAssignment(assignment.data.score),
       graphVisible: true,
     });
 
     this.buildClassScoresGraph(this.state.classAssignments[index]);
     this.buildBenchmarkGraph(this.state.classAssignments[index]);
+  };
+
+  //Modal handling
+  openRegradeModal = (index) => {
+    this.setState({
+      modal_assignment: this.state.myAssignments[index],
+      modal_index: index,
+      modal_assignment_type: this.state.myAssignments[index].type,
+      regrade_open: true,
+    });
+  };
+
+  closeRegradeModal = () => {
+    this.setState({
+      modal_assignment: null,
+      modal_index: null,
+      regrade_open: false,
+      submit_status: "",
+      reason_input: "",
+      modal_assignment_type: null,
+    });
+  };
+
+  //Updates reason for regrade
+  updateReasonValue = (evt) => {
+    this.setState({ reason_input: evt.target.value });
+  };
+
+  //Generate 8 digit code
+  static get8DigitCode() {
+    let code = "";
+    for (let i = 0; i < 8; i++) {
+      code += Math.floor(Math.random()*10);
+    }
+    return code;
+  }
+
+  setFullName() {
+    let self = this;
+
+    //Get students full name
+    let studentRef = firestore.collection("users").doc(this.props.uid);
+    studentRef.get().then(function (doc) {
+      self.setState({studentName: GradesTable.getFullName(doc.data().firstName, doc.data().lastName)})
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+  };
+
+  //Get student's full name
+  static getFullName(first, last){
+    return first + " " + last;
+  };
+
+  //Regrade request handling
+  onRegradeSubmit = () => {
+    let self = this;
+    self.setState({ submit_status: "writing" });
+
+    let type = self.state.modal_assignment.type;
+    let doc_code = self.state.modal_assignment.assignment_code;
+
+    //Get student's assignment list for updating regradeStatus
+    let assignmentRef = firestore.collection("users").doc(this.props.uid).collection(type).doc(doc_code);
+    assignmentRef.get().then(function () {
+
+      let assignment = self.state.modal_assignment;
+      assignment.regradeStatus = "pending";
+
+      assignmentRef.update({
+        regradeStatus: assignment.regradeStatus,
+      }).catch(function (error) {
+        console.log("Error updating document:", error);
+      });
+
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+
+    console.log(this.state.modal_assignment);
+
+    let request = {
+      name: this.state.modal_assignment.data.name,
+      maxScore: this.state.modal_assignment.data.maxScore,
+      reason: this.state.reason_input,
+      score: this.state.modal_assignment.data.score,
+      studentName: this.state.studentName,
+      studentCode: this.props.uid,
+    };
+
+    //Get class reference for updating all pending requests
+    let regradeRef = firestore.collection("classes").doc(this.props.code).collection("regrades");
+    regradeRef.doc(GradesTable.get8DigitCode()).set(request).then(function () {
+      self.setState({
+        submit_status: "submitted",
+      });
+    }).catch(function(error) {
+      console.error("Error adding document: ", error);
+    });
+  };
+
+  getModalContent() {
+    switch(this.state.submit_status){
+
+      case "writing":
+        return (
+          <Modal
+            className={"modalStyle"}
+            onRequestClose={this.closeRegradeModal}
+            isOpen={this.state.regrade_open}
+            ariaHideApp={false}>
+            <h2 className={"homeworkTitle"}>
+              Submitting request...
+            </h2>
+          </Modal>
+        );
+
+      case "submitted":
+        return (
+          <Modal
+            className={"modalStyle"}
+            onRequestClose={this.closeRegradeModal}
+            isOpen={this.state.regrade_open}
+            ariaHideApp={false}>
+            <h2 className={"homeworkTitle"}>
+              Successfully submitted request!
+            </h2>
+            <div/>
+            <h4 className={"homeworkTitle"}>Your request is pending instructor review.</h4>
+            <div/>
+            <Button type="text" className="submitButton" size="lg" onClick={this.closeRegradeModal}>Return to Assignments</Button>
+          </Modal>
+        );
+
+      default:
+        let assignment = this.state.modal_assignment;
+        if(assignment != null){
+          return (
+            <Modal
+              className={"modalStyle"}
+              onRequestClose={this.closeRegradeModal}
+              isOpen={this.state.regrade_open}
+              ariaHideApp={false}>
+
+              <h2 className={"homeworkTitle"}>
+                Request Regrade
+              </h2>
+              <h2>Assignment: {assignment.data.name}</h2>
+              <h2>Score: {assignment.data.score}/{assignment.data.maxScore}</h2>
+
+              <div className={"makeSpace"}/>
+
+              <h2>Reason for Regrade:</h2>
+              <Input className={"modalInput"} type={"text"} value={this.state.reason_input} onChange={this.updateReasonValue}/>
+
+              <div className={"makeSpace"}/>
+
+              <Button type="text" className="submitButton" size="lg" onClick={this.onRegradeSubmit}>Submit Request</Button>
+            </Modal>
+          );
+        }
+    }
+  }
+
+  //Gets the correct button text
+  getButton(index, clickBind){
+    let buttonText = "Request Regrade";
+    let regrade_status = this.state.myAssignments[index].regradeStatus;
+    if(regrade_status != null){
+      switch(regrade_status){
+        case "pending":
+          buttonText = "Regrade Pending";
+          clickBind = null;
+          break;
+        case "accepted":
+          buttonText = "Regrade Accepted";
+          clickBind = null;
+          break;
+        case "declined":
+          buttonText = "Regrade Declined";
+          clickBind = null;
+          break;
+        default:
+          break;
+      }
+    }
+
+    return (
+      <Button onClick={clickBind}
+              style={{backgroundColor: 'white', color: '#21CE99'}}>
+        {buttonText}
+      </Button>
+    );
   };
 
   render() {
@@ -546,10 +742,11 @@ class GradesTable extends Component {
                     </thead>
                     <tbody>
                     {Object.keys(this.state.myAssignments).map((key, index) => {
+                      let boundButtonClick = this.openRegradeModal.bind(this, index);
                       return <tr key={key}>
                         <td>{this.state.myAssignments[index].data.name}</td>
                         <td>{this.state.myAssignments[index].data.score != null ? this.state.myAssignments[index].data.score : "--"}</td>
-                        <td>{this.state.myAssignments[index].data.maxscore}</td>
+                        <td>{this.state.myAssignments[index].data.maxScore}</td>
                         <td>{this.getPercentage(this.state.myAssignments[index].data.score, this.state.myAssignments[index].data.maxscore)}</td>
                         <td>{this.getAverageScore(this.state.classAssignments[index], true)}</td>
                         <td>{this.getMedianScore(this.state.classAssignments[index], true)}</td>
@@ -560,9 +757,7 @@ class GradesTable extends Component {
                           </span>
                         </td>
                         <td>
-                          <RouterLink to={`practiceQuestion`}>
-                            Link
-                          </RouterLink>
+                          {this.getButton(index, boundButtonClick)}
                         </td>
                       </tr>
                     })
@@ -610,6 +805,13 @@ class GradesTable extends Component {
                   </ResponsiveContainer>
                 </Col>
               </Row>
+
+              <Row>
+                <Col>
+                  {this.getModalContent()}
+                </Col>
+              </Row>
+
               <Row>
                 <Col className={"moreSpace"}>
                 </Col>

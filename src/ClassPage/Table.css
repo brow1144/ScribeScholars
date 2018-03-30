@@ -19,3 +19,25 @@
 .borderC {
 //border: solid 1px red;
 }
+
+.modalStyle {
+    position: absolute;
+    top: 10vh;
+    left: 20vh;
+    right: 20vh;
+    bottom: 10vh;
+    border: 5px solid #21CE99;
+    background: rgb(255, 255, 255);
+    padding: 20px;
+}
+
+.modalInput {
+    font-size: 2rem;
+    line-height: 2;
+    height: fit-content;
+}
+
+.submitButton {
+    background-color: #21CE99 !important;
+    border-color: #21CE99 !important;
+}
