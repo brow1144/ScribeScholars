@@ -157,7 +157,7 @@ class MyStudents extends Component {
       if (this.state.allAssignments.hasOwnProperty(i)) {
         if (this.state.allAssignments[i].uid === uid && this.state.allAssignments[i].data.score != null) {
           total += this.state.allAssignments[i].data.score;
-          max += this.state.allAssignments[i].data.maxscore;
+          max += this.state.allAssignments[i].data.maxScore;
         }
       }
     }
@@ -180,7 +180,7 @@ class MyStudents extends Component {
 
         if (assignment.data.score != null) {
           let name = assignment.data.name;
-          let grade = (assignment.data.score / assignment.data.maxscore) * 100;
+          let grade = (assignment.data.score / assignment.data.maxScore) * 100;
           let avg = this.getAverageScore(this.state.classAssignments[i], true);
           let med = this.getMedianScore(this.state.classAssignments[i], true);
 
@@ -215,7 +215,7 @@ class MyStudents extends Component {
       return "--";
 
     if (percentage) {   // return score as a percentage
-      let grade = ((total / numStudents) / assignment.data.maxscore) * 100;
+      let grade = ((total / numStudents) / assignment.data.maxScore) * 100;
 
       if (grade % 1 !== 0)
         grade = Math.round(grade * 100) / 100;
@@ -259,7 +259,7 @@ class MyStudents extends Component {
     }
 
     if (percentage) {   // return score as a percentage
-      let grade = (median / assignment.data.maxscore) * 100;
+      let grade = (median / assignment.data.maxScore) * 100;
 
       if (grade % 1 !== 0)
         grade = Math.round(grade * 100) / 100;

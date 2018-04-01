@@ -45,13 +45,15 @@ class GradesTable extends Component {
       studentName: null,
     };
 
+    // TODO moved to componentWillMount() for now
+    //this.setFullName();
+    //this.getClassInfo();
+  }
+
+  componentWillMount() {
     this.setFullName();
     this.getClassInfo();
   }
-
-  //componentWillUpdate(){
-  //  this.getClassInfo();
-  //}
 
   // get assignments and students for a particular class
   getClassInfo = () => {
@@ -185,7 +187,7 @@ class GradesTable extends Component {
       return "--";
 
     if (percentage) {   // return score as a percentage
-      let grade = ((total / numStudents) / assignment.data.maxscore) * 100;
+      let grade = ((total / numStudents) / assignment.data.maxScore) * 100;
 
       if (grade % 1 !== 0)
         grade = Math.round(grade * 100) / 100;
@@ -229,7 +231,7 @@ class GradesTable extends Component {
     }
 
     if (percentage) {   // return score as a percentage
-      let grade = (median / assignment.data.maxscore) * 100;
+      let grade = (median / assignment.data.maxScore) * 100;
 
       if (grade % 1 !== 0)
         grade = Math.round(grade * 100) / 100;
@@ -254,7 +256,7 @@ class GradesTable extends Component {
       if (this.state.allAssignments.hasOwnProperty(i)) {
         if (this.state.allAssignments[i].uid === uid && this.state.allAssignments[i].data.score != null) {
           total += this.state.allAssignments[i].data.score;
-          max += this.state.allAssignments[i].data.maxscore;
+          max += this.state.allAssignments[i].data.maxScore;
         }
       }
     }
@@ -356,7 +358,7 @@ class GradesTable extends Component {
     let score = assignment.data.score;
     let avg = this.getAverageScore(classAssignment, false);
     let med = this.getMedianScore(classAssignment, false);
-    let max = assignment.data.maxscore;
+    let max = assignment.data.maxScore;
 
     this.setState({
       assignmentComp: [].concat({name: name, score: score, average: avg, median: med, max: max}),
@@ -397,7 +399,7 @@ class GradesTable extends Component {
 
         if (assignment != null && assignment.data.score != null) {
           let name = assignment.data.name;
-          let grade = (assignment.data.score / assignment.data.maxscore) * 100;
+          let grade = (assignment.data.score / assignment.data.maxScore) * 100;
           let avg = this.getAverageScore(this.state.classAssignments[i], true);
           let med = this.getMedianScore(this.state.classAssignments[i], true);
 
@@ -442,9 +444,8 @@ class GradesTable extends Component {
   };
 
   showGraph = (index) => {
-    let assignment = this.state.classAssignments[index];
     this.setState({
-      myScore: this.getMyAssignment(assignment.data.score),
+      myScore: this.getMyAssignment(this.state.classAssignments[index]).data.score,
       graphVisible: true,
     });
 
@@ -751,7 +752,7 @@ class GradesTable extends Component {
                         <td>{this.state.myAssignments[index].data.name}</td>
                         <td>{this.state.myAssignments[index].data.score != null ? this.state.myAssignments[index].data.score : "--"}</td>
                         <td>{this.state.myAssignments[index].data.maxScore}</td>
-                        <td>{this.getPercentage(this.state.myAssignments[index].data.score, this.state.myAssignments[index].data.maxscore)}</td>
+                        <td>{this.getPercentage(this.state.myAssignments[index].data.score, this.state.myAssignments[index].data.maxScore)}</td>
                         <td>{this.getAverageScore(this.state.classAssignments[index], true)}</td>
                         <td>{this.getMedianScore(this.state.classAssignments[index], true)}</td>
                         <td>
