@@ -252,11 +252,11 @@ class LiveFeed extends Component {
 
     for (let i in this.state.completionMap) {
 
-      if (this.state.completionMap[i] === 0) {
+      if (this.state.completionMap[i] === "0") {
         notStarted++;
-      } else if (this.state.completionMap[i] === 1) {
+      } else if (this.state.completionMap[i] === "1") {
         inProgress++;
-      } else if (this.state.completionMap[i] === 2) {
+      } else if (this.state.completionMap[i] === "2") {
         completed++;
       }
     }
