@@ -529,20 +529,24 @@ class GradesTable extends Component {
       console.log("Error getting document:", error);
     });
 
-    console.log(this.state.modal_assignment);
+    let code = GradesTable.get8DigitCode();
 
     let request = {
       name: this.state.modal_assignment.data.name,
+      class: this.state.code,
       maxScore: this.state.modal_assignment.data.maxScore,
       reason: this.state.reason_input,
       score: this.state.modal_assignment.data.score,
       studentName: this.state.studentName,
       studentCode: this.props.uid,
+      type: this.state.modal_assignment.type,
+      requestCode: code,
+      userDocCode: doc_code,
     };
 
     //Get class reference for updating all pending requests
     let regradeRef = firestore.collection("classes").doc(this.props.code).collection("regrades");
-    regradeRef.doc(GradesTable.get8DigitCode()).set(request).then(function () {
+    regradeRef.doc(code).set(request).then(function () {
       self.setState({
         submit_status: "submitted",
       });
@@ -617,7 +621,7 @@ class GradesTable extends Component {
   //Gets the correct button text
   getButton(index, clickBind){
     let buttonText = "Request Regrade";
-    let regrade_status = this.state.myAssignments[index].regradeStatus;
+    let regrade_status = this.state.myAssignments[index].data.regradeStatus;
     if(regrade_status != null){
       switch(regrade_status){
         case "pending":

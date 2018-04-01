@@ -10,6 +10,7 @@ import GradesTable from './GradesTable';
 import Cards from '../HomePage/Cards';
 import './ClassHome.css';
 import MyStudents from '../MyStudents/MyStudents';
+import RegradeTable from "./RegradeTable";
 
 class ClassHome extends Component {
 
@@ -17,6 +18,9 @@ class ClassHome extends Component {
     super(props);
 
     this.state = {
+
+      role: "",
+      gotRole: false,
 
       announcements: [{
         title: null,
@@ -28,25 +32,28 @@ class ClassHome extends Component {
       assignments: [{
         code: null,
         name: null,
-        maxscore: null,
+        maxScore: null,
       }],
 
       homeworks: [{
         code: null,
         name: null,
-        maxscore: null,
+        maxScore: null,
       }],
 
       classImage: null,
 
-      announcementsActive: true,
+      announcementsActive: false,
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: false,
       myStudentsActive: false,
+      regradeRequestsActive: false,
       gradesActive: false,
     };
-  }
+
+    this.getRole();
+  };
 
   componentWillMount() {
     this.props.selectClass(this.props.path);
@@ -55,15 +62,18 @@ class ClassHome extends Component {
 
   getRole = () => {
     let self = this;
-    let userRef = firestore.collection("users").doc(this.state.uid);
+    let userRef = firestore.collection("users").doc(this.props.uid);
     userRef.get().then(function (doc){
       if(doc.exists){
         self.setState({
           role: doc.data().role,
+          gotRole: true,
         });
       }else{
         console.log("Error: doc does not exist!")
       }
+    }).catch(function (error){
+      console.log("Error getting user's role. " + error);
     });
   };
 
@@ -74,6 +84,7 @@ class ClassHome extends Component {
       homeworkActive: false,
       discussionActive: false,
       myStudentsActive: false,
+      regradeRequestsActive: false,
       gradesActive: false,
     })
   };
@@ -85,6 +96,7 @@ class ClassHome extends Component {
       homeworkActive: false,
       discussionActive: false,
       myStudentsActive: false,
+      regradeRequestsActive: false,
       gradesActive: false,
     })
   };
@@ -96,6 +108,7 @@ class ClassHome extends Component {
       homeworkActive: true,
       discussionActive: false,
       myStudentsActive: false,
+      regradeRequestsActive: false,
       gradesActive: false,
     });
   };
@@ -107,31 +120,46 @@ class ClassHome extends Component {
       homeworkActive: false,
       discussionActive: true,
       myStudentsActive: false,
+      regradeRequestsActive: false,
       gradesActive: false,
     })
   };
 
-    switchMyStudents = () => {
-        this.setState({
-            announcementsActive: false,
-            lessonsActive: false,
-            homeworkActive: false,
-            discussionActive: false,
-            myStudentsActive: true,
-            gradesActive: false,
-        })
-    };
+  switchMyStudents = () => {
+    this.setState({
+      announcementsActive: false,
+      lessonsActive: false,
+      homeworkActive: false,
+      discussionActive: false,
+      myStudentsActive: true,
+      regradeRequestsActive: false,
+      gradesActive: false,
+    })
+  };
 
-    switchGrades = () => {
-      this.setState({
-        announcementsActive: false,
-        lessonsActive: false,
-        homeworkActive: false,
-        discussionActive: false,
-        myStudentsActive: false,
-        gradesActive: true,
-      })
-    };
+  switchRegradeRequests = () => {
+    this.setState({
+      announcementsActive: false,
+      lessonsActive: false,
+      homeworkActive: false,
+      discussionActive: false,
+      myStudentsActive: false,
+      regradeRequestsActive: true,
+      gradesActive: false,
+    })
+  };
+
+  switchGrades = () => {
+    this.setState({
+      announcementsActive: false,
+      lessonsActive: false,
+      homeworkActive: false,
+      discussionActive: false,
+      myStudentsActive: false,
+      regradeRequestsActive: false,
+      gradesActive: true,
+    })
+  };
 
   render() {
 
@@ -166,12 +194,12 @@ class ClassHome extends Component {
                 Board</NavLink>
             </RouterLink>
 
-            {this.props.role === "teacher"
+
+            {this.state.gotRole && this.state.role === "teacher"
               ?
               <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/myStudents`}>
 
                   <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive} code={this.props.code} lessonNumber={this.props.lessonNumber}>My Students</NavLink>
-
                 
               </RouterLink>
               :
@@ -179,6 +207,18 @@ class ClassHome extends Component {
                 <NavLink onClick={this.switchGrades} active={this.state.gradesActive}>Grades</NavLink>
 
               </RouterLink>
+            }
+
+            {this.state.gotRole && this.state.role === "teacher"
+              ?
+              <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/regradeRequests`}>
+
+                <NavLink onClick={this.switchRegradeRequests} active={this.state.regradeRequestsActive} code={this.props.code} uid={this.state.uid}>Regrade Requests</NavLink>
+
+              </RouterLink>
+              :
+              <div>
+              </div>
             }
 
           </Nav>
@@ -224,6 +264,13 @@ class ClassHome extends Component {
           {this.state.gradesActive
             ?
             <GradesTable code={this.props.code} uid={this.props.uid}/>
+            :
+            <div>
+            </div>
+          }
+          {this.state.regradeRequestsActive
+            ?
+            <RegradeTable code={this.props.code} uid={this.props.uid}/>
             :
             <div>
             </div>
