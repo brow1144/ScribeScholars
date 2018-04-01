@@ -92,8 +92,7 @@ class GenHomework extends Component {
           history: doc.data().history,
           answers: doc.data().answers,
           mcq: doc.data().mcq,
-          //score: doc.data().score,
-          //multiple: doc.data().multiple,
+          multiple: doc.data().multiple,
         }, () => {
           self.setQuestion();
         })
@@ -160,6 +159,7 @@ class GenHomework extends Component {
             currentScore: self.state.currentScore,
             answers: self.state.answers,
             mcq: self.state.mcq,
+            multiple: self.state.multiple,
           }).then(function () {
             self.getUserAssignment(self.props.code)
           });
@@ -171,6 +171,7 @@ class GenHomework extends Component {
             currentScore: self.state.currentScore,
             answers: self.state.answers,
             mcq: self.state.mcq,
+            multiple: self.state.multiple,
           }).then(function () {
             self.setState({
               finalPage: true,
@@ -209,6 +210,7 @@ class GenHomework extends Component {
               completed: self.state.completed,
               currentScore: self.state.currentScore,
               answers: self.state.answers,
+              multiple: self.state.multiple,
             }).then(function () {
               self.getUserAssignment(self.props.code)
             });
