@@ -43,14 +43,14 @@ class MCQ extends Component {
               <FormGroup>
                 <Label className={"RadioLabel"}>
                   <Input onClick={() => this.props.setAns(this.state.opt3)} checked={this.props.oldAns === "option3"} className={"RadioButton textSize"}
-                         type="radio" name="radio1"/>
+                         type="radio" name="radio3"/>
                   <p className={"textSize"}>{this.props.option3}</p>
                 </Label>
               </FormGroup>
               <FormGroup>
                 <Label className={"RadioLabel"}>
                   <Input onClick={() => this.props.setAns(this.state.opt4)} checked={this.props.oldAns === "option4"} className={"RadioButton"} type="radio"
-                         name="radio1"/>
+                         name="radio4"/>
                   <p className={"textSize"}>{this.props.option4}</p>
                 </Label>
               </FormGroup>
@@ -61,9 +61,9 @@ class MCQ extends Component {
     }
     else {
       return (
-      <Col sm={{size: 10, offset: 1}}>
-        <h3>End of the assignment</h3>
-      </Col>
+        <Col sm={{size: 10, offset: 1}}>
+          <h3>End of the assignment</h3>
+        </Col>
       )
     }
   }
