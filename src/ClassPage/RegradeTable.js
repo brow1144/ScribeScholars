@@ -3,9 +3,8 @@ import {Table, Container, Row, Col, Label, Button, Input } from 'reactstrap';
 import { firestore } from "../base";
 import Modal from 'react-modal';
 import './Table.css'
-import GradesTable from "./GradesTable";
 
-class RegradeTable extends Component {
+class RegradeTable extends Component { //TODO if Firebase Regrade collection is enmpty doneLoading is never set
 
   constructor(props) {
     super(props);
@@ -15,17 +14,10 @@ class RegradeTable extends Component {
       code: this.props.code,
       regrades: [],
 
-      modal_request: {
-        name: null,
-        maxscore: null,
-        reason: null,
-        score: null,
-        student: null,
-        studentCode: null,
-      },
+      modal_request: null,
       modal_index: null,
+      modal_doc_id: null,
       modal_open: false,
-      reason_input: "",
 
       input_score: "",
 
@@ -33,20 +25,23 @@ class RegradeTable extends Component {
       doneLoading: false,
     };
 
-    let self = this;
-
-    //Get data on regrades
-    let docRef = firestore.collection("classes").doc(this.props.code);
-    docRef.get().then(function (doc) {
-
-      self.setState({
-        regrades: doc.data().regrades,
+    let regradeRef = firestore.collection("classes").doc(this.state.code).collection("regrades");
+    regradeRef.get().then((snapshot) => {
+      let i = 0;
+      snapshot.forEach((doc) => {
+        i++;
+        if (doc.data().class === this.state.code) {
+          this.setState({
+            regrades: this.state.regrades.concat(doc.data()),
+          });
+        }
+        if(i === snapshot.docs.length){
+          this.setState({
+            doneLoading: true,
+          });
+        }
       });
-
-    }).then( function () {
-      self.setState({ doneLoading: true });
-
-    }).catch(function (error) {
+    }).catch((error) => {
       console.log("Error getting document:", error);
     });
   };
@@ -68,21 +63,16 @@ class RegradeTable extends Component {
       modal_request: null,
       modal_open: false,
       modal_index: null,
-      reason_input: "",
       submit_status: null,
+      input_score: null,
     });
-  };
-
-  //Called when regrade is accepted
-  onAccept = () => {
-    this.setState({ submit_status: "accepted" });
   };
 
   //Called after teacher enters student's new grade
   onSubmitFinalScore = () => {
-    this.setState({ submit_status: "writing" });
-    this.updateStudentAssignment();
-    this.removeFromRegrades();
+    let self = this;
+    self.setState({ submit_status: "writing" });
+    self.handleUpdating("accepted", this.state.input_score);
   };
 
   updateInputScore = (evt) => {
@@ -90,77 +80,56 @@ class RegradeTable extends Component {
     self.setState({ input_score: evt.target.value });
   };
 
+  //Called when regrade is accepted
+  onAccept = () => {
+    let self = this;
+    self.setState({ submit_status: "accepted" });
+  };
+
   //Called when regrade is declined
   onDecline = () => {
     let self = this;
     self.setState({ submit_status: "declined" });
-    self.removeFromRegrades();
+    self.handleUpdating("declined", null);
   };
 
-  updateStudentAssignment() {
+  //Handles updating after the forms have been submitted
+  handleUpdating(accOrDec, newScore){
     let self = this;
-
-    let studentRef = firestore.collection("users").doc(this.state.modal_request.studentCode).collection("assignments").doc(this.props.code);
-    studentRef.get().then(function (doc) {
-      let grades = doc.data().grades;
-      for(let i = 0; i < grades.length; i++){
-        if(grades[i].name === self.state.modal_request.name){
-          let assignment = grades[i];
-
-          if(self.state.submit_status === "writing" || self.state.submit_status === "accepted"){
-            assignment.regrade_status = "accepted";
-            assignment.score = self.state.input_score;
-          }else if(self.state.submit_status === "declined"){
-            assignment.regrade_status = "declined";
-          }
-
-          grades.splice(i, 1, assignment);
-
-          studentRef.update({
-            grades: grades,
-          }).then(function () {
-            self.setState({
-              submit_status: "submitted",
-            });
-          }).catch(function (error) {
-            console.log("Error updating document:", error);
-          });;
-
-          break;
-        }
+    let response = null;
+    let request = this.state.modal_request;
+    firestore.collection("users").doc(request.studentCode).collection(request.type).doc(request.userDocCode).get().then(function (doc){
+      response = doc.data();
+      response.regradeStatus = accOrDec;
+      if(newScore != null){
+        response.score = newScore;
       }
+      self.updateStudentDoc(response);
+    }).catch(function (error){
+      console.error("Error getting document " + (error));
+    });
+  }
 
-    }).then(function (){
-      self.setState({ doneLoading: true });
+  //Deletes the regrade from the regrade collection of the class and sets submit status to submitted
+  deleteRegradeDoc() {
+    let self = this;
+    firestore.collection("classes").doc(this.state.code).collection("regrades").doc(this.state.modal_request.requestCode).delete().then(function (){
+      self.setState({ submit_status: "submitted"});
     }).catch(function (error) {
-      console.log("Error getting document:", error);
+      console.error("Error removing document: ", error);
     });
   };
 
-  removeFromRegrades() {
+  //Updates the student's regrade collection with the contents of response.
+  //Response should come from getUserAssignment
+  updateStudentDoc(response) {
     let self = this;
     //Get class reference for updating all pending requests
-    let classRef = firestore.collection("classes").doc(this.props.code);
-    classRef.get().then(function (doc) {
-
-      let allRequests = doc.data().regrades;
-      allRequests.splice(self.state.modal_index, 1);
-
-      classRef.update({
-        regrades: allRequests
-      }).then(function() {
-
-        self.setState({
-          submit_status: "submitted",
-          regrades: allRequests,
-        });
-
-      }).catch(function(error) {
-        console.log("Error updating document: ", error);
-      });
-
+    let studentRef = firestore.collection("users").doc(this.state.modal_request.studentCode).collection(this.state.modal_request.type).doc(this.state.modal_request.userDocCode);
+    studentRef.set(response).then(function (doc){
+      self.deleteRegradeDoc();
     }).catch(function (error) {
-      console.log("Error getting document:", error);
+      console.error("Error setting doc", (error));
     });
   };
 
@@ -179,7 +148,7 @@ class RegradeTable extends Component {
             </h2>
             <div className="makeSpace"/>
             <h4 className="modalText">
-              Please enter {this.state.modal_request.student}'s new grade for {this.state.modal_request.name}.
+              Please enter {this.state.modal_request.studentName}'s new grade for {this.state.modal_request.name}.
             </h4>
             <div className="makeSpace"/>
 
@@ -188,9 +157,8 @@ class RegradeTable extends Component {
               <Col xs="12" md="4">
                 <Input type="text" bsSize="lg" value={this.state.input_score} onChange={this.updateInputScore}/>
               </Col>
-              <Col md="0"/>
               <Col md="4">
-                <h3>{"/" + this.state.modal_request.maxscore}</h3>
+                <h3>{"/" + this.state.modal_request.maxScore}</h3>
               </Col>
               <Col md="1"/>
             </Row>
@@ -259,9 +227,9 @@ class RegradeTable extends Component {
               <h2 className={"homeworkTitle"}>
                 Viewing Regrade Request
               </h2>
-              <h2>Student: {this.state.modal_request.student}</h2>
+              <h2>Student: {this.state.modal_request.studentName}</h2>
               <h2>Assignment: {this.state.modal_request.name}</h2>
-              <h2>Current Score: {this.state.modal_request.score}/{this.state.modal_request.maxscore}</h2>
+              <h2>Current Score: {this.state.modal_request.score}/{this.state.modal_request.maxScore}</h2>
 
               <div className={"makeSpace"}/>
 
@@ -343,10 +311,10 @@ class RegradeTable extends Component {
                   {Object.keys(this.state.regrades).map((key, index) => {
                     let boundButtonClick = this.openRegradeModal.bind(this, index);
                     return <tr key={key}>
-                      <td>{this.state.regrades[index].student}</td>
+                      <td>{this.state.regrades[index].studentName}</td>
                       <td>{this.state.regrades[index].name}</td>
                       <td>{this.state.regrades[index].score}</td>
-                      <td>{this.state.regrades[index].maxscore}</td>
+                      <td>{this.state.regrades[index].maxScore}</td>
                       <td>
                         {this.getButton(index, boundButtonClick)}
                       </td>

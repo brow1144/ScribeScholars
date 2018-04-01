@@ -19,6 +19,9 @@ class ClassHome extends Component {
 
     this.state = {
 
+      role: "",
+      gotRole: false,
+
       announcements: [{
         title: null,
         subtitle: null,
@@ -29,18 +32,18 @@ class ClassHome extends Component {
       assignments: [{
         code: null,
         name: null,
-        maxscore: null,
+        maxScore: null,
       }],
 
       homeworks: [{
         code: null,
         name: null,
-        maxscore: null,
+        maxScore: null,
       }],
 
       classImage: null,
 
-      announcementsActive: true,
+      announcementsActive: false,
       lessonsActive: false,
       homeworkActive: false,
       discussionActive: false,
@@ -48,7 +51,9 @@ class ClassHome extends Component {
       regradeRequestsActive: false,
       gradesActive: false,
     };
-  }
+
+    this.getRole();
+  };
 
   componentWillMount() {
     this.props.selectClass(this.props.path);
@@ -57,15 +62,18 @@ class ClassHome extends Component {
 
   getRole = () => {
     let self = this;
-    let userRef = firestore.collection("users").doc(this.state.uid);
+    let userRef = firestore.collection("users").doc(this.props.uid);
     userRef.get().then(function (doc){
       if(doc.exists){
         self.setState({
           role: doc.data().role,
+          gotRole: true,
         });
       }else{
         console.log("Error: doc does not exist!")
       }
+    }).catch(function (error){
+      console.log("Error getting user's role. " + error);
     });
   };
 
@@ -159,39 +167,39 @@ class ClassHome extends Component {
       background: `url(${this.props.classImage}) no-repeat center center`,
     };
 
-    return (
-      <div>
-        <div style={jumboStyle} className="jumbotron">
-          <h1>{this.props.className}</h1>
-          <p className="lead"> {this.props.selectedClass}</p>
-        </div>
+      return (
+        <div>
+          <div style={jumboStyle} className="jumbotron">
+            <h1>{this.props.className}</h1>
+            <p className="lead"> {this.props.selectedClass}</p>
+          </div>
 
-        <Nav horizontal="center" tabs>
+          <Nav horizontal="center" tabs>
 
-          <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/announcements`}>
-            <NavLink onClick={this.switchAnnouncement}
-                     active={this.state.announcementsActive}>Announcements</NavLink>
-          </RouterLink>
+            <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/announcements`}>
+              <NavLink onClick={this.switchAnnouncement}
+                       active={this.state.announcementsActive}>Announcements</NavLink>
+            </RouterLink>
 
-          <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/lessons`}>
-            <NavLink onClick={this.switchLessons} active={this.state.lessonsActive}>In-Class Lessons</NavLink>
-          </RouterLink>
+            <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/lessons`}>
+              <NavLink onClick={this.switchLessons} active={this.state.lessonsActive}>In-Class Lessons</NavLink>
+            </RouterLink>
 
-          <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/homework`}>
-            <NavLink onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
-          </RouterLink>
+            <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/homework`}>
+              <NavLink onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
+            </RouterLink>
 
-          <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/discussion`}>
-            <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
-              Board</NavLink>
-          </RouterLink>
+            <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/discussion`}>
+              <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
+                Board</NavLink>
+            </RouterLink>
 
-            {this.props.role === "teacher"
+
+            {this.state.gotRole && this.state.role === "teacher"
               ?
               <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/myStudents`}>
 
                   <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive} code={this.props.code} lessonNumber={this.props.lessonNumber}>My Students</NavLink>
-
                 
               </RouterLink>
               :
@@ -201,74 +209,74 @@ class ClassHome extends Component {
               </RouterLink>
             }
 
-          {this.props.role === "teacher"
+            {this.state.gotRole && this.state.role === "teacher"
+              ?
+              <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/regradeRequests`}>
+
+                <NavLink onClick={this.switchRegradeRequests} active={this.state.regradeRequestsActive} code={this.props.code} uid={this.state.uid}>Regrade Requests</NavLink>
+
+              </RouterLink>
+              :
+              <div>
+              </div>
+            }
+
+          </Nav>
+
+          {this.state.announcementsActive
             ?
-            <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/regradeRequests`}>
-              <NavLink onClick={this.switchRegradeRequests} active={this.state.regradeRequestsActive}>Regrade Requests</NavLink>
-            </RouterLink>
+            <div>
+              <div className="announcementsDiv">
+                <Cards announcements={this.props.classAnnouncements}/>
+              </div>
+            </div>
             :
             <div>
             </div>
           }
-      </Nav>
 
-        {this.state.announcementsActive
-          ?
-          <div>
-            <div className="announcementsDiv">
-              <Cards announcements={this.props.classAnnouncements}/>
+          {this.state.homeworkActive
+            ?
+            <div>
+              <HomeworkTable uid={this.props.uid} code = {this.props.code} lessonNumber = {this.props.lessonNumber} homeworks={this.props.homeworks} />
             </div>
-          </div>
-          :
-          <div>
-          </div>
-        }
+            :
+            <div>
+            </div>
+          }
+          {this.state.lessonsActive
+            ?
+            <AssignTable uid={this.props.uid} code={this.props.code} lessonNumber={this.props.lessonNumber} assignments={this.props.assignments} />
+            :
+            <div>
+            </div>
+          }
 
-        {this.state.homeworkActive
-          ?
-          <div>
-            <HomeworkTable code = {this.props.code} lessonNumber = {this.props.lessonNumber} homeworks={this.props.homeworks} />
-          </div>
-          :
-          <div>
-          </div>
-        }
-        {this.state.lessonsActive
-          ?
-          <AssignTable code = {this.props.code} lessonNumber = {this.props.lessonNumber} assignments={this.props.assignments} />
-          :
-          <div>
-          </div>
-        }
-
-        {this.state.myStudentsActive
-          ?
-          <div>
-            <MyStudents code={this.props.code}/>
-          </div>
-          :
-          <div>
-          </div>
-        }
-      
-        {this.state.regradeRequestsActive
-          ?
-          <div>
+          {this.state.myStudentsActive
+            ?
+            <div>
+              <MyStudents code={this.props.code}/>
+            </div>
+            :
+            <div>
+            </div>
+          }
+          {this.state.gradesActive
+            ?
+            <GradesTable code={this.props.code} uid={this.props.uid}/>
+            :
+            <div>
+            </div>
+          }
+          {this.state.regradeRequestsActive
+            ?
             <RegradeTable code={this.props.code} uid={this.props.uid}/>
-          </div>
-          :
-          <div>
-          </div>
-        }
-        {this.state.gradesActive
-          ?
-          <GradesTable code={this.props.code} uid={this.props.uid}/>
-          :
-          <div>
-          </div>
-        }
-      </div>
-    )
+            :
+            <div>
+            </div>
+          }
+        </div>
+      )
   }
 }
 
