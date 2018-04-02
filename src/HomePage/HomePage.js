@@ -23,6 +23,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import GenHomework from "../ClassPage/HomeworkComponents/GenHomework";
 import GenAssignment from "../ClassPage/LiveComponents/GenAssignment";
 
+import EventButton from "./EventButton"
+
 import StudentLiveFeed from "../ClassPage/StudentLiveFeed";
 
 const mql = window.matchMedia(`(min-width: 600px)`);
@@ -98,7 +100,7 @@ class HomePage extends Component {
 
 
       myAssignments: [],
-
+      eventButtonOpen: false,
     };
   }
 
@@ -605,7 +607,7 @@ class HomePage extends Component {
                      width={this.state.width}/>
             <Row>
               <Col md="1"/>
-              <Col md="8">
+              <Col md="7">
                 <BigCalendar
                   events={this.props.dates}
                   style={calendarStyles}
@@ -613,7 +615,10 @@ class HomePage extends Component {
                   eventPropGetter={(this.eventStyleGetter)}
                 />
               </Col>
-              <Col md="3"/>
+
+              <Col md="3">
+                <EventButton uid={this.state.uid} expanded={this.state.eventButtonOpen}/>
+              </Col>
             </Row>
 
             <hr className="divider"/>
@@ -622,6 +627,7 @@ class HomePage extends Component {
             <div className="announcementsDiv">
               <Cards announcements={this.props.announcements}/>
             </div>
+
           </Sidebar>
         );
 
