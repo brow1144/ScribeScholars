@@ -37,7 +37,7 @@ class EventButton extends Component {
     let endDate = ev.target.endDate.value;
     let endTime = ev.target.endTime.value;
 
-    /*if (name === "") {
+    if (name === "") {
       self.setState({
         errorMessage: "Please enter a valid event name.",
         errorVisible: true,
@@ -83,11 +83,9 @@ class EventButton extends Component {
         errorVisible: true,
       });
       return;
-    }*/
+    }
 
-    console.log("reached");
-
-    /*let event = {
+    let event = {
       name: name,
       description: description,
       startDate: startDate,
@@ -103,6 +101,9 @@ class EventButton extends Component {
     let userRef = firestore.collection("users").doc(this.props.uid);
     userRef.get().then(function (doc) {
       let currentEvents = doc.data().events;
+      if(currentEvents == null){
+        currentEvents = [];
+      }
       currentEvents.push(event);
 
       userRef.update({
@@ -116,7 +117,7 @@ class EventButton extends Component {
       });
     }).catch(function (error){
       console.error("Error getting user doc" + (error));
-    });*/
+    });
   };
 
   onDismiss = () => {
@@ -130,102 +131,88 @@ class EventButton extends Component {
       return (
         <div>
           <Accordion>
-            <AccordionItem>
+            <AccordionItem expanded={this.props.expanded}>
               <AccordionItemTitle>
                 <h3 align="center">Add an Event</h3>
               </AccordionItemTitle>
               <AccordionItemBody className={"accordBody"}>
-                <div className={"inside"}>
+                <div className="text-center">
+                  <Row>
+                    <Col md="1"/>
+                    <Col md="10">
 
-                  <Form>
+                      <Form onSubmit={(ev) => this.onFormSubmit(ev)}>
+                        <div className="divider"/>
 
-                    <Row>
-                      <Col>
-                        <InputGroup>
-                          <InputGroupAddon addonType="prepend">
-                            <InputGroupText>Name</InputGroupText>
-                          </InputGroupAddon>
-                          <Input name="name"/>
-                        </InputGroup>
-                        <br/>
-                      </Col>
-                    </Row>
+                        <FormGroup>
+                          <InputGroup>
+                            <InputGroupAddon addonType="prepend">
+                              <InputGroupText>Name</InputGroupText>
+                            </InputGroupAddon>
+                            <Input name="name"/>
+                          </InputGroup>
+                          <br/>
+                        </FormGroup>
 
-                    <Row>
-                      <Col>
-                        <InputGroup>
-                          <InputGroupAddon addonType="prepend">
-                            <InputGroupText>Description</InputGroupText>
-                          </InputGroupAddon>
-                          <Input name="description"/>
-                        </InputGroup>
-                        <br/>
-                      </Col>
-                    </Row>
+                        <FormGroup>
+                          <InputGroup>
+                            <InputGroupAddon addonType="prepend">
+                              <InputGroupText>Description</InputGroupText>
+                            </InputGroupAddon>
+                            <Input name="description"/>
+                          </InputGroup>
+                          <br/>
+                        </FormGroup>
+                        <FormGroup>
+                          <InputGroup>
+                            <InputGroupAddon addonType="prepend">
+                              <InputGroupText>Start Date</InputGroupText>
+                            </InputGroupAddon>
+                            <Input type="date" name="startDate"/>
+                          </InputGroup>
+                          <br/>
+                        </FormGroup>
+                        <FormGroup>
+                          <InputGroup>
+                            <InputGroupAddon addonType="prepend">
+                              <InputGroupText>Start Time</InputGroupText>
+                            </InputGroupAddon>
+                            <Input type="time" name="startTime"/>
+                          </InputGroup>
+                          <br/>
+                        </FormGroup>
+                        <FormGroup>
+                          <InputGroup>
+                            <InputGroupAddon addonType="prepend">
+                              <InputGroupText>End Date</InputGroupText>
+                            </InputGroupAddon>
+                            <Input type="date" name="endDate"/>
+                          </InputGroup>
+                          <br/>
+                        </FormGroup>
 
-                    <Row>
-                      <Col>
-                        <InputGroup>
-                          <InputGroupAddon addonType="prepend">
-                            <InputGroupText>Start Date</InputGroupText>
-                          </InputGroupAddon>
-                          <Input type="date" name="startDate"/>
-                        </InputGroup>
-                        <br/>
-                      </Col>
-                    </Row>
+                        <FormGroup>
+                          <InputGroup>
+                            <InputGroupAddon addonType="prepend">
+                              <InputGroupText>End Time</InputGroupText>
+                            </InputGroupAddon>
+                            <Input type="time" name="endTime"/>
+                          </InputGroup>
+                          <br/>
+                        </FormGroup>
 
-                    <Row>
-                      <Col>
-                        <InputGroup>
-                          <InputGroupAddon addonType="prepend">
-                            <InputGroupText>Start Time</InputGroupText>
-                          </InputGroupAddon>
-                          <Input type="time" name="startTime"/>
-                        </InputGroup>
-                        <br/>
-                      </Col>
-                    </Row>
+                        <FormGroup>
+                          <Alert color="danger" isOpen={this.state.errorVisible} toggle={this.onDismiss}>
+                            {this.state.errorMessage}
+                          </Alert>
 
-                    <Row>
-                      <Col>
-                        <InputGroup>
-                          <InputGroupAddon addonType="prepend">
-                            <InputGroupText>End Date</InputGroupText>
-                          </InputGroupAddon>
-                          <Input type="date" name="endDate"/>
-                        </InputGroup>
-                        <br/>
-                      </Col>
-                    </Row>
+                          <Button size="lg" className="submitButton">Add Event</Button>
+                        </FormGroup>
 
-                    <Row>
-                      <Col>
-                        <InputGroup>
-                          <InputGroupAddon addonType="prepend">
-                            <InputGroupText>End Time</InputGroupText>
-                          </InputGroupAddon>
-                          <Input type="time" name="endTime"/>
-                        </InputGroup>
-                        <br/>
-                      </Col>
-                    </Row>
+                      </Form>
 
-                    <Row>
-                      <Col>
-                        <Alert color="danger" isOpen={this.state.errorVisible} toggle={this.onDismiss}>
-                          {this.state.errorMessage}
-                        </Alert>
-                      </Col>
-                    </Row>
-
-                    <Row>
-                      <Col>
-                        <Button type="submit" className="submitButton">Add Event</Button>
-                      </Col>
-                    </Row>
-
-                  </Form>
+                    </Col>
+                  </Row>
 
                 </div>
               </AccordionItemBody>
@@ -236,7 +223,13 @@ class EventButton extends Component {
     } else {
       return (
         <div>
-          <Label align="center"> Submitting... </Label>
+          <Accordion>
+            <AccordionItem expanded={this.props.expanded}>
+              <AccordionItemTitle>
+                <h3 align="center">Submitting Event...</h3>
+              </AccordionItemTitle>
+            </AccordionItem>
+          </Accordion>
         </div>
       );
     }

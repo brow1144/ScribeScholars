@@ -100,7 +100,7 @@ class HomePage extends Component {
 
 
       myAssignments: [],
-
+      eventButtonOpen: false,
     };
   }
 
@@ -617,7 +617,7 @@ class HomePage extends Component {
               </Col>
 
               <Col md="3">
-                <EventButton uid={this.state.uid}/>
+                <EventButton uid={this.state.uid} expanded={this.state.eventButtonOpen}/>
               </Col>
             </Row>
 
