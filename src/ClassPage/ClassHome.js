@@ -11,6 +11,7 @@ import Cards from '../HomePage/Cards';
 import './ClassHome.css';
 import MyStudents from '../MyStudents/MyStudents';
 import RegradeTable from "./RegradeTable";
+import DiscussionBoard from "../DiscussionBoard/DiscussionBoard";
 
 class ClassHome extends Component {
 
@@ -228,6 +229,18 @@ class ClassHome extends Component {
             <div>
               <div className="announcementsDiv">
                 <Cards announcements={this.props.classAnnouncements}/>
+              </div>
+            </div>
+            :
+            <div>
+            </div>
+          }
+
+          {this.state.discussionActive
+            ?
+            <div>
+              <div>
+                <DiscussionBoard selectedClass={this.props.selectedClass} role={this.props.role} uid={this.props.uid} />
               </div>
             </div>
             :

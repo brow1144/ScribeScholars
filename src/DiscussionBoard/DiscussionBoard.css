@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+
+.searchBox {
+    background-color: #3D4855;
+    color: white;
+    height: 10em;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+    font-family: 'Roboto', sans-serif;
+}
+
+.searchWord {
+    font-size: 1.3em;
+}
+
+.searchSubTitle {
+    color: #8a95a0;
+}
+
+.questionBox {
+    background-color: #dbdbdb;
+    color: white;
+    height: 8em;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+    font-family: 'Roboto', sans-serif;
+}
+
+.userImage {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border:2px solid darkgrey;
+}
+
+.questionText {
+    color: #21CE99;
+}
+
+.hashtag {
+    color: #8a95a0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.replyNum {
+    color: #8a95a0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.replies {
+    color: #8a95a0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.check {
+    color: #21CE99;
+    font-size: 1.4em;
+}
+
+.times {
+    color: #F45531;
+    font-size: 1.4em;
+}
+
+.response {
+    color: #8a95a0;
+    font-family: 'Roboto', sans-serif;
+    padding-right: 0.5em;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
