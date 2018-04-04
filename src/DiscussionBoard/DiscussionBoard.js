@@ -55,8 +55,8 @@ class DiscussionBoard extends Component {
         <br/>
 
         <Row>
-          <Col xs='0' md='2'/>
-          <Col xs='12' md='8'>
+          <Col sm='0' md='2'/>
+          <Col sm='12' md='8'>
             <Row>
               <Col className='center' md='2'>
                 <h4 className='recent'>Recent</h4>
@@ -73,12 +73,12 @@ class DiscussionBoard extends Component {
               </Col>
             </Row>
             <Row className='questionBox'>
-              <Col xs='1' md='1'>
+              <Col xs='4' md='1'>
                 <img className="userImage"
                      src='https://yt3.ggpht.com/a-/AJLlDp2XDF1qkCbGAr7HiDi6ywCWp3JfwN3vgN6ksA=s900-mo-c-c0xffffffff-rj-k-no'
                      alt="userIcon" />
               </Col>
-              <Col xs='4' md='4'>
+              <Col xs='8' md='4'>
                 <h3 className='questionText'>
                   How to start investing
                 </h3>
@@ -86,13 +86,13 @@ class DiscussionBoard extends Component {
                   by Kyle Brown
                 </p>
               </Col>
-              <Col xs='1' md='1'/>
-              <Col xs='3' md='3'>
+              <Col xs='0' md='2'/>
+              <Col xs='11' md='3'>
                 <h4 className='hashtag'>
                   # Investing
                 </h4>
               </Col>
-              <Col xs='2' md='2'>
+              <Col xs='10' md='1'>
                 <Row>
                   <p className='response'>
                     Teacher:
@@ -106,13 +106,13 @@ class DiscussionBoard extends Component {
                   <i className="fas fa-times times"/>
                 </Row>
               </Col>
-              <Col xs='1' md='1'>
+              <Col xs='11' md='1'>
                   <h4 className='replyNum'>78</h4>
                   <p className='replies'>Views</p>
               </Col>
             </Row>
           </Col>
-          <Col xs='0' md='2'/>
+          <Col sm='0' md='2'/>
         </Row>
 
 
