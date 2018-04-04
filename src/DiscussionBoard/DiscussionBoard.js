@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Col, Row, InputGroup, InputGroupAddon, Input} from 'reactstrap';
+import { Col, Row, InputGroup, InputGroupAddon, Input, Button} from 'reactstrap';
 
 import '../DiscussionBoard/DiscussionBoard.css'
 
@@ -57,6 +57,21 @@ class DiscussionBoard extends Component {
         <Row>
           <Col xs='0' md='2'/>
           <Col xs='12' md='8'>
+            <Row>
+              <Col className='center' md='2'>
+                <h4 className='recent'>Recent</h4>
+              </Col>
+              <Col className='center' md='2'>
+                <h4 className='popular'>Popular</h4>
+              </Col>
+              <Col className='center' md='2'>
+                <h4 className='lastReply'>Last Reply</h4>
+              </Col>
+              <Col md='4'/>
+              <Col md='2'>
+                <Button className='exSpace' color='success'>+ New Thread</Button>
+              </Col>
+            </Row>
             <Row className='questionBox'>
               <Col xs='1' md='1'>
                 <img className="userImage"

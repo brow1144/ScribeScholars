@@ -71,6 +71,87 @@
     padding-right: 0.5em;
 }
 
+.recent {
+    color: #8a95a0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.recent:hover {
+    border-bottom: 3px solid #21CE99;
+}
+
+.popular {
+    color: #8a95a0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.popular:hover {
+    border-bottom: 3px solid #21CE99;
+}
+
+.lastReply {
+    color: #8a95a0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.lastReply:hover {
+    border-bottom: 3px solid #21CE99;
+}
+
+.underline {
+    border-bottom: 3px solid #21CE99;
+}
+
+.center {
+    text-align: center;
+}
+
+.exSpace {
+    margin-bottom: 7px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
