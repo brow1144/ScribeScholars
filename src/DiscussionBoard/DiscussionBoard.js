@@ -13,9 +13,16 @@ class DiscussionBoard extends Component {
     super(props);
 
     this.state = {
-
+      newQVisible: false,
     };
   }
+
+  addNewDiscussion = (ev) => {
+    ev.preventDefault();
+
+    this.setState({newQVisible: !this.state.newQVisible});
+
+  };
 
   render() {
     return (
@@ -55,7 +62,12 @@ class DiscussionBoard extends Component {
         <br/>
         <br/>
 
-        <AddDiscussion/>
+        {this.state.newQVisible
+          ?
+          <AddDiscussion/>
+          :
+          null
+        }
 
         <br/>
         <br/>
@@ -75,7 +87,7 @@ class DiscussionBoard extends Component {
               </Col>
               <Col md='4'/>
               <Col md='2'>
-                <Button className='exSpace' color='success'>+ New Thread</Button>
+                <Button onClick={this.addNewDiscussion} className='exSpace' color='success'>+ New Thread</Button>
               </Col>
             </Row>
           </Col>
