@@ -244,6 +244,7 @@ class HomePage extends Component {
    */
   componentWillMount() {
     this.props.getShowGPA();
+    this.props.getShowAlerts();
     this.getClasses();
     mql.addListener(this.mediaQueryChanged);
     window.addEventListener('resize', this.handleWindowChange);
@@ -586,6 +587,7 @@ class HomePage extends Component {
       updateAnnouncements: this.props.updateAnnouncements,
       updateUserImage: this.props.updateUserImage,
       toggleGPA: this.props.toggleGPA,
+      toggleAlerts: this.props.toggleAlerts,
       selectClass: this.props.selectClass,
       updateClassPicture: this.props.updateClassPicture,
       getClassAnnouncements: this.props.getClassAnnouncements,
@@ -679,7 +681,7 @@ class HomePage extends Component {
           <Settings {...actions} classes={this.props.classes} userImage={this.state.userImage}
                     updateUserImage={this.props.updateUserImage} updateClasses={this.props.updateClasses}
                     role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid}
-                    showGPA={this.props.showGPA}/>
+                    showGPA={this.props.showGPA} showAlerts={this.props.showAlerts}/>
         </Sidebar>
       );
 
