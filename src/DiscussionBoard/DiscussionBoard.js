@@ -95,7 +95,7 @@ class DiscussionBoard extends Component {
 
         {this.state.newQVisible
           ?
-          <AddDiscussion discussion={discussion}/>
+          <AddDiscussion uid={this.props.uid} classCode={this.props.classCode} discussion={discussion}/>
           :
           null
         }

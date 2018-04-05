@@ -62,9 +62,52 @@ class AddDiscussion extends Component {
     } else if (title === '' || hashtag === '' || body === '') {
       this.setState({errorMessage: 'You forgot to enter multiple form fields!'});
       this.setState({ visible: true });
-    } else
-      this.setState({visible: false})
+    } else {
+      this.setState({visible: false});
 
+      let code = this.getCode();
+
+      let self = this;
+
+      let classRef = firestore.collection("classes").doc(this.props.classCode).collection('discussionBoard').doc(code);
+
+      classRef.get().then(function (doc) {
+        if (doc.exists) {
+          console.log('Impossible');
+        } else {
+          console.log(title);
+          console.log(hashtag);
+          console.log(body);
+          console.log('');
+          console.log('');
+          console.log(0);
+          console.log(self.props.uid);
+
+          classRef.set({
+            title: title,
+            hashtag: hashtag,
+            body: body,
+            studentAns: '',
+            teacherAns: '',
+            views: 0,
+            uid: self.props.uid,
+          }).catch(function (error) {
+            console.log(error);
+          });
+        }
+      }).catch(function (error) {
+        console.log("Error getting document: ", error);
+      });
+    }
+  };
+
+  //Generate New Homework code
+  getCode = () => {
+    let code = "";
+    for (let i = 0; i < 9; i++) {
+      code += Math.floor(Math.random() * 10);
+    }
+    return code;
   };
 
   onDismiss = () => {
