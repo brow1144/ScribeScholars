@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Col, Row, InputGroup, InputGroupAddon, Input, Button} from 'reactstrap';
+import { Col, Row, InputGroup, InputGroupAddon, Input, Button, Alert } from 'reactstrap';
 
 import { firestore } from "../base";
 
@@ -16,8 +16,8 @@ class DiscussionBoard extends Component {
 
     this.state = {
       newQVisible: false,
-
-      discussions: {"": {}},
+      visible: false,
+      discussions: {'': {}},
     }
   };
 
@@ -29,7 +29,7 @@ class DiscussionBoard extends Component {
     let self = this;
     let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard");
 
-    let discussions = {"": {}};
+    let discussions = {'': {}};
 
     docRef.onSnapshot(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
@@ -47,6 +47,11 @@ class DiscussionBoard extends Component {
 
   successfulNewQuestion = () => {
     this.setState({newQVisible: false});
+    this.setState({visible: true});
+  };
+
+  onDismiss = () => {
+    this.setState({visible: false});
   };
 
   render() {
@@ -101,6 +106,16 @@ class DiscussionBoard extends Component {
           :
           null
         }
+
+        <Row>
+          <Col xs='0' md='2'/>
+          <Col xs='12' md='8'>
+            <Alert color="success" isOpen={this.state.visible} toggle={this.onDismiss}>
+              Congratulations! Your question has been submitted successfully!
+            </Alert>
+          </Col>
+          <Col xs='0' md='2'/>
+        </Row>
 
         <br/>
         <br/>
