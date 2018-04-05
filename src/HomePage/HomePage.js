@@ -10,6 +10,7 @@ import moment from 'moment';
 import Side from './Side';
 import HomeNav from './HomeNav';
 import Cards from './Cards';
+import AlertHandler from './AlertHandler';
 import ClassHome from '../ClassPage/ClassHome';
 import LiveFeed from '../ClassPage/LiveFeed';
 import GradingPage from '../MyStudents/GradingPage';
@@ -102,7 +103,11 @@ class HomePage extends Component {
       myAssignments: [],
       eventButtonOpen: false,
 
-      alertsVisible: true,
+      //alertsVisible: true,
+      alerts: [
+        "HW 2",
+        "Due tonight at 11:59 EDT",
+      ],
     };
   }
 
@@ -524,12 +529,6 @@ class HomePage extends Component {
     });
   };
 
-  onDismiss = () => {
-    this.setState({
-      alertsVisible: false,
-    });
-  };
-
   /**
    *
    * Method called to add components to the webpage
@@ -619,10 +618,10 @@ class HomePage extends Component {
             <Row>
               <Col md="1"/>
               <Col md="7">
-                <Alert color="info" hidden={!this.props.showAlerts}
-                       isOpen={this.state.alertsVisible} toggle={this.onDismiss}>
-                  Hello There
-                </Alert>
+                {Object.keys(this.state.alerts).map((key, index) =>
+                  <AlertHandler key={index} text={this.state.alerts[index]} showAlerts={this.props.showAlerts}/>
+                )
+                }
               </Col>
             </Row>
 
