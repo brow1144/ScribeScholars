@@ -11,6 +11,7 @@ import Cards from '../HomePage/Cards';
 import './ClassHome.css';
 import MyStudents from '../MyStudents/MyStudents';
 import RegradeTable from "./RegradeTable";
+import DiscussionBoard from "../DiscussionBoard/DiscussionBoard";
 
 class ClassHome extends Component {
 
@@ -56,6 +57,21 @@ class ClassHome extends Component {
   };
 
   componentWillMount() {
+
+    if (this.props.tab === 'announcements') {
+      this.setState({announcementsActive: true})
+    } else if (this.props.tab === 'lessons') {
+      this.setState({lessonsActive: true})
+    } else if (this.props.tab === 'homework') {
+      this.setState({homeworkActive: true})
+    } else if (this.props.tab === 'discussion') {
+      this.setState({discussionActive: true})
+    } else if (this.props.tab === 'myStudents') {
+      this.setState({myStudentsActive: true})
+    } else if (this.props.tab === 'regradeRequests') {
+      this.setState({regradeRequestsActive: true})
+    }
+
     this.props.selectClass(this.props.path);
     this.props.updateClassPicture(this.props.path);
   };
@@ -228,6 +244,18 @@ class ClassHome extends Component {
             <div>
               <div className="announcementsDiv">
                 <Cards announcements={this.props.classAnnouncements}/>
+              </div>
+            </div>
+            :
+            <div>
+            </div>
+          }
+
+          {this.state.discussionActive
+            ?
+            <div>
+              <div>
+                <DiscussionBoard selectedClass={this.props.selectedClass} role={this.props.role} uid={this.props.uid} />
               </div>
             </div>
             :
