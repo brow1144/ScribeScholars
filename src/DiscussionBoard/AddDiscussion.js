@@ -72,17 +72,7 @@ class AddDiscussion extends Component {
       let classRef = firestore.collection("classes").doc(this.props.classCode).collection('discussionBoard').doc(code);
 
       classRef.get().then(function (doc) {
-        if (doc.exists) {
-          console.log('Impossible');
-        } else {
-          console.log(title);
-          console.log(hashtag);
-          console.log(body);
-          console.log('');
-          console.log('');
-          console.log(0);
-          console.log(self.props.uid);
-
+        if (!doc.exists) {
           classRef.set({
             title: title,
             hashtag: hashtag,
@@ -91,6 +81,8 @@ class AddDiscussion extends Component {
             teacherAns: '',
             views: 0,
             uid: self.props.uid,
+          }).then(function () {
+            self.props.successfulNewQuestion();
           }).catch(function (error) {
             console.log(error);
           });

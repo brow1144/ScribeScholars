@@ -42,9 +42,11 @@ class DiscussionBoard extends Component {
 
   addNewDiscussion = (ev) => {
     ev.preventDefault();
-
     this.setState({newQVisible: !this.state.newQVisible});
+  };
 
+  successfulNewQuestion = () => {
+    this.setState({newQVisible: false});
   };
 
   render() {
@@ -95,7 +97,7 @@ class DiscussionBoard extends Component {
 
         {this.state.newQVisible
           ?
-          <AddDiscussion uid={this.props.uid} classCode={this.props.classCode} discussion={discussion}/>
+          <AddDiscussion successfulNewQuestion={this.successfulNewQuestion} uid={this.props.uid} classCode={this.props.classCode} discussion={discussion}/>
           :
           null
         }
