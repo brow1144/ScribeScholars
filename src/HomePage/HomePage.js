@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { firestore } from "../base";
-import { Row, Col } from 'reactstrap';
+import { Row, Col, Alert } from 'reactstrap';
 
 import Sidebar from 'react-sidebar';
 import BigCalendar from 'react-big-calendar';
@@ -101,6 +101,8 @@ class HomePage extends Component {
 
       myAssignments: [],
       eventButtonOpen: false,
+
+      alertsVisible: true,
     };
   }
 
@@ -522,6 +524,12 @@ class HomePage extends Component {
     });
   };
 
+  onDismiss = () => {
+    this.setState({
+      alertsVisible: false,
+    });
+  };
+
   /**
    *
    * Method called to add components to the webpage
@@ -607,6 +615,17 @@ class HomePage extends Component {
                      showGPA={this.props.showGPA}
                      role={this.props.role}
                      width={this.state.width}/>
+
+            <Row>
+              <Col md="1"/>
+              <Col md="7">
+                <Alert color="info" hidden={!this.props.showAlerts}
+                       isOpen={this.state.alertsVisible} toggle={this.onDismiss}>
+                  Hello There
+                </Alert>
+              </Col>
+            </Row>
+
             <Row>
               <Col md="1"/>
               <Col md="7">
