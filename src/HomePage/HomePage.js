@@ -691,7 +691,7 @@ class HomePage extends Component {
           <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
                    width={this.state.width}/>
 
-          <ClassHome {...classData} {...actions} lessonNumber={this.props.lessonNumber} selectedClass={this.props.selectedClass} uid={this.state.uid} role={this.state.role}/>
+          <ClassHome tab={this.props.tab} {...classData} {...actions} lessonNumber={this.props.lessonNumber} selectedClass={this.props.selectedClass} uid={this.state.uid} role={this.state.role}/>
 
 
         </Sidebar>
