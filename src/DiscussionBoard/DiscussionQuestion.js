@@ -27,16 +27,16 @@ class DiscussionQuestion extends Component {
             </Col>
             <Col xs='8' md='4'>
               <h3 className='questionText'>
-                How to start investing
+                {this.props.discussion.title}
               </h3>
               <p className="searchSubTitle">
-                by Kyle Brown
+                by {this.props.discussion.uid}
               </p>
             </Col>
             <Col xs='0' md='2'/>
             <Col xs='11' md='3'>
               <h4 className='hashtag'>
-                # Investing
+                # {this.props.discussion.hashtag}
               </h4>
             </Col>
             <Col xs='10' md='1'>
@@ -54,7 +54,7 @@ class DiscussionQuestion extends Component {
               </Row>
             </Col>
             <Col xs='11' md='1'>
-              <h4 className='replyNum'>78</h4>
+              <h4 className='replyNum'>{this.props.discussion.views}</h4>
               <p className='replies'>Views</p>
             </Col>
           </Row>

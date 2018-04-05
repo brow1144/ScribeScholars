@@ -117,14 +117,12 @@ class DiscussionBoard extends Component {
           <Col xs='0' md='2'/>
         </Row>
 
-        <DiscussionQuestion />
-        <DiscussionQuestion />
-        <DiscussionQuestion />
-        <DiscussionQuestion />
-        <DiscussionQuestion />
-        <DiscussionQuestion />
-        <DiscussionQuestion />
-        <DiscussionQuestion />
+
+        {Object.keys(this.state.discussions).map((key, index) => {
+          return (
+            <DiscussionQuestion discussion={this.state.discussions[key]} key={key}/>
+          )
+        })}
 
         <br/>
         <br/>
