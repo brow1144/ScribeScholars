@@ -7,6 +7,7 @@ import {firestore} from "../../base";
 import MCQ from "../LiveComponents/MCQ";
 import FRQ from "./FRQ";
 import Video from "./Video";
+import MSQ from "./MSQ";
 
 class GenHomework extends Component {
 
@@ -44,6 +45,7 @@ class GenHomework extends Component {
       answers: [],
 
       multiple: [],
+      multi: [],
 
       finalPage: false,
     }
@@ -111,7 +113,7 @@ class GenHomework extends Component {
 
     let quest = this.state.questions[this.state.currentQuestion - 1];
 
-    if(quest.type === "MCQ") {
+    if (quest.type === "MCQ") {
       self.setState({
         correctAns: quest.correctAns,
         option1: quest.option1,
@@ -121,17 +123,24 @@ class GenHomework extends Component {
         prompt: quest.prompt,
         type: quest.type,
       });
-    }
-    else if(quest.type === "FRQ") {
+    } else if (quest.type === "FRQ") {
       self.setState({
         frqResponse: self.state.history[self.state.currentQuestion - 1],
         prompt: quest.prompt,
         type: quest.type,
       });
-    }
-    else if(quest.type === "VIDEO") {
+    } else if (quest.type === "VIDEO") {
       self.setState({
         url: quest.url,
+        type: quest.type,
+      });
+    } else if (quest.type === "MSQ") {
+      self.setState({
+        option1: quest.option1,
+        option2: quest.option2,
+        option3: quest.option3,
+        option4: quest.option4,
+        prompt: quest.prompt,
         type: quest.type,
       });
     }
@@ -386,16 +395,21 @@ class GenHomework extends Component {
     })
   };
 
+
+  /*
+   * Set the answer history for MSQ
+   */
   selectMulti = () => {
     let self = this;
     let tmpHis = self.state.history;
     let ansArr = self.state.answers;
+    let tmpMulti = self.state.multiple;
 
     //Update history array
     for(let i in tmpHis) {
       if(i == self.state.currentQuestion-1)
       {
-        tmpHis[i] = "ungraded"
+        tmpHis[i] = "multi"
       }
     }
 
@@ -411,6 +425,7 @@ class GenHomework extends Component {
     self.setState({
       answers: ansArr,
       history: tmpHis,
+      multiple: tmpMulti,
     })
   }
 
@@ -418,25 +433,31 @@ class GenHomework extends Component {
 
     const action = {
       setFRQ: this.setFRQ,
+      selectMulti: this.selectMulti,
     };
 
     return (
-      <div className={"center"}>
+      <div>
         <Container fluid>
           <Card style={{boxShadow: '8px 8px 3px rgba(0, 0, 0, 0.2)'}}>
             <Row>
               {this.state.type === "MCQ"
                 ?
-                <MCQ currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
+                <MSQ {...action} currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
                      setAns = {this.setAns} finalPage = {this.state.finalPage} oldAns = {this.state.history[this.state.currentQuestion-1]}
                      option1={this.state.option1} option2={this.state.option2} option3={this.state.option3} option4={this.state.option4}/>
                 : this.state.type === "FRQ"
                   ?
                   <FRQ {...action} name={this.state.name} currentQuestion={this.state.currentQuestion}
                        prompt = {this.state.prompt} frqResponse = {this.state.frqResponse} finalPage = {this.state.finalPage}/>
-                  :
-                  <Video name={this.state.name} currentQuestion={this.state.currentQuestion} url = {this.state.url}
+                  : this.state.type === "VIDEO"
+                    ?
+                    <Video name={this.state.name} currentQuestion={this.state.currentQuestion} url = {this.state.url}
                          finalPage = {this.state.finalPage}/>
+                    :
+                    <MSQ currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
+                         setAns = {this.setAns} finalPage = {this.state.finalPage} oldAns = {this.state.history[this.state.currentQuestion-1]}
+                         option1={this.state.option1} option2={this.state.option2} option3={this.state.option3} option4={this.state.option4}/>
               }
 
             </Row>

@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 
 import {Col, FormGroup, Label, Input} from 'reactstrap';
 
-import "./MCQ.css"
+import "../LiveComponents/MCQ.css"
 
 
-class MCQ extends Component {
+class MSQ extends Component {
 
   constructor(props) {
     super(props);
@@ -21,11 +21,11 @@ class MCQ extends Component {
   render() {
     if (this.props.finalPage === false) {
       return (
-        <Col sm={{size: 10, offset: 1}}>
+        <Col sm={{size: 8, offset: 2}}>
           <FormGroup tag={"fieldset"}>
             <legend className={"RadioTitle"}>{this.props.name}: Question {this.props.currentQuestion}</legend>
             <legend className={"RadioTitle"}>{this.props.prompt}</legend>
-            <Col sm={{size: 10, offset: 1}}>
+            <Col>
               <FormGroup>
                 <Label className={"RadioLabel"}>
                   <Input onClick={() => this.props.setAns(this.state.opt1)} checked={this.props.oldAns === "option1"} className={"RadioButton"} type="radio"
@@ -71,4 +71,4 @@ class MCQ extends Component {
 }
 
 
-export default MCQ
+export default MSQ

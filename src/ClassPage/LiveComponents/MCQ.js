@@ -21,11 +21,11 @@ class MCQ extends Component {
   render() {
     if (this.props.finalPage === false) {
       return (
-        <Col sm={{size: 10, offset: 1}}>
+        <Col sm={{size: 8, offset: 2}}>
           <FormGroup tag={"fieldset"}>
             <legend className={"RadioTitle"}>{this.props.name}: Question {this.props.currentQuestion}</legend>
             <legend className={"RadioTitle"}>{this.props.prompt}</legend>
-            <Col sm={{size: 10, offset: 1}}>
+            <Col>
               <FormGroup>
                 <Label className={"RadioLabel"}>
                   <Input onClick={() => this.props.setAns(this.state.opt1)} checked={this.props.oldAns === "option1"} className={"RadioButton"} type="radio"
@@ -42,7 +42,7 @@ class MCQ extends Component {
               </FormGroup>
               <FormGroup>
                 <Label className={"RadioLabel"}>
-                  <Input onClick={() => this.props.setAns(this.state.opt3)} checked={this.props.oldAns === "option3"} className={"RadioButton textSize"}
+                  <Input onClick={() => this.props.setAns(this.state.opt3)} checked={this.props.oldAns === "option3"} className={"RadioButton"}
                          type="radio" name="radio1"/>
                   <p className={"textSize"}>{this.props.option3}</p>
                 </Label>
