@@ -77,13 +77,23 @@ class AddDiscussion extends Component {
                 <p className='response'>
                   Teacher:
                 </p>
-                <i className="fas fa-times times"/>
+                {this.props.discussion.teacherAns === ''
+                ?
+                  <i className="fas fa-check check"/>
+                  :
+                  <i className="fas fa-times times"/>
+                }
               </Row>
               <Row>
                 <p className='response'>
                   Student:
                 </p>
-                <i className="fas fa-times times"/>
+                {this.props.discussion.studentAns === ''
+                ?
+                  <i className="fas fa-check check"/>
+                  :
+                  <i className="fas fa-times times"/>
+                }
               </Row>
             </Col>
             <Col xs='11' md='1'>
