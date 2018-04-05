@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { Col, Row, InputGroup, InputGroupAddon, Input, Button} from 'reactstrap';
 
+import AddDiscussion from '../DiscussionBoard/AddDiscussion';
 import DiscussionQuestion from '../DiscussionBoard/DiscussionQuestion';
 
 import '../DiscussionBoard/DiscussionBoard.css'
@@ -53,9 +54,11 @@ class DiscussionBoard extends Component {
 
         <br/>
         <br/>
-        <br/>
-        <br/>
 
+        <AddDiscussion/>
+
+        <br/>
+        <br/>
 
         <Row>
           <Col xs='0' md='2'/>
@@ -87,7 +90,6 @@ class DiscussionBoard extends Component {
         <DiscussionQuestion />
         <DiscussionQuestion />
         <DiscussionQuestion />
-
 
         <br/>
         <br/>
