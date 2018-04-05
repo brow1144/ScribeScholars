@@ -255,7 +255,7 @@ class ClassHome extends Component {
             ?
             <div>
               <div>
-                <DiscussionBoard selectedClass={this.props.selectedClass} role={this.props.role} uid={this.props.uid} />
+                <DiscussionBoard classCode={this.props.path} code={this.props.code} role={this.props.role} uid={this.props.uid} />
               </div>
             </div>
             :
