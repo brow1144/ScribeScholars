@@ -48,6 +48,14 @@ class DiscussionBoard extends Component {
   };
 
   render() {
+
+    let discussion = {
+      views: 0,
+      studentAns: '',
+      teacherAns: '',
+      uid: this.props.uid,
+    };
+
     return (
       <div>
 
@@ -87,7 +95,7 @@ class DiscussionBoard extends Component {
 
         {this.state.newQVisible
           ?
-          <AddDiscussion/>
+          <AddDiscussion discussion={discussion}/>
           :
           null
         }
