@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import { Col, Row, InputGroup, InputGroupAddon, Input, Button} from 'reactstrap';
 
+import { firestore } from "../base";
+
 import AddDiscussion from '../DiscussionBoard/AddDiscussion';
 import DiscussionQuestion from '../DiscussionBoard/DiscussionQuestion';
 
@@ -14,12 +16,29 @@ class DiscussionBoard extends Component {
 
     this.state = {
       newQVisible: false,
-    };
-  }
+
+      discussions: {"": {}},
+    }
+  };
 
   componentWillMount() {
-
+    this.getDiscussions();
   }
+
+  getDiscussions = () => {
+    let self = this;
+    let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard");
+
+    let discussions = {"": {}};
+
+    docRef.onSnapshot(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        discussions[doc.id] = doc.data();
+        Object.keys(discussions).forEach((key) => (key === '') && delete discussions[key]);
+        self.setState({discussions: discussions});
+      });
+    });
+  };
 
   addNewDiscussion = (ev) => {
     ev.preventDefault();
