@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 
 import { Col, Row} from 'reactstrap';
 
+import defaultUser from '../HomePage/defUser.png';
+
+import { firestore } from "../base";
+
 import '../DiscussionBoard/DiscussionBoard.css'
 
 class DiscussionQuestion extends Component {
@@ -10,8 +14,34 @@ class DiscussionQuestion extends Component {
     super(props);
 
     this.state = {
-
+      userImage: '',
+      name: '',
     };
+  }
+
+  componentWillMount() {
+    if (this.props.discussion.uid !== undefined && this.props.discussion.uid !== null) {
+      console.log(this.props.discussion.uid);
+
+      let docRef = firestore.collection("users").doc(this.props.discussion.uid);
+      let self = this;
+
+      docRef.get().then(function (doc) {
+        if (doc.exists) {
+          let name = doc.data().firstName + ' ' + doc.data().lastName;
+          console.log(doc.data().userImage);
+          self.setState({
+            userImage: doc.data().userImage,
+            name: name,
+          });
+
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(function (error) {
+        console.log("Error getting document:", error);
+      })
+    }
   }
 
   render() {
@@ -21,16 +51,23 @@ class DiscussionQuestion extends Component {
         <Col className='borderClass' sm='12' md='8'>
           <Row className='questionBox'>
             <Col xs='4' md='1'>
-              <img className="userImage"
-                   src='https://yt3.ggpht.com/a-/AJLlDp2XDF1qkCbGAr7HiDi6ywCWp3JfwN3vgN6ksA=s900-mo-c-c0xffffffff-rj-k-no'
-                   alt="userIcon"/>
+              {this.state.userImage
+                ?
+                <img className="userImage"
+                     src={this.state.userImage}
+                     alt="userIcon"/>
+                :
+                <img className="userImage"
+                     src={defaultUser}
+                     alt="userIcon"/>
+              }
             </Col>
             <Col xs='8' md='4'>
               <h3 className='questionText'>
                 {this.props.discussion.title}
               </h3>
               <p className="searchSubTitle">
-                by {this.props.discussion.uid}
+                by {this.state.name}
               </p>
             </Col>
             <Col xs='0' md='2'/>
