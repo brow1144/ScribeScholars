@@ -57,6 +57,21 @@ class ClassHome extends Component {
   };
 
   componentWillMount() {
+
+    if (this.props.tab === 'announcements') {
+      this.setState({announcementsActive: true})
+    } else if (this.props.tab === 'lessons') {
+      this.setState({lessonsActive: true})
+    } else if (this.props.tab === 'homework') {
+      this.setState({homeworkActive: true})
+    } else if (this.props.tab === 'discussion') {
+      this.setState({discussionActive: true})
+    } else if (this.props.tab === 'myStudents') {
+      this.setState({myStudentsActive: true})
+    } else if (this.props.tab === 'regradeRequests') {
+      this.setState({regradeRequestsActive: true})
+    }
+
     this.props.selectClass(this.props.path);
     this.props.updateClassPicture(this.props.path);
   };

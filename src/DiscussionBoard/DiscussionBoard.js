@@ -17,6 +17,10 @@ class DiscussionBoard extends Component {
     };
   }
 
+  componentWillMount() {
+
+  }
+
   addNewDiscussion = (ev) => {
     ev.preventDefault();
 

@@ -575,6 +575,16 @@ class Main extends Component {
               />
           )}/>
 
+        <Route path="/homepage/:class/:tab" render={(match) => (
+          <HomePage
+            tab={match.match.params.tab}
+            path={match.match.params.class}
+            page="classes"
+            {...data}
+            {...actions}
+          />
+        )}/>
+
         <Route path="/homepage/:class" render={(match) => (
           <HomePage
             path={match.match.params.class}
