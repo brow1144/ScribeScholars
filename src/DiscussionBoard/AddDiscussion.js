@@ -6,6 +6,8 @@ import { firestore } from "../base";
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.bubble.css';
+import 'react-quill/dist/quill.core.css';
 
 import '../DiscussionBoard/AddDiscussion.css';
 
@@ -52,18 +54,17 @@ class AddDiscussion extends Component {
     ev.preventDefault();
     let title = ev.target.title.value;
     let hashtag = ev.target.hashtag.value;
-    let body = ev.target.body.value;
 
-    if (title === '' && hashtag !== '' && body !== '') {
+    if (title === '' && hashtag !== '' && this.state.text !== '') {
       this.setState({errorMessage: 'You forgot to enter a title!'});
       this.setState({ visible: true });
-    } else if (title !== '' && hashtag === '' && body !== '') {
+    } else if (title !== '' && hashtag === '' && this.state.text !== '') {
       this.setState({errorMessage: 'You forgot to enter a topic!'});
       this.setState({ visible: true });
-    } else if (title !== '' && hashtag !== '' && body === '') {
+    } else if (title !== '' && hashtag !== '' && this.state.text === '') {
       this.setState({errorMessage: 'You forgot to enter a message body!'});
       this.setState({ visible: true });
-    } else if (title === '' || hashtag === '' || body === '') {
+    } else if (title === '' || hashtag === '' || this.state.text === '') {
       this.setState({errorMessage: 'You forgot to enter multiple form fields!'});
       this.setState({ visible: true });
     } else {
@@ -80,7 +81,7 @@ class AddDiscussion extends Component {
           classRef.set({
             title: title,
             hashtag: hashtag,
-            body: body,
+            body: self.state.text,
             studentAns: '',
             teacherAns: '',
             views: 0,
@@ -118,38 +119,38 @@ class AddDiscussion extends Component {
     this.setState({hashtag: ev.target.value});
   };
 
-  handleChange = (value) => {
-    this.setState({text: value});
+  handleChange = (content) => {
+    this.setState({text: content});
   };
 
   
   render() {
-
-    let modules = {
+    const modules = {
       toolbar: {
-        container: "#toolbar",
+        container: [
+          ['bold', 'italic', 'underline'],
+          ['blockquote', 'code'],
+
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+
+          [{ 'size': ['small', false, 'large', 'huge'] }],
+
+          [{ 'color': [] }, { 'background': [] }],
+          [{ 'font': [] }],
+          [{ 'align': [] }],
+
+          ['image', 'video'],
+        ],
       },
-      clipboard: {
-        matchVisual: false,
-      }
     };
 
-    let formats = [
-      "header",
-      "font",
-      "size",
-      "bold",
-      "italic",
-      "underline",
-      "strike",
-      "blockquote",
-      "list",
-      "bullet",
-      "indent",
-      "link",
-      "image",
-      "color",
-      "code",
+    const formats = [
+      'bold', 'italic', 'underline',
+      'blockquote', 'code',
+      'list', 'bullet',
+      'size',
+      'color', 'background', 'font', 'align',
+      'image', 'video',
     ];
 
     return (
@@ -237,34 +238,15 @@ class AddDiscussion extends Component {
                 <InputGroup>
                   <div className='wrapper'>
                      <div id="toolbar">
-                       <select className="ql-header" defaultValue={""} onChange={e => e.persist()}>
-                         <option value="1" />
-                         <option value="2" />
-                         <option selected />
-                       </select>
-                       <button className="ql-bold" />
-                       <button className="ql-italic" />
-                       <select className="ql-color">
-                         <option value="red" />
-                         <option value="green" />
-                         <option value="blue" />
-                         <option value="orange" />
-                         <option value="violet" />
-                         <option value="#d0d1d2" />
-                         <option value="#21CE99" />
-                         <option selected />
-                       </select>
-                       <button className="ql-code" />
                      </div>
-                    <ReactQuill className="text-editor"
+                    <ReactQuill
+                        className="text-editor"
                         onChange={this.handleChange}
                         placeholder={this.props.text}
                         modules={modules}
                         formats={formats}
-                        theme={"snow"} // pass false to use minimal theme
-                    />
+                        theme={"snow"} />
                   </div>
-                  {/*</div>*/}
                 </InputGroup>
               </Col>
             </Row>

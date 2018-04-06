@@ -2,7 +2,7 @@
 
 .newQuestion {
     background-color: #e8e8e8;
-    color: white;
+    /*color: white;*/
     justify-content: center;
     align-items: center;
     vertical-align: middle;
@@ -20,7 +20,7 @@
 }
 
 .text-editor {
-    height: 20em;
+    height: 25em;
     /*width: 40em;*/
     /*width: 100%;*/
 }
