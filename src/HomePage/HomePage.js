@@ -355,10 +355,11 @@ class HomePage extends Component {
     console.log(this.state.dates.length);
     //new Date(data.deadlines[i].startYear, data.deadlines[i].startMonth, data.deadlines[i].startDay, data.deadlines[i].startHour, data.deadlines[i].startMinute, 0),
     let now = new Date(Date.now());
+    //for (let i in this.state.dates) {
     this.state.dates.forEach(function(date) {
       let diff = date.end - now;
       console.log(diff);
-      if (diff < 24 && diff > - 0) {
+      if (diff >= 0 && diff < 24) {
         console.log("comin right up");
       }
     });
