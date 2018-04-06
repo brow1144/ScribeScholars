@@ -240,7 +240,7 @@ class AddDiscussion extends Component {
                      <div id="toolbar">
                      </div>
                     <ReactQuill
-                        className="text-editor"
+                        className='text-area'
                         onChange={this.handleChange}
                         placeholder={this.props.text}
                         modules={modules}
@@ -253,7 +253,7 @@ class AddDiscussion extends Component {
 
             <br/>
 
-            <Button outline color='success'>Submit Discussion</Button>
+            <Button className='buttonSpace' outline color='success'>Submit Discussion</Button>
 
           </Form>
           <br/>

@@ -9,22 +9,20 @@
     font-family: 'Roboto', sans-serif;
 }
 
-.textArea {
-    height: 15em;
-}
-
 .createDiscussion {
     font-family: 'Source Sans Pro', sans-serif;
     font-size: 2em;
     color: #21CE99;
 }
 
-.text-editor {
-    height: 25em;
-    /*width: 40em;*/
-    /*width: 100%;*/
-}
-
 .wrapper {
     width: 100%;
+}
+
+.text-area {
+    height: 100%
+}
+
+.buttonSpace {
+    margin-top: 4em;
 }
