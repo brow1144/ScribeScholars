@@ -308,7 +308,7 @@ class HomePage extends Component {
           self.getUserImage();
           self.getDeadlines();
           self.getAnnouncements();
-          self.getAlerts();
+          //self.getAlerts();
         }
         if (doc.data().firstName !== null && doc.data().lastName !== null && doc.data().role !== null) {
           self.setState({
@@ -351,18 +351,27 @@ class HomePage extends Component {
   };
 
   getAlerts = () => {
-    console.log(this.state.dates);
-    console.log(this.state.dates.length);
+    //console.log(this.state.dates);
+    //console.log(this.state.dates.length);
     //new Date(data.deadlines[i].startYear, data.deadlines[i].startMonth, data.deadlines[i].startDay, data.deadlines[i].startHour, data.deadlines[i].startMinute, 0),
     let now = new Date(Date.now());
     //for (let i in this.state.dates) {
-    this.state.dates.forEach(function(date) {
-      let diff = date.end - now;
-      console.log(diff);
-      if (diff >= 0 && diff < 24) {
-        console.log("comin right up");
-      }
-    });
+
+    // console.log("Before loop");
+    // console.log(this.state.dates);
+
+
+    for (let i = 0; i < this.state.dates.length; i++) {
+      console.log(this.state.dates[i]);
+    }
+
+    // this.state.dates.forEach(function(date) {
+    //   let diff = date.end - now;
+    //   console.log(diff);
+    //   if (diff >= 0 && diff < 24) {
+    //     console.log("comin right up");
+    //   }
+    // });
   };
 
   /**
@@ -407,6 +416,7 @@ class HomePage extends Component {
         } else {
           console.log("No such document!");
         }
+        self.getAlerts();
         self.props.updateDates(self.state.dates);
       }).catch(function (error) {
         console.log("Error getting document:", error);
