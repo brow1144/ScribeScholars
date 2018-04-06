@@ -4,6 +4,11 @@ import { Row, Col, InputGroup, Form, InputGroupAddon, Input, Button, Alert} from
 
 import { firestore } from "../base";
 
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.bubble.css';
+import 'react-quill/dist/quill.core.css';
+
 import '../DiscussionBoard/AddDiscussion.css';
 
 class AddDiscussion extends Component {
@@ -13,11 +18,12 @@ class AddDiscussion extends Component {
 
     this.state = {
       visible: false,
-      errorMessage: "",
+      errorMessage: '',
       userImage: '',
       name: '',
       title: 'Please enter a short discussion title',
       hashtag: 'Topic',
+      text: '',
     };
   }
 
@@ -48,18 +54,17 @@ class AddDiscussion extends Component {
     ev.preventDefault();
     let title = ev.target.title.value;
     let hashtag = ev.target.hashtag.value;
-    let body = ev.target.body.value;
 
-    if (title === '' && hashtag !== '' && body !== '') {
+    if (title === '' && hashtag !== '' && this.state.text !== '') {
       this.setState({errorMessage: 'You forgot to enter a title!'});
       this.setState({ visible: true });
-    } else if (title !== '' && hashtag === '' && body !== '') {
+    } else if (title !== '' && hashtag === '' && this.state.text !== '') {
       this.setState({errorMessage: 'You forgot to enter a topic!'});
       this.setState({ visible: true });
-    } else if (title !== '' && hashtag !== '' && body === '') {
+    } else if (title !== '' && hashtag !== '' && this.state.text === '') {
       this.setState({errorMessage: 'You forgot to enter a message body!'});
       this.setState({ visible: true });
-    } else if (title === '' || hashtag === '' || body === '') {
+    } else if (title === '' || hashtag === '' || this.state.text === '') {
       this.setState({errorMessage: 'You forgot to enter multiple form fields!'});
       this.setState({ visible: true });
     } else {
@@ -76,7 +81,7 @@ class AddDiscussion extends Component {
           classRef.set({
             title: title,
             hashtag: hashtag,
-            body: body,
+            body: self.state.text,
             studentAns: '',
             teacherAns: '',
             views: 0,
@@ -114,12 +119,44 @@ class AddDiscussion extends Component {
     this.setState({hashtag: ev.target.value});
   };
 
+  handleChange = (content) => {
+    this.setState({text: content});
+  };
+
+  
   render() {
+    const modules = {
+      toolbar: {
+        container: [
+          ['bold', 'italic', 'underline'],
+          ['blockquote', 'code'],
+
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+
+          [{ 'size': ['small', false, 'large', 'huge'] }],
+
+          [{ 'color': [] }, { 'background': [] }],
+          [{ 'font': [] }],
+          [{ 'align': [] }],
+
+          ['image', 'video'],
+        ],
+      },
+    };
+
+    const formats = [
+      'bold', 'italic', 'underline',
+      'blockquote', 'code',
+      'list', 'bullet',
+      'size',
+      'color', 'background', 'font', 'align',
+      'image', 'video',
+    ];
+
     return (
       <Row>
         <Col xs='0' md='2'/>
         <Col className='newQuestion' xs='12' md='8'>
-
           <br/>
           <h2 className='createDiscussion'>Create Discussion</h2>
           <hr/>
@@ -196,10 +233,23 @@ class AddDiscussion extends Component {
               </Col>
             </Row>
             <br/>
-            <InputGroup>
-              <InputGroupAddon addonType="prepend">Question</InputGroupAddon>
-              <Input className='textArea' type="textarea" name="body" id="exampleText" />
-            </InputGroup>
+            <Row>
+              <Col xs='12'>
+                <InputGroup>
+                  <div className='wrapper'>
+                     <div id="toolbar">
+                     </div>
+                    <ReactQuill
+                        className="text-editor"
+                        onChange={this.handleChange}
+                        placeholder={this.props.text}
+                        modules={modules}
+                        formats={formats}
+                        theme={"snow"} />
+                  </div>
+                </InputGroup>
+              </Col>
+            </Row>
 
             <br/>
 
