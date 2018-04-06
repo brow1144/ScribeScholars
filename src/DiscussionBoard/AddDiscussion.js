@@ -4,6 +4,9 @@ import { Row, Col, InputGroup, Form, InputGroupAddon, Input, Button, Alert} from
 
 import { firestore } from "../base";
 
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 import '../DiscussionBoard/AddDiscussion.css';
 
 class AddDiscussion extends Component {
@@ -13,11 +16,12 @@ class AddDiscussion extends Component {
 
     this.state = {
       visible: false,
-      errorMessage: "",
+      errorMessage: '',
       userImage: '',
       name: '',
       title: 'Please enter a short discussion title',
       hashtag: 'Topic',
+      text: '',
     };
   }
 
@@ -114,12 +118,16 @@ class AddDiscussion extends Component {
     this.setState({hashtag: ev.target.value});
   };
 
+  handleChange = (value) => {
+    this.setState({text: value});
+  };
+
+  
   render() {
     return (
       <Row>
         <Col xs='0' md='2'/>
         <Col className='newQuestion' xs='12' md='8'>
-
           <br/>
           <h2 className='createDiscussion'>Create Discussion</h2>
           <hr/>
@@ -198,7 +206,8 @@ class AddDiscussion extends Component {
             <br/>
             <InputGroup>
               <InputGroupAddon addonType="prepend">Question</InputGroupAddon>
-              <Input className='textArea' type="textarea" name="body" id="exampleText" />
+              {/*<Input className='textArea' type="textarea" name="body" id="exampleText" />*/}
+              <ReactQuill className='textArea' value={this.state.text} onChange={this.handleChange} />
             </InputGroup>
 
             <br/>
