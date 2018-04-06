@@ -18,3 +18,13 @@
     font-size: 2em;
     color: #21CE99;
 }
+
+.text-editor {
+    height: 20em;
+    /*width: 40em;*/
+    /*width: 100%;*/
+}
+
+.wrapper {
+    width: 100%;
+}

@@ -124,6 +124,34 @@ class AddDiscussion extends Component {
 
   
   render() {
+
+    let modules = {
+      toolbar: {
+        container: "#toolbar",
+      },
+      clipboard: {
+        matchVisual: false,
+      }
+    };
+
+    let formats = [
+      "header",
+      "font",
+      "size",
+      "bold",
+      "italic",
+      "underline",
+      "strike",
+      "blockquote",
+      "list",
+      "bullet",
+      "indent",
+      "link",
+      "image",
+      "color",
+      "code",
+    ];
+
     return (
       <Row>
         <Col xs='0' md='2'/>
@@ -204,11 +232,42 @@ class AddDiscussion extends Component {
               </Col>
             </Row>
             <br/>
-            <InputGroup>
-              <InputGroupAddon addonType="prepend">Question</InputGroupAddon>
-              {/*<Input className='textArea' type="textarea" name="body" id="exampleText" />*/}
-              <ReactQuill className='textArea' value={this.state.text} onChange={this.handleChange} />
-            </InputGroup>
+            <Row>
+              <Col xs='12'>
+                <InputGroup>
+                  <div className='wrapper'>
+                     <div id="toolbar">
+                       <select className="ql-header" defaultValue={""} onChange={e => e.persist()}>
+                         <option value="1" />
+                         <option value="2" />
+                         <option selected />
+                       </select>
+                       <button className="ql-bold" />
+                       <button className="ql-italic" />
+                       <select className="ql-color">
+                         <option value="red" />
+                         <option value="green" />
+                         <option value="blue" />
+                         <option value="orange" />
+                         <option value="violet" />
+                         <option value="#d0d1d2" />
+                         <option value="#21CE99" />
+                         <option selected />
+                       </select>
+                       <button className="ql-code" />
+                     </div>
+                    <ReactQuill className="text-editor"
+                        onChange={this.handleChange}
+                        placeholder={this.props.text}
+                        modules={modules}
+                        formats={formats}
+                        theme={"snow"} // pass false to use minimal theme
+                    />
+                  </div>
+                  {/*</div>*/}
+                </InputGroup>
+              </Col>
+            </Row>
 
             <br/>
 
