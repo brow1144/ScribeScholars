@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { firestore } from "../base";
-import { Row, Col, Alert } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 
 import Sidebar from 'react-sidebar';
 import BigCalendar from 'react-big-calendar';
@@ -308,6 +308,7 @@ class HomePage extends Component {
           self.getUserImage();
           self.getDeadlines();
           self.getAnnouncements();
+          self.getAlerts();
         }
         if (doc.data().firstName !== null && doc.data().lastName !== null && doc.data().role !== null) {
           self.setState({
@@ -347,6 +348,20 @@ class HomePage extends Component {
     }).catch(function (error) {
       console.log("Error getting document:", error);
     })
+  };
+
+  getAlerts = () => {
+    console.log(this.state.dates);
+    console.log(this.state.dates.length);
+    //new Date(data.deadlines[i].startYear, data.deadlines[i].startMonth, data.deadlines[i].startDay, data.deadlines[i].startHour, data.deadlines[i].startMinute, 0),
+    let now = new Date(Date.now());
+    this.state.dates.forEach(function(date) {
+      let diff = date.end - now;
+      console.log(diff);
+      if (diff < 24 && diff > - 0) {
+        console.log("comin right up");
+      }
+    });
   };
 
   /**
