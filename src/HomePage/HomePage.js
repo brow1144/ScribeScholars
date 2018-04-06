@@ -351,27 +351,27 @@ class HomePage extends Component {
   };
 
   getAlerts = () => {
-    //console.log(this.state.dates);
-    //console.log(this.state.dates.length);
-    //new Date(data.deadlines[i].startYear, data.deadlines[i].startMonth, data.deadlines[i].startDay, data.deadlines[i].startHour, data.deadlines[i].startMinute, 0),
-    let now = new Date(Date.now());
+    let now = new Date(Date.now());   // get current time
+    let tmpAlerts = [];
+
     //for (let i in this.state.dates) {
+    this.state.dates.forEach(function(date) {
+      let diff = (date.end - now) / (60 * 60 * 1000);  // get difference in hours
+      if (diff >= 0 && diff < 24) {  // if deadline is less than 24 hours away
+        let endTime = date.end.getHours() + ":" + date.end.getMinutes();
+        if (date.end.getHours() > 12)
+          endTime = (date.end.getHours() - 12) + ":" + date.end.getMinutes() + "PM";
+        else
+          endTime += "AM";
 
-    // console.log("Before loop");
-    // console.log(this.state.dates);
 
+        tmpAlerts.push(date.title + " is due today at " + endTime);
+      }
+    });
 
-    for (let i = 0; i < this.state.dates.length; i++) {
-      console.log(this.state.dates[i]);
-    }
-
-    // this.state.dates.forEach(function(date) {
-    //   let diff = date.end - now;
-    //   console.log(diff);
-    //   if (diff >= 0 && diff < 24) {
-    //     console.log("comin right up");
-    //   }
-    // });
+    this.setState({
+      alerts: tmpAlerts,
+    });
   };
 
   /**
