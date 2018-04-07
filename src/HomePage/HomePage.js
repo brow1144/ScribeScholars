@@ -103,6 +103,7 @@ class HomePage extends Component {
       eventButtonOpen: false,
 
       alerts: [],
+      hiddenAlerts: [],
     };
   }
 
@@ -157,9 +158,10 @@ class HomePage extends Component {
 
     if (!isNaN(gpa)) {
       let studentRef = firestore.collection("users").doc(this.state.uid);
-      studentRef.update({
+      studentRef.set({
         gpa: gpa,
-      }).catch((error) => {
+      }, {merge: true}
+      ).catch((error) => {
         console.log("Error getting document:", error);
       });
     }
@@ -298,6 +300,7 @@ class HomePage extends Component {
         if (doc.data().classes !== null) {
           self.setState({
             classes: doc.data().classes,
+            hiddenAlerts: doc.data().hiddenAlerts,
           });
 
           self.getUserImage();
@@ -344,13 +347,23 @@ class HomePage extends Component {
     })
   };
 
+  isHidden = (name) => {
+    for (let i in this.state.hiddenAlerts) {
+      if (this.state.hiddenAlerts[i] === name)
+        return true;
+    }
+
+    return false;
+  };
+
   getAlerts = () => {
     let now = new Date(Date.now());   // get current time
     let tmpAlerts = [];
+    let self = this;
 
     this.state.dates.forEach(function(date) {
       let diff = (date.end - now) / (60 * 60 * 1000);  // get difference in hours
-      if (diff >= 0 && diff < 24) {  // if deadline is less than 24 hours away
+      if (diff >= 0 && diff < 24 && !self.isHidden(date.title)) {  // if deadline is less than 24 hours away
         let endHours = date.end.getHours();
         let endWord;
         let endTime;
@@ -363,7 +376,7 @@ class HomePage extends Component {
           endTime = endHours + ":" + date.end.getMinutes() + " AM";
         }
 
-        tmpAlerts.push(date.title + " is due " + endWord + " at " + endTime);
+        tmpAlerts.push({name: date.title, text: " is due " + endWord + " at " + endTime});
       }
     });
 
@@ -643,7 +656,8 @@ class HomePage extends Component {
               <Col md="1"/>
               <Col md="7">
                 {Object.keys(this.state.alerts).map((key, index) =>
-                  <AlertHandler key={index} text={this.state.alerts[index]} showAlerts={this.props.showAlerts}/>
+                  <AlertHandler key={index} alert={this.state.alerts[index]} uid={this.state.uid}
+                                showAlerts={this.props.showAlerts} hiddenAlerts={this.state.hiddenAlerts}/>
                 )
                 }
               </Col>
