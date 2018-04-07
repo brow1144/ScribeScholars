@@ -10,6 +10,7 @@ import moment from 'moment';
 import Side from './Side';
 import HomeNav from './HomeNav';
 import Cards from './Cards';
+import AlertHandler from './AlertHandler';
 import ClassHome from '../ClassPage/ClassHome';
 import LiveFeed from '../ClassPage/LiveFeed';
 import GradingPage from '../MyStudents/GradingPage';
@@ -95,12 +96,14 @@ class HomePage extends Component {
       docked: props.docked,
       open: props.open,
 
-        gradeName : null,
-        gradeMax : null,
-
+      gradeName : null,
+      gradeMax : null,
 
       myAssignments: [],
       eventButtonOpen: false,
+
+      alerts: [],
+      hiddenAlerts: [],
     };
   }
 
@@ -155,9 +158,10 @@ class HomePage extends Component {
 
     if (!isNaN(gpa)) {
       let studentRef = firestore.collection("users").doc(this.state.uid);
-      studentRef.update({
+      studentRef.set({
         gpa: gpa,
-      }).catch((error) => {
+      }, {merge: true}
+      ).catch((error) => {
         console.log("Error getting document:", error);
       });
     }
@@ -244,6 +248,7 @@ class HomePage extends Component {
    */
   componentWillMount() {
     this.props.getShowGPA();
+    this.props.getShowAlerts();
     this.getClasses();
     mql.addListener(this.mediaQueryChanged);
     window.addEventListener('resize', this.handleWindowChange);
@@ -295,6 +300,7 @@ class HomePage extends Component {
         if (doc.data().classes !== null) {
           self.setState({
             classes: doc.data().classes,
+            hiddenAlerts: doc.data().hiddenAlerts,
           });
 
           self.getUserImage();
@@ -342,6 +348,47 @@ class HomePage extends Component {
   };
 
   /**
+   *  Known issue:  alerts will not work with multiple deadlines with the same title.
+   */
+  isHidden = (name) => {
+    for (let i in this.state.hiddenAlerts) {
+      if (this.state.hiddenAlerts[i] === name)
+        return true;
+    }
+
+    return false;
+  };
+
+  getAlerts = () => {
+    let now = new Date(Date.now());   // get current time
+    let tmpAlerts = [];
+    let self = this;
+
+    this.state.dates.forEach(function(date) {
+      let diff = (date.end - now) / (60 * 60 * 1000);  // get difference in hours
+      if (diff >= 0 && diff < 24 && !self.isHidden(date.title)) {  // if deadline is less than 24 hours away
+        let endHours = date.end.getHours();
+        let endWord;
+        let endTime;
+
+        if (endHours > 12) {
+          endWord = "tonight";
+          endTime = (endHours - 12) + ":" + date.end.getMinutes() + " PM";
+        } else {
+          endWord = "today";
+          endTime = endHours + ":" + date.end.getMinutes() + " AM";
+        }
+
+        tmpAlerts.push({name: date.title, text: " is due " + endWord + " at " + endTime});
+      }
+    });
+
+    this.setState({
+      alerts: tmpAlerts,
+    });
+  };
+
+  /**
    *
    * Now that we have the teacher uid and the students
    * array of classes,
@@ -383,6 +430,7 @@ class HomePage extends Component {
         } else {
           console.log("No such document!");
         }
+        self.getAlerts();
         self.props.updateDates(self.state.dates);
       }).catch(function (error) {
         console.log("Error getting document:", error);
@@ -586,6 +634,7 @@ class HomePage extends Component {
       updateAnnouncements: this.props.updateAnnouncements,
       updateUserImage: this.props.updateUserImage,
       toggleGPA: this.props.toggleGPA,
+      toggleAlerts: this.props.toggleAlerts,
       selectClass: this.props.selectClass,
       updateClassPicture: this.props.updateClassPicture,
       getClassAnnouncements: this.props.getClassAnnouncements,
@@ -605,6 +654,18 @@ class HomePage extends Component {
                      showGPA={this.props.showGPA}
                      role={this.props.role}
                      width={this.state.width}/>
+
+            <Row>
+              <Col md="1"/>
+              <Col md="7">
+                {Object.keys(this.state.alerts).map((key, index) =>
+                  <AlertHandler key={index} alert={this.state.alerts[index]} uid={this.state.uid}
+                                showAlerts={this.props.showAlerts} hiddenAlerts={this.state.hiddenAlerts}/>
+                )
+                }
+              </Col>
+            </Row>
+
             <Row>
               <Col md="1"/>
               <Col md="7">
@@ -679,7 +740,7 @@ class HomePage extends Component {
           <Settings {...actions} classes={this.props.classes} userImage={this.state.userImage}
                     updateUserImage={this.props.updateUserImage} updateClasses={this.props.updateClasses}
                     role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid}
-                    showGPA={this.props.showGPA}/>
+                    showGPA={this.props.showGPA} showAlerts={this.props.showAlerts}/>
         </Sidebar>
       );
 

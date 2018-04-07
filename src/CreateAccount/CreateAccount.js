@@ -102,6 +102,7 @@ class CreateAccount extends Component {
               email: this.state.tmpEmail,
               role: this.state.tmpRole,
               showGPA: true,
+              showAlerts: true,
             }).then(function() {
               console.log("successfully written!");
             }).catch(function(error) {

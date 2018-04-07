@@ -25,6 +25,7 @@ class Main extends Component {
 
       uid: this.props.uid,
       showGPA: null,
+      showAlerts: null,
 
       userImage: null,
 
@@ -53,7 +54,7 @@ class Main extends Component {
 
       homeworks: [{
         lessonCode: null,
-        maxscore: null,
+        maxScore: null,
         name: null,
         class: null,
         questions: null,
@@ -61,7 +62,7 @@ class Main extends Component {
 
       assignments: [{
         lessonCode: null,
-        maxscore: null,
+        maxScore: null,
         name: null,
         class: null,
         questions: null,
@@ -310,6 +311,22 @@ class Main extends Component {
       });
     };
 
+  getShowAlerts = () => {
+    let self = this;
+
+    let studentRef = firestore.collection("users").doc(this.state.uid);
+
+    studentRef.get().then((doc) => {
+      if (doc.exists) {
+        self.setState({
+          showAlerts: doc.data().showAlerts,
+        });
+      }
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
+
   toggleGPA = () => {
       let old_state = this.state.showGPA;
 
@@ -326,6 +343,22 @@ class Main extends Component {
       });
     };
 
+  toggleAlerts = () => {
+    let old_state = this.state.showAlerts;
+
+    this.setState({
+      showAlerts: !this.state.showAlerts,
+    });
+
+    let studentRef = firestore.collection("users").doc(this.state.uid);
+
+    studentRef.update({
+      "showAlerts": !old_state,
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
+
   getAssignments = (classCode) => {
 
     let object = [{}];
@@ -339,7 +372,7 @@ class Main extends Component {
 
         object.unshift({
           lessonCode: doc.id,
-          maxscore: doc.data().maxscore,
+          maxScore: doc.data().maxScore,
           name: doc.data().name,
           class: classCode,
           questions: doc.data().questions,
@@ -387,7 +420,7 @@ class Main extends Component {
       querySnapshot.forEach(function (doc) {
         object.unshift({
           lessonCode: doc.id,
-          maxscore: doc.data().maxscore,
+          maxScore: doc.data().maxScore,
           name: doc.data().name,
           class: classCode,
           questions: doc.data().questions,
@@ -415,6 +448,7 @@ class Main extends Component {
         role: this.state.role,
         classes: this.state.classes,
         showGPA: this.state.showGPA,
+        showAlerts: this.state.showAlerts,
         dates: this.state.dates,
         announcements: this.state.announcements,
         userImage: this.state.userImage,
@@ -435,6 +469,8 @@ class Main extends Component {
         updateUserImage: this.updateUserImage,
         getShowGPA: this.getShowGPA,
         toggleGPA: this.toggleGPA,
+        getShowAlerts: this.getShowAlerts,
+        toggleAlerts: this.toggleAlerts,
         selectClass: this.selectClass,
         updateClassPicture: this.updateClassPicture,
         getClassAnnouncements: this.getClassAnnouncements,

@@ -164,10 +164,21 @@ class SetPersonal extends Component {
                                 <Col sm={6}>
                                   <FormGroup check inline hidden={this.props.role === "teacher"}>
                                     <Label check size="lg">
-                                      <Input onChange={this.props.toggleGPA} type="checkbox" id="checkbox" checked={this.props.showGPA === true}/> Show GPA
+                                      <Input onChange={this.props.toggleGPA} type="checkbox" id="checkbox"
+                                             checked={this.props.showGPA === true}/> Show GPA
                                     </Label>
                                   </FormGroup>
                                 </Col>
+                            </FormGroup>
+                            <FormGroup row>
+                              <Col sm={6}>
+                                <FormGroup check inline hidden={this.props.role === "teacher"}>
+                                  <Label check size="lg">
+                                    <Input onChange={this.props.toggleAlerts} type="checkbox" id="checkbox"
+                                           checked={this.props.showAlerts === true}/> Show Deadline Alerts
+                                  </Label>
+                                </FormGroup>
+                              </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Col sm={{size:6, offset: 2}}>
