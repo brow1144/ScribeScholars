@@ -96,18 +96,13 @@ class HomePage extends Component {
       docked: props.docked,
       open: props.open,
 
-        gradeName : null,
-        gradeMax : null,
-
+      gradeName : null,
+      gradeMax : null,
 
       myAssignments: [],
       eventButtonOpen: false,
 
-      //alertsVisible: true,
-      alerts: [
-        "HW 2",
-        "Due tonight at 11:59 EDT",
-      ],
+      alerts: [],
     };
   }
 
@@ -308,7 +303,6 @@ class HomePage extends Component {
           self.getUserImage();
           self.getDeadlines();
           self.getAnnouncements();
-          //self.getAlerts();
         }
         if (doc.data().firstName !== null && doc.data().lastName !== null && doc.data().role !== null) {
           self.setState({
@@ -354,18 +348,22 @@ class HomePage extends Component {
     let now = new Date(Date.now());   // get current time
     let tmpAlerts = [];
 
-    //for (let i in this.state.dates) {
     this.state.dates.forEach(function(date) {
       let diff = (date.end - now) / (60 * 60 * 1000);  // get difference in hours
       if (diff >= 0 && diff < 24) {  // if deadline is less than 24 hours away
-        let endTime = date.end.getHours() + ":" + date.end.getMinutes();
-        if (date.end.getHours() > 12)
-          endTime = (date.end.getHours() - 12) + ":" + date.end.getMinutes() + "PM";
-        else
-          endTime += "AM";
+        let endHours = date.end.getHours();
+        let endWord;
+        let endTime;
 
+        if (endHours > 12) {
+          endWord = "tonight";
+          endTime = (endHours - 12) + ":" + date.end.getMinutes() + " PM";
+        } else {
+          endWord = "today";
+          endTime = endHours + ":" + date.end.getMinutes() + " AM";
+        }
 
-        tmpAlerts.push(date.title + " is due today at " + endTime);
+        tmpAlerts.push(date.title + " is due " + endWord + " at " + endTime);
       }
     });
 
