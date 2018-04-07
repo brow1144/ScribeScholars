@@ -347,6 +347,9 @@ class HomePage extends Component {
     })
   };
 
+  /**
+   *  Known issue:  alerts will not work with multiple deadlines with the same title.
+   */
   isHidden = (name) => {
     for (let i in this.state.hiddenAlerts) {
       if (this.state.hiddenAlerts[i] === name)
