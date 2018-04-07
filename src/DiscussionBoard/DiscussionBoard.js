@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
-import { Col, Row, InputGroup, InputGroupAddon, Input, Button} from 'reactstrap';
+import { Col, Row, InputGroup, InputGroupAddon, Input, Button, Alert } from 'reactstrap';
+
+import { firestore } from "../base";
 
 import AddDiscussion from '../DiscussionBoard/AddDiscussion';
 import DiscussionQuestion from '../DiscussionBoard/DiscussionQuestion';
@@ -14,21 +16,53 @@ class DiscussionBoard extends Component {
 
     this.state = {
       newQVisible: false,
-    };
-  }
+      visible: false,
+      discussions: {'': {}},
+    }
+  };
 
   componentWillMount() {
-
+    this.getDiscussions();
   }
+
+  getDiscussions = () => {
+    let self = this;
+    let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard");
+
+    let discussions = {'': {}};
+
+    docRef.onSnapshot(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        discussions[doc.id] = doc.data();
+        Object.keys(discussions).forEach((key) => (key === '') && delete discussions[key]);
+        self.setState({discussions: discussions});
+      });
+    });
+  };
 
   addNewDiscussion = (ev) => {
     ev.preventDefault();
-
     this.setState({newQVisible: !this.state.newQVisible});
+  };
 
+  successfulNewQuestion = () => {
+    this.setState({newQVisible: false});
+    this.setState({visible: true});
+  };
+
+  onDismiss = () => {
+    this.setState({visible: false});
   };
 
   render() {
+
+    let discussion = {
+      views: 0,
+      studentAns: '',
+      teacherAns: '',
+      uid: this.props.uid,
+    };
+
     return (
       <div>
 
@@ -68,10 +102,20 @@ class DiscussionBoard extends Component {
 
         {this.state.newQVisible
           ?
-          <AddDiscussion/>
+          <AddDiscussion successfulNewQuestion={this.successfulNewQuestion} uid={this.props.uid} classCode={this.props.classCode} discussion={discussion}/>
           :
           null
         }
+
+        <Row>
+          <Col xs='0' md='2'/>
+          <Col xs='12' md='8'>
+            <Alert color="success" isOpen={this.state.visible} toggle={this.onDismiss}>
+              Congratulations! Your question has been submitted successfully!
+            </Alert>
+          </Col>
+          <Col xs='0' md='2'/>
+        </Row>
 
         <br/>
         <br/>
@@ -98,74 +142,13 @@ class DiscussionBoard extends Component {
           <Col xs='0' md='2'/>
         </Row>
 
-        <DiscussionQuestion />
-        <DiscussionQuestion />
-        <DiscussionQuestion />
-        <DiscussionQuestion />
-        <DiscussionQuestion />
-        <DiscussionQuestion />
-        <DiscussionQuestion />
-        <DiscussionQuestion />
 
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+        {Object.keys(this.state.discussions).map((key, index) => {
+          return (
+            <DiscussionQuestion discussion={this.state.discussions[key]} key={key}/>
+          )
+        })}
+
         <br/>
         <br/>
         <br/>
