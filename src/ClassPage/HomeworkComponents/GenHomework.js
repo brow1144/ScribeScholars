@@ -382,7 +382,7 @@ class GenHomework extends Component {
         console.log("Error getting document:", error);
       });
     })
-  }
+  };
 
   /*
    * Set FRQ state for later use
@@ -443,7 +443,7 @@ class GenHomework extends Component {
             <Row>
               {this.state.type === "MCQ"
                 ?
-                <MSQ {...action} currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
+                <MCQ {...action} currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
                      setAns = {this.setAns} finalPage = {this.state.finalPage} oldAns = {this.state.history[this.state.currentQuestion-1]}
                      option1={this.state.option1} option2={this.state.option2} option3={this.state.option3} option4={this.state.option4}/>
                 : this.state.type === "FRQ"
