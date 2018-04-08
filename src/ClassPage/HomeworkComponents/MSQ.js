@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 
 import {Col, FormGroup, Label, Input} from 'reactstrap';
 
-import "./MCQ.css"
+import "../LiveComponents/MCQ.css"
 
 
-class MCQ extends Component {
+class MSQ extends Component {
 
   constructor(props) {
     super(props);
@@ -42,15 +42,15 @@ class MCQ extends Component {
               </FormGroup>
               <FormGroup>
                 <Label className={"RadioLabel"}>
-                  <Input onClick={() => this.props.setAns(this.state.opt3)} checked={this.props.oldAns === "option3"} className={"RadioButton"}
-                         type="radio" name="radio1"/>
+                  <Input onClick={() => this.props.setAns(this.state.opt3)} checked={this.props.oldAns === "option3"} className={"RadioButton textSize"}
+                         type="radio" name="radio3"/>
                   <p className={"textSize"}>{this.props.option3}</p>
                 </Label>
               </FormGroup>
               <FormGroup>
                 <Label className={"RadioLabel"}>
                   <Input onClick={() => this.props.setAns(this.state.opt4)} checked={this.props.oldAns === "option4"} className={"RadioButton"} type="radio"
-                         name="radio1"/>
+                         name="radio4"/>
                   <p className={"textSize"}>{this.props.option4}</p>
                 </Label>
               </FormGroup>
@@ -61,9 +61,9 @@ class MCQ extends Component {
     }
     else {
       return (
-      <Col sm={{size: 10, offset: 1}}>
-        <h3>End of the assignment</h3>
-      </Col>
+        <Col sm={{size: 10, offset: 1}}>
+          <h3>End of the assignment</h3>
+        </Col>
       )
     }
   }
@@ -71,4 +71,4 @@ class MCQ extends Component {
 }
 
 
-export default MCQ
+export default MSQ
