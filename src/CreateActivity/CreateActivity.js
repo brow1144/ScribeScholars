@@ -9,18 +9,14 @@ import {
     AccordionItemBody,
 } from 'react-accessible-accordion';
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
-
-
 import './CreateActivity.css';
-//import MCQ from './MCQForm';
-// import VideoForm from './VideoForm';
-// import FRQ from './FRQForm';
 import Instruct from './Instruct';
-
 import {firestore} from "../base";
 import MCQForm from "./MCQForm";
 import FRQForm from "./FRQForm";
 import VideoForm from "./VideoForm";
+import FIBForm from "./FIBForm";
+import SMQForm from "./SMQForm";
 
 class CreateActivity extends Component {
     constructor(props) {
@@ -165,6 +161,26 @@ class CreateActivity extends Component {
                     option4: "",
                     prompt: "",
                     type: "MCQ",
+                };
+                tempArr.push(tempQ);
+                break;
+            case "Fill in the Blank":
+                tempQ = {
+                    correctAns: "",
+                    prompt: "",
+                    type: "FIB",
+                };
+                tempArr.push(tempQ);
+                break;
+            case "Select Multiple":
+                tempQ = {
+                    correctAns: [],
+                    option1: "",
+                    option2: "",
+                    option3: "",
+                    option4: "",
+                    prompt: "",
+                    type: "SMQ",
                 };
                 tempArr.push(tempQ);
                 break;
@@ -357,12 +373,16 @@ class CreateActivity extends Component {
                                             ?
                                             <Input bsSize="lg" type="select" name="select" id="exampleSelect">
                                                 <option>Multiple Choice</option>
+                                                <option>Fill in the Blank</option>
+                                                <option>Select Multiple</option>
                                                 <option>Free Response</option>
                                                 <option>Video Page</option>
                                             </Input>
                                             :
                                             <Input bsSize="lg" type="select" name="select" id="exampleSelect">
                                                 <option>Multiple Choice</option>
+                                                <option>Fill in the Blank</option>
+                                                <option>Select Multiple</option>
                                             </Input>
                                         }
                                     </Col>
@@ -398,8 +418,18 @@ class CreateActivity extends Component {
                                                                     ?
                                                                     <VideoForm question={quest} index={index}
                                                                                recordQuestion={this.recordQuestion}/>
-                                                                    :
-                                                                    <div/>
+                                                                    : (quest.type === "FIB")
+                                                                        ?
+                                                                        <FIBForm question={quest} index={index}
+                                                                                 recordQuestion={this.recordQuestion} />
+                                                                        :
+                                                                        (quest.type === "SMQ")
+                                                                            ?
+                                                                            <SMQForm question={quest} index={index}
+                                                                                     recordQuestion={this.recordQuestion} />
+                                                                            :
+                                                                            <div/>
+
                                                         }
                                                     </AccordionItemBody>
                                                 </AccordionItem>
@@ -428,43 +458,3 @@ class CreateActivity extends Component {
 }
 
 export default CreateActivity
-
-
-/*
-<Accordion>
-{this.states.questions != null && Object.keys(this.state.questions).map((key, index) => {
-    return <AccordionItem key={key}>
-        <AccordionItemTitle>
-            <h3>
-                {this.props.classes[index].class}
-            </h3>
-        </AccordionItemTitle>
-        <AccordionItemBody className={"accordBody"}>
-            <div className="inside">
-                <Row>
-                    <Col sm="12">
-                        <Form onSubmit={this.onFormSubmit}>
-
-                            <FormGroup row>
-                                <Col xs="7">
-                                    <InputGroup size="10">
-                                        <InputGroupAddon addonType="prepend">Class Name</InputGroupAddon>
-                                        <Input bsSize="md" type="username" name="className" id="exampleClassName" defaultValue={this.props.classes[index].class} />
-                                    </InputGroup>
-
-                                </Col>
-                            </FormGroup>
-                            <Button outline color="success" size={"lg"}>
-                                <i className="far fa-save" />
-                            </Button>
-                            <span className="deleteIcon" onClick={ () => this.toggle(this.props.classes[index].code)}>
-                                                <i className="fas fa-trash-alt picIcon"/>
-                                              </span>
-                        </Form>
-                    </Col>
-                </Row>
-                </div>
-        </AccordionItemBody>
-    </AccordionItem>
-})}
-</Accordion>*/
