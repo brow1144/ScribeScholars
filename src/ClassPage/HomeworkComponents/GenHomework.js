@@ -134,7 +134,7 @@ class GenHomework extends Component {
         url: quest.url,
         type: quest.type,
       });
-    } else if (quest.type === "MSQ") {
+    } else if (quest.type === "SMQ") {
       self.setState({
         option1: quest.option1,
         option2: quest.option2,
@@ -143,6 +143,12 @@ class GenHomework extends Component {
         prompt: quest.prompt,
         type: quest.type,
       });
+    }
+    else if (quest.type === "FIB") {
+      self.setState({
+          prompt: quest.prompt,
+          type: quest.type,
+      })
     }
   };
 
@@ -427,7 +433,7 @@ class GenHomework extends Component {
       history: tmpHis,
       multiple: tmpMulti,
     })
-  }
+  };
 
   render() {
 
@@ -454,10 +460,13 @@ class GenHomework extends Component {
                     ?
                     <Video name={this.state.name} currentQuestion={this.state.currentQuestion} url = {this.state.url}
                          finalPage = {this.state.finalPage}/>
-                    :
-                    <MSQ currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
-                         setAns = {this.setAns} finalPage = {this.state.finalPage} oldAns = {this.state.history[this.state.currentQuestion-1]}
-                         option1={this.state.option1} option2={this.state.option2} option3={this.state.option3} option4={this.state.option4}/>
+                    : this.state.type === "SMQ"
+                              ?
+                              <MSQ currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
+                                   setAns = {this.setAns} finalPage = {this.state.finalPage} oldAns = {this.state.history[this.state.currentQuestion-1]}
+                                   option1={this.state.option1} option2={this.state.option2} option3={this.state.option3} option4={this.state.option4}/>
+                              :
+                              <div/> // this will be fill in the blank
               }
 
             </Row>
