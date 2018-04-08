@@ -10,13 +10,24 @@ class Instruct extends Component {
         this.state = {
             selectedOption: "",
             question: this.props.question,
+            defaultPoints: true,
         }
 
     }
 
+    toggleWeighting = () => {
+      this.setState({
+        defaultPoints: !this.state.defaultPoints,
+      })
+    };
+
     onFormSubmit = (ev) => {
         ev.preventDefault();
-        this.props.createHomework(ev.target.title.value, ev.target.descriptText.value);
+
+        if (this.state.defaultPoints)
+            this.props.createHomework(ev.target.title.value, ev.target.descriptText.value, 0);
+        else
+            this.props.createHomework(ev.target.title.value, ev.target.descriptText.value, parseInt(ev.target.totalPoints.value));
     };
 
     render() {
@@ -71,6 +82,25 @@ class Instruct extends Component {
                                     <Input bsSize="lg" type="textarea" name="descriptText" id="exampleText"/>
                                 </Col>
                             </FormGroup>
+
+                          <FormGroup row>
+                            <Col sm={10}>
+                              <FormGroup check inline>
+                                <Label check size="lg">
+                                  <Input onChange={this.toggleWeighting} type="checkbox" id="checkbox"
+                                         checked={this.state.defaultPoints}/> Use default weighting (1 point per question)
+                                </Label>
+                              </FormGroup>
+                            </Col>
+                          </FormGroup>
+
+                          <Label size="lg" for="examplePoints" sm={6} hidden={this.state.defaultPoints}> Total Points:</Label>
+                          <FormGroup row hidden={this.state.defaultPoints}>
+                            <Col sm={10}>
+                              <Input bsSize="lg" type="number" name="totalPoints" id="examplePoints"/>
+                            </Col>
+                          </FormGroup>
+
                             <br/>
                             <FormGroup check>
                                 <Col sm={{ size: 9 }}>
