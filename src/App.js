@@ -163,10 +163,6 @@ class App extends Component {
             : <Redirect to="/sign-in"/>
         )}/>
 
-        <Route path='/graphs' render={() => (
-          <Graphs uid={this.state.uid}/>
-        )}/>
-
         <Route render={() => <Redirect to="/HomePage"/>}/>
 
         <Route exact path='/create-activity' render={() => (
