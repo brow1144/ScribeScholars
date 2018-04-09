@@ -166,6 +166,7 @@ class Settings extends Component {
         updateAnnouncements: this.props.updateAnnouncements,
         updateUserImage: this.props.updateUserImage,
         toggleGPA: this.props.toggleGPA,
+        toggleAlerts: this.props.toggleAlerts,
         selectClass: this.props.selectClass,
         updateClassPicture: this.props.updateClassPicture,
         getClassAnnouncments: this.props.getClassAnnouncments,
@@ -190,6 +191,7 @@ class Settings extends Component {
                             phoneN={this.state.phoneN}
                             descript={this.state.descript}
                             showGPA={this.props.showGPA}
+                            showAlerts={this.props.showAlerts}
                             updateP={this.updatePersonal.bind(this)}
                         />
                         :
