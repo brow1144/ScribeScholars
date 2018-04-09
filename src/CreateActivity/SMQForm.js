@@ -14,7 +14,7 @@ class SMQForm extends Component {
     onFormSubmit = (ev) => {
         ev.preventDefault();
 
-        let ans = ev.target.ans.value.split(", ");
+        //let ans = ev.target.ans.value.split(", ");
 
         let quest = {
             type: "SMQ",
@@ -23,7 +23,7 @@ class SMQForm extends Component {
             option2: ev.target.opt2.value,
             option3: ev.target.opt3.value,
             option4: ev.target.opt4.value,
-            correctAns: ans,
+            correctAns: ev.target.ans.value,
         };
 
         this.props.recordQuestion(quest, this.props.index);

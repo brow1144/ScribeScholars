@@ -80,15 +80,22 @@ class AssignTable extends Component {
                       <td>{this.props.assignments[index].maxscore}</td>
                       <td>
                         {this.state.role === "teacher" ?
-                          <RouterLink
-                            to={`/HomePage/${this.props.code}/lessons/liveFeed/${this.props.assignments[index].lessonCode}`}>
-                            Link
-                          </RouterLink>
-                          :
-                          <RouterLink
-                            to={`/HomePage/${this.props.code}/lessons/${this.props.assignments[index].lessonCode}`}>
-                            Link
-                          </RouterLink>
+                            <div>
+                                <RouterLink
+                                    to={`/HomePage/${this.props.code}/lessons/liveFeed/${this.props.assignments[index].lessonCode}`}>
+                                    Live Feed
+                                </RouterLink>
+                                <span style={{display: 'inline-block', width: '1.25rem'}}> </span>
+                                <RouterLink
+                                    to={`/HomePage/${this.props.code}/lessons/edit-activity/${this.props.assignments[index].lessonCode}`}>
+                                    Edit
+                                </RouterLink>
+                            </div>
+                            :
+                            <RouterLink
+                                to={`/HomePage/${this.props.code}/lessons/${this.props.assignments[index].lessonCode}`}>
+                                Take Lesson
+                            </RouterLink>
                         }
                       </td>
                     </tr>
