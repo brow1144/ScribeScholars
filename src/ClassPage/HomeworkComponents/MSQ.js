@@ -28,28 +28,28 @@ class MSQ extends Component {
             <Col>
               <FormGroup>
                 <Label className={"RadioLabel"}>
-                  <Input onClick={() => this.props.setAns(this.state.opt1)} checked={this.props.oldAns === "option1"} className={"RadioButton"} type="radio"
+                  <Input onClick={() => this.props.setAns(this.state.opt1)} className={"RadioButton"} type="checkbox"
                          name="radio1"/>{' '}
                   <p className={"textSize"}>{this.props.option1}</p>
                 </Label>
               </FormGroup>
               <FormGroup>
                 <Label className={"RadioLabel"}>
-                  <Input onClick={() => this.props.setAns(this.state.opt2)} checked={this.props.oldAns === "option2"} className={"RadioButton"} type="radio"
+                  <Input onClick={() => this.props.setAns(this.state.opt2)} className={"RadioButton"} type="checkbox"
                          name="radio2"/>{' '}
                   <p className={"textSize"}>{this.props.option2}</p>
                 </Label>
               </FormGroup>
               <FormGroup>
                 <Label className={"RadioLabel"}>
-                  <Input onClick={() => this.props.setAns(this.state.opt3)} checked={this.props.oldAns === "option3"} className={"RadioButton textSize"}
-                         type="radio" name="radio3"/>
+                  <Input onClick={() => this.props.setAns(this.state.opt3)} className={"RadioButton textSize"}
+                         type="checkbox" name="radio3"/>
                   <p className={"textSize"}>{this.props.option3}</p>
                 </Label>
               </FormGroup>
               <FormGroup>
                 <Label className={"RadioLabel"}>
-                  <Input onClick={() => this.props.setAns(this.state.opt4)} checked={this.props.oldAns === "option4"} className={"RadioButton"} type="radio"
+                  <Input onClick={() => this.props.setAns(this.state.opt4)}  className={"RadioButton"} type="checkbox"
                          name="radio4"/>
                   <p className={"textSize"}>{this.props.option4}</p>
                 </Label>
