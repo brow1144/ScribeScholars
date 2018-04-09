@@ -147,7 +147,7 @@ class App extends Component {
         <Route exact path='/ScribeScholars/create-class' render={() => (
           this.signedIn()
             ? <CreateClass uid={this.state.uid}/>
-            : <Redirect to="/About"/>
+            : <Redirect to="/ScribeScholars/About"/>
         )}/>
 
         <Route exact path='/ScribeScholars/create-class-success' render={() => (
@@ -160,7 +160,7 @@ class App extends Component {
         <Route path='/ScribeScholars/settings' render={() => (
           this.signedIn()
             ? <Main page={"settings"} uid={this.state.uid}/>
-            : <Redirect to="/ScribeScholars/sign-i fn"/>
+            : <Redirect to="/ScribeScholars/sign-in"/>
         )}/>
 
         <Route render={() => <Redirect to="/ScribeScholars/HomePage"/>}/>
