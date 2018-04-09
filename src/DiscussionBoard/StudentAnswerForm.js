@@ -9,7 +9,7 @@ class StudentAnswerForm extends Component {
 
         this.state = {
             answerText: "",
-            studentId: null,
+            studentId: this.props.uid,
 
         }
     }
@@ -28,6 +28,15 @@ class StudentAnswerForm extends Component {
                                     <Input type="textarea" name="text" id="exampleText" placeholder="Answer the question here"/>
                                 </FormGroup>
                             </Form>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Button>Submit</Button>
+                        </Col>
+                        <Col/>
+                        <Col>
+                            <Button>Cancel</Button>
                         </Col>
                     </Row>
                 </Container>

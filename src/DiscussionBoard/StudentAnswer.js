@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, Table, Button} from 'reactstrap';
+import {Container, Row, Col} from 'reactstrap';
 
 class StudentAnswer extends Component {
 
@@ -8,7 +8,7 @@ class StudentAnswer extends Component {
 
         this.state = {
             answerText: "",
-            studentId: null,
+            studentId: this.props.uid,
 
         }
     }
