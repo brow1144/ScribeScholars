@@ -10,21 +10,21 @@ class Instruct extends Component {
         this.state = {
             selectedOption: "",
             question: this.props.question,
-            defaultPoints: true,
+            defaultWeighting: true,
         }
 
     }
 
     toggleWeighting = () => {
       this.setState({
-        defaultPoints: !this.state.defaultPoints,
+        defaultWeighting: !this.state.defaultWeighting,
       })
     };
 
     onFormSubmit = (ev) => {
         ev.preventDefault();
 
-        if (this.state.defaultPoints)
+        if (this.state.defaultWeighting)
             this.props.createHomework(ev.target.title.value, ev.target.descriptText.value, 0);
         else
             this.props.createHomework(ev.target.title.value, ev.target.descriptText.value, parseInt(ev.target.totalPoints.value));
@@ -88,14 +88,14 @@ class Instruct extends Component {
                               <FormGroup check inline>
                                 <Label check size="lg">
                                   <Input onChange={this.toggleWeighting} type="checkbox" id="checkbox"
-                                         checked={this.state.defaultPoints}/> Use default weighting (1 point per question)
+                                         checked={this.state.defaultWeighting}/> Use default weighting
                                 </Label>
                               </FormGroup>
                             </Col>
                           </FormGroup>
 
-                          <Label size="lg" for="examplePoints" sm={6} hidden={this.state.defaultPoints}> Total Points:</Label>
-                          <FormGroup row hidden={this.state.defaultPoints}>
+                          <Label size="lg" for="examplePoints" sm={6} hidden={this.state.defaultWeighting}> Total Points:</Label>
+                          <FormGroup row hidden={this.state.defaultWeighting}>
                             <Col sm={10}>
                               <Input bsSize="lg" type="number" name="totalPoints" id="examplePoints"/>
                             </Col>

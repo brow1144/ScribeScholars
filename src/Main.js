@@ -222,7 +222,7 @@ class Main extends Component {
       this.setState({
         role: role,
       });
-    }
+    };
 
     updateAnnouncements = (announcements) => {
       this.setState({
