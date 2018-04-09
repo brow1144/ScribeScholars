@@ -397,7 +397,6 @@ class GenHomework extends Component {
    */
   setFRQ = (ev) => {
     let self = this;
-    console.log(ev);
     self.setState({
       frqResponse: ev,
     })
@@ -405,7 +404,6 @@ class GenHomework extends Component {
 
     setFIB = (ev) => {
         let self = this;
-        console.log(ev);
         self.setState({
             fibResponse: ev,
         })
