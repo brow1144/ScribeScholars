@@ -501,6 +501,28 @@ class Main extends Component {
           />
         )}/>
 
+          <Route path="/ScribeScholars/HomePage/:class/homework/edit-activity/:lessonNumber" render={(match) => (
+              <HomePage
+                  class={match.match.params.class}
+                  assType="Homework"
+                  lessonNumber={match.match.params.lessonNumber}
+                  page="editActivity"
+                  {...data}
+                  {...actions}
+              />
+          )}/>
+
+          <Route path="/ScribeScholars/HomePage/:class/lessons/edit-activity/:lessonNumber" render={(match) => (
+              <HomePage
+                  class={match.match.params.class}
+                  assType="Homework"
+                  lessonNumber={match.match.params.lessonNumber}
+                  page="editActivity"
+                  {...data}
+                  {...actions}
+              />
+          )}/>
+
         <Route path="/ScribeScholars/HomePage/:class/lessons/liveFeed/:lessonNumber/:uid" render={(match) => (
 
           <HomePage
