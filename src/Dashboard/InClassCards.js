@@ -12,7 +12,7 @@ const InClassCards = (props) => {
         <Row>
             {Object.keys(props.inclass).map((key, index) => {
                 return<Col xs={12} key={key} className={"assPad"}>
-                    <RouterLink to={"/HomePage/"+props.code+"/myStudents/"+props.inclass[index].colRef+"/"+props.inclass[index].id}>
+                    <RouterLink to={"/ScribeScholars/HomePage/"+props.code+"/myStudents/"+props.inclass[index].colRef+"/"+props.inclass[index].id}>
                         <Button size="lg" className={"assButt"} key={key} block>
                             <h1 className={"assTitle"}>
                                 {props.inclass[index].name}

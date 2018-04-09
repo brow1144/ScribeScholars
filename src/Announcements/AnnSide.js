@@ -11,16 +11,16 @@ import '../HomePage/Side.css'
 const SettingsSide = () => {
     return (
         <div>
-            <NavLink style={{ textDecoration: 'none' }} to={`/HomePage`}>
+            <NavLink style={{ textDecoration: 'none' }} to={`/ScribeScholars/HomePage`}>
                 <img src={logo} alt="Logo" />
             </NavLink>
 
-            <NavLink style={{ textDecoration: 'none', color: 'black' }} to={`/createAnnouncements`}>
+            <NavLink style={{ textDecoration: 'none', color: 'black' }} to={`/ScribeScholars/createAnnouncements`}>
                 <p className="classOne" >Make Announcement</p>
             </NavLink>
 
 
-            <NavLink style={{ textDecoration: 'none' , color: 'black' }} to={`/setRoomPicture`}>
+            <NavLink style={{ textDecoration: 'none' , color: 'black' }} to={`/ScribeScholars/setRoomPicture`}>
                 <p className="classOne" >Set Classroom Picture</p>
             </NavLink>
 

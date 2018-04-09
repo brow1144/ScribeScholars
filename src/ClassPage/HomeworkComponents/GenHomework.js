@@ -547,7 +547,7 @@ class GenHomework extends Component {
                   <Col xs={4}>
                     <div className={"space"}/>
                     <Nav pills>
-                      <RouterLink className="navLinks" to={`/HomePage/${this.state.code}/announcements`}>
+                      <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.state.code}/announcements`}>
                         <NavLink >Return to the classroom page</NavLink>
                       </RouterLink>
                     </Nav>
