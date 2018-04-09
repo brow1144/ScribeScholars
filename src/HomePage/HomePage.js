@@ -16,6 +16,7 @@ import LiveFeed from '../ClassPage/LiveFeed';
 import GradingPage from '../MyStudents/GradingPage';
 
 import CreateActivity from '../CreateActivity/CreateActivity';
+import EditActivity from '../EditActivity/EditActivity';
 
 import Settings from '../Settings/Settings';
 
@@ -590,222 +591,241 @@ class HomePage extends Component {
    */
   render() {
 
-    let sidebarContent = <Side selectedClass={this.props.selectedClass} selectClass={this.props.selectClass}
-                               userImage={this.props.userImage} updateUserImage={this.props.updateUserImage}
-                               flipClass={this.flipToClass.bind(this)} flipPersonal={this.flipToPersonal.bind(this)}
-                               page={this.props.page} uid={this.state.uid} classes={this.props.classes}/>;
+      let sidebarContent = <Side selectedClass={this.props.selectedClass} selectClass={this.props.selectClass}
+                                 userImage={this.props.userImage} updateUserImage={this.props.updateUserImage}
+                                 flipClass={this.flipToClass.bind(this)} flipPersonal={this.flipToPersonal.bind(this)}
+                                 page={this.props.page} uid={this.state.uid} classes={this.props.classes}/>;
 
-    const sidebarStyles = {
-      sidebar: {
-        backgroundColor: '#f2f2f2',
-        width: '8em',
-        textAlign: 'center',
-      },
-      overlay: {
-        backgroundColor: '#f3f3f3'
-      },
-    };
+      const sidebarStyles = {
+          sidebar: {
+              backgroundColor: '#f2f2f2',
+              width: '8em',
+              textAlign: 'center',
+          },
+          overlay: {
+              backgroundColor: '#f3f3f3'
+          },
+      };
 
-    const calendarStyles = {
-      height: "60em",
-    };
+      const calendarStyles = {
+          height: "60em",
+      };
 
-    const sideData = {
-      styles: sidebarStyles,
-      sidebar: sidebarContent,
-      open: this.state.sidebarOpen,
-      docked: this.state.sidebarDocked,
-      onSetOpen: this.onSetSidebarOpen,
-    };
+      const sideData = {
+          styles: sidebarStyles,
+          sidebar: sidebarContent,
+          open: this.state.sidebarOpen,
+          docked: this.state.sidebarDocked,
+          onSetOpen: this.onSetSidebarOpen,
+      };
 
-    const classData = {
-      code: this.props.selectedClass,
-      className: this.props.className,
-      classAnnouncements: this.props.classAnnouncements,
-      path: this.props.path,
-      classImage: this.props.classImage,
-      assignments: this.props.assignments,
-      homeworks: this.props.homeworks,
-    };
+      const classData = {
+          code: this.props.selectedClass,
+          className: this.props.className,
+          classAnnouncements: this.props.classAnnouncements,
+          path: this.props.path,
+          classImage: this.props.classImage,
+          assignments: this.props.assignments,
+          homeworks: this.props.homeworks,
+      };
 
-    const actions = {
-      updateClasses: this.props.updateClasses,
-      updateRole: this.props.updateRole,
-      updateAnnouncements: this.props.updateAnnouncements,
-      updateUserImage: this.props.updateUserImage,
-      toggleGPA: this.props.toggleGPA,
-      toggleAlerts: this.props.toggleAlerts,
-      selectClass: this.props.selectClass,
-      updateClassPicture: this.props.updateClassPicture,
-      getClassAnnouncements: this.props.getClassAnnouncements,
-      getAssignments: this.props.getAssignments,
-      getHomeworks: this.props.getHomeworks,
-    };
+      const actions = {
+          updateClasses: this.props.updateClasses,
+          updateRole: this.props.updateRole,
+          updateAnnouncements: this.props.updateAnnouncements,
+          updateUserImage: this.props.updateUserImage,
+          toggleGPA: this.props.toggleGPA,
+          toggleAlerts: this.props.toggleAlerts,
+          selectClass: this.props.selectClass,
+          updateClassPicture: this.props.updateClassPicture,
+          getClassAnnouncements: this.props.getClassAnnouncements,
+          getAssignments: this.props.getAssignments,
+          getHomeworks: this.props.getHomeworks,
+      };
 
-    if (this.props.page === "home") {
-      // If Screen is Big
-      if (this.state.width > 600) {
+      if (this.props.page === "home") {
+          // If Screen is Big
+          if (this.state.width > 600) {
 
-        return (
-          <Sidebar {...sideData}>
+              return (
+                  <Sidebar {...sideData}>
 
-            <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} gpa={this.state.gpa}
-                     expand={this.dockSideBar}
-                     showGPA={this.props.showGPA}
-                     role={this.props.role}
-                     width={this.state.width}/>
+                      <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} gpa={this.state.gpa}
+                               expand={this.dockSideBar}
+                               showGPA={this.props.showGPA}
+                               role={this.props.role}
+                               width={this.state.width}/>
 
-            <Row>
-              <Col md="1"/>
-              <Col md="7">
-                {Object.keys(this.state.alerts).map((key, index) =>
-                  <AlertHandler key={index} alert={this.state.alerts[index]} uid={this.state.uid}
-                                showAlerts={this.props.showAlerts} hiddenAlerts={this.state.hiddenAlerts}/>
-                )
-                }
-              </Col>
-            </Row>
+                      <Row>
+                          <Col md="1"/>
+                          <Col md="7">
+                              {Object.keys(this.state.alerts).map((key, index) =>
+                                  <AlertHandler key={index} alert={this.state.alerts[index]} uid={this.state.uid}
+                                                showAlerts={this.props.showAlerts}
+                                                hiddenAlerts={this.state.hiddenAlerts}/>
+                              )
+                              }
+                          </Col>
+                      </Row>
 
-            <Row>
-              <Col md="1"/>
-              <Col md="7">
-                <BigCalendar
-                  events={this.props.dates}
-                  style={calendarStyles}
-                  defaultDate={new Date()}
-                  eventPropGetter={(this.eventStyleGetter)}
-                />
-              </Col>
+                      <Row>
+                          <Col md="1"/>
+                          <Col md="7">
+                              <BigCalendar
+                                  events={this.props.dates}
+                                  style={calendarStyles}
+                                  defaultDate={new Date()}
+                                  eventPropGetter={(this.eventStyleGetter)}
+                              />
+                          </Col>
 
-              <Col md="3">
-                <EventButton uid={this.state.uid} expanded={this.state.eventButtonOpen}/>
-              </Col>
-            </Row>
+                          <Col md="3">
+                              <EventButton uid={this.state.uid} expanded={this.state.eventButtonOpen}/>
+                          </Col>
+                      </Row>
 
-            <hr className="divider"/>
-            <b className="annTest">Announcements</b>
+                      <hr className="divider"/>
+                      <b className="annTest">Announcements</b>
 
-            <div className="announcementsDiv">
-              <Cards announcements={this.props.announcements}/>
-            </div>
+                      <div className="announcementsDiv">
+                          <Cards announcements={this.props.announcements}/>
+                      </div>
 
-          </Sidebar>
-        );
+                  </Sidebar>
+              );
 
-        // If Screen is Small
-      } else {
+              // If Screen is Small
+          } else {
 
-        return (
-          <Sidebar {...sideData}>
+              return (
+                  <Sidebar {...sideData}>
 
-            <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} gpa={this.state.gpa}
-                     expand={this.dockSideBar}
-                     showGPA={this.props.showGPA}
-                     role={this.props.role}
-                     width={this.state.width}/>
+                      <HomeNav firstName={this.state.firstName} lastName={this.state.lastName} gpa={this.state.gpa}
+                               expand={this.dockSideBar}
+                               showGPA={this.props.showGPA}
+                               role={this.props.role}
+                               width={this.state.width}/>
 
-            <Row>
-              <Col md="1"/>
-              <Col md="8">
-                <BigCalendar
-                  toolbar={false}
-                  events={this.props.dates}
-                  style={calendarStyles}
-                  defaultDate={new Date()}
-                  eventPropGetter={(this.eventStyleGetter)}
-                />
-              </Col>
-              <Col md="3"/>
-            </Row>
+                      <Row>
+                          <Col md="1"/>
+                          <Col md="8">
+                              <BigCalendar
+                                  toolbar={false}
+                                  events={this.props.dates}
+                                  style={calendarStyles}
+                                  defaultDate={new Date()}
+                                  eventPropGetter={(this.eventStyleGetter)}
+                              />
+                          </Col>
+                          <Col md="3"/>
+                      </Row>
 
-            <hr className="divider"/>
-            <b className="annTest">Announcements</b>
+                      <hr className="divider"/>
+                      <b className="annTest">Announcements</b>
 
-            <div className="announcementsDiv">
-              <Cards announcements={this.state.announcements}/>
-            </div>
+                      <div className="announcementsDiv">
+                          <Cards announcements={this.state.announcements}/>
+                      </div>
 
-          </Sidebar>
-        );
+                  </Sidebar>
+              );
 
-      }
-    } else if (this.props.page === "settings") {
+          }
+      } else if (this.props.page === "settings") {
 
-      return (
-        <Sidebar {...sideData}>
+          return (
+              <Sidebar {...sideData}>
 
-          <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
-                   width={this.state.width}/>
+                  <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
+                           width={this.state.width}/>
 
-          <Settings {...actions} classes={this.props.classes} userImage={this.state.userImage}
-                    updateUserImage={this.props.updateUserImage} updateClasses={this.props.updateClasses}
-                    role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid}
-                    showGPA={this.props.showGPA} showAlerts={this.props.showAlerts}/>
-        </Sidebar>
-      );
+                  <Settings {...actions} classes={this.props.classes} userImage={this.state.userImage}
+                            updateUserImage={this.props.updateUserImage} updateClasses={this.props.updateClasses}
+                            role={this.props.role} personalPage={this.state.personalPage} uid={this.state.uid}
+                            showGPA={this.props.showGPA} showAlerts={this.props.showAlerts}/>
+              </Sidebar>
+          );
 
-    } else if (this.props.page === "classes") {
+      } else if (this.props.page === "classes") {
 
-      return (
-        <Sidebar {...sideData}>
+          return (
+              <Sidebar {...sideData}>
 
-          <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
-                   width={this.state.width}/>
+                  <HomeNav firstName={""} lastName={""} expand={this.dockSideBar}
+                           width={this.state.width}/>
 
-          <ClassHome classCode={this.props.path} tab={this.props.tab} {...classData} {...actions} lessonNumber={this.props.lessonNumber} class={this.props.class} uid={this.state.uid} role={this.state.role}/>
-
-
-        </Sidebar>
-      );
-    } else if (this.props.page === "liveFeed") {
-
-      return (
-        <Sidebar {...sideData}>
-
-          <HomeNav firstName={"In-Class Live Feed"} lastName={""} expand={this.dockSideBar}
-                   width={this.state.width}/>
-
-          <Row>
-            <Col>
-              <LiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} uid={this.state.uid}/>
-            </Col>
-          </Row>
-        </Sidebar>
-      );
-
-    } else if (this.props.page === "studentLiveFeed") {
-
-      return (
-        <Sidebar {...sideData}>
-
-          <HomeNav firstName={"Individual Student Live Feed"} lastName={""} expand={this.dockSideBar}
-                   width={this.state.width}/>
-
-          <Row>
-            <Col>
-              <StudentLiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} studUid={this.props.studUid}/>
-            </Col>
-          </Row>
-        </Sidebar>
-      );
-
-    } else if (this.props.page === "createActivity") {
-      return (
-        <Sidebar {...sideData}>
-
-          <HomeNav firstName={"Create: " + this.props.assType} lastName={""} expand={this.dockSideBar}
-                   width={this.state.width}/>
-
-          <Row>
-            <Col>
-              <CreateActivity {...classData} class={this.props.class} assType={this.props.assType} uid={this.state.uid}/>
-            </Col>
-          </Row>
-        </Sidebar>
-      );
+                  <ClassHome classCode={this.props.path} tab={this.props.tab} {...classData} {...actions}
+                             lessonNumber={this.props.lessonNumber} class={this.props.class} uid={this.state.uid}
+                             role={this.state.role}/>
 
 
-    }else if (this.props.page === "gradingPage") {
+              </Sidebar>
+          );
+      } else if (this.props.page === "liveFeed") {
+
+          return (
+              <Sidebar {...sideData}>
+
+                  <HomeNav firstName={"In-Class Live Feed"} lastName={""} expand={this.dockSideBar}
+                           width={this.state.width}/>
+
+                  <Row>
+                      <Col>
+                          <LiveFeed {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber}
+                                    uid={this.state.uid}/>
+                      </Col>
+                  </Row>
+              </Sidebar>
+          );
+
+      } else if (this.props.page === "studentLiveFeed") {
+
+          return (
+              <Sidebar {...sideData}>
+
+                  <HomeNav firstName={"Individual Student Live Feed"} lastName={""} expand={this.dockSideBar}
+                           width={this.state.width}/>
+
+                  <Row>
+                      <Col>
+                          <StudentLiveFeed {...classData} class={this.props.class}
+                                           lessonNumber={this.props.lessonNumber} studUid={this.props.studUid}/>
+                      </Col>
+                  </Row>
+              </Sidebar>
+          );
+
+      } else if (this.props.page === "createActivity") {
+          return (
+              <Sidebar {...sideData}>
+
+                  <HomeNav firstName={"Create: " + this.props.assType} lastName={""} expand={this.dockSideBar}
+                           width={this.state.width}/>
+
+                  <Row>
+                      <Col>
+                          <CreateActivity {...classData} class={this.props.class} assType={this.props.assType}
+                                          uid={this.state.uid}/>
+                      </Col>
+                  </Row>
+              </Sidebar>
+          );
+
+
+      } else if (this.props.page === "editActivity") {
+          return (
+              <Sidebar {...sideData}>
+                  <HomeNav firstName={"Editing: " + this.props.assType} lastName={""} expand={this.dockSideBar}
+                           width={this.state.width}/>
+                  <Row>
+                      <Col>
+                          <EditActivity {...classData} class={this.props.class} assType={this.props.assType}
+                                          uid={this.state.uid}/>
+                      </Col>
+                  </Row>
+              </Sidebar>
+          );
+      } else if (this.props.page === "gradingPage") {
         let assRef = firestore.collection("classes").doc(this.props.class).collection(this.props.assCol).doc(this.props.assKey);
         let self = this;
 

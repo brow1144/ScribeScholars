@@ -515,7 +515,7 @@ class Main extends Component {
           <Route path="/HomePage/:class/lessons/edit-activity/:lessonNumber" render={(match) => (
               <HomePage
                   class={match.match.params.class}
-                  assType="Homework"
+                  assType="Lesson"
                   lessonNumber={match.match.params.lessonNumber}
                   page="editActivity"
                   {...data}
