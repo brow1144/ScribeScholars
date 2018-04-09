@@ -8,6 +8,7 @@ import MCQ from "../LiveComponents/MCQ";
 import FRQ from "./FRQ";
 import Video from "./Video";
 import MSQ from "./MSQ";
+import FIB from "./FIB";
 
 class GenHomework extends Component {
 
@@ -94,7 +95,6 @@ class GenHomework extends Component {
           history: doc.data().history,
           answers: doc.data().answers,
           mcq: doc.data().mcq,
-          multiple: doc.data().multiple,
         }, () => {
           self.setQuestion();
         })
@@ -136,6 +136,7 @@ class GenHomework extends Component {
       });
     } else if (quest.type === "SMQ") {
       self.setState({
+        correctAns: quest.correctAns,
         option1: quest.option1,
         option2: quest.option2,
         option3: quest.option3,
@@ -174,7 +175,6 @@ class GenHomework extends Component {
             currentScore: self.state.currentScore,
             answers: self.state.answers,
             mcq: self.state.mcq,
-            multiple: self.state.multiple,
           }).then(function () {
             self.getUserAssignment(self.props.code)
           });
@@ -186,7 +186,6 @@ class GenHomework extends Component {
             currentScore: self.state.currentScore,
             answers: self.state.answers,
             mcq: self.state.mcq,
-            multiple: self.state.multiple,
           }).then(function () {
             self.setState({
               finalPage: true,
@@ -225,7 +224,6 @@ class GenHomework extends Component {
               completed: self.state.completed,
               currentScore: self.state.currentScore,
               answers: self.state.answers,
-              multiple: self.state.multiple,
             }).then(function () {
               self.getUserAssignment(self.props.code)
             });
@@ -241,6 +239,10 @@ class GenHomework extends Component {
    * Sets the answers array to current correct answer, and
    * updates the history array with the new answer,
    */
+
+  //
+  // TODO: Make sure you change set ans to work properly for select multiple since you can unselect aanswers however you plan to do it
+  //
   setAns = (answer) => {
 
     let self = this;
@@ -401,6 +403,14 @@ class GenHomework extends Component {
     })
   };
 
+    setFIB = (ev) => {
+        let self = this;
+        console.log(ev);
+        self.setState({
+            fibResponse: ev,
+        })
+    };
+
 
   /*
    * Set the answer history for MSQ
@@ -409,7 +419,6 @@ class GenHomework extends Component {
     let self = this;
     let tmpHis = self.state.history;
     let ansArr = self.state.answers;
-    let tmpMulti = self.state.multiple;
 
     //Update history array
     for(let i in tmpHis) {
@@ -431,7 +440,6 @@ class GenHomework extends Component {
     self.setState({
       answers: ansArr,
       history: tmpHis,
-      multiple: tmpMulti,
     })
   };
 
@@ -439,6 +447,7 @@ class GenHomework extends Component {
 
     const action = {
       setFRQ: this.setFRQ,
+      setFIB: this.setFIB,
       selectMulti: this.selectMulti,
     };
 
@@ -466,7 +475,9 @@ class GenHomework extends Component {
                                    setAns = {this.setAns} finalPage = {this.state.finalPage} oldAns = {this.state.history[this.state.currentQuestion-1]}
                                    option1={this.state.option1} option2={this.state.option2} option3={this.state.option3} option4={this.state.option4}/>
                               :
-                              <div/> // this will be fill in the blank
+                              <FIB {...action} name={this.state.name} currentQuestion={this.state.currentQuestion}
+                                   prompt = {this.state.prompt} fibResponse = {this.state.fibResponse} finalPage = {this.state.finalPage}/>
+
               }
 
             </Row>
