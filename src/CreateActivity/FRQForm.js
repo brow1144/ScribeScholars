@@ -16,6 +16,7 @@ class FRQForm extends Component {
         let quest = {
             type: "FRQ",
             prompt: ev.target.promptQ.value,
+            points: parseInt(ev.target.points.value),
         };
 
         this.props.recordQuestion(quest, this.props.index);
@@ -32,6 +33,14 @@ class FRQForm extends Component {
                     <Col sm={6}>
                         <Input bsSize="lg" type="username" name="promptQ" id="exampleNumber"/>
                     </Col>
+                </FormGroup>
+                <br/>
+                <FormGroup row>
+                  <Label size="lg" for="examplePoints" sm={3}>Points:</Label>
+
+                  <Col sm={2}>
+                    <Input bsSize="lg" type="number" name="points" id="examplePoints" defaultValue="1"/>
+                  </Col>
                 </FormGroup>
                 <br/>
                 <FormGroup check style={{paddingLeft: '0'}}>

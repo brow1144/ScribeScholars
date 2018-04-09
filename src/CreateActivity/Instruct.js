@@ -10,24 +10,12 @@ class Instruct extends Component {
         this.state = {
             selectedOption: "",
             question: this.props.question,
-            defaultWeighting: true,
         }
-
     }
-
-    toggleWeighting = () => {
-      this.setState({
-        defaultWeighting: !this.state.defaultWeighting,
-      })
-    };
 
     onFormSubmit = (ev) => {
         ev.preventDefault();
-
-        if (this.state.defaultWeighting)
-            this.props.createHomework(ev.target.title.value, ev.target.descriptText.value, 0);
-        else
-            this.props.createHomework(ev.target.title.value, ev.target.descriptText.value, parseInt(ev.target.totalPoints.value));
+        this.props.createHomework(ev.target.title.value, ev.target.descriptText.value);
     };
 
     render() {
@@ -82,24 +70,6 @@ class Instruct extends Component {
                                     <Input bsSize="lg" type="textarea" name="descriptText" id="exampleText"/>
                                 </Col>
                             </FormGroup>
-
-                          <FormGroup row>
-                            <Col sm={10}>
-                              <FormGroup check inline>
-                                <Label check size="lg">
-                                  <Input onChange={this.toggleWeighting} type="checkbox" id="checkbox"
-                                         checked={this.state.defaultWeighting}/> Use default weighting
-                                </Label>
-                              </FormGroup>
-                            </Col>
-                          </FormGroup>
-
-                          <Label size="lg" for="examplePoints" sm={6} hidden={this.state.defaultWeighting}> Total Points:</Label>
-                          <FormGroup row hidden={this.state.defaultWeighting}>
-                            <Col sm={10}>
-                              <Input bsSize="lg" type="number" name="totalPoints" id="examplePoints"/>
-                            </Col>
-                          </FormGroup>
 
                             <br/>
                             <FormGroup check>

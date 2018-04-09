@@ -35,7 +35,7 @@ class CreateActivity extends Component {
         };
     }
 
-    createHomework = (title, descript, totalPoints) => {
+    createHomework = (title, descript) => {
 
         let self = this;
         this.flipComp();
@@ -47,7 +47,7 @@ class CreateActivity extends Component {
         else
             classRef = firestore.collection("classes").doc(self.props.class).collection("homework").doc(code);
 
-        self.setState({hwCode: code, title: title, totalPoints: totalPoints,});
+        self.setState({hwCode: code, title: title});
 
         classRef.get().then(function (doc) {
             if (doc.exists) {
@@ -198,6 +198,7 @@ class CreateActivity extends Component {
             case "Video Page":
                 tempQ = {
                     url: "",
+                    points: "",
                     type: "VIDEO",
                 };
                 tempArr.push(tempQ);
