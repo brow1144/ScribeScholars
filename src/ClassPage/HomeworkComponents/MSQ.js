@@ -11,10 +11,10 @@ class MSQ extends Component {
     super(props);
 
     this.state = {
-      opt1: "option1",
-      opt2: "option2",
-      opt3: "option3",
-      opt4: "option4",
+      opt1: "1",
+      opt2: "2",
+      opt3: "3",
+      opt4: "4",
     }
   }
 
@@ -28,29 +28,29 @@ class MSQ extends Component {
             <Col>
               <FormGroup>
                 <Label className={"RadioLabel"}>
-                  <Input onClick={() => this.props.setAns(this.state.opt1)} className={"RadioButton"} type="checkbox"
-                         name="radio1"/>{' '}
+                  <Input onClick={() => this.props.selectMulti(this.state.opt1)} className={"RadioButton"} type="checkbox"
+                         name="radio1" checked={this.props.multiHist[0] === "1"}/>{' '}
                   <p className={"textSize"}>{this.props.option1}</p>
                 </Label>
               </FormGroup>
               <FormGroup>
                 <Label className={"RadioLabel"}>
-                  <Input onClick={() => this.props.setAns(this.state.opt2)} className={"RadioButton"} type="checkbox"
-                         name="radio2"/>{' '}
+                  <Input onClick={() => this.props.selectMulti(this.state.opt2)} className={"RadioButton"} type="checkbox"
+                         name="radio2" checked={this.props.multiHist[1] === "2"}/>{' '}
                   <p className={"textSize"}>{this.props.option2}</p>
                 </Label>
               </FormGroup>
               <FormGroup>
                 <Label className={"RadioLabel"}>
-                  <Input onClick={() => this.props.setAns(this.state.opt3)} className={"RadioButton textSize"}
-                         type="checkbox" name="radio3"/>
+                  <Input onClick={() => this.props.selectMulti(this.state.opt3)} className={"RadioButton textSize"}
+                         type="checkbox" name="radio3" checked={this.props.multiHist[2] === "3"}/>
                   <p className={"textSize"}>{this.props.option3}</p>
                 </Label>
               </FormGroup>
               <FormGroup>
                 <Label className={"RadioLabel"}>
-                  <Input onClick={() => this.props.setAns(this.state.opt4)}  className={"RadioButton"} type="checkbox"
-                         name="radio4"/>
+                  <Input onClick={() => this.props.selectMulti(this.state.opt4)}  className={"RadioButton"} type="checkbox"
+                         name="radio4" checked={this.props.multiHist[3] === "4"}/>
                   <p className={"textSize"}>{this.props.option4}</p>
                 </Label>
               </FormGroup>

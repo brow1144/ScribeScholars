@@ -45,8 +45,8 @@ class GenHomework extends Component {
       history: [],
       answers: [],
 
-      multiple: [],
-      multi: [],
+      multiple: null,
+      multiHist: [],
 
       finalPage: false,
     }
@@ -144,6 +144,19 @@ class GenHomework extends Component {
         prompt: quest.prompt,
         type: quest.type,
       });
+
+      let fill = self.state.history[this.state.currentQuestion-1].split(" ");
+
+      for (let x = 0; x < 4; x++)
+          self.state.multiHist[x] = "";
+
+      // Make multihistory fill up from the correctAns
+      for (let x = 0; x < 4; x++) {
+        let index = Number(fill[x]);
+        if (fill[x] !== "")
+          self.state.multiHist[index-1] = fill[x];
+      }
+
     }
     else if (quest.type === "FIB") {
       self.setState({
@@ -160,8 +173,8 @@ class GenHomework extends Component {
     let self = this;
 
     let user = firestore.collection("users").doc(this.state.uid).collection("homework").doc(this.state.homeworkNumber)
-
-    if(self.state.type !== "MCQ") {
+    
+    if(!(self.state.type === "MCQ") && !(self.state.type === "SMQ")) {
       self.fillArray()
     }
 
@@ -209,7 +222,7 @@ class GenHomework extends Component {
       })
     }
     else {
-      if(self.state.type !== "MCQ") {
+      if(!(self.state.type === "MCQ") && !(self.state.type === "SMQ")) {
         self.fillArray()
       }
 
@@ -239,10 +252,6 @@ class GenHomework extends Component {
    * Sets the answers array to current correct answer, and
    * updates the history array with the new answer,
    */
-
-  //
-  // TODO: Make sure you change set ans to work properly for select multiple since you can unselect aanswers however you plan to do it
-  //
   setAns = (answer) => {
 
     let self = this;
@@ -293,10 +302,10 @@ class GenHomework extends Component {
     }
 
     //Update answers array
-    for(let i in ansArr) {
-      if(i == self.state.currentQuestion-1)
+    for (let i in ansArr) {
+      if (i == self.state.currentQuestion-1)
       {
-        ansArr[i] = "ungraded"
+          ansArr[i] = "ungraded"
       }
     }
 
@@ -344,7 +353,7 @@ class GenHomework extends Component {
         score: s,
       })
     }
-    console.log(s);
+
     //Set the states
     self.setState({
       mcq: mcqQuestion,
@@ -402,30 +411,61 @@ class GenHomework extends Component {
     })
   };
 
-    setFIB = (ev) => {
-        let self = this;
-        self.setState({
-            fibResponse: ev,
-        })
-    };
+  /*
+   * Sets the fill in the blank variable
+   */
+  setFIB = (ev) => {
+    let self = this;
+    self.setState({
+      fibResponse: ev,
+    })
+  };
 
 
   /*
-   * Set the answer history for MSQ
+   * Set the answer history for MSQ using a compressed answer string
+   * Also figure out how to check this new string to pre-select answers for history
    */
-  selectMulti = () => {
+  selectMulti = (num) => {
     let self = this;
     let tmpHis = self.state.history;
     let ansArr = self.state.answers;
+    let mult = self.state.multiHist;
+
+    let tmp = Number(num);
+    let str = "";
+
+
+    //Set the current multiHistory array to the new variable
+    for (let i in mult) {
+
+      if (i == tmp-1)
+      {
+        if (mult[i] === "") {
+          mult[i] = num;
+        }
+        else
+          mult[i] = "";
+      }
+
+      // Makes a string out of the variables selected
+      if (mult[i] != "") {
+        str += mult[i] + " ";
+      }
+    }
+
+    //Convert multihistory to a string smashed together
+
 
     //Update history array
     for(let i in tmpHis) {
       if(i == self.state.currentQuestion-1)
       {
-        tmpHis[i] = "multi"
+        tmpHis[i] = str;
       }
     }
 
+    console.log(ansArr);
     //Update answers array
     for(let i in ansArr) {
       if(i == self.state.currentQuestion-1)
@@ -438,6 +478,7 @@ class GenHomework extends Component {
     self.setState({
       answers: ansArr,
       history: tmpHis,
+      multiHist: mult,
     })
   };
 
@@ -447,6 +488,23 @@ class GenHomework extends Component {
       setFRQ: this.setFRQ,
       setFIB: this.setFIB,
       selectMulti: this.selectMulti,
+      setAns: this.setAns,
+    };
+
+    const data = {
+      currentQuestion: this.state.currentQuestion,
+      name: this.state.name,
+      prompt: this.state.prompt,
+      finalPage: this.state.finalPage,
+      oldAns: this.state.history[this.state.currentQuestion-1],
+      option1: this.state.option1,
+      option2: this.state.option2,
+      option3: this.state.option3,
+      option4: this.state.option4,
+      frqResponse: this.state.frqResponse,
+      url: this.state.url,
+      fibResponse: this.state.fibResponse,
+      multiHist: this.state.multiHist,
     };
 
     return (
@@ -456,25 +514,18 @@ class GenHomework extends Component {
             <Row>
               {this.state.type === "MCQ"
                 ?
-                <MCQ {...action} currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
-                     setAns = {this.setAns} finalPage = {this.state.finalPage} oldAns = {this.state.history[this.state.currentQuestion-1]}
-                     option1={this.state.option1} option2={this.state.option2} option3={this.state.option3} option4={this.state.option4}/>
+                <MCQ {...action} {...data}/>
                 : this.state.type === "FRQ"
                   ?
-                  <FRQ {...action} name={this.state.name} currentQuestion={this.state.currentQuestion}
-                       prompt = {this.state.prompt} frqResponse = {this.state.frqResponse} finalPage = {this.state.finalPage}/>
+                  <FRQ {...action} {...data}/>
                   : this.state.type === "VIDEO"
                     ?
-                    <Video name={this.state.name} currentQuestion={this.state.currentQuestion} url = {this.state.url}
-                         finalPage = {this.state.finalPage}/>
+                    <Video {...action} {...data}/>
                     : this.state.type === "SMQ"
                               ?
-                              <MSQ currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
-                                   setAns = {this.setAns} finalPage = {this.state.finalPage} oldAns = {this.state.history[this.state.currentQuestion-1]}
-                                   option1={this.state.option1} option2={this.state.option2} option3={this.state.option3} option4={this.state.option4}/>
+                              <MSQ {...action} {...data}/>
                               :
-                              <FIB {...action} name={this.state.name} currentQuestion={this.state.currentQuestion}
-                                   prompt = {this.state.prompt} fibResponse = {this.state.fibResponse} finalPage = {this.state.finalPage}/>
+                              <FIB {...action} {...data}/>
 
               }
 
