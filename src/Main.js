@@ -481,7 +481,7 @@ class Main extends Component {
     return (
       <Switch>
 
-        <Route path="/HomePage/:class/lesson/create-activity" render={(match) => (
+        <Route path="/ScribeScholars/HomePage/:class/lesson/create-activity" render={(match) => (
           <HomePage
             class={match.match.params.class}
             assType="Lesson"
@@ -491,7 +491,7 @@ class Main extends Component {
           />
         )}/>
 
-        <Route path="/HomePage/:class/homework/create-activity" render={(match) => (
+        <Route path="/ScribeScholars/HomePage/:class/homework/create-activity" render={(match) => (
           <HomePage
             class={match.match.params.class}
             assType="Homework"
@@ -501,7 +501,7 @@ class Main extends Component {
           />
         )}/>
 
-        <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber/:uid" render={(match) => (
+        <Route path="/ScribeScholars/HomePage/:class/lessons/liveFeed/:lessonNumber/:uid" render={(match) => (
 
           <HomePage
             studUid={match.match.params.uid}
@@ -513,7 +513,7 @@ class Main extends Component {
           />
         )}/>
 
-        <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber" render={(match) => (
+        <Route path="/ScribeScholars/HomePage/:class/lessons/liveFeed/:lessonNumber" render={(match) => (
 
           <HomePage
             class={match.match.params.class}
@@ -523,7 +523,7 @@ class Main extends Component {
             {...actions}
           />
         )}/>
-          <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber/:uid" render={(match) => (
+          <Route path="/ScribeScholars/HomePage/:class/lessons/liveFeed/:lessonNumber/:uid" render={(match) => (
             this.state.role  === "teacher"
               ?
                 <HomePage
@@ -545,7 +545,7 @@ class Main extends Component {
                 )}/>
           )}/>
 
-          <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber" render={(match) => (
+          <Route path="/ScribeScholars/HomePage/:class/lessons/liveFeed/:lessonNumber" render={(match) => (
             this.state.role  === "teacher"
               ?
             <HomePage
@@ -556,7 +556,7 @@ class Main extends Component {
               {...actions}
             />
               :
-              <Route path="/homepage/:class" render={(match) => (
+              <Route path="/ScribeScholars/homepage/:class" render={(match) => (
                 <HomePage
                   path={match.match.params.class}
                   page="classes"
@@ -567,7 +567,7 @@ class Main extends Component {
           )}/>
         }
 
-        <Route path="/HomePage/:class/lessons/:lessonNumber" render={(match) => (
+        <Route path="/ScribeScholars/HomePage/:class/lessons/:lessonNumber" render={(match) => (
 
           <HomePage
             class={match.match.params.class}
@@ -579,7 +579,7 @@ class Main extends Component {
 
         )}/>
 
-        <Route path="/HomePage/:class/homework/:lessonNumber" render={(match) => (
+        <Route path="/ScribeScholars/HomePage/:class/homework/:lessonNumber" render={(match) => (
           this.state.role === "teacher"
             ?
             <HomePage
@@ -599,7 +599,7 @@ class Main extends Component {
             />
         )}/>
 
-          <Route path="/HomePage/:class/myStudents/:assCol/:assKey" render={(match) => (
+          <Route path="/ScribeScholars/HomePage/:class/myStudents/:assCol/:assKey" render={(match) => (
 
               <HomePage
                   class={match.match.params.class}
@@ -611,7 +611,7 @@ class Main extends Component {
               />
           )}/>
 
-        <Route path="/homepage/:class/:tab" render={(match) => (
+        <Route path="/ScribeScholars/homepage/:class/:tab" render={(match) => (
           <HomePage
             tab={match.match.params.tab}
             path={match.match.params.class}
@@ -621,7 +621,7 @@ class Main extends Component {
           />
         )}/>
 
-        <Route path="/homepage/:class" render={(match) => (
+        <Route path="/ScribeScholars/homepage/:class" render={(match) => (
           <HomePage
             tab='announcements'
             path={match.match.params.class}
@@ -631,7 +631,7 @@ class Main extends Component {
           />
         )}/>
 
-        <Route path="/homepage" render={() => (
+        <Route path="/ScribeScholars/homepage" render={() => (
           <HomePage
             page={this.props.page}
             {...data}
@@ -639,7 +639,7 @@ class Main extends Component {
           />
         )}/>
 
-        <Route path="/settings" render={() => (
+        <Route path="/ScribeScholars/settings" render={() => (
           <HomePage
             page={this.props.page}
             {...data}

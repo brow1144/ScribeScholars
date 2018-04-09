@@ -75,7 +75,7 @@ class HomeworkTable extends Component {
                                         <td>{this.props.homeworks[index].maxscore}</td>
                                         <td>
                                             <RouterLink
-                                                to={`/HomePage/${this.props.code}/homework/${this.props.homeworks[index].lessonCode}`}>
+                                                to={`/ScribeScholars/HomePage/${this.props.code}/homework/${this.props.homeworks[index].lessonCode}`}>
                                                 Link
                                             </RouterLink>
                                         </td>
@@ -90,7 +90,7 @@ class HomeworkTable extends Component {
                         <Col className={"moreSpace"}>
                             {this.state.role === "teacher"
                                 ?
-                                <RouterLink to={`/HomePage/${this.props.code}/homework/create-activity`}>
+                                <RouterLink to={`/ScribeScholars/HomePage/${this.props.code}/homework/create-activity`}>
                                     Create New Class Homework
                                 </RouterLink>
                                 :

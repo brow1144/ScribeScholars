@@ -30,7 +30,7 @@ class ClassSuccess extends Component {
 
                     <div className="spacing"/>
 
-                    <NavLink style={{ textDecoration: 'none' }} to="/create-account">
+                    <NavLink style={{ textDecoration: 'none' }} to="/ScribeScholars/create-account">
                         <Button type="submit" className="homeButton" size="lg" block>Return Home!</Button>
                     </NavLink>
 

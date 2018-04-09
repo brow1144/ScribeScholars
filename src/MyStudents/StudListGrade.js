@@ -57,7 +57,7 @@ const StudListGrade = (props) => {
                 <Col xs={0} md={8}/>
                 <Col xs={12} md={2}>
                     <RouterLink
-                        to={"/HomePage/" + props.code + "/myStudents"}>
+                        to={"/ScribeScholars/HomePage/" + props.code + "/myStudents"}>
                         <Button>
                             Commit
                         </Button>
