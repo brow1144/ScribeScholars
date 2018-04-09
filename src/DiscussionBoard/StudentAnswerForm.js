@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, Table, Button, Form, } from 'reactstrap';
+import {Container, Row, Col, Button, Form, } from 'reactstrap';
 import './StudentAnswerForm.css'
 
 class StudentAnswerForm extends Component {
