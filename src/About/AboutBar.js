@@ -51,7 +51,7 @@ class AboutBar extends Component {
                                 <NavLink className="link" href="#Contact-Us" ><h2>Contact Us</h2></NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink className="link" href="/sign-in" ><h2>Sign in</h2></NavLink>
+                                <NavLink className="link" href="/ScribeScholars/sign-in" ><h2>Sign in</h2></NavLink>
                             </NavItem>
                         </Nav>
                     </Collapse>
