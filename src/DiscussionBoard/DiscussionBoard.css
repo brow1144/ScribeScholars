@@ -28,6 +28,11 @@
     font-family: 'Roboto', sans-serif;
 }
 
+.questionBox:hover {
+    cursor: pointer;
+    background-color: #dbdbdb;
+}
+
 .userImage {
     width: 50px;
     height: 50px;

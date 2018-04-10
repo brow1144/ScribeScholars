@@ -42,12 +42,16 @@ class DiscussionQuestion extends Component {
     }
   }
 
+  handleExpand = (id) => {
+    console.log(id);
+  };
+
   render() {
     return (
       <Row>
         <Col sm='0' md='2'/>
         <Col className='borderClass' sm='12' md='8'>
-          <Row className='questionBox'>
+          <Row onClick={() => {this.handleExpand(this.props.discussion.id)}} className='questionBox'>
             <Col xs='4' md='1'>
               {this.state.userImage
                 ?
