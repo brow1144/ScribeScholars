@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300');
+
+.answerBox {
+    background-color: #d8d8d8;
+    /*height: 10em;*/
+}
+
+.teacherAnswer {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 2em;
+    color: #21CE99;
+}
