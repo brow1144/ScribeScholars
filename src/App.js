@@ -86,7 +86,7 @@ class App extends Component {
             : <Redirect to="/ScribeScholars/About"/>
         )}/>
 
-        <Route exact path='/ScribeScholars/sign-in' render={() => (
+        <Route path='/ScribeScholars/sign-in' render={() => (
           !this.signedIn()
             ? <SignIn/>
             : <Redirect to="/ScribeScholars/HomePage"/>
