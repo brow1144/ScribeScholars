@@ -30,7 +30,7 @@ class GenAssignment extends Component {
       code: null,
       questions: null,
 
-      maxscore: null,
+      maxScore: null,
       numOfQuestions: null,
       currentScore: null,
       currentQuestion: null,
@@ -38,6 +38,7 @@ class GenAssignment extends Component {
       completed: null,
       history: [],
       status: [],
+      gradeScore: 0,
 
       ans: null,
 
@@ -74,12 +75,12 @@ class GenAssignment extends Component {
 
     let self = this;
 
-    let docRef = firestore.collection("users").doc(self.props.uid).collection("inClass").doc(self.props.lessonNumber)
+    let docRef = firestore.collection("users").doc(self.props.uid).collection("inClass").doc(self.props.lessonNumber);
 
     docRef.get().then((doc) => {
       if (doc.exists) {
         self.setState({
-          maxscore: doc.data().maxscore,
+          maxScore: doc.data().maxScore,
           currentScore: doc.data().currentScore,
           currentQuestion: doc.data().currentQuestion,
           completed: doc.data().completed,
@@ -114,8 +115,8 @@ class GenAssignment extends Component {
       option4: quest.option4,
       prompt: quest.prompt,
       type: quest.type,
+      points: quest.points,
     });
-
   };
 
   /*
@@ -147,6 +148,7 @@ class GenAssignment extends Component {
             completed: self.state.completed,
             answerHistory: self.state.answerHistory,
             currentScore: self.state.currentScore,
+            score: self.state.gradeScore,
           }).then(function() {
             self.setState({
               finalPage: true,
@@ -261,7 +263,11 @@ class GenAssignment extends Component {
     let self = this;
 
     let tmpGrade = self.state.answerHistory;
+    let tmpGradeScore = this.state.gradeScore;
     let percentage = 0;
+
+    if (this.state.status[this.state.currentQuestion - 1] == "1")
+      tmpGradeScore += this.state.points;
 
     for(let i in tmpGrade) {                              //i starts at 0 and is the index for tmp grade array
       if(i == self.state.currentQuestion-1) {             //find the current question which we want to update
@@ -279,8 +285,9 @@ class GenAssignment extends Component {
     self.setState({
       answerHistory: tmpGrade,
       currentScore: score,
+      gradeScore: tmpGradeScore,
     })
-  }
+  };
 
   checkCompletion = () => {
     let check = 0;
@@ -328,7 +335,7 @@ class GenAssignment extends Component {
     }).catch((error) => {
       console.log("Error getting document:", error);
     });
-  }
+  };
 
   render() {
     return (

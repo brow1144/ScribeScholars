@@ -376,13 +376,13 @@ class GenHomework extends Component {
               break;
             }
             else
-              tmpScore = this.state.questions[i].points;
+              tmpScore = 1;
           }
 
 
           // Check if the tmpScore is set and if it is add a point
           if (tmpScore) {
-            s += 1;
+            s += this.state.questions[i].points;
           }
         }
       } else if (self.state.typeArr[i] === "FIB") {
@@ -390,7 +390,7 @@ class GenHomework extends Component {
         if (tmpHis[i] !== "") {
           mcqQuestion += 1;
           if (ansArr[i].toUpperCase() === tmpHis[i].toUpperCase()) {
-            s += 1;
+            s += this.state.questions[i].points;
           }
         }
       }
