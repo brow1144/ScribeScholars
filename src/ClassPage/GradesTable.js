@@ -129,7 +129,7 @@ class GradesTable extends Component {
         } else {
           if (doc.data().class === self.state.code && doc.data().score != null) {
             self.setState({
-              allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid}),
+              allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid, type: type}),
             });
           }
         }
@@ -245,19 +245,38 @@ class GradesTable extends Component {
 
   // get overall grade in class
   getGrade = (uid) => {
-    let total = 0;
-    let max = 0;
+    //let total = 0;
+    let inClassTotal = 0;
+    let homeworkTotal = 0;
+    //let max = 0;
+    let inClassMax = 0;
+    let homeworkMax = 0;
 
     for (let i in this.state.allAssignments) {
       if (this.state.allAssignments.hasOwnProperty(i)) {
         if (this.state.allAssignments[i].uid === uid && this.state.allAssignments[i].data.score != null) {
-          total += this.state.allAssignments[i].data.score;
-          max += this.state.allAssignments[i].data.maxScore;
+          if (this.state.allAssignments[i].type === "inClass") {
+            inClassTotal += this.state.allAssignments[i].data.score;
+            inClassMax += this.state.allAssignments[i].data.maxScore;
+          } else if (this.state.allAssignments[i].type === "homework") {
+            homeworkTotal += this.state.allAssignments[i].data.score;
+            homeworkMax += this.state.allAssignments[i].data.maxScore;
+          }
+
+          //total += this.state.allAssignments[i].data.score;
+          //max += this.state.allAssignments[i].data.maxScore;
         }
       }
     }
 
-    let grade = (total / max) * 100;
+    let grade;
+
+    if (inClassMax !== 0 && homeworkMax !== 0)
+      grade = ((inClassTotal / inClassMax) * .3 + (homeworkTotal / homeworkMax) * .7) * 100;
+    else if (inClassMax !== 0)
+      grade = (inClassTotal / inClassMax) * 100;
+    else if (homeworkMax !== 0)
+      grade = (homeworkTotal / homeworkMax) * 100;
 
     if (grade % 1 !== 0)
       grade = Math.round(grade * 100) / 100;

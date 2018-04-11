@@ -155,7 +155,6 @@ class HomePage extends Component {
     if (gpa % 1 !== 0)
       gpa = Math.round(gpa * 100) / 100;
 
-
     if (!isNaN(gpa)) {
       let studentRef = firestore.collection("users").doc(this.state.uid);
       studentRef.set({
@@ -171,19 +170,38 @@ class HomePage extends Component {
 
   // get grade in a specific class
   getGrade = (code) => {
-    let total = 0;
-    let max = 0;
+    //let total = 0;
+    let inClassTotal = 0;
+    let homeworkTotal = 0;
+    //let max = 0;
+    let inClassMax = 0;
+    let homeworkMax = 0;
 
     for (let i in this.state.myAssignments) {
       if (this.state.myAssignments.hasOwnProperty(i)) {
-        if (this.state.myAssignments[i].class === code && this.state.myAssignments[i].score != null) {
-          total += this.state.myAssignments[i].score;
-          max += this.state.myAssignments[i].maxScore;
+        if (this.state.myAssignments[i].data.class === code && this.state.myAssignments[i].data.score != null) {
+          if (this.state.myAssignments[i].type === "inClass") {
+            inClassTotal += this.state.myAssignments[i].data.score;
+            inClassMax += this.state.myAssignments[i].data.maxScore;
+          } else if (this.state.myAssignments[i].type === "homework") {
+            homeworkTotal += this.state.myAssignments[i].data.score;
+            homeworkMax += this.state.myAssignments[i].data.maxScore;
+          }
+
+          //total += this.state.allAssignments[i].score;
+          //max += this.state.allAssignments[i].maxScore;
         }
       }
     }
 
-    let grade = (total / max) * 100;
+    let grade;
+
+    if (inClassMax !== 0 && homeworkMax !== 0)
+      grade = ((inClassTotal / inClassMax) * .3 + (homeworkTotal / homeworkMax) * .7) * 100;
+    else if (inClassMax !== 0)
+      grade = (inClassTotal / inClassMax) * 100;
+    else if (homeworkMax !== 0)
+      grade = (homeworkTotal / homeworkMax) * 100;
 
     if (grade % 1 !== 0)
       grade = Math.round(grade * 100) / 100;
@@ -222,7 +240,7 @@ class HomePage extends Component {
       snapshot.forEach((doc) => {
         if (doc.data().score != null) {
           self.setState({
-            myAssignments: self.state.myAssignments.concat(doc.data()),
+            myAssignments: self.state.myAssignments.concat({data: doc.data(), type: type}),
           });
         }
       });
