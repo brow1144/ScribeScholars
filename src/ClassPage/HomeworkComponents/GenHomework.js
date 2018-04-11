@@ -26,7 +26,7 @@ class GenHomework extends Component {
       prompt: null,
       type: null,
       url: null,
-      frqResponse: " ",
+      frqResponse: "",
 
       homeworkNumber: this.props.homeworkNumber,
 
@@ -48,6 +48,7 @@ class GenHomework extends Component {
       multiple: null,
       multiHist: [],
 
+      typeArr: [],
       finalPage: false,
     }
   }
@@ -147,8 +148,9 @@ class GenHomework extends Component {
 
       let fill = self.state.history[this.state.currentQuestion-1].split(" ");
 
+      // Initialize array for storing the multiple select history
       for (let x = 0; x < 4; x++)
-          self.state.multiHist[x] = "";
+        self.state.multiHist[x] = "";
 
       // Make multihistory fill up from the correctAns
       for (let x = 0; x < 4; x++) {
@@ -156,13 +158,21 @@ class GenHomework extends Component {
         if (fill[x] !== "")
           self.state.multiHist[index-1] = fill[x];
       }
-
     }
     else if (quest.type === "FIB") {
       self.setState({
-          prompt: quest.prompt,
-          type: quest.type,
+        frqResponse: self.state.history[self.state.currentQuestion - 1],
+        correctAns: quest.correctAns,
+        prompt: quest.prompt,
+        type: quest.type,
       })
+    }
+
+
+    // Put current question type into the array
+    for (let x = 0; x < self.state.numOfQuestions; x++) {
+      // Fill our array with the question types
+      self.state.typeArr[x] = self.state.questions[x].type;
     }
   };
 
@@ -173,8 +183,9 @@ class GenHomework extends Component {
     let self = this;
 
     let user = firestore.collection("users").doc(this.state.uid).collection("homework").doc(this.state.homeworkNumber)
-    
+
     if(!(self.state.type === "MCQ") && !(self.state.type === "SMQ")) {
+      console.log("Here i go filling again");
       self.fillArray()
     }
 
@@ -294,17 +305,26 @@ class GenHomework extends Component {
     for(let i in tmpHis) {
       if(i == self.state.currentQuestion-1)
       {
+        console.log(self.state.frqResponse);
         if(self.state.type === "Video")
           tmpHis[i] = "Video";
         else if(self.state.type === "FRQ")
           tmpHis[i] = self.state.frqResponse;
+        else if(self.state.type === "FIB")
+          tmpHis[i] = self.state.frqResponse;
       }
     }
+
+    console.log(tmpHis)
 
     //Update answers array
     for (let i in ansArr) {
       if (i == self.state.currentQuestion-1)
       {
+        if (self.state.type === "FIB") {
+          ansArr[i] = self.state.correctAns
+        }
+        else
           ansArr[i] = "ungraded"
       }
     }
@@ -328,30 +348,60 @@ class GenHomework extends Component {
     let tmpHis = self.state.history;
     let ansArr = self.state.answers;
 
-    //Update history array
-    for(let i in tmpHis) {
-      if(ansArr[i] !== "")            //Make sure to only grade MCQ
-      {
-        if(ansArr[i] !== "ungraded")                  //Increment the complete variable if its not empty string
-        {
+    // Loops over the type array and calcs the grades for MCQ, SMQ, and Fill in the Blank
+    for (let i in self.state.typeArr) {
+      if (self.state.typeArr[i] === "MCQ") {
+        // Check to see that the question is answered
+        if (tmpHis[i] !== "") {
           mcqQuestion += 1;
-          if(ansArr[i] === tmpHis[i]) {
+          if (ansArr[i] === tmpHis[i]) {
+            s += 1;
+          }
+        }
+      } else if (self.state.typeArr[i] === "SMQ") {
+        if (tmpHis[i] !== "") {
+          mcqQuestion += 1;
+          // Get an array of the student's and the correct answers
+          let studentAns = self.state.history[self.state.currentQuestion - 1].split(" ");
+          let correctAnswer = self.state.answers[self.state.currentQuestion - 1].split(", ");
+          // Jank fix for the student Ans having an extra space
+
+
+          let tmpScore = 0;
+          // Loop over the answer array and check the answers
+          for (let k = 0; k < correctAnswer.length; k ++) {
+            if (studentAns[k] !== correctAnswer[k]) {
+              // If one of them doesn't match, break
+              tmpScore = 0;
+              break;
+            }
+            else
+              tmpScore = 1;
+          }
+
+
+          // Check if the tmpScore is set and if it is add a point
+          if (tmpScore) {
+            s += 1;
+          }
+        }
+      } else if (self.state.typeArr[i] === "FIB") {
+        // This if checks that the question is answered
+        if (tmpHis[i] !== "") {
+          mcqQuestion += 1;
+          if (ansArr[i].toUpperCase() === tmpHis[i].toUpperCase()) {
             s += 1;
           }
         }
       }
-      else
-        complete = 1
     }
 
-    if(complete)
-      complete = 0;
-    else {
+    // Check to see if homework is done
+    if(mcqQuestion) {
       complete = 2;
-      //score = s;
       self.setState({
         score: s,
-      })
+      });
     }
 
     //Set the states
@@ -417,7 +467,7 @@ class GenHomework extends Component {
   setFIB = (ev) => {
     let self = this;
     self.setState({
-      fibResponse: ev,
+      frqResponse: ev,
     })
   };
 
@@ -465,7 +515,6 @@ class GenHomework extends Component {
       }
     }
 
-    console.log(ansArr);
     //Update answers array
     for(let i in ansArr) {
       if(i == self.state.currentQuestion-1)
@@ -503,7 +552,7 @@ class GenHomework extends Component {
       option4: this.state.option4,
       frqResponse: this.state.frqResponse,
       url: this.state.url,
-      fibResponse: this.state.fibResponse,
+      frqResponse: this.state.frqResponse,
       multiHist: this.state.multiHist,
     };
 
