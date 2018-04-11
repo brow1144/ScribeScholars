@@ -14,7 +14,7 @@ const QuizCards = (props) => {
         <Row>
             {Object.keys(props.quizzes).map((key, index) => {
                 return<Col xs={12} key={key} className={"assPad"}>
-                    <RouterLink to={"/HomePage/"+props.code+"/myStudents/"+props.quizzes[index].colRef+"/"+props.quizzes[index].id}>
+                    <RouterLink to={"/ScribeScholars/HomePage/"+props.code+"/myStudents/"+props.quizzes[index].colRef+"/"+props.quizzes[index].id}>
                         <Button size="lg" className={"assButt"} key={key} block>
                             <h1 className={"assTitle"}>
                                 {props.quizzes[index].name}

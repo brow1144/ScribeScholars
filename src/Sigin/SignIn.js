@@ -62,11 +62,11 @@ onDismiss = () => {
             </FormGroup>
           </Form>
           <hr />
-          <NavLink style={{ textDecoration: 'none' }} to="/create-account">
+          <NavLink style={{ textDecoration: 'none' }} to="/ScribeScholars/create-account">
             <Button className="createAccountButton" size="lg" block>Sign Up!</Button>
           </NavLink>
           <br/>
-          <NavLink style={{ textDecoration: 'none' }} to="/forgotPassword">
+          <NavLink style={{ textDecoration: 'none' }} to="/ScribeScholars/forgotPassword">
             <p style={{fontSize: '1.2em', color: '#21CE99', cursor: 'pointer'}}>Forgot Password</p>
           </NavLink>
         </div>

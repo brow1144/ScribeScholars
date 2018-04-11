@@ -8,6 +8,8 @@ import { firestore } from "../base";
 
 import '../DiscussionBoard/DiscussionBoard.css'
 
+import AnswerBox from './AnswerBox';
+
 class DiscussionQuestion extends Component {
 
   constructor(props) {
@@ -16,6 +18,7 @@ class DiscussionQuestion extends Component {
     this.state = {
       userImage: '',
       name: '',
+      accVisible: false,
     };
   }
 
@@ -42,12 +45,16 @@ class DiscussionQuestion extends Component {
     }
   }
 
+  handleExpand = (id) => {
+    this.setState({accVisible: !this.state.accVisible});
+  };
+
   render() {
     return (
       <Row>
         <Col sm='0' md='2'/>
         <Col className='borderClass' sm='12' md='8'>
-          <Row className='questionBox'>
+          <Row onClick={() => {this.handleExpand(this.props.discussion.id)}} className='questionBox'>
             <Col xs='4' md='1'>
               {this.state.userImage
                 ?
@@ -101,6 +108,12 @@ class DiscussionQuestion extends Component {
               <p className='replies'>Views</p>
             </Col>
           </Row>
+          {this.state.accVisible === true
+            ?
+              <AnswerBox discussion={this.props.discussion}/>
+            :
+            null
+          }
         </Col>
         <Col sm='0' md='2'/>
       </Row>

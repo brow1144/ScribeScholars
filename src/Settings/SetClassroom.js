@@ -669,7 +669,7 @@ class SetClassroom extends Component {
                                         <hr/>
 
                                       <p className="skinnyFont">Dashboard Info</p>
-                                        <NavLink style={{textDecoration: 'none'}} to={`/DashboardInfo`}>
+                                        <NavLink style={{textDecoration: 'none'}} to={`/ScribeScholars/DashboardInfo`}>
                                             <Button type="submit" outline color="success" size={"lg"}>
                                                 <i className="far fa-arrow-alt-circle-right" />
                                             </Button>
@@ -752,7 +752,7 @@ class SetClassroom extends Component {
                         :
                         <Col >
                           <Row>
-                            <NavLink style={{ textDecoration: 'none' }} to={`/create-class`}>
+                            <NavLink style={{ textDecoration: 'none' }} to={`/ScribeScholars/create-class`}>
                               <Button type="submit" className="createClassButton" size ="lg" block>Create Class!</Button>
                             </NavLink>
                           </Row>
