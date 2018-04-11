@@ -145,7 +145,7 @@ class DiscussionBoard extends Component {
 
         {Object.keys(this.state.discussions).map((key, index) => {
           return (
-            <DiscussionQuestion discussion={this.state.discussions[key]} key={key}/>
+            <DiscussionQuestion uid={this.props.uid} classCode={this.props.classCode} discussion={this.state.discussions[key]} key={key}/>
           )
         })}
 
