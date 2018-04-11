@@ -31,7 +31,7 @@ class AnswerBox extends Component {
           </Col>
         </Row>
 
-        <TeacherAnswer discussion={this.props.discussion}/>
+        <TeacherAnswer uid={this.props.uid} classCode={this.props.classCode} discussion={this.props.discussion}/>
       </div>
     );
   }
