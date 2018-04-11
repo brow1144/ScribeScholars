@@ -110,7 +110,7 @@ class DiscussionQuestion extends Component {
           </Row>
           {this.state.accVisible === true
             ?
-              <AnswerBox />
+              <AnswerBox discussion={this.props.discussion}/>
             :
             null
           }
