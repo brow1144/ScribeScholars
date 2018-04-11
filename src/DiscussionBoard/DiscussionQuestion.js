@@ -8,7 +8,7 @@ import { firestore } from "../base";
 
 import '../DiscussionBoard/DiscussionBoard.css'
 
-import AnswerBox from './AnswerBox';
+import AnswerBox from './Question/AnswerBox';
 
 class DiscussionQuestion extends Component {
 
