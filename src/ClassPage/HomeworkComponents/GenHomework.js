@@ -364,8 +364,6 @@ class GenHomework extends Component {
           // Get an array of the student's and the correct answers
           let studentAns = self.state.history[self.state.currentQuestion - 1].split(" ");
           let correctAnswer = self.state.answers[self.state.currentQuestion - 1].split(", ");
-          // Jank fix for the student Ans having an extra space
-
 
           let tmpScore = 0;
           // Loop over the answer array and check the answers
@@ -395,6 +393,7 @@ class GenHomework extends Component {
         }
       }
     }
+
 
     // Check to see if homework is done
     if(mcqQuestion) {
