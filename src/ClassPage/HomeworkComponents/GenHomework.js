@@ -37,7 +37,7 @@ class GenHomework extends Component {
 
       score: null,
       mcq: null,
-      maxscore: null,
+      maxScore: null,
       numOfQuestions: null,
       currentScore: null,
       currentQuestion: null,
@@ -83,12 +83,12 @@ class GenHomework extends Component {
 
     let self = this;
 
-    let docRef = firestore.collection("users").doc(this.state.uid).collection("homework").doc(this.props.homeworkNumber)
+    let docRef = firestore.collection("users").doc(this.state.uid).collection("homework").doc(this.props.homeworkNumber);
 
     docRef.get().then((doc) => {
       if (doc.exists) {
         self.setState({
-          maxscore: doc.data().maxscore,
+          maxScore: doc.data().maxScore,
           currentScore: doc.data().currentScore,
           currentQuestion: doc.data().currentQuestion,
           completed: doc.data().completed,
@@ -355,7 +355,7 @@ class GenHomework extends Component {
         if (tmpHis[i] !== "") {
           mcqQuestion += 1;
           if (ansArr[i] === tmpHis[i]) {
-            s += 1;
+            s += this.state.questions[i].points;
           }
         }
       } else if (self.state.typeArr[i] === "SMQ") {
@@ -376,7 +376,7 @@ class GenHomework extends Component {
               break;
             }
             else
-              tmpScore = 1;
+              tmpScore = this.state.questions[i].points;
           }
 
 
@@ -410,7 +410,7 @@ class GenHomework extends Component {
       completed: complete,
       currentScore: s,
     }, () => {
-      let docRef = firestore.collection("users").doc(this.state.uid).collection("homework").doc(this.props.homeworkNumber)
+      let docRef = firestore.collection("users").doc(this.state.uid).collection("homework").doc(this.props.homeworkNumber);
 
       docRef.get().then((doc) => {
         if (doc.exists) {
