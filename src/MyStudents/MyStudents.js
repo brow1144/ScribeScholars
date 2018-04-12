@@ -3,7 +3,6 @@ import {Container, Row, Col, Table, Button} from 'reactstrap';
 import {XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, ResponsiveContainer } from 'recharts';
 
 import './MyStudents.css';
-import Graphs from '../Dashboard/Dashboard';
 import StudList from '../Dashboard/StudList'
 import HomeCards from '../Dashboard/HomeCards'
 import InClassCards from '../Dashboard/InClassCards'
@@ -75,8 +74,8 @@ class MyStudents extends Component {
         }
 
         self.getClassAssignmentsOfType("homework");
-        self.getClassAssignmentsOfType("quizzes");
-        self.getClassAssignmentsOfType("tests");
+        //self.getClassAssignmentsOfType("quizzes");
+        //self.getClassAssignmentsOfType("tests");
         self.getClassAssignmentsOfType("inClass");
 
         self.getAllAssignments();
@@ -465,6 +464,11 @@ class MyStudents extends Component {
     });
   };
 
+  // TODO deleted from down below, don't reference Graphs
+/*<Row className="chartAlign">
+<Graphs lessonNumber={this.props.lessonNumber} code={this.props.code}/>
+</Row>*/
+
   render() {
     this.state.students.sort(this.compareValues("grade")).reverse();
 
@@ -485,9 +489,6 @@ class MyStudents extends Component {
                 <Col className={"mainPage"}>
                   <h1>Dashboard</h1>
                 </Col>
-              </Row>
-              <Row className="chartAlign">
-                <Graphs lessonNumber={this.props.lessonNumber} code={this.props.code}/>
               </Row>
             </Col>
           </Row>

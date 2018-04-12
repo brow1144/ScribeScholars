@@ -19,9 +19,6 @@ import DashboardInfo from "./DashboardInfo/DashboardInfoPage";
 import MyStudents from "./MyStudents/MyStudents";
 import MakeWork from "./WorkForm/MakeWork";
 import ForgotPassword from './Sigin/ForgotPassword';
-
-import Graphs from "./Graphs";
-
 import CreateActivity from './CreateActivity/CreateActivity';
 
 

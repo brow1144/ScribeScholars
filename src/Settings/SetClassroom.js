@@ -47,6 +47,7 @@ class SetClassroom extends Component {
 
         kyleVisible: false,
         annVisible: false,
+        weightingError: false,
       };
     }
 
@@ -192,7 +193,7 @@ class SetClassroom extends Component {
           })
             .then(function() {
               console.log("Document successfully updated!");
-              self.props.getClassAnnouncments(code);
+              self.props.getClassAnnouncements(code);
             }).catch(function(error) {
             // The document probably doesn't exist.
             console.error("Error updating document: ", error);
@@ -474,6 +475,26 @@ class SetClassroom extends Component {
 
     };
 
+    updateWeighting = (ev, classCode) => {
+      let inClassWeight = parseInt(ev.target.inClass.value);
+      let homeworkWeight = parseInt(ev.target.homework.value);
+
+      if (inClassWeight + homeworkWeight !== 100) {
+        this.setState({
+          weightingError: true,
+        });
+      } else {
+        let classRef = firestore.collection("classes").doc(classCode);
+
+        classRef.update({
+          inClassWeight: inClassWeight,
+          homeworkWeight: homeworkWeight,
+        }).catch((error) => {
+          console.log("Error updating document:", error);
+        });
+      }
+    };
+
     onDismiss = () => {
       this.setState({
         visible: false,
@@ -646,12 +667,45 @@ class SetClassroom extends Component {
                                           </Button>
                                         </Form>
                                         <hr/>
+
                                       <p className="skinnyFont">Dashboard Info</p>
                                         <NavLink style={{textDecoration: 'none'}} to={`/ScribeScholars/DashboardInfo`}>
                                             <Button type="submit" outline color="success" size={"lg"}>
                                                 <i className="far fa-arrow-alt-circle-right" />
                                             </Button>
                                         </NavLink>
+                                      <hr/>
+
+                                      <p className="skinnyFont">Change Class Weighting</p>
+                                      <Row>
+                                        <Col sm="12">
+                                          <Form onSubmit={(ev) => this.updateWeighting(ev, this.props.classes[index].code)}>
+                                            <FormGroup row>
+                                              <Col xs="7">
+                                                <InputGroup size="10">
+                                                  <InputGroupAddon addonType="prepend">Lessons</InputGroupAddon>
+                                                  <Input bsSize="md" type="number" name="inClass" id="exampleInClass" placeholder="30"/>
+                                                  <InputGroupAddon addonType="append">%</InputGroupAddon>
+                                                </InputGroup>
+                                                <br/>
+                                                <InputGroup size="10">
+                                                  <InputGroupAddon addonType="prepend">Homework</InputGroupAddon>
+                                                  <Input bsSize="md" type="number" name="homework" id="exampleHomework" placeholder="70"/>
+                                                  <InputGroupAddon addonType="append">%</InputGroupAddon>
+                                                </InputGroup>
+                                              </Col>
+                                            </FormGroup>
+
+                                            <Alert color="danger" isOpen={this.state.weightingError}>
+                                              Please enter values that total 100
+                                            </Alert>
+                                            <Button outline color="success" size="lg">
+                                              <i className="far fa-save" />
+                                            </Button>
+                                          </Form>
+                                        </Col>
+                                      </Row>
+
                                     </div>
                                   </AccordionItemBody>
                                 </AccordionItem>

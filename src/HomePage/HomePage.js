@@ -178,7 +178,7 @@ class HomePage extends Component {
       if (this.state.myAssignments.hasOwnProperty(i)) {
         if (this.state.myAssignments[i].class === code && this.state.myAssignments[i].score != null) {
           total += this.state.myAssignments[i].score;
-          max += this.state.myAssignments[i].maxscore;
+          max += this.state.myAssignments[i].maxScore;
         }
       }
     }
@@ -199,8 +199,8 @@ class HomePage extends Component {
     studentRef.get().then((doc) => {
       if (doc.exists) {
         self.getAssignmentsOfType("homework");
-        self.getAssignmentsOfType("quizzes");
-        self.getAssignmentsOfType("tests");
+        //self.getAssignmentsOfType("quizzes");
+        //self.getAssignmentsOfType("tests");
         self.getAssignmentsOfType("inClass");
 
         studentRef.get().then(() => {

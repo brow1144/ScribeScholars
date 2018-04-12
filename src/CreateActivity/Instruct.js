@@ -11,7 +11,6 @@ class Instruct extends Component {
             selectedOption: "",
             question: this.props.question,
         }
-
     }
 
     onFormSubmit = (ev) => {
@@ -71,6 +70,7 @@ class Instruct extends Component {
                                     <Input bsSize="lg" type="textarea" name="descriptText" id="exampleText"/>
                                 </Col>
                             </FormGroup>
+
                             <br/>
                             <FormGroup check>
                                 <Col sm={{ size: 9 }}>

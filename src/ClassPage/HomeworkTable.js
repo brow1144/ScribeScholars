@@ -64,7 +64,7 @@ class HomeworkTable extends Component {
                                 <thead>
                                 <tr>
                                     <th>Assignment</th>
-                                    <th>Max Score</th>
+                                    <th>Points Possible</th>
                                     <th>Links</th>
                                 </tr>
                                 </thead>
@@ -72,7 +72,7 @@ class HomeworkTable extends Component {
                                 {Object.keys(this.props.homeworks).map((key, index) => {
                                     return <tr key={key}>
                                         <td>{this.props.homeworks[index].name}</td>
-                                        <td>{this.props.homeworks[index].maxscore}</td>
+                                        <td>{this.props.homeworks[index].maxScore}</td>
                                         <td>
                                             <RouterLink
                                                 to={`/ScribeScholars/HomePage/${this.props.code}/homework/${this.props.homeworks[index].lessonCode}`}>
