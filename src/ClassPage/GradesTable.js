@@ -283,10 +283,8 @@ class GradesTable extends Component {
 
   // get overall grade in class
   getGrade = (uid) => {
-    //let total = 0;
     let inClassTotal = 0;
     let homeworkTotal = 0;
-    //let max = 0;
     let inClassMax = 0;
     let homeworkMax = 0;
 
@@ -300,9 +298,6 @@ class GradesTable extends Component {
             homeworkTotal += this.state.allAssignments[i].data.score;
             homeworkMax += this.state.allAssignments[i].data.maxScore;
           }
-
-          //total += this.state.allAssignments[i].data.score;
-          //max += this.state.allAssignments[i].data.maxScore;
         }
       }
     }
