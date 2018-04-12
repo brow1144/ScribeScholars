@@ -8,7 +8,7 @@ import { firestore } from "../base";
 
 import '../DiscussionBoard/DiscussionBoard.css'
 
-import AnswerBox from './AnswerBox';
+import AnswerBox from './Question/AnswerBox';
 
 class DiscussionQuestion extends Component {
 
@@ -110,7 +110,7 @@ class DiscussionQuestion extends Component {
           </Row>
           {this.state.accVisible === true
             ?
-              <AnswerBox discussion={this.props.discussion}/>
+              <AnswerBox uid={this.props.uid} classCode={this.props.classCode} discussion={this.props.discussion}/>
             :
             null
           }

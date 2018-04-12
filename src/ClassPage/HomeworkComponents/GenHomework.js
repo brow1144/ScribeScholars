@@ -185,7 +185,6 @@ class GenHomework extends Component {
     let user = firestore.collection("users").doc(this.state.uid).collection("homework").doc(this.state.homeworkNumber)
 
     if(!(self.state.type === "MCQ") && !(self.state.type === "SMQ")) {
-      console.log("Here i go filling again");
       self.fillArray()
     }
 
@@ -305,7 +304,6 @@ class GenHomework extends Component {
     for(let i in tmpHis) {
       if(i == self.state.currentQuestion-1)
       {
-        console.log(self.state.frqResponse);
         if(self.state.type === "Video")
           tmpHis[i] = "Video";
         else if(self.state.type === "FRQ")
@@ -314,8 +312,6 @@ class GenHomework extends Component {
           tmpHis[i] = self.state.frqResponse;
       }
     }
-
-    console.log(tmpHis)
 
     //Update answers array
     for (let i in ansArr) {
@@ -362,14 +358,15 @@ class GenHomework extends Component {
         if (tmpHis[i] !== "") {
           mcqQuestion += 1;
           // Get an array of the student's and the correct answers
-          let studentAns = self.state.history[self.state.currentQuestion - 1].split(" ");
-          let correctAnswer = self.state.answers[self.state.currentQuestion - 1].split(", ");
-          // Jank fix for the student Ans having an extra space
-
+          let studentAns = self.state.history[i].split(" ");
+          let correctAnswer = self.state.answers[i].split(", ");
 
           let tmpScore = 0;
           // Loop over the answer array and check the answers
           for (let k = 0; k < correctAnswer.length; k ++) {
+            console.log(studentAns[k]);
+            console.log(correctAnswer[k]);
+
             if (studentAns[k] !== correctAnswer[k]) {
               // If one of them doesn't match, break
               tmpScore = 0;
@@ -378,8 +375,6 @@ class GenHomework extends Component {
             else
               tmpScore = 1;
           }
-
-
           // Check if the tmpScore is set and if it is add a point
           if (tmpScore) {
             s += this.state.questions[i].points;
@@ -395,6 +390,7 @@ class GenHomework extends Component {
         }
       }
     }
+
 
     // Check to see if homework is done
     if(mcqQuestion) {
@@ -603,8 +599,8 @@ class GenHomework extends Component {
                   </Col>
                   :
                   <Col>
-                    <h4>Not all questions are completed!</h4>
-                    <h4>Please answer all questions before continuing.</h4>
+                    <h4>Make sure all questions are answered</h4>
+                    <h4>Then press submit</h4>
                   </Col>
                 }
               </Row>
