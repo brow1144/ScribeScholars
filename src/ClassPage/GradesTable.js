@@ -44,10 +44,6 @@ class GradesTable extends Component {
 
       studentName: null,
     };
-
-    // TODO moved to componentWillMount() for now
-    //this.setFullName();
-    //this.getClassInfo();
   }
 
   componentWillMount() {
@@ -69,8 +65,8 @@ class GradesTable extends Component {
         }
 
         self.getClassAssignmentsOfType("homework");
-        self.getClassAssignmentsOfType("quizzes");
-        self.getClassAssignmentsOfType("tests");
+        //self.getClassAssignmentsOfType("quizzes");
+        //self.getClassAssignmentsOfType("tests");
         self.getClassAssignmentsOfType("inClass");
 
         self.getMyAssignments();
@@ -102,8 +98,8 @@ class GradesTable extends Component {
     studentRef.get().then((doc) => {
       if (doc.exists) {
         self.getAssignmentsOfType(this.state.uid, "homework", false);
-        self.getAssignmentsOfType(this.state.uid, "quizzes", false);
-        self.getAssignmentsOfType(this.state.uid, "tests", false);
+        //self.getAssignmentsOfType(this.state.uid, "quizzes", false);
+        //self.getAssignmentsOfType(this.state.uid, "tests", false);
         self.getAssignmentsOfType(this.state.uid, "inClass", false);
 
         self.getAllAssignments();
@@ -121,7 +117,7 @@ class GradesTable extends Component {
         if (!all) {
           if (doc.data().class === self.state.code) {
             self.setState({
-              myAssignments: self.state.myAssignments.concat({data: doc.data(), uid: uid, type: type, assignment_code: doc.id}),
+              myAssignments: self.state.myAssignments.concat({data: doc.data(), uid: uid, type: type, assignment_code: doc.data().id}),
             });
 
             if (doc.data().score != null) {
@@ -149,8 +145,8 @@ class GradesTable extends Component {
     for (let i in this.state.students) {
       if (this.state.students.hasOwnProperty(i)) {
         self.getAssignmentsOfType(self.state.students[i], "homework", true);
-        self.getAssignmentsOfType(self.state.students[i], "quizzes", true);
-        self.getAssignmentsOfType(self.state.students[i], "tests", true);
+        //self.getAssignmentsOfType(self.state.students[i], "quizzes", true);
+        //self.getAssignmentsOfType(self.state.students[i], "tests", true);
         self.getAssignmentsOfType(self.state.students[i], "inClass", true);
 
         let studentRef = firestore.collection("users").doc(this.state.students[i]);
@@ -737,7 +733,7 @@ class GradesTable extends Component {
                     <tr>
                       <th>Assignment</th>
                       <th>Score</th>
-                      <th>Max Score</th>
+                      <th>Points Possible</th>
                       <th>Percentage</th>
                       <th>Average</th>
                       <th>Median</th>
@@ -752,9 +748,9 @@ class GradesTable extends Component {
                         <td>{this.state.myAssignments[index].data.name}</td>
                         <td>{this.state.myAssignments[index].data.score != null ? this.state.myAssignments[index].data.score : "--"}</td>
                         <td>{this.state.myAssignments[index].data.maxScore}</td>
-                        <td>{this.getPercentage(this.state.myAssignments[index].data.score, this.state.myAssignments[index].data.maxScore)}</td>
-                        <td>{this.getAverageScore(this.state.classAssignments[index], true)}</td>
-                        <td>{this.getMedianScore(this.state.classAssignments[index], true)}</td>
+                        <td>{this.getPercentage(this.state.myAssignments[index].data.score, this.state.myAssignments[index].data.maxScore)} %</td>
+                        <td>{this.getAverageScore(this.state.classAssignments[index], true)} %</td>
+                        <td>{this.getMedianScore(this.state.classAssignments[index], true)} %</td>
                         <td>
                           <span style={this.state.myAssignments[index].data.score != null ? {} : {display: "none"}}
                                 onClick={() => this.showGraph(index)}>
@@ -772,8 +768,8 @@ class GradesTable extends Component {
                 </Col>
               </Row>
               <Col>
-              <Row className="total" hidden={this.state.hidden}>Total Grade: {this.getGrade(this.state.uid)}</Row>
-              <Row className="rank" hidden={this.state.hidden}>Class Average: {this.state.classAverage}</Row>
+              <Row className="total" hidden={this.state.hidden}>Total Grade: {this.getGrade(this.state.uid)} %</Row>
+              <Row className="rank" hidden={this.state.hidden}>Class Average: {this.state.classAverage} %</Row>
               <Row className="rank" hidden={this.state.hidden}>Rank: {this.getRank(this.state.uid)}</Row>
               <br/>
               </Col>

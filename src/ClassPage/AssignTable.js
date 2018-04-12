@@ -67,7 +67,7 @@ class AssignTable extends Component {
                 <thead>
                 <tr>
                   <th>Assignment</th>
-                  <th>Max Score</th>
+                  <th>Points Possible</th>
                   <th>Links</th>
                 </tr>
                 </thead>
@@ -77,7 +77,7 @@ class AssignTable extends Component {
                   {Object.keys(this.props.assignments).map((key, index) => {
                     return <tr key={key}>
                       <td>{this.props.assignments[index].name}</td>
-                      <td>{this.props.assignments[index].maxscore}</td>
+                      <td>{this.props.assignments[index].maxScore}</td>
                       <td>
                         {this.state.role === "teacher" ?
                             <div>

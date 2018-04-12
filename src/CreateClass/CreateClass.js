@@ -96,6 +96,8 @@ class CreateClass extends Component {
                     deadlines: [],
                     students: [],
                     tabs: self.state.tabs,
+                    inClassWeight: 30,
+                    homeworkWeight: 70,
                 }).then(function() {
                     console.log("successfully written!");
 

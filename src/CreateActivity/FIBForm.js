@@ -18,6 +18,7 @@ class FIBForm extends Component {
             type: "FIB",
             prompt: ev.target.promptQ.value,
             correctAns: ev.target.blankAns.value,
+            points: parseInt(ev.target.points.value),
         };
 
         this.props.recordQuestion(quest, this.props.index);
@@ -40,6 +41,14 @@ class FIBForm extends Component {
                     <Col sm={6}>
                         <Input bsSize="lg" type="username" name="blankAns" id="exampleNumber"/>
                     </Col>
+                </FormGroup>
+                <br/>
+                <FormGroup row>
+                  <Label size="lg" for="examplePoints" sm={3}>Points:</Label>
+
+                  <Col sm={2}>
+                    <Input bsSize="lg" type="number" name="points" id="examplePoints" defaultValue="1"/>
+                  </Col>
                 </FormGroup>
                 <br/>
                 <FormGroup check style={{paddingLeft: '0'}}>
