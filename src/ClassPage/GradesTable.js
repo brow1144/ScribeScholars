@@ -8,6 +8,33 @@ import './GradesTable.css'
 
 class GradesTable extends Component {
 
+  // TODO move to correct class, TBD
+  curveGrade = (assignment, newMaxScore) => {
+    for (let i in this.state.students) {
+      if (this.state.students.hasOwnProperty(i)) {
+        let assignmentRef = firestore.collection("users").doc(this.state.students[i])
+          .collection(assignment.type).doc(assignment.assignment_code);
+
+        assignmentRef.update({
+          oldMaxScore: assignment.data.maxScore,
+          maxScore: newMaxScore,
+        }).catch((error) => {
+          console.log("Error getting document:", error);
+        });
+      }
+    }
+
+    let classAssignmentRef = firestore.collection("classes").doc(this.state.code)
+      .collection(assignment.type).doc(assignment.assignment_code);
+
+    classAssignmentRef.update({
+      oldMaxScore: assignment.data.maxScore,
+      maxScore: newMaxScore,
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
+
   constructor(props) {
     super(props);
 
@@ -92,7 +119,7 @@ class GradesTable extends Component {
     firestore.collection("classes").doc(this.state.code).collection(type).get().then((snapshot) => {
       snapshot.forEach((doc) => {
         self.setState({
-          classAssignments: self.state.classAssignments.concat({data: doc.data()}),
+          classAssignments: self.state.classAssignments.concat({data: doc.data(), type: type, assignment_code: doc.id}),
         });
       });
     }).catch((error) => {
@@ -127,7 +154,7 @@ class GradesTable extends Component {
         if (!all) {
           if (doc.data().class === self.state.code) {
             self.setState({
-              myAssignments: self.state.myAssignments.concat({data: doc.data(), uid: uid, type: type, assignment_code: doc.data().id}),
+              myAssignments: self.state.myAssignments.concat({data: doc.data(), uid: uid, type: type, assignment_code: doc.id}),
             });
 
             if (doc.data().score != null) {
@@ -139,7 +166,7 @@ class GradesTable extends Component {
         } else {
           if (doc.data().class === self.state.code && doc.data().score != null) {
             self.setState({
-              allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid, type: type}),
+              allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid, type: type, assignment_code: doc.id}),
             });
           }
         }
@@ -861,7 +888,11 @@ class GradesTable extends Component {
                       return <tr key={key}>
                         <td>{this.state.myAssignments[index].data.name}</td>
                         <td>{this.state.myAssignments[index].data.score != null ? this.state.myAssignments[index].data.score : "--"}</td>
-                        <td>{this.state.myAssignments[index].data.maxScore}</td>
+                        <td>{this.state.myAssignments[index].data.maxScore}{" "}
+                          {<span style={this.state.myAssignments[index].data.oldMaxScore != null ? {} : {display: "none"}}>
+                            <text>(curved from {this.state.myAssignments[index].data.oldMaxScore})</text>
+                          </span>}
+                        </td>
                         <td>{this.getPercentage(this.state.myAssignments[index].data.score, this.state.myAssignments[index].data.maxScore)} %</td>
                         <td>{this.getAverageScore(this.state.classAssignments[index], true)} %</td>
                         <td>{this.getMedianScore(this.state.classAssignments[index], true)} %</td>
