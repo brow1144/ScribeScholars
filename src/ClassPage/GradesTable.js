@@ -1,11 +1,39 @@
 import React, { Component } from 'react';
-import {Table, Container, Row, Col, Label, Button ,Input } from 'reactstrap';
-import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area, ReferenceLine, ResponsiveContainer } from 'recharts';
+import {Table, Container, Row, Col, Label, Button, Input } from 'reactstrap';
+import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area, ReferenceLine,
+  ResponsiveContainer, Pie, PieChart, Cell } from 'recharts';
 import { firestore } from "../base";
 import Modal from 'react-modal';
 import './GradesTable.css'
 
 class GradesTable extends Component {
+
+  // TODO move to correct class, TBD
+  curveGrade = (assignment, newMaxScore) => {
+    for (let i in this.state.students) {
+      if (this.state.students.hasOwnProperty(i)) {
+        let assignmentRef = firestore.collection("users").doc(this.state.students[i])
+          .collection(assignment.type).doc(assignment.assignment_code);
+
+        assignmentRef.update({
+          oldMaxScore: assignment.data.maxScore,
+          maxScore: newMaxScore,
+        }).catch((error) => {
+          console.log("Error getting document:", error);
+        });
+      }
+    }
+
+    let classAssignmentRef = firestore.collection("classes").doc(this.state.code)
+      .collection(assignment.type).doc(assignment.assignment_code);
+
+    classAssignmentRef.update({
+      oldMaxScore: assignment.data.maxScore,
+      maxScore: newMaxScore,
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
 
   constructor(props) {
     super(props);
@@ -23,12 +51,19 @@ class GradesTable extends Component {
       classAssignments: [],   // assignments in the class
       students: [],   // all students in the class
       allAssignments: [],   // all assignments from every student
+      inClassWeight: null,
+      homeworkWeight: null,
 
       classScores: [],  // class scores for an individual assignment
       assignmentComp: [],   // user's score, average, and median
       classOverallGrades: [],   // class overall grades
       assignmentScores: [],   // individual scores for each assignment
       assignmentGrades: [],   // individual grades for each assignment
+      classDist: [],  // weighting of different assignment categories
+      pointDist: [],  // distribution of points in the class
+      weightedDist: [],   // weighted distribution of points in the class
+      maxPointDist: [],   // distribution of total points in the class
+      weightedMaxDist: [],  // weighted distribution of total points in the class
 
       classAverage: null,
 
@@ -61,6 +96,8 @@ class GradesTable extends Component {
         if (doc.data().students != null) {
           self.setState({
             students: doc.data().students,
+            inClassWeight: doc.data().inClassWeight / 100,
+            homeworkWeight: doc.data().homeworkWeight / 100,
           });
         }
 
@@ -82,7 +119,7 @@ class GradesTable extends Component {
     firestore.collection("classes").doc(this.state.code).collection(type).get().then((snapshot) => {
       snapshot.forEach((doc) => {
         self.setState({
-          classAssignments: self.state.classAssignments.concat({data: doc.data()}),
+          classAssignments: self.state.classAssignments.concat({data: doc.data(), type: type, assignment_code: doc.id}),
         });
       });
     }).catch((error) => {
@@ -117,7 +154,7 @@ class GradesTable extends Component {
         if (!all) {
           if (doc.data().class === self.state.code) {
             self.setState({
-              myAssignments: self.state.myAssignments.concat({data: doc.data(), uid: uid, type: type, assignment_code: doc.data().id}),
+              myAssignments: self.state.myAssignments.concat({data: doc.data(), uid: uid, type: type, assignment_code: doc.id}),
             });
 
             if (doc.data().score != null) {
@@ -129,7 +166,7 @@ class GradesTable extends Component {
         } else {
           if (doc.data().class === self.state.code && doc.data().score != null) {
             self.setState({
-              allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid}),
+              allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid, type: type, assignment_code: doc.id}),
             });
           }
         }
@@ -157,6 +194,7 @@ class GradesTable extends Component {
             self.getClassAverage();
             self.buildAssignmentScoresGraph();
             self.buildAssignmentGradesGraph();
+            self.buildPointDistGraphs();
           }
         }).catch(function(error) {
           console.log("Error getting document:", error);
@@ -245,19 +283,33 @@ class GradesTable extends Component {
 
   // get overall grade in class
   getGrade = (uid) => {
-    let total = 0;
-    let max = 0;
+    let inClassTotal = 0;
+    let homeworkTotal = 0;
+    let inClassMax = 0;
+    let homeworkMax = 0;
 
     for (let i in this.state.allAssignments) {
       if (this.state.allAssignments.hasOwnProperty(i)) {
         if (this.state.allAssignments[i].uid === uid && this.state.allAssignments[i].data.score != null) {
-          total += this.state.allAssignments[i].data.score;
-          max += this.state.allAssignments[i].data.maxScore;
+          if (this.state.allAssignments[i].type === "inClass") {
+            inClassTotal += this.state.allAssignments[i].data.score;
+            inClassMax += this.state.allAssignments[i].data.maxScore;
+          } else if (this.state.allAssignments[i].type === "homework") {
+            homeworkTotal += this.state.allAssignments[i].data.score;
+            homeworkMax += this.state.allAssignments[i].data.maxScore;
+          }
         }
       }
     }
 
-    let grade = (total / max) * 100;
+    let grade;
+
+    if (inClassMax !== 0 && homeworkMax !== 0)
+      grade = ((inClassTotal / inClassMax) * this.state.inClassWeight + (homeworkTotal / homeworkMax) * this.state.homeworkWeight) * 100;
+    else if (inClassMax !== 0)
+      grade = (inClassTotal / inClassMax) * 100;
+    else if (homeworkMax !== 0)
+      grade = (homeworkTotal / homeworkMax) * 100;
 
     if (grade % 1 !== 0)
       grade = Math.round(grade * 100) / 100;
@@ -358,6 +410,70 @@ class GradesTable extends Component {
 
     this.setState({
       assignmentComp: [].concat({name: name, score: score, average: avg, median: med, max: max}),
+    });
+  };
+
+  // build data for pointDists
+  buildPointDistGraphs = () => {
+    let tmpClassDist = [];
+    let tmpPointDist = [];
+    let tmpMaxPointDist = [];
+    let tmpWeightedDist = [];
+    let tmpWeightedMaxDist = [];
+
+    for (let i in this.state.myAssignments) {
+      if (this.state.myAssignments.hasOwnProperty(i)) {
+        if (this.state.myAssignments[i].data.score != null) {
+          let name = this.state.myAssignments[i].data.name;
+          let score = this.state.myAssignments[i].data.score;
+          let maxScore = this.state.myAssignments[i].data.maxScore;
+
+          if (this.state.myAssignments[i].type === "inClass") {
+            tmpPointDist.push({name: name, points: score, color: "#21CE99"});
+            tmpMaxPointDist.push({name: name, points: maxScore, color: "#21CE99"});
+
+            // calculate weighted scores
+            let weighted = score * this.state.inClassWeight;
+            let weightedMax = maxScore * this.state.inClassWeight;
+
+            // round if necessary
+            if (weighted % 1 !== 0)
+              weighted = Math.round(weighted * 100) / 100;
+            if (weightedMax % 1 !== 0)
+              weightedMax = Math.round(weightedMax * 100) / 100;
+
+            tmpWeightedDist.push({name: name, points: weighted, color: "#21CE99"});
+            tmpWeightedMaxDist.push({name: name, points: weightedMax, color: "#21CE99"});
+          } else if (this.state.myAssignments[i].type === "homework") {
+            tmpPointDist.push({name: name, points: score, color: "#f1cbff"});
+            tmpMaxPointDist.push({name: name, points: maxScore, color: "#f1cbff"});
+
+            // calculate weighted scores
+            let weighted = score * this.state.homeworkWeight;
+            let weightedMax = maxScore * this.state.homeworkWeight;
+
+            // round if necessary
+            if (weighted % 1 !== 0)
+              weighted = Math.round(weighted * 100) / 100;
+            if (weightedMax % 1 !== 0)
+              weightedMax = Math.round(weightedMax * 100) / 100;
+
+            tmpWeightedDist.push({name: name, points: weighted, color: "#bf8bff"});
+            tmpWeightedMaxDist.push({name: name, points: weightedMax, color: "#bf8bff"});
+          }
+        }
+      }
+    }
+
+    tmpClassDist.push({name: "Lessons", percentage: this.state.inClassWeight * 100, color: "#21CE99"});
+    tmpClassDist.push({name: "Homework", percentage: this.state.homeworkWeight * 100, color: "#bf8bff"});
+
+    this.setState({
+      classDist: tmpClassDist,
+      pointDist: tmpPointDist,
+      maxPointDist: tmpMaxPointDist,
+      weightedDist: tmpWeightedDist,
+      weightedMaxDist: tmpWeightedMaxDist,
     });
   };
 
@@ -709,6 +825,26 @@ class GradesTable extends Component {
           </div>
         )
       } else {
+        const formatClassDist = (value) => {
+          return <text>{value} % of overall grade</text>
+        };
+
+        const formatWeightedDist = (value) => {
+          return <text>{value} points earned (weighted)</text>
+        };
+
+        const formatWeightedMaxDist = (value) => {
+          return <text>{value} points possible (weighted)</text>
+        };
+
+        const formatPointDist = (value) => {
+          return <text>{value} points earned (unweighted)</text>
+        };
+
+        const formatMaxPointDist = (value) => {
+          return <text>{value} points possible (unweighted)</text>
+        };
+
         return (
           <div>
             <Container fluid>
@@ -747,7 +883,11 @@ class GradesTable extends Component {
                       return <tr key={key}>
                         <td>{this.state.myAssignments[index].data.name}</td>
                         <td>{this.state.myAssignments[index].data.score != null ? this.state.myAssignments[index].data.score : "--"}</td>
-                        <td>{this.state.myAssignments[index].data.maxScore}</td>
+                        <td>{this.state.myAssignments[index].data.maxScore}{" "}
+                          {<span style={this.state.myAssignments[index].data.oldMaxScore != null ? {} : {display: "none"}}>
+                            <text>(curved from {this.state.myAssignments[index].data.oldMaxScore})</text>
+                          </span>}
+                        </td>
                         <td>{this.getPercentage(this.state.myAssignments[index].data.score, this.state.myAssignments[index].data.maxScore)} %</td>
                         <td>{this.getAverageScore(this.state.classAssignments[index], true)} %</td>
                         <td>{this.getMedianScore(this.state.classAssignments[index], true)} %</td>
@@ -804,6 +944,77 @@ class GradesTable extends Component {
                       <Bar dataKey="median" fill="#f1cbff" />
                     </BarChart>
                   </ResponsiveContainer>
+                </Col>
+              </Row>
+
+              <Row hidden={this.state.hidden}>
+                <Col xs={{size: 5, offset: 1}}>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                      <Pie data={this.state.classDist} dataKey="percentage" nameKey="name" cx="50%" cy="50%" outerRadius={80}>
+                        {
+                          this.state.classDist.map((entry, index) =>
+                            <Cell fill={this.state.classDist[index].color}/>)
+                        }
+                      </Pie>
+                      <Tooltip formatter={formatClassDist}/>
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </Col>
+
+                <Col xs={{size: 5}}>
+                  <Row>
+                    <ResponsiveContainer width="50%" height={150}>
+                      <PieChart margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                        <Pie data={this.state.weightedDist} dataKey="points" nameKey="name" cx="50%" cy="50%" outerRadius={50} label>
+                          {
+                            this.state.weightedDist.map((entry, index) =>
+                              <Cell fill={this.state.weightedDist[index].color}/>)
+                          }
+                        </Pie>
+                        <Tooltip formatter={formatWeightedDist}/>
+                      </PieChart>
+                    </ResponsiveContainer>
+
+                    <ResponsiveContainer width="50%" height={150}>
+                      <PieChart margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                        <Pie data={this.state.pointDist} dataKey="points" nameKey="name" cx="50%" cy="50%" outerRadius={50} label>
+                          {
+                            this.state.pointDist.map((entry, index) =>
+                              <Cell fill={this.state.pointDist[index].color}/>)
+                          }
+                        </Pie>
+                        <Tooltip formatter={formatPointDist}/>
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </Row>
+
+                  <Row>
+                    <ResponsiveContainer width="50%" height={150}>
+                      <PieChart margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                        <Pie data={this.state.weightedMaxDist} dataKey="points" nameKey="name" cx="50%" cy="50%" outerRadius={50} label>
+                          {
+                            this.state.weightedMaxDist.map((entry, index) =>
+                              <Cell fill={this.state.weightedMaxDist[index].color}/>)
+                          }
+                        </Pie>
+                        <Tooltip formatter={formatWeightedMaxDist}/>
+                      </PieChart>
+                    </ResponsiveContainer>
+
+                    <ResponsiveContainer width="50%" height={150}>
+                      <PieChart margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                        <Pie data={this.state.maxPointDist} dataKey="points" nameKey="name" cx="50%" cy="50%" outerRadius={50} label>
+                          {
+                            this.state.maxPointDist.map((entry, index) =>
+                              <Cell fill={this.state.maxPointDist[index].color}/>)
+                          }
+                        </Pie>
+                        <Tooltip formatter={formatMaxPointDist}/>
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </Row>
                 </Col>
               </Row>
 
