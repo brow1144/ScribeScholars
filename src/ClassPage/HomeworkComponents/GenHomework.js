@@ -361,10 +361,12 @@ class GenHomework extends Component {
           let studentAns = self.state.history[i].split(" ");
           let correctAnswer = self.state.answers[i].split(", ");
 
-          console.log(studentAns);
           let tmpScore = 0;
           // Loop over the answer array and check the answers
           for (let k = 0; k < correctAnswer.length; k ++) {
+            console.log(studentAns[k]);
+            console.log(correctAnswer[k]);
+
             if (studentAns[k] !== correctAnswer[k]) {
               // If one of them doesn't match, break
               tmpScore = 0;
