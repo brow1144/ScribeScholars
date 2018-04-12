@@ -104,16 +104,53 @@ class HomePage extends Component {
 
       alerts: [],
       hiddenAlerts: [],
+
+      classWeighting: [],
     };
   }
+
+  getClassWeighting = () => {
+    let self = this;
+    let tmpClassWeighting = [];
+
+    for (let i in this.state.classes) {
+      if (this.state.classes.hasOwnProperty(i)) {
+        let classRef = firestore.collection("classes").doc(this.state.classes[i].code);
+
+        classRef.get().then((doc) => {
+          if (doc.exists) {
+            tmpClassWeighting.push({
+              code: self.state.classes[i].code,
+              inClassWeight: doc.data().inClassWeight / 100,
+              homeworkWeight: doc.data().homeworkWeight / 100,
+            });
+
+            classRef.get().then(() => {
+              if (parseInt(i, 10) === self.state.classes.length - 1) {
+                self.setState({
+                  classWeighting: tmpClassWeighting,
+                });
+
+                self.getMyAssignments();
+              }
+            }).catch((error) => {
+              console.log("Error getting document: ", error);
+            });
+          }
+        }).catch((error) => {
+          console.log("Error getting document: ", error);
+        });
+      }
+    }
+  };
 
   // calculate GPA for a student
   calcGPA = () => {
     let grades = [];
 
-    for (let i in this.state.classes) {
-      if (this.state.classes.hasOwnProperty(i)) {
-        let grade = this.getGrade(this.state.classes[i].code);
+    for (let i in this.state.classWeighting) {
+      if (this.state.classWeighting.hasOwnProperty(i)) {
+        let grade = this.getGrade(this.state.classWeighting[i].code, this.state.classWeighting[i].inClassWeight, this.state.classWeighting[i].homeworkWeight);
 
         if (!isNaN(grade))
           grades.push(grade);
@@ -169,11 +206,9 @@ class HomePage extends Component {
   };
 
   // get grade in a specific class
-  getGrade = (code) => {
-    //let total = 0;
+  getGrade = (code, inClassWeight, homeworkWeight) => {
     let inClassTotal = 0;
     let homeworkTotal = 0;
-    //let max = 0;
     let inClassMax = 0;
     let homeworkMax = 0;
 
@@ -187,9 +222,6 @@ class HomePage extends Component {
             homeworkTotal += this.state.myAssignments[i].data.score;
             homeworkMax += this.state.myAssignments[i].data.maxScore;
           }
-
-          //total += this.state.allAssignments[i].score;
-          //max += this.state.allAssignments[i].maxScore;
         }
       }
     }
@@ -197,7 +229,7 @@ class HomePage extends Component {
     let grade;
 
     if (inClassMax !== 0 && homeworkMax !== 0)
-      grade = ((inClassTotal / inClassMax) * .3 + (homeworkTotal / homeworkMax) * .7) * 100;
+      grade = ((inClassTotal / inClassMax) * inClassWeight + (homeworkTotal / homeworkMax) * homeworkWeight) * 100;
     else if (inClassMax !== 0)
       grade = (inClassTotal / inClassMax) * 100;
     else if (homeworkMax !== 0)
@@ -332,7 +364,7 @@ class HomePage extends Component {
             role: doc.data().role,
           }, () => {
             if (self.state.role === "student")
-              self.getMyAssignments();
+              self.getClassWeighting();
           });
         }
       } else {
@@ -721,6 +753,17 @@ class HomePage extends Component {
                      showGPA={this.props.showGPA}
                      role={this.props.role}
                      width={this.state.width}/>
+
+            <Row>
+              <Col md="1"/>
+              <Col md="7">
+                {Object.keys(this.state.alerts).map((key, index) =>
+                  <AlertHandler key={index} alert={this.state.alerts[index]} uid={this.state.uid}
+                                showAlerts={this.props.showAlerts} hiddenAlerts={this.state.hiddenAlerts}/>
+                )
+                }
+              </Col>
+            </Row>
 
             <Row>
               <Col md="1"/>

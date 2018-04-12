@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import {Table, Container, Row, Col, Label, Button ,Input } from 'reactstrap';
-import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area, ReferenceLine, ResponsiveContainer } from 'recharts';
+import {Table, Container, Row, Col, Label, Button, Input } from 'reactstrap';
+import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, AreaChart, Area, ReferenceLine,
+  ResponsiveContainer, Pie, PieChart, Cell } from 'recharts';
 import { firestore } from "../base";
 import Modal from 'react-modal';
 import './GradesTable.css'
@@ -23,12 +24,19 @@ class GradesTable extends Component {
       classAssignments: [],   // assignments in the class
       students: [],   // all students in the class
       allAssignments: [],   // all assignments from every student
+      inClassWeight: null,
+      homeworkWeight: null,
 
       classScores: [],  // class scores for an individual assignment
       assignmentComp: [],   // user's score, average, and median
       classOverallGrades: [],   // class overall grades
       assignmentScores: [],   // individual scores for each assignment
       assignmentGrades: [],   // individual grades for each assignment
+      classDist: [],  // weighting of different assignment categories
+      pointDist: [],  // distribution of points in the class
+      weightedDist: [],   // weighted distribution of points in the class
+      maxPointDist: [],   // distribution of total points in the class
+      weightedMaxDist: [],  // weighted distribution of total points in the class
 
       classAverage: null,
 
@@ -61,6 +69,8 @@ class GradesTable extends Component {
         if (doc.data().students != null) {
           self.setState({
             students: doc.data().students,
+            inClassWeight: doc.data().inClassWeight / 100,
+            homeworkWeight: doc.data().homeworkWeight / 100,
           });
         }
 
@@ -157,6 +167,7 @@ class GradesTable extends Component {
             self.getClassAverage();
             self.buildAssignmentScoresGraph();
             self.buildAssignmentGradesGraph();
+            self.buildPointDistGraphs();
           }
         }).catch(function(error) {
           console.log("Error getting document:", error);
@@ -272,7 +283,7 @@ class GradesTable extends Component {
     let grade;
 
     if (inClassMax !== 0 && homeworkMax !== 0)
-      grade = ((inClassTotal / inClassMax) * .3 + (homeworkTotal / homeworkMax) * .7) * 100;
+      grade = ((inClassTotal / inClassMax) * this.state.inClassWeight + (homeworkTotal / homeworkMax) * this.state.homeworkWeight) * 100;
     else if (inClassMax !== 0)
       grade = (inClassTotal / inClassMax) * 100;
     else if (homeworkMax !== 0)
@@ -377,6 +388,70 @@ class GradesTable extends Component {
 
     this.setState({
       assignmentComp: [].concat({name: name, score: score, average: avg, median: med, max: max}),
+    });
+  };
+
+  // build data for pointDists
+  buildPointDistGraphs = () => {
+    let tmpClassDist = [];
+    let tmpPointDist = [];
+    let tmpMaxPointDist = [];
+    let tmpWeightedDist = [];
+    let tmpWeightedMaxDist = [];
+
+    for (let i in this.state.myAssignments) {
+      if (this.state.myAssignments.hasOwnProperty(i)) {
+        if (this.state.myAssignments[i].data.score != null) {
+          let name = this.state.myAssignments[i].data.name;
+          let score = this.state.myAssignments[i].data.score;
+          let maxScore = this.state.myAssignments[i].data.maxScore;
+
+          if (this.state.myAssignments[i].type === "inClass") {
+            tmpPointDist.push({name: name, points: score, color: "#21CE99"});
+            tmpMaxPointDist.push({name: name, points: maxScore, color: "#21CE99"});
+
+            // calculate weighted scores
+            let weighted = score * this.state.inClassWeight;
+            let weightedMax = maxScore * this.state.inClassWeight;
+
+            // round if necessary
+            if (weighted % 1 !== 0)
+              weighted = Math.round(weighted * 100) / 100;
+            if (weightedMax % 1 !== 0)
+              weightedMax = Math.round(weightedMax * 100) / 100;
+
+            tmpWeightedDist.push({name: name, points: weighted, color: "#21CE99"});
+            tmpWeightedMaxDist.push({name: name, points: weightedMax, color: "#21CE99"});
+          } else if (this.state.myAssignments[i].type === "homework") {
+            tmpPointDist.push({name: name, points: score, color: "#f1cbff"});
+            tmpMaxPointDist.push({name: name, points: maxScore, color: "#f1cbff"});
+
+            // calculate weighted scores
+            let weighted = score * this.state.homeworkWeight;
+            let weightedMax = maxScore * this.state.homeworkWeight;
+
+            // round if necessary
+            if (weighted % 1 !== 0)
+              weighted = Math.round(weighted * 100) / 100;
+            if (weightedMax % 1 !== 0)
+              weightedMax = Math.round(weightedMax * 100) / 100;
+
+            tmpWeightedDist.push({name: name, points: weighted, color: "#bf8bff"});
+            tmpWeightedMaxDist.push({name: name, points: weightedMax, color: "#bf8bff"});
+          }
+        }
+      }
+    }
+
+    tmpClassDist.push({name: "Lessons", percentage: this.state.inClassWeight * 100, color: "#21CE99"});
+    tmpClassDist.push({name: "Homework", percentage: this.state.homeworkWeight * 100, color: "#bf8bff"});
+
+    this.setState({
+      classDist: tmpClassDist,
+      pointDist: tmpPointDist,
+      maxPointDist: tmpMaxPointDist,
+      weightedDist: tmpWeightedDist,
+      weightedMaxDist: tmpWeightedMaxDist,
     });
   };
 
@@ -728,6 +803,26 @@ class GradesTable extends Component {
           </div>
         )
       } else {
+        const formatClassDist = (value) => {
+          return <text>{value} % of overall grade</text>
+        };
+
+        const formatWeightedDist = (value) => {
+          return <text>{value} points earned (weighted)</text>
+        };
+
+        const formatWeightedMaxDist = (value) => {
+          return <text>{value} points possible (weighted)</text>
+        };
+
+        const formatPointDist = (value) => {
+          return <text>{value} points earned (unweighted)</text>
+        };
+
+        const formatMaxPointDist = (value) => {
+          return <text>{value} points possible (unweighted)</text>
+        };
+
         return (
           <div>
             <Container fluid>
@@ -823,6 +918,77 @@ class GradesTable extends Component {
                       <Bar dataKey="median" fill="#f1cbff" />
                     </BarChart>
                   </ResponsiveContainer>
+                </Col>
+              </Row>
+
+              <Row hidden={this.state.hidden}>
+                <Col xs={{size: 5, offset: 1}}>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <PieChart margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                      <Pie data={this.state.classDist} dataKey="percentage" nameKey="name" cx="50%" cy="50%" outerRadius={80}>
+                        {
+                          this.state.classDist.map((entry, index) =>
+                            <Cell fill={this.state.classDist[index].color}/>)
+                        }
+                      </Pie>
+                      <Tooltip formatter={formatClassDist}/>
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </Col>
+
+                <Col xs={{size: 5}}>
+                  <Row>
+                    <ResponsiveContainer width="50%" height={150}>
+                      <PieChart margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                        <Pie data={this.state.weightedDist} dataKey="points" nameKey="name" cx="50%" cy="50%" outerRadius={50} label>
+                          {
+                            this.state.weightedDist.map((entry, index) =>
+                              <Cell fill={this.state.weightedDist[index].color}/>)
+                          }
+                        </Pie>
+                        <Tooltip formatter={formatWeightedDist}/>
+                      </PieChart>
+                    </ResponsiveContainer>
+
+                    <ResponsiveContainer width="50%" height={150}>
+                      <PieChart margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                        <Pie data={this.state.pointDist} dataKey="points" nameKey="name" cx="50%" cy="50%" outerRadius={50} label>
+                          {
+                            this.state.pointDist.map((entry, index) =>
+                              <Cell fill={this.state.pointDist[index].color}/>)
+                          }
+                        </Pie>
+                        <Tooltip formatter={formatPointDist}/>
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </Row>
+
+                  <Row>
+                    <ResponsiveContainer width="50%" height={150}>
+                      <PieChart margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                        <Pie data={this.state.weightedMaxDist} dataKey="points" nameKey="name" cx="50%" cy="50%" outerRadius={50} label>
+                          {
+                            this.state.weightedMaxDist.map((entry, index) =>
+                              <Cell fill={this.state.weightedMaxDist[index].color}/>)
+                          }
+                        </Pie>
+                        <Tooltip formatter={formatWeightedMaxDist}/>
+                      </PieChart>
+                    </ResponsiveContainer>
+
+                    <ResponsiveContainer width="50%" height={150}>
+                      <PieChart margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                        <Pie data={this.state.maxPointDist} dataKey="points" nameKey="name" cx="50%" cy="50%" outerRadius={50} label>
+                          {
+                            this.state.maxPointDist.map((entry, index) =>
+                              <Cell fill={this.state.maxPointDist[index].color}/>)
+                          }
+                        </Pie>
+                        <Tooltip formatter={formatMaxPointDist}/>
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </Row>
                 </Col>
               </Row>
 
