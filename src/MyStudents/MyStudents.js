@@ -6,7 +6,7 @@ import './MyStudents.css';
 import StudList from '../Dashboard/StudList'
 import HomeCards from '../Dashboard/HomeCards'
 import InClassCards from '../Dashboard/InClassCards'
-import QuizCards from '../Dashboard/QuizCards'
+//import QuizCards from '../Dashboard/QuizCards'
 import {firestore} from "../base";
 
 
@@ -35,11 +35,11 @@ class MyStudents extends Component {
         max: null
       }],
 
-      quizzes: [{
+      /*quizzes: [{
         id: null,
         name: null,
         max: null
-      }],
+      }],*/
 
       uid: this.props.uid,
       code: this.props.code,
@@ -63,6 +63,13 @@ class MyStudents extends Component {
     }
   }
 
+  componentWillMount() {
+    this.getClassInfo();
+    this.getHomeworks();
+    this.getInClass();
+    //this.getQuizzes();
+  };
+
   // get assignments and students for a particular class
   getClassInfo = () => {
     let self = this;
@@ -73,17 +80,17 @@ class MyStudents extends Component {
         if (doc.data().students != null) {
           self.setState({
             studentsList: doc.data().students,
-            inClassWeight: doc.data().inClassWeight,
-            homeworkWeight: doc.data().homeworkWeight,
+            inClassWeight: doc.data().inClassWeight / 100,
+            homeworkWeight: doc.data().homeworkWeight / 100,
           });
+
+          self.getClassAssignmentsOfType("homework");
+          //self.getClassAssignmentsOfType("quizzes");
+          //self.getClassAssignmentsOfType("tests");
+          self.getClassAssignmentsOfType("inClass");
+
+          self.getAllAssignments();
         }
-
-        self.getClassAssignmentsOfType("homework");
-        //self.getClassAssignmentsOfType("quizzes");
-        //self.getClassAssignmentsOfType("tests");
-        self.getClassAssignmentsOfType("inClass");
-
-        self.getAllAssignments();
       }
     }).catch((error) => {
       console.log("Error getting document:", error);
@@ -96,7 +103,7 @@ class MyStudents extends Component {
     firestore.collection("classes").doc(this.state.code).collection(type).get().then((snapshot) => {
       snapshot.forEach((doc) => {
         self.setState({
-          classAssignments: self.state.classAssignments.concat({data: doc.data()}),
+          classAssignments: self.state.classAssignments.concat({data: doc.data(), type: type}),
         });
       });
     }).catch((error) => {
@@ -111,7 +118,7 @@ class MyStudents extends Component {
       snapshot.forEach((doc) => {
         if (doc.data().class === self.state.code && doc.data().score != null) {
           self.setState({
-            allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid}),
+            allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid, type: type}),
           });
         }
       });
@@ -136,8 +143,8 @@ class MyStudents extends Component {
     for (let i in this.state.studentsList) {
       if (this.state.studentsList.hasOwnProperty(i)) {
         self.getAssignmentsOfType(self.state.studentsList[i], "homework");
-        self.getAssignmentsOfType(self.state.studentsList[i], "quizzes");
-        self.getAssignmentsOfType(self.state.studentsList[i], "tests");
+        //self.getAssignmentsOfType(self.state.studentsList[i], "quizzes");
+        //self.getAssignmentsOfType(self.state.studentsList[i], "tests");
         self.getAssignmentsOfType(self.state.studentsList[i], "inClass");
 
         let studentRef = firestore.collection("users").doc(this.state.studentsList[i]);
@@ -293,13 +300,6 @@ class MyStudents extends Component {
     }
   };
 
-  componentWillMount() {
-    this.getClassInfo();
-    this.getHomeworks();
-    this.getInClass();
-    this.getQuizzes();
-  };
-
   getHomeworks = () => {
     let object = [{}];
 
@@ -362,7 +362,7 @@ class MyStudents extends Component {
     });
   };
 
-  getQuizzes = () => {
+  /*getQuizzes = () => {
     let object = [{}];
 
     let self = this;
@@ -391,7 +391,7 @@ class MyStudents extends Component {
     self.setState({
       quizzes: object
     });
-  };
+  };*/
 
   getStudents = () => {
     let object = [];
@@ -413,24 +413,12 @@ class MyStudents extends Component {
             studRef.get().then(function (doc) {
               let data = doc.data();
 
-              if (data.gpa == null) {
-                console.log(data.firstName + " did not have a valid GPA.");
-                object.unshift({
-                  name: data.firstName + " " + data.lastName,
-                  email: data.email,
-                  uid: id,
-                  gpa: 0,
-                  grade: self.getGrade(id),
-                });
-              } else {
-                object.unshift({
-                  name: data.firstName + " " + data.lastName,
-                  email: data.email,
-                  uid: id,
-                  gpa: data.gpa,
-                  grade: self.getGrade(id),
-                });
-              }
+              object.unshift({
+                name: data.firstName + " " + data.lastName,
+                email: data.email,
+                uid: id,
+                grade: self.getGrade(id),
+              });
 
               self.setState({
                 students: object,
@@ -551,7 +539,6 @@ class MyStudents extends Component {
                         <tr>
                           <th>Rank</th>
                           <th>Grade</th>
-                          <th>GPA</th>
                           <th>Name</th>
                           <th>Email</th>
                           <th/>
@@ -574,10 +561,6 @@ class MyStudents extends Component {
               <Col>
                 <h1>In-Class Lessons</h1>
                 <InClassCards code={this.props.code} inclass={this.state.inclass}/>
-              </Col>
-              <Col>
-                <h1>Quizzes</h1>
-                <QuizCards code={this.props.code} quizzes={this.state.quizzes}/>
               </Col>
             </Col>
           </Row>

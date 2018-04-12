@@ -1,13 +1,10 @@
 import React from 'react'
-
-
 import {Row, Col, Button } from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom';
 
 import './AssignStyle.css'
 
 const HomeCards = (props) => {
-
     return (
         <Row>
             {Object.keys(props.homeworks).map((key, index) => {
