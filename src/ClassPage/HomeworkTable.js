@@ -59,24 +59,22 @@ class HomeworkTable extends Component {
     user.get().then((doc) => {
       if (doc.exists) {
         if (homework.available) {
-
+          homework.available = false;
           user.update({
             available: false,
           }).then(function () {
             self.setState({
               phrase: "Enable",
             });
-            homework.available = false;
           });
         } else {
-
+          homework.available = true;
           user.update({
             available: true,
           }).then(function () {
             self.setState({
               phrase: "Disable",
             });
-            homework.available = true;
           });
         }
       }
