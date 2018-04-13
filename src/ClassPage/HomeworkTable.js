@@ -121,42 +121,44 @@ class HomeworkTable extends Component {
                                   }
                                 </tr>
                                 </thead>
-                                <tbody>
-                                {Object.keys(this.state.homeworks).map((key, index) => {
-                                    return <tr key={key}>
-                                        <td>{this.state.homeworks[index].name}</td>
-                                        <td>{this.state.homeworks[index].maxScore}</td>
-                                        <td>
-                                          {this.state.homeworks[index].available
-                                            ?
-                                            <RouterLink
-                                              to={`/ScribeScholars/HomePage/${this.props.code}/homework/${this.state.homeworks[index].lessonCode}`}>
-                                              Available
-                                            </RouterLink>
-                                            :
-                                            <RouterLink
-                                              to={`/ScribeScholars/HomePage/${this.props.code}/homework/${this.state.homeworks[index].lessonCode}`}>
-                                              Unavailable
-                                            </RouterLink>
-                                          }
-                                        </td>
-                                      {this.state.role === "teacher"
+                              <tbody>
+                              {Object.keys(this.state.homeworks).map((key, index) => {
+                                return <tr key={key}>
+                                  <td>{this.state.homeworks[index].name}</td>
+                                  <td>{this.state.homeworks[index].maxScore}</td>
+                                  <td>
+                                    {this.state.homeworks[index].available
+                                      ?
+                                      <RouterLink
+                                        to={`/ScribeScholars/HomePage/${this.props.code}/homework/${this.state.homeworks[index].lessonCode}`}>
+                                        Available
+                                      </RouterLink>
+                                      :
+                                      <RouterLink
+                                        to={`/ScribeScholars/HomePage/${this.props.code}/homework/${this.state.homeworks[index].lessonCode}`}>
+                                        Unavailable
+                                      </RouterLink>
+                                    }
+                                  </td>
+                                  {this.state.role === "teacher"
+                                    ?
+                                    <td>
+                                      {this.state.homeworks[index].available
                                         ?
-                                        <td>
-                                          {this.state.homeworks[index].available
-                                            ?
-                                            <Button onClick={() => this.changeAvail(this.state.homeworks[index])}>Disable</Button>
-                                            :
-                                            <Button onClick={() => this.changeAvail(this.state.homeworks[index])}>Enable</Button>
-                                          }
-                                            </td>
+                                        <Button
+                                          onClick={() => this.changeAvail(this.state.homeworks[index])}>Disable</Button>
                                         :
-                                        <div/>
+                                        <Button
+                                          onClick={() => this.changeAvail(this.state.homeworks[index])}>Enable</Button>
                                       }
-                                    </tr>
-                                })
-                                }
-                                </tbody>
+                                    </td>
+                                    :
+                                    <div/>
+                                  }
+                                </tr>
+                              })
+                              }
+                              </tbody>
                             </Table>
                         </Col>
                     </Row>
