@@ -127,10 +127,18 @@ class HomeworkTable extends Component {
                                         <td>{this.state.homeworks[index].name}</td>
                                         <td>{this.state.homeworks[index].maxScore}</td>
                                         <td>
+                                          {this.state.homeworks[index].available
+                                            ?
                                             <RouterLink
-                                                to={`/ScribeScholars/HomePage/${this.props.code}/homework/${this.state.homeworks[index].lessonCode}`}>
-                                                Available
+                                              to={`/ScribeScholars/HomePage/${this.props.code}/homework/${this.state.homeworks[index].lessonCode}`}>
+                                              Available
                                             </RouterLink>
+                                            :
+                                            <RouterLink
+                                              to={`/ScribeScholars/HomePage/${this.props.code}/homework/${this.state.homeworks[index].lessonCode}`}>
+                                              Unavailable
+                                            </RouterLink>
+                                          }
                                         </td>
                                       {this.state.role === "teacher"
                                         ?
