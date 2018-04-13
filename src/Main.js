@@ -58,6 +58,7 @@ class Main extends Component {
         name: null,
         class: null,
         questions: null,
+        available: null,
       }],
 
       assignments: [{
@@ -66,6 +67,7 @@ class Main extends Component {
         name: null,
         class: null,
         questions: null,
+        available: null,
       }],
 
       myAssignments: [],
@@ -424,6 +426,7 @@ class Main extends Component {
           name: doc.data().name,
           class: classCode,
           questions: doc.data().questions,
+          available: doc.data().available,
         });
         self.setState({
           homeworks: object,
