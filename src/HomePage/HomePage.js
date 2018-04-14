@@ -810,21 +810,7 @@ class HomePage extends Component {
                   </Row>
               </Sidebar>
           );
-
-
-      } else if (this.props.page === "editActivity") {
-          return (
-              <Sidebar {...sideData}>
-                  <HomeNav firstName={"Editing: " + this.props.assType} lastName={""} expand={this.dockSideBar}
-                           width={this.state.width}/>
-                  <Row>
-                      <Col>
-                          <EditActivity {...classData} class={this.props.class} assType={this.props.assType}
-                                          uid={this.state.uid}/>
-                      </Col>
-                  </Row>
-              </Sidebar>
-          );
+          
       } else if (this.props.page === "gradingPage") {
         let assRef = firestore.collection("classes").doc(this.props.class).collection(this.props.assCol).doc(this.props.assKey);
         let self = this;
