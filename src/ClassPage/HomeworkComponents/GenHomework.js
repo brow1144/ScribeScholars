@@ -202,7 +202,7 @@ class GenHomework extends Component {
             self.getUserAssignment(self.props.code)
           });
         }
-        else if (doc.data().currentQuestion + 1 == self.state.numOfQuestions + 1) {
+        else if (doc.data().currentQuestion + 1 === self.state.numOfQuestions + 1) {
           user.update({
             history: self.state.history,
             completed: self.state.completed,
@@ -270,7 +270,8 @@ class GenHomework extends Component {
 
     //Update history array
     for(let i in tmpHis) {
-      if(i == self.state.currentQuestion-1)
+      // CHANGED EQUALS
+      if(Number(i) === self.state.currentQuestion-1)
       {
         tmpHis[i] = answer
       }
@@ -278,7 +279,9 @@ class GenHomework extends Component {
 
     //Update answers array
     for(let i in ansArr) {
-      if(i == self.state.currentQuestion-1)
+      // CHANGED EQUALS
+      console.log(i);
+      if(Number(i) === self.state.currentQuestion-1)
       {
         ansArr[i] = self.state.correctAns
       }
@@ -302,7 +305,8 @@ class GenHomework extends Component {
 
     //Update history array
     for(let i in tmpHis) {
-      if(i == self.state.currentQuestion-1)
+      // CHANGED EQUALS
+      if(Number(i) === self.state.currentQuestion-1)
       {
         if(self.state.type === "Video")
           tmpHis[i] = "Video";
@@ -315,7 +319,8 @@ class GenHomework extends Component {
 
     //Update answers array
     for (let i in ansArr) {
-      if (i == self.state.currentQuestion-1)
+      // CHANGED EQUALS
+      if (Number(i) === self.state.currentQuestion-1)
       {
         if (self.state.type === "FIB") {
           ansArr[i] = self.state.correctAns
@@ -484,8 +489,8 @@ class GenHomework extends Component {
 
     //Set the current multiHistory array to the new variable
     for (let i in mult) {
-
-      if (i == tmp-1)
+      // CHANGED EQUALS
+      if (Number(i) === tmp-1)
       {
         if (mult[i] === "") {
           mult[i] = num;
@@ -495,7 +500,8 @@ class GenHomework extends Component {
       }
 
       // Makes a string out of the variables selected
-      if (mult[i] != "") {
+      // CHANGED EQUALS
+      if (mult[i] !== "") {
         str += mult[i] + " ";
       }
     }
@@ -505,7 +511,8 @@ class GenHomework extends Component {
 
     //Update history array
     for(let i in tmpHis) {
-      if(i == self.state.currentQuestion-1)
+      // CHANGED EQUALS
+      if(Number(i) === self.state.currentQuestion-1)
       {
         tmpHis[i] = str;
       }
@@ -513,7 +520,8 @@ class GenHomework extends Component {
 
     //Update answers array
     for(let i in ansArr) {
-      if(i == self.state.currentQuestion-1)
+      // CHANGED EQUALS
+      if(Number(i) === self.state.currentQuestion-1)
       {
         ansArr[i] = self.state.correctAns
       }
@@ -548,7 +556,6 @@ class GenHomework extends Component {
       option4: this.state.option4,
       frqResponse: this.state.frqResponse,
       url: this.state.url,
-      frqResponse: this.state.frqResponse,
       multiHist: this.state.multiHist,
     };
 

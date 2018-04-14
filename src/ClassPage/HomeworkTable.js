@@ -117,17 +117,17 @@ class HomeworkTable extends Component {
                                     ?
                                     <th>Enable/Disable</th>
                                     :
-                                    <div/>
+                                    <th/>
                                   }
                                 </tr>
                                 </thead>
                               {Object.keys(this.state.homeworks).map((key, index) => {
-                                return <tbody>
+                                return <tbody key={key}>
                                   {this.state.homeworks[index].available === false && this.state.role === "student"
                                     ?
                                     <tr/>
                                     :
-                                    <tr key={key}>
+                                    <tr>
                                       <td>{this.state.homeworks[index].name}</td>
                                       <td>{this.state.homeworks[index].maxScore}</td>
                                       <td>
@@ -157,7 +157,7 @@ class HomeworkTable extends Component {
                                           }
                                         </td>
                                         :
-                                        <div/>
+                                        <td/>
                                       }
                                     </tr>
                                   }

@@ -16,7 +16,7 @@ class FRQForm extends Component {
         let quest = {
             type: "FRQ",
             prompt: ev.target.promptQ.value,
-            points: parseInt(ev.target.points.value),
+            points: parseInt(ev.target.points.value, 10),
         };
 
         this.props.recordQuestion(quest, this.props.index);
