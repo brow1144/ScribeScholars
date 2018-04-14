@@ -74,7 +74,7 @@ class DiscussionBoard extends Component {
     for (let i in this.state.originalDiscussions) {
       let data = this.state.originalDiscussions[i];
 
-      if (data.hashtag.includes(ev.target.value)) {
+      if (data.hashtag.toLowerCase().includes(ev.target.value.toLowerCase())) {
         temp.push(data);
       }
 
