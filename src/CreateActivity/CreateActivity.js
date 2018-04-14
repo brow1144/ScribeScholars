@@ -56,6 +56,7 @@ class CreateActivity extends Component {
                 classRef.set({
                     name: title,
                     description: descript,
+                    available: false,
                 }).then(function () {
                     console.log("successfully written!");
                 }).catch(function (error) {
