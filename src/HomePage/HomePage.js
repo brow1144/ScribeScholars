@@ -85,6 +85,12 @@ class HomePage extends Component {
         class: null,
       }],
 
+      calendarEvents: [{
+        title: null,
+        start: null,
+        end: null,
+      }],
+
       lessonNumber: this.props.lessonNumber,
       class: this.props.class,
 
@@ -356,6 +362,7 @@ class HomePage extends Component {
           self.getUserImage();
           self.getDeadlines();
           self.getAnnouncements();
+          self.getCalendarEvents();
         }
         if (doc.data().firstName !== null && doc.data().lastName !== null && doc.data().role !== null) {
           self.setState({
@@ -550,6 +557,46 @@ class HomePage extends Component {
 
   };
 
+  /**
+   *
+   * Get Calendar Events from Firebase
+   * Calendar Events are manually created by the user where deadlines are added by teacher
+   * when an assignment is created
+   *
+   * Called after getAnnouncements() from getClasses()
+   *
+   * Format for calendar events is
+   * name: ''
+   * time: MM/DD/YYYY TT:TT
+   *
+   */
+
+  getCalendarEvents = () => {
+    let object = [{}];
+    let self = this;
+    let userRef = firestore.collection("users").doc(this.state.uid);
+
+    userRef.get().then(function (doc){
+      if (doc.exists){
+        let data = doc.data();
+        for (let i in data.events) {
+          if (data.events.hasOwnProperty(i)) {
+            object.unshift({
+              title: data.events[i].title,
+              start: new Date(data.events[i].start),
+              end: new Date(data.events[i].end),
+            });
+
+            self.setState({
+              calendarEvents: object,
+            });
+          }
+        }
+      } else {
+        console.log("No such document!");
+      }
+    });
+  };
 
   /**
    *
@@ -618,6 +665,16 @@ class HomePage extends Component {
       sidebarOpen: false,
     });
   };
+
+  /**
+   * Concatenates deadline and calendarEvent arrays
+   * Used for updating the calendar
+   */
+
+  getAllEvents = () => {
+    let events = this.props.dates.concat(this.state.calendarEvents);
+    return events;
+  }
 
   /**
    *
@@ -720,10 +777,12 @@ class HomePage extends Component {
               <Col md="1"/>
               <Col md="7">
                 <BigCalendar
-                  events={this.props.dates}
+                  selectable
+                  events={this.getAllEvents()}
                   style={calendarStyles}
                   defaultDate={new Date()}
                   eventPropGetter={(this.eventStyleGetter)}
+                  onSelectEvent={event => alert(event.title)}
                 />
               </Col>
 
@@ -767,13 +826,15 @@ class HomePage extends Component {
 
             <Row>
               <Col md="1"/>
-              <Col md="8">
+              <Col md="7">
                 <BigCalendar
                   toolbar={false}
-                  events={this.props.dates}
+                  selectable
+                  events={this.getAllEvents()}
                   style={calendarStyles}
                   defaultDate={new Date()}
                   eventPropGetter={(this.eventStyleGetter)}
+                  onSelectEvent={event => alert(event.title)}
                 />
               </Col>
               <Col md="3"/>
