@@ -121,44 +121,49 @@ class HomeworkTable extends Component {
                                   }
                                 </tr>
                                 </thead>
-                              <tbody>
                               {Object.keys(this.state.homeworks).map((key, index) => {
-                                return <tr key={key}>
-                                  <td>{this.state.homeworks[index].name}</td>
-                                  <td>{this.state.homeworks[index].maxScore}</td>
-                                  <td>
-                                    {this.state.homeworks[index].available
-                                      ?
-                                      <RouterLink
-                                        to={`/ScribeScholars/HomePage/${this.props.code}/homework/${this.state.homeworks[index].lessonCode}`}>
-                                        Available
-                                      </RouterLink>
-                                      :
-                                      <RouterLink
-                                        to={`/ScribeScholars/HomePage/${this.props.code}/homework/${this.state.homeworks[index].lessonCode}`}>
-                                        Unavailable
-                                      </RouterLink>
-                                    }
-                                  </td>
-                                  {this.state.role === "teacher"
+                                return <tbody>
+                                  {this.state.homeworks[index].available === false && this.state.role === "student"
                                     ?
-                                    <td>
-                                      {this.state.homeworks[index].available
-                                        ?
-                                        <Button
-                                          onClick={() => this.changeAvail(this.state.homeworks[index])}>Disable</Button>
-                                        :
-                                        <Button
-                                          onClick={() => this.changeAvail(this.state.homeworks[index])}>Enable</Button>
-                                      }
-                                    </td>
+                                    <tr/>
                                     :
-                                    <div/>
+                                    <tr key={key}>
+                                      <td>{this.state.homeworks[index].name}</td>
+                                      <td>{this.state.homeworks[index].maxScore}</td>
+                                      <td>
+                                        {this.state.homeworks[index].available
+                                          ?
+                                          <RouterLink
+                                            to={`/ScribeScholars/HomePage/${this.props.code}/homework/${this.state.homeworks[index].lessonCode}`}>
+                                            Available
+                                          </RouterLink>
+                                          :
+                                          <RouterLink
+                                            to={`/ScribeScholars/HomePage/${this.props.code}/homework/${this.state.homeworks[index].lessonCode}`}>
+                                            Unavailable
+                                          </RouterLink>
+                                        }
+                                      </td>
+                                      {this.state.role === "teacher"
+                                        ?
+                                        <td>
+                                          {this.state.homeworks[index].available
+                                            ?
+                                            <Button
+                                              onClick={() => this.changeAvail(this.state.homeworks[index])}>Disable</Button>
+                                            :
+                                            <Button
+                                              onClick={() => this.changeAvail(this.state.homeworks[index])}>Enable</Button>
+                                          }
+                                        </td>
+                                        :
+                                        <div/>
+                                      }
+                                    </tr>
                                   }
-                                </tr>
+                                </tbody>
                               })
                               }
-                              </tbody>
                             </Table>
                         </Col>
                     </Row>
