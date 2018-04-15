@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Table, Button, Container, Row, Col} from 'reactstrap';
-import {NavLink as RouterLink} from 'react-router-dom'
+import {Table, Button, Container, Row, Col, Input} from 'reactstrap';
+import {NavLink as RouterLink} from 'react-router-dom';
+import Modal from 'react-modal';
 import './Table.css'
 import { firestore } from '../base.js'
 
@@ -15,6 +16,9 @@ class HomeworkTable extends Component {
             role: null,
             phrase: new Array(100),
             avail: null,
+          modalAssignment: null,
+          modalOpen: false,
+          doneLoading: false,
         }
     }
 
@@ -83,6 +87,59 @@ class HomeworkTable extends Component {
     });
   };
 
+  getAssignment = (homework) => {
+    let self = this;
+    let homeworkRef = firestore.collection("classes").doc(this.props.code).collection("homework").doc(homework.lessonCode);
+
+    homeworkRef.get().then((doc) => {
+      if (doc.exists) {
+        self.setState({
+          modalAssignment: doc.data(),
+        });
+      }
+    }).then(function() {
+      self.setState({
+        doneLoading: true,
+      });
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
+
+  openModal = (homework) => {
+      this.getAssignment(homework);
+      this.setState({
+          modalOpen: true
+      });
+  };
+
+  closeModal = () => {
+    this.setState({ modalOpen: false });
+  };
+
+  getModalContent(){
+    if (this.state.modalOpen && this.state.modalAssignment != null && this.state.doneLoading){
+      return (
+        <Modal
+          className={"modalStyle"}
+          onRequestClose={this.closeModal}
+          isOpen={this.state.modalOpen}
+          ariaHideApp={false}>
+
+          <h2 className={"homeworkTitle"}>
+            Viewing Assignment Details
+          </h2>
+          <h2>Assignment: {this.state.modalAssignment.name}</h2>
+          <h2>Max Score: {this.state.modalAssignment.maxScore}</h2>
+          <h2>Deadline: {this.state.modalAssignment.due}</h2>
+
+          <div className={"makeSpace"}/>
+
+        </Modal>
+      );
+    }
+  };
+
     render() {
         return (
             <div>
@@ -116,6 +173,12 @@ class HomeworkTable extends Component {
                                   {this.state.role === "teacher"
                                     ?
                                     <th>Enable/Disable</th>
+                                    :
+                                    <th/>
+                                  }
+                                  {this.state.role === "teacher"
+                                    ?
+                                    <th>View Assignment Details</th>
                                     :
                                     <th/>
                                   }
@@ -159,6 +222,14 @@ class HomeworkTable extends Component {
                                         :
                                         <td/>
                                       }
+                                      {this.state.role === "teacher"
+                                        ?
+                                        <td>
+                                          <Button onClick={() => this.openModal(this.state.homeworks[index])}>View</Button>
+                                        </td>
+                                        :
+                                        <td/>
+                                      }
                                     </tr>
                                   }
                                 </tbody>
@@ -179,6 +250,13 @@ class HomeworkTable extends Component {
                             }
                         </Col>
                     </Row>
+
+                    <Row>
+                        <Col>
+                          {this.getModalContent()}
+                        </Col>
+                    </Row>
+
                     <Row>
                         <Col className={"moreSpace"}>
                         </Col>
