@@ -13,7 +13,7 @@ class HomeworkTable extends Component {
         this.state = {
           homeworks: [{}],
             role: null,
-            phrase: new Array(10),
+            phrase: new Array(100),
             avail: null,
         }
     }

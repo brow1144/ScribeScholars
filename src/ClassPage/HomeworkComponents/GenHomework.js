@@ -556,6 +556,7 @@ class GenHomework extends Component {
       option4: this.state.option4,
       frqResponse: this.state.frqResponse,
       url: this.state.url,
+      frqResponse: this.state.frqResponse,
       multiHist: this.state.multiHist,
     };
 

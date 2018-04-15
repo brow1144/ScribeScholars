@@ -321,7 +321,7 @@ class GenAssignment extends Component {
 
   render() {
     return (
-      <div className={"center"}>
+      <div>
         <Container fluid>
           <Card style={{boxShadow: '8px 8px 3px rgba(0, 0, 0, 0.2)'}}>
             <Row>
@@ -333,14 +333,14 @@ class GenAssignment extends Component {
             {this.state.finalPage
               ?
               <Row>
-                <Col xs={6}>
+                <Col xs={{size: 3, offset: 1}}>
                   <div className={"space"}/>
                   <Button onClick={this.decPage}>Last Question</Button>
                   <br/>
                 </Col>
                 {this.state.completed === "2"
                   ?
-                  <Col xs={6}>
+                  <Col xs={{size: 4, offset: 2}}>
                     <div className={"space"}/>
                     <Nav pills>
                       <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.state.code}/announcements`}>
@@ -355,13 +355,20 @@ class GenAssignment extends Component {
                    </Col>
                 }
               </Row>
-              :
-              <Row>
-                <Col xs={{size: 5, offset: 1}}>
-                  <Button onClick={this.decPage}>Last Question</Button>
-                  <Button onClick={this.incPage}>Next Question</Button>
-                </Col>
-              </Row>
+              : this.state.currentQuestion === 1
+                ?
+                <Row>
+                  <Col xs={{size: 5, offset: 1}}>
+                    <Button onClick={this.incPage}>Next Question</Button>
+                  </Col>
+                </Row>
+                :
+                <Row>
+                  <Col xs={{size: 5, offset: 1}}>
+                    <Button onClick={this.decPage}>Last Question</Button>
+                    <Button onClick={this.incPage}>Next Question</Button>
+                  </Col>
+                </Row>
             }
             <br/>
           </Card>

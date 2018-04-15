@@ -378,6 +378,7 @@ class Main extends Component {
           name: doc.data().name,
           class: classCode,
           questions: doc.data().questions,
+          available: doc.data().available,
         });
         self.setState({
           assignments: object,
