@@ -70,6 +70,110 @@ class EditActivity extends Component {
     });
   };
 
+  publishAss = () => {
+    let self = this;
+    let homeworkRef;// = firestore.collection("classes").doc(this.props.code).collection("Homework").doc("39489037");
+    if (this.props.assType === "Lesson")
+      homeworkRef = firestore.collection("classes").doc(self.props.class).collection("inClass").doc(self.state.hwCode);
+    else
+      homeworkRef = firestore.collection("classes").doc(self.props.class).collection("homework").doc(self.state.hwCode);
+
+    homeworkRef.update({
+      questions: self.state.questions,
+      maxScore: self.state.totalPoints,
+    }).then(function () {
+      console.log("Successfully added a question");
+
+    }).catch(function (error) {
+      console.log("Error updating document: ", error);
+    });
+
+    let classRef = firestore.collection("classes").doc(self.props.class);
+
+    classRef.get().then(function (doc) {
+      if (doc.exists) {
+        let tempArr = doc.data().students;
+
+        let tempAnsHis = new Array(self.state.questions.length);
+        for (let i = 0; i < tempAnsHis.length; i++) {
+          tempAnsHis[i] = 0;
+        }
+
+        let tempHist = new Array(self.state.questions.length);
+        for (let i = 0; i < tempHist.length; i++) {
+          tempHist[i] = "";
+        }
+
+        let tempQuests = new Array(self.state.questions.length);
+        for (let i = 0; i < tempQuests.length; i++) {
+          tempQuests[i] = "2";
+        }
+        for (let i = 0; i < tempArr.length; i++) {
+          let studentRef;
+          if (self.props.assType === "Lesson") {
+            studentRef = firestore.collection("users").doc(tempArr[i]).collection("inClass").doc(self.state.hwCode);
+            studentRef.get().then(function (doc) {
+              if (doc.exists) {
+                self.setNewDoc();
+              } else {
+                studentRef.set({
+                  answerHistory: tempAnsHis,
+                  class: self.props.class,
+                  completed: "",
+                  currentQuestion: 1,
+                  currentScore: 0,
+                  maxScore: self.state.totalPoints,
+                  name: self.state.title,
+                  numOfQuestions: self.state.questions.length,
+                  questions: tempQuests,
+                  history: tempHist,
+
+                }).then(function () {
+                  console.log("successfully written!");
+                }).catch(function (error) {
+                  console.log(error);
+                });
+              }
+            }).catch(function (error) {
+              console.log("Error getting document: ", error);
+            });
+          }
+          else {
+            studentRef = firestore.collection("users").doc(tempArr[i]).collection("homework").doc(self.state.hwCode);
+            studentRef.get().then(function (doc) {
+              if (doc.exists) {
+                self.setNewDoc();
+              } else {
+                studentRef.set({
+                  answers: tempHist,
+                  class: self.props.class,
+                  completed: 0,
+                  currentQuestion: 1,
+                  currentScore: 0,
+                  mcq: 0,
+                  maxScore: self.state.totalPoints,
+                  name: self.state.title,
+                  numOfQuestions: self.state.questions.length,
+                  history: tempHist,
+
+                }).then(function () {
+                  console.log("successfully written!");
+                }).catch(function (error) {
+                  console.log(error);
+                });
+              }
+            }).catch(function (error) {
+              console.log("Error getting document: ", error);
+            });
+          }
+        }
+      }
+    })
+
+
+  };
+
+
   render() {
     return(
       <Container fluid className={"ContainerRules"}>
