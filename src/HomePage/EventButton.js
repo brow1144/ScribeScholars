@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Label, InputGroupText, InputGroup, InputGroupAddon, Button, Container, Row, Col, Form, FormGroup, Alert, Input, ModalBody, ModalFooter, ModalHeader, Modal } from 'reactstrap';
+import { InputGroupText, InputGroup, InputGroupAddon, Button, Row, Col, Form, FormGroup, Alert, Input } from 'reactstrap';
 import { Accordion, AccordionItem, AccordionItemTitle, AccordionItemBody } from 'react-accessible-accordion';
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
 import { firestore } from "../base";
