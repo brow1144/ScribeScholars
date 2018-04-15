@@ -58,6 +58,7 @@ class Main extends Component {
         name: null,
         class: null,
         questions: null,
+        available: null,
       }],
 
       assignments: [{
@@ -66,6 +67,7 @@ class Main extends Component {
         name: null,
         class: null,
         questions: null,
+        available: null,
       }],
 
       myAssignments: [],
@@ -222,7 +224,7 @@ class Main extends Component {
       this.setState({
         role: role,
       });
-    }
+    };
 
     updateAnnouncements = (announcements) => {
       this.setState({
@@ -376,6 +378,7 @@ class Main extends Component {
           name: doc.data().name,
           class: classCode,
           questions: doc.data().questions,
+          available: doc.data().available,
         });
         self.setState({
           assignments: object,
@@ -424,6 +427,7 @@ class Main extends Component {
           name: doc.data().name,
           class: classCode,
           questions: doc.data().questions,
+          available: doc.data().available,
         });
         self.setState({
           homeworks: object,
@@ -515,7 +519,7 @@ class Main extends Component {
           <Route path="/ScribeScholars/HomePage/:class/lessons/edit-activity/:lessonNumber" render={(match) => (
               <HomePage
                   class={match.match.params.class}
-                  assType="Homework"
+                  assType="Lesson"
                   lessonNumber={match.match.params.lessonNumber}
                   page="editActivity"
                   {...data}

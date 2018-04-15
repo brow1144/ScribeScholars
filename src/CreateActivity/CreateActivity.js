@@ -31,10 +31,11 @@ class CreateActivity extends Component {
             question: {},
             hwCode: null,
             title: "",
+            totalPoints: 0,
         };
     }
 
-    createHomework = (title, descript) => {
+    createHomework = (title, descript, dueDate) => {
 
         let self = this;
         this.flipComp();
@@ -46,7 +47,7 @@ class CreateActivity extends Component {
         else
             classRef = firestore.collection("classes").doc(self.props.class).collection("homework").doc(code);
 
-        self.setState({hwCode: code, title: title,});
+        self.setState({hwCode: code, title: title});
 
         classRef.get().then(function (doc) {
             if (doc.exists) {
@@ -55,6 +56,8 @@ class CreateActivity extends Component {
                 classRef.set({
                     name: title,
                     description: descript,
+                    due: dueDate,
+                    available: false,
                 }).then(function () {
                     console.log("successfully written!");
                 }).catch(function (error) {
@@ -159,6 +162,7 @@ class CreateActivity extends Component {
                     option3: "",
                     option4: "",
                     prompt: "",
+                    points: "",
                     type: "MCQ",
                 };
                 tempArr.push(tempQ);
@@ -167,6 +171,7 @@ class CreateActivity extends Component {
                 tempQ = {
                     correctAns: "",
                     prompt: "",
+                    points: "",
                     type: "FIB",
                 };
                 tempArr.push(tempQ);
@@ -179,6 +184,7 @@ class CreateActivity extends Component {
                     option3: "",
                     option4: "",
                     prompt: "",
+                    points: "",
                     type: "SMQ",
                 };
                 tempArr.push(tempQ);
@@ -186,6 +192,7 @@ class CreateActivity extends Component {
             case "Free Response":
                 tempQ = {
                     prompt: "",
+                    points: "",
                     type: "FRQ",
                 };
                 tempArr.push(tempQ);
@@ -193,6 +200,7 @@ class CreateActivity extends Component {
             case "Video Page":
                 tempQ = {
                     url: "",
+                    points: "",
                     type: "VIDEO",
                 };
                 tempArr.push(tempQ);
@@ -211,8 +219,11 @@ class CreateActivity extends Component {
 
         tempArr.splice(index, 1, quest);
 
+        let tempTotalPoints = this.state.totalPoints + tempArr[index].points;
+
         this.setState({
             questions: tempArr,
+            totalPoints: tempTotalPoints,
         });
     };
 
@@ -225,10 +236,9 @@ class CreateActivity extends Component {
         else
             homeworkRef = firestore.collection("classes").doc(self.props.class).collection("homework").doc(self.state.hwCode);
 
-
         homeworkRef.update({
             questions: self.state.questions,
-            maxscore: self.state.questions.length,
+            maxScore: self.state.totalPoints,
         }).then(function () {
             console.log("Successfully added a question");
 
@@ -270,7 +280,7 @@ class CreateActivity extends Component {
                                     completed: "",
                                     currentQuestion: 1,
                                     currentScore: 0,
-                                    maxscore: self.state.questions.length,
+                                    maxScore: self.state.totalPoints,
                                     name: self.state.title,
                                     numOfQuestions: self.state.questions.length,
                                     questions: tempQuests,
@@ -299,7 +309,7 @@ class CreateActivity extends Component {
                                     currentQuestion: 1,
                                     currentScore: 0,
                                     mcq: 0,
-                                    maxScore: self.state.questions.length,
+                                    maxScore: self.state.totalPoints,
                                     name: self.state.title,
                                     numOfQuestions: self.state.questions.length,
                                     history: tempHist,
@@ -324,7 +334,7 @@ class CreateActivity extends Component {
                                                     completed: "",
                                                     currentQuestion: 1,
                                                     currentScore: 0,
-                                                    maxscore: self.state.questions.length,
+                                                    maxScore: self.state.questions.length,
                                                     name: self.state.title,
                                                     numOfQuestions: self.state.questions.length,
                                                     questions: tempQuests,

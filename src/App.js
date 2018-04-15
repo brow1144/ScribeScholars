@@ -19,9 +19,6 @@ import DashboardInfo from "./DashboardInfo/DashboardInfoPage";
 import MyStudents from "./MyStudents/MyStudents";
 import MakeWork from "./WorkForm/MakeWork";
 import ForgotPassword from './Sigin/ForgotPassword';
-
-import Graphs from "./Graphs";
-
 import CreateActivity from './CreateActivity/CreateActivity';
 
 
@@ -86,7 +83,7 @@ class App extends Component {
             : <Redirect to="/ScribeScholars/About"/>
         )}/>
 
-        <Route exact path='/ScribeScholars/sign-in' render={() => (
+        <Route path='/ScribeScholars/sign-in' render={() => (
           !this.signedIn()
             ? <SignIn/>
             : <Redirect to="/ScribeScholars/HomePage"/>
@@ -147,7 +144,7 @@ class App extends Component {
         <Route exact path='/ScribeScholars/create-class' render={() => (
           this.signedIn()
             ? <CreateClass uid={this.state.uid}/>
-            : <Redirect to="/About"/>
+            : <Redirect to="/ScribeScholars/About"/>
         )}/>
 
         <Route exact path='/ScribeScholars/create-class-success' render={() => (
@@ -160,7 +157,7 @@ class App extends Component {
         <Route path='/ScribeScholars/settings' render={() => (
           this.signedIn()
             ? <Main page={"settings"} uid={this.state.uid}/>
-            : <Redirect to="/ScribeScholars/sign-i fn"/>
+            : <Redirect to="/ScribeScholars/sign-in"/>
         )}/>
 
         <Route render={() => <Redirect to="/ScribeScholars/HomePage"/>}/>

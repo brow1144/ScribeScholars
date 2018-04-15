@@ -11,12 +11,12 @@ class Instruct extends Component {
             selectedOption: "",
             question: this.props.question,
         }
-
     }
 
     onFormSubmit = (ev) => {
         ev.preventDefault();
-        this.props.createHomework(ev.target.title.value, ev.target.descriptText.value);
+        let dateAndTime = ev.target.date.value + " " + ev.target.time.value;
+        this.props.createHomework(ev.target.title.value, ev.target.descriptText.value, dateAndTime);
     };
 
     render() {
@@ -71,7 +71,20 @@ class Instruct extends Component {
                                     <Input bsSize="lg" type="textarea" name="descriptText" id="exampleText"/>
                                 </Col>
                             </FormGroup>
+
                             <br/>
+                          <Label size="lg" for="exampleText" sm={6}> Activity Deadline:</Label>
+
+                          <FormGroup row>
+                            <Col sm={7}>
+                              <Input bsSize="lg" type="date" name="date" id="date"/>
+                            </Col>
+                            <Col sm={5}>
+                              <Input bsSize="lg" type="time" name="time" id="time"/>
+                            </Col>
+                          </FormGroup>
+
+                          <br/>
                             <FormGroup check>
                                 <Col sm={{ size: 9 }}>
                                     <Button color={"info"} size={"lg"} block>Create Activity</Button>

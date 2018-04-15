@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {Table, Container, Row, Col } from 'reactstrap';
+import {Table, Container, Row, Col, Button } from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom'
 
 import { firestore } from '../base.js'
@@ -13,7 +13,10 @@ class AssignTable extends Component {
     super(props);
 
     this.state = {
+      assignments: [{}],
+      phrase: new Array(20),
       role: null,
+      avail: null,
     }
   }
 
@@ -29,6 +32,7 @@ class AssignTable extends Component {
       if (doc.exists) {
         self.setState({
           role: doc.data().role,
+          assignments: self.props.assignments,
         });
       } else {
         console.log("No such document!");
@@ -38,6 +42,41 @@ class AssignTable extends Component {
     });
 
   };
+
+  /*
+     * Updates firebase with the new availability
+     */
+  changeAvail = (assignment) => {
+    let self = this;
+    let user = firestore.collection("classes").doc(this.props.code).collection("inClass").doc(assignment.lessonCode);
+
+    user.get().then((doc) => {
+      if (doc.exists) {
+        if (assignment.available) {
+          assignment.available = false;
+          user.update({
+            available: false,
+          }).then(function () {
+            self.setState({
+              phrase: "Enable",
+            });
+          });
+        } else {
+          assignment.available = true;
+          user.update({
+            available: true,
+          }).then(function () {
+            self.setState({
+              phrase: "Disable",
+            });
+          });
+        }
+      }
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
+
 
   render() {
     return (
@@ -67,45 +106,78 @@ class AssignTable extends Component {
                 <thead>
                 <tr>
                   <th>Assignment</th>
-                  <th>Max Score</th>
+                  <th>Points Possible</th>
                   <th>Links</th>
+                  {this.state.role === "teacher"
+                    ?
+                    <th>Enable/Disable</th>
+                    :
+                    <th/>
+                  }
                 </tr>
                 </thead>
-                {this.props.assignments
-                  ?
-                  <tbody>
-                  {Object.keys(this.props.assignments).map((key, index) => {
-                    return <tr key={key}>
-                      <td>{this.props.assignments[index].name}</td>
-                      <td>{this.props.assignments[index].maxscore}</td>
-                      <td>
-                        {this.state.role === "teacher" ?
-                            <div>
-                                <RouterLink
-                                    to={`/ScribeScholars/HomePage/${this.props.code}/lessons/liveFeed/${this.props.assignments[index].lessonCode}`}>
-                                    Live Feed
-                                </RouterLink>
-                                <span style={{display: 'inline-block', width: '1.25rem'}}> </span>
-                                <RouterLink
-                                    to={`/ScribeScholars/HomePage/${this.props.code}/lessons/edit-activity/${this.props.assignments[index].lessonCode}`}>
-                                    Edit
-                                </RouterLink>
-                            </div>
-                            :
-                            <RouterLink
-                                to={`/ScribeScholars/HomePage/${this.props.code}/lessons/${this.props.assignments[index].lessonCode}`}>
-                                Take Lesson
-                            </RouterLink>
-                        }
-                      </td>
-                    </tr>
-                  })}
-                  </tbody>
-                  :
-                  <tbody>
-                  </tbody>
-                }
+                {Object.keys(this.state.assignments).map((key, index) => {
+                  return <tbody key={key}>
+                  {this.state.assignments[index].available === false && this.state.role === "student"
+                    ?
+                    <tr/>
+                    :
+                    <tr>
+                      <td>{this.state.assignments[index].name}</td>
+                      <td>{this.state.assignments[index].maxScore}</td>
 
+                      {this.state.role === "teacher" ?
+                        <td>
+                          <RouterLink style={{display: 'inline-block', width: '1rem'}}
+                            to={`/ScribeScholars/HomePage/${this.props.code}/lessons/liveFeed/${this.state.assignments[index].lessonCode}`}>
+                            Live Feed
+                          </RouterLink>
+                          <span style={{display: 'inline-block', width: '1rem'}}> </span>
+                          {this.state.assignments[index].available
+                            ?
+                            <p>Open</p>
+
+                            :
+                            <p>Closed</p>
+                          }
+                          <RouterLink
+                            to={`/ScribeScholars/HomePage/${this.props.code}/lessons/edit-activity/${this.state.assignments[index].lessonCode}`}>
+                            Edit
+                          </RouterLink>
+                        </td>
+                        :
+                        <td>
+                        {this.state.assignments[index].available
+                          ?
+                          <RouterLink
+                            to={`/ScribeScholars/HomePage/${this.props.code}/lessons/${this.state.assignments[index].lessonCode}`}>
+                            Open
+                          </RouterLink>
+                          :
+                          <p>Closed</p>
+                        }
+                        </td>
+                      }
+
+                      {this.state.role === "teacher"
+                        ?
+                        <td>
+                          {this.state.assignments[index].available
+                            ?
+                            <Button
+                              onClick={() => this.changeAvail(this.state.assignments[index])}>Disable</Button>
+                            :
+                            <Button
+                              onClick={() => this.changeAvail(this.state.assignments[index])}>Enable</Button>
+                          }
+                        </td>
+                        :
+                        <td/>
+                      }
+                    </tr>
+                  }
+                  </tbody>
+                })}
               </Table>
             </Col>
           </Row>
@@ -134,123 +206,3 @@ class AssignTable extends Component {
 
 
 export default AssignTable
-
-//
-//EXAMPLE CODE FROM WALTERS INITIAL TEMPLATES
-//
-
-//
-//VIDEO EXAMPLE
-//
-/*
-import React, { Component } from 'react';
-import ReactPlayer from 'react-player'
-
-class VideoActivity extends Component {
-    constructor(this.props) {
-        super(this.props);
-        this.state = {}
-    }
-    render() {
-        return(
-            <div className='player-wrapper'>
-                <ReactPlayer
-                    url='https://www.youtube.com/watch?v=VAB8ShsX1U4'
-                    className='react-player'
-                    controls
-                />
-            </div>
-        );
-    }
-}
-
-export default VideoActivity
- */
-
-//
-//MCQ EXAMPLE
-//
-/*
-import React, { Component } from 'react';
-
-import { Col, FormGroup, Label, Input} from 'reactstrap';
-
-import './MCQ.css';
-
-class MCQ extends Component {
-    constructor(this.props) {
-        super(this.props);
-        this.state = {
-            selectedOption: "",
-            question: this.this.props.question,
-        }
-
-    }
-
-
-    render() {
-        return(
-            <FormGroup tag={"fieldset"}>
-                <legend className={"RadioTitle"}>#1 This Is The Question Header?</legend>
-                <Col sm={{ size:10 }} >
-                    <FormGroup>
-                        <Label className={"RadioLabel"}>
-                            <Input className={"RadioButton"} type="radio" name="radio1" />{' '}
-                            <p>Possible Answer Number 1</p>
-                        </Label>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label className={"RadioLabel"}>
-                            <Input className={"RadioButton"} type="radio" name="radio1" />{' '}
-                            <p>Possible Answer Number 2</p>
-                        </Label>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label className={"RadioLabel"}>
-                            <Input className={"RadioButton"} type="radio" name="radio1"/>
-                            <p>Possible Answer Number 3</p>
-                        </Label>
-                    </FormGroup>
-                </Col>
-            </FormGroup>
-
-        );
-    }
-}
-
-export default MCQ*/
-
-//
-//EXAMPLE FRQ
-//
-/*
-import React, { Component } from 'react';
-
-import { Col, FormGroup, Label, Input } from 'reactstrap';
-
-import './FRQ.css';
-
-class FRQ extends Component {
-    constructor(this.props) {
-        super(this.props);
-        this.state = {
-        }
-    }
-
-
-    render() {
-        return(
-            <FormGroup tag={"fieldset"}>
-                <FormGroup row>
-                    <Col sm={"6"}>
-                        <Label className={"FRQTitle"} for="exampleText">#2 Free Response Question Goes Here</Label>
-                        <Input style={{height: '20rem'}} type="textarea" name="text" id="exampleText" />
-                    </Col>
-                </FormGroup>
-            </FormGroup>
-
-        );
-    }
-}
-
-export default FRQ*/

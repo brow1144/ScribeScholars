@@ -85,6 +85,12 @@ class HomePage extends Component {
         class: null,
       }],
 
+      calendarEvents: [{
+        title: null,
+        start: null,
+        end: null,
+      }],
+
       lessonNumber: this.props.lessonNumber,
       class: this.props.class,
 
@@ -104,16 +110,53 @@ class HomePage extends Component {
 
       alerts: [],
       hiddenAlerts: [],
+
+      classWeighting: [],
     };
   }
+
+  getClassWeighting = () => {
+    let self = this;
+    let tmpClassWeighting = [];
+
+    for (let i in this.state.classes) {
+      if (this.state.classes.hasOwnProperty(i)) {
+        let classRef = firestore.collection("classes").doc(this.state.classes[i].code);
+
+        classRef.get().then((doc) => {
+          if (doc.exists) {
+            tmpClassWeighting.push({
+              code: self.state.classes[i].code,
+              inClassWeight: doc.data().inClassWeight / 100,
+              homeworkWeight: doc.data().homeworkWeight / 100,
+            });
+
+            classRef.get().then(() => {
+              if (parseInt(i, 10) === self.state.classes.length - 1) {
+                self.setState({
+                  classWeighting: tmpClassWeighting,
+                });
+
+                self.getMyAssignments();
+              }
+            }).catch((error) => {
+              console.log("Error getting document: ", error);
+            });
+          }
+        }).catch((error) => {
+          console.log("Error getting document: ", error);
+        });
+      }
+    }
+  };
 
   // calculate GPA for a student
   calcGPA = () => {
     let grades = [];
 
-    for (let i in this.state.classes) {
-      if (this.state.classes.hasOwnProperty(i)) {
-        let grade = this.getGrade(this.state.classes[i].code);
+    for (let i in this.state.classWeighting) {
+      if (this.state.classWeighting.hasOwnProperty(i)) {
+        let grade = this.getGrade(this.state.classWeighting[i].code, this.state.classWeighting[i].inClassWeight, this.state.classWeighting[i].homeworkWeight);
 
         if (!isNaN(grade))
           grades.push(grade);
@@ -155,7 +198,6 @@ class HomePage extends Component {
     if (gpa % 1 !== 0)
       gpa = Math.round(gpa * 100) / 100;
 
-
     if (!isNaN(gpa)) {
       let studentRef = firestore.collection("users").doc(this.state.uid);
       studentRef.set({
@@ -170,20 +212,34 @@ class HomePage extends Component {
   };
 
   // get grade in a specific class
-  getGrade = (code) => {
-    let total = 0;
-    let max = 0;
+  getGrade = (code, inClassWeight, homeworkWeight) => {
+    let inClassTotal = 0;
+    let homeworkTotal = 0;
+    let inClassMax = 0;
+    let homeworkMax = 0;
 
     for (let i in this.state.myAssignments) {
       if (this.state.myAssignments.hasOwnProperty(i)) {
-        if (this.state.myAssignments[i].class === code && this.state.myAssignments[i].score != null) {
-          total += this.state.myAssignments[i].score;
-          max += this.state.myAssignments[i].maxscore;
+        if (this.state.myAssignments[i].data.class === code && this.state.myAssignments[i].data.score != null) {
+          if (this.state.myAssignments[i].type === "inClass") {
+            inClassTotal += this.state.myAssignments[i].data.score;
+            inClassMax += this.state.myAssignments[i].data.maxScore;
+          } else if (this.state.myAssignments[i].type === "homework") {
+            homeworkTotal += this.state.myAssignments[i].data.score;
+            homeworkMax += this.state.myAssignments[i].data.maxScore;
+          }
         }
       }
     }
 
-    let grade = (total / max) * 100;
+    let grade;
+
+    if (inClassMax !== 0 && homeworkMax !== 0)
+      grade = ((inClassTotal / inClassMax) * inClassWeight + (homeworkTotal / homeworkMax) * homeworkWeight) * 100;
+    else if (inClassMax !== 0)
+      grade = (inClassTotal / inClassMax) * 100;
+    else if (homeworkMax !== 0)
+      grade = (homeworkTotal / homeworkMax) * 100;
 
     if (grade % 1 !== 0)
       grade = Math.round(grade * 100) / 100;
@@ -199,8 +255,8 @@ class HomePage extends Component {
     studentRef.get().then((doc) => {
       if (doc.exists) {
         self.getAssignmentsOfType("homework");
-        self.getAssignmentsOfType("quizzes");
-        self.getAssignmentsOfType("tests");
+        //self.getAssignmentsOfType("quizzes");
+        //self.getAssignmentsOfType("tests");
         self.getAssignmentsOfType("inClass");
 
         studentRef.get().then(() => {
@@ -222,7 +278,7 @@ class HomePage extends Component {
       snapshot.forEach((doc) => {
         if (doc.data().score != null) {
           self.setState({
-            myAssignments: self.state.myAssignments.concat(doc.data()),
+            myAssignments: self.state.myAssignments.concat({data: doc.data(), type: type}),
           });
         }
       });
@@ -306,6 +362,7 @@ class HomePage extends Component {
           self.getUserImage();
           self.getDeadlines();
           self.getAnnouncements();
+          self.getCalendarEvents();
         }
         if (doc.data().firstName !== null && doc.data().lastName !== null && doc.data().role !== null) {
           self.setState({
@@ -314,7 +371,7 @@ class HomePage extends Component {
             role: doc.data().role,
           }, () => {
             if (self.state.role === "student")
-              self.getMyAssignments();
+              self.getClassWeighting();
           });
         }
       } else {
@@ -500,6 +557,46 @@ class HomePage extends Component {
 
   };
 
+  /**
+   *
+   * Get Calendar Events from Firebase
+   * Calendar Events are manually created by the user where deadlines are added by teacher
+   * when an assignment is created
+   *
+   * Called after getAnnouncements() from getClasses()
+   *
+   * Format for calendar events is
+   * name: ''
+   * time: MM/DD/YYYY TT:TT
+   *
+   */
+
+  getCalendarEvents = () => {
+    let object = [{}];
+    let self = this;
+    let userRef = firestore.collection("users").doc(this.state.uid);
+
+    userRef.get().then(function (doc){
+      if (doc.exists){
+        let data = doc.data();
+        for (let i in data.events) {
+          if (data.events.hasOwnProperty(i)) {
+            object.unshift({
+              title: data.events[i].title,
+              start: new Date(data.events[i].start),
+              end: new Date(data.events[i].end),
+            });
+
+            self.setState({
+              calendarEvents: object,
+            });
+          }
+        }
+      } else {
+        console.log("No such document!");
+      }
+    });
+  };
 
   /**
    *
@@ -568,6 +665,16 @@ class HomePage extends Component {
       sidebarOpen: false,
     });
   };
+
+  /**
+   * Concatenates deadline and calendarEvent arrays
+   * Used for updating the calendar
+   */
+
+  getAllEvents = () => {
+    let events = this.props.dates.concat(this.state.calendarEvents);
+    return events;
+  }
 
   /**
    *
@@ -670,10 +777,12 @@ class HomePage extends Component {
               <Col md="1"/>
               <Col md="7">
                 <BigCalendar
-                  events={this.props.dates}
+                  selectable
+                  events={this.getAllEvents()}
                   style={calendarStyles}
                   defaultDate={new Date()}
                   eventPropGetter={(this.eventStyleGetter)}
+                  onSelectEvent={event => alert(event.title)}
                 />
               </Col>
 
@@ -706,13 +815,26 @@ class HomePage extends Component {
 
             <Row>
               <Col md="1"/>
-              <Col md="8">
+              <Col md="7">
+                {Object.keys(this.state.alerts).map((key, index) =>
+                  <AlertHandler key={index} alert={this.state.alerts[index]} uid={this.state.uid}
+                                showAlerts={this.props.showAlerts} hiddenAlerts={this.state.hiddenAlerts}/>
+                )
+                }
+              </Col>
+            </Row>
+
+            <Row>
+              <Col md="1"/>
+              <Col md="7">
                 <BigCalendar
                   toolbar={false}
-                  events={this.props.dates}
+                  selectable
+                  events={this.getAllEvents()}
                   style={calendarStyles}
                   defaultDate={new Date()}
                   eventPropGetter={(this.eventStyleGetter)}
+                  onSelectEvent={event => alert(event.title)}
                 />
               </Col>
               <Col md="3"/>
