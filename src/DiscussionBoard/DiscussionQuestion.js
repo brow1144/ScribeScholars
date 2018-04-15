@@ -46,7 +46,21 @@ class DiscussionQuestion extends Component {
   }
 
   handleExpand = (id) => {
-    this.setState({accVisible: !this.state.accVisible});
+    let self = this;
+    this.setState({accVisible: !this.state.accVisible}, () => {
+      let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard").doc(this.props.discussion.id);
+
+      console.log('Test');
+
+      docRef.onSnapshot(function (doc) {
+        if (doc.exists) {
+          let views = doc.data().views;
+          views[self.props.uid] = self.props.uid;
+          docRef.update({views: views})
+        }
+      })
+
+    });
   };
 
   render() {
@@ -104,7 +118,7 @@ class DiscussionQuestion extends Component {
                 }              </Row>
             </Col>
             <Col xs='11' md='1'>
-              <h4 className='replyNum'>{this.props.discussion.views}</h4>
+              <h4 className='replyNum'>{Object.keys(this.props.discussion.views).length}</h4>
               <p className='replies'>Views</p>
             </Col>
           </Row>

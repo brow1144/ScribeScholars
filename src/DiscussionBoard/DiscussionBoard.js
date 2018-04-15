@@ -44,7 +44,7 @@ class DiscussionBoard extends Component {
           for (let i in discussionsObj) {
             discussions.push(discussionsObj[i]);
           }
-          let temp = discussions.sort(self.compare);
+          let temp = discussions.sort(self.dateComare);
           self.setState({discussions: temp});
         });
 
@@ -60,6 +60,14 @@ class DiscussionBoard extends Component {
   successfulNewQuestion = () => {
     this.setState({newQVisible: false});
     this.setState({visible: true});
+  };
+
+  dateComare = (a, b) => {
+    if (a.date< b.date)
+      return 1;
+    if (a.date > b.date)
+      return -1;
+    return 0;
   };
 
   compare = (a, b) => {
