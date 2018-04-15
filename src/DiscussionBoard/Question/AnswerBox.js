@@ -6,6 +6,7 @@ import 'react-quill/dist/quill.core.css';
 import './AnswerBox.css'
 
 import TeacherAnswer from './TeacherAnswer';
+import StudentAnswer from './StudentAnswer';
 
 class AnswerBox extends Component {
 
@@ -28,7 +29,14 @@ class AnswerBox extends Component {
             <br/>
           </Col>
         </Row>
-        <TeacherAnswer role={this.props.role} uid={this.props.uid} classCode={this.props.classCode} discussion={this.props.discussion}/>
+          {this.props.role === 'teacher'
+              ?
+              <TeacherAnswer role={this.props.role} uid={this.props.uid} classCode={this.props.classCode}
+                             discussion={this.props.discussion}/>
+              :
+              <StudentAnswer role={this.props.role} uid={this.props.uid} classCode={this.props.classCode}
+                             discussion={this.props.discussion}/>
+          }
       </div>
     );
   }
