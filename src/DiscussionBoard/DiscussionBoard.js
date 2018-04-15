@@ -17,9 +17,9 @@ class DiscussionBoard extends Component {
     this.state = {
       newQVisible: false,
       visible: false,
-      // discussions: {'': {}},
+      discussionsObj: {'': {}},
       discussions: [],
-      originalDiscussions: [],
+      originalDiscussions: {'': {}},
     }
   };
 
@@ -31,17 +31,23 @@ class DiscussionBoard extends Component {
     let self = this;
     let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard");
 
-    // let discussions = {'': {}};
-    let discussions = [];
-
+    let discussionsObj = {'': {}};
+    let originalDiscussions = [];
 
     docRef.onSnapshot(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
-        // discussions[doc.id] = doc.data();
-        discussions.push(doc.data());
+        discussionsObj[doc.id] = doc.data();
+        originalDiscussions[doc.id] = doc.data();
+        Object.keys(discussionsObj).forEach((key) => (key === '') && delete discussionsObj[key]);
+        self.setState({discussionsObj: discussionsObj, originalDiscussions: originalDiscussions}, () => {
+          let discussions = [];
+          for (let i in discussionsObj) {
+            discussions.push(discussionsObj[i]);
+          }
+          let temp = discussions.sort(self.compare);
+          self.setState({discussions: temp});
+        });
 
-        // Object.keys(discussions).forEach((key) => (key === '') && delete discussions[key]);
-        self.setState({originalDiscussions: discussions, discussions: discussions});
       });
     });
   };
@@ -73,15 +79,11 @@ class DiscussionBoard extends Component {
 
     for (let i in this.state.originalDiscussions) {
       let data = this.state.originalDiscussions[i];
-
       if (data.hashtag.toLowerCase().includes(ev.target.value.toLowerCase())) {
         temp.push(data);
       }
-
     }
     this.setState({discussions: temp});
-
-    // let temp = this.state.discussions.sort(this.compare);
   };
 
   render() {
