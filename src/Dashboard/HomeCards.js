@@ -12,7 +12,7 @@ const HomeCards = (props) => {
         <Row>
             {Object.keys(props.homeworks).map((key, index) => {
                 return <Col xs={12} key={key} className={"assPad"}>
-                    <RouterLink to={"/HomePage/"+props.code+"/myStudents/"+props.homeworks[index].colRef+"/"+props.homeworks[index].id}>
+                    <RouterLink to={"/ScribeScholars/HomePage/"+props.code+"/myStudents/"+props.homeworks[index].colRef+"/"+props.homeworks[index].id}>
                         <Button size="lg" className={"assButt"} key={key} block>
                             <h1 className={"assTitle"}>
                                 {props.homeworks[index].name}

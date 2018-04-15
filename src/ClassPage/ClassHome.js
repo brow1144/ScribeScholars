@@ -192,20 +192,20 @@ class ClassHome extends Component {
 
           <Nav horizontal="center" tabs>
 
-            <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/announcements`}>
+            <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/announcements`}>
               <NavLink onClick={this.switchAnnouncement}
                        active={this.state.announcementsActive}>Announcements</NavLink>
             </RouterLink>
 
-            <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/lessons`}>
+            <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/lessons`}>
               <NavLink onClick={this.switchLessons} active={this.state.lessonsActive}>In-Class Lessons</NavLink>
             </RouterLink>
 
-            <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/homework`}>
+            <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/homework`}>
               <NavLink onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
             </RouterLink>
 
-            <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/discussion`}>
+            <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/discussion`}>
               <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
                 Board</NavLink>
             </RouterLink>
@@ -213,13 +213,13 @@ class ClassHome extends Component {
 
             {this.state.gotRole && this.state.role === "teacher"
               ?
-              <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/myStudents`}>
+              <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/myStudents`}>
 
                   <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive} code={this.props.code} lessonNumber={this.props.lessonNumber}>My Students</NavLink>
                 
               </RouterLink>
               :
-              <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/grades`}>
+              <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/grades`}>
                 <NavLink onClick={this.switchGrades} active={this.state.gradesActive}>Grades</NavLink>
 
               </RouterLink>
@@ -227,7 +227,7 @@ class ClassHome extends Component {
 
             {this.state.gotRole && this.state.role === "teacher"
               ?
-              <RouterLink className="navLinks" to={`/HomePage/${this.props.code}/regradeRequests`}>
+              <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/regradeRequests`}>
 
                 <NavLink onClick={this.switchRegradeRequests} active={this.state.regradeRequestsActive} code={this.props.code} uid={this.state.uid}>Regrade Requests</NavLink>
 

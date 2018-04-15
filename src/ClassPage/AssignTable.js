@@ -82,18 +82,18 @@ class AssignTable extends Component {
                         {this.state.role === "teacher" ?
                             <div>
                                 <RouterLink
-                                    to={`/HomePage/${this.props.code}/lessons/liveFeed/${this.props.assignments[index].lessonCode}`}>
+                                    to={`/ScribeScholars/HomePage/${this.props.code}/lessons/liveFeed/${this.props.assignments[index].lessonCode}`}>
                                     Live Feed
                                 </RouterLink>
                                 <span style={{display: 'inline-block', width: '1.25rem'}}> </span>
                                 <RouterLink
-                                    to={`/HomePage/${this.props.code}/lessons/edit-activity/${this.props.assignments[index].lessonCode}`}>
+                                    to={`/ScribeScholars/HomePage/${this.props.code}/lessons/edit-activity/${this.props.assignments[index].lessonCode}`}>
                                     Edit
                                 </RouterLink>
                             </div>
                             :
                             <RouterLink
-                                to={`/HomePage/${this.props.code}/lessons/${this.props.assignments[index].lessonCode}`}>
+                                to={`/ScribeScholars/HomePage/${this.props.code}/lessons/${this.props.assignments[index].lessonCode}`}>
                                 Take Lesson
                             </RouterLink>
                         }
@@ -113,7 +113,7 @@ class AssignTable extends Component {
             <Col className={"moreSpace"}>
                 {this.state.role === "teacher"
                     ?
-                    <RouterLink to={`/HomePage/${this.props.code}/lesson/create-activity`}>
+                    <RouterLink to={`/ScribeScholars/HomePage/${this.props.code}/lesson/create-activity`}>
                         Create New In Class Lesson
                     </RouterLink>
                     :
