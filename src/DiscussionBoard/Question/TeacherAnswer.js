@@ -143,7 +143,8 @@ class TeacherAnswer extends Component {
             </Row>
           </div>
           :
-
+          this.props.role === 'teacher'
+          ?
           <div>
             <Row>
               <Col sm='1'/>
@@ -176,6 +177,7 @@ class TeacherAnswer extends Component {
             </Row>
 
           </div>
+            : null
 
         }
       </div>
