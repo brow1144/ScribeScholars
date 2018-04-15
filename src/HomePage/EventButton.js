@@ -12,8 +12,7 @@ class EventButton extends Component {
 
     this.state = {
 
-      name: null,
-      description: null,
+      title: null,
       startDate: null,
       startTime: null,
       endDate: null,
@@ -30,24 +29,15 @@ class EventButton extends Component {
     ev.preventDefault();
     let self = this;
 
-    let name = ev.target.name.value;
-    let description = ev.target.description.value;
+    let title = ev.target.title.value;
     let startDate = ev.target.startDate.value;
     let startTime = ev.target.startTime.value;
     let endDate = ev.target.endDate.value;
     let endTime = ev.target.endTime.value;
 
-    if (name === "") {
+    if (title === "") {
       self.setState({
-        errorMessage: "Please enter a valid event name.",
-        errorVisible: true,
-      });
-      return;
-    }
-
-    if (description === "") {
-      self.setState({
-        errorMessage: "Please enter a valid event description.",
+        errorMessage: "Please enter a valid event title.",
         errorVisible: true,
       });
       return;
@@ -85,18 +75,15 @@ class EventButton extends Component {
       return;
     }
 
-    let event = {
-      name: name,
-      description: description,
-      startDate: startDate,
-      startTime: startTime,
-      endDate: endDate,
-      endTime: endTime,
-    };
-
     self.setState({
       submitting: true,
     });
+
+    let event = {
+      title: title,
+      start: startDate + " " + startTime,
+      end: endDate + " " + endTime,
+    };
 
     let userRef = firestore.collection("users").doc(this.props.uid);
     userRef.get().then(function (doc) {
@@ -147,22 +134,13 @@ class EventButton extends Component {
                         <FormGroup>
                           <InputGroup>
                             <InputGroupAddon addonType="prepend">
-                              <InputGroupText>Name</InputGroupText>
+                              <InputGroupText>Title</InputGroupText>
                             </InputGroupAddon>
-                            <Input name="name"/>
+                            <Input name="title"/>
                           </InputGroup>
                           <br/>
                         </FormGroup>
 
-                        <FormGroup>
-                          <InputGroup>
-                            <InputGroupAddon addonType="prepend">
-                              <InputGroupText>Description</InputGroupText>
-                            </InputGroupAddon>
-                            <Input name="description"/>
-                          </InputGroup>
-                          <br/>
-                        </FormGroup>
                         <FormGroup>
                           <InputGroup>
                             <InputGroupAddon addonType="prepend">

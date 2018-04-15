@@ -20,9 +20,7 @@ class AnswerBox extends Component {
   render() {
     return (
       <div>
-
         <br/>
-
         <Row>
           <Col sm='1'/>
           <Col className='answerBoxBackground' sm='11'>
@@ -30,8 +28,7 @@ class AnswerBox extends Component {
             <br/>
           </Col>
         </Row>
-
-        <TeacherAnswer discussion={this.props.discussion}/>
+        <TeacherAnswer role={this.props.role} uid={this.props.uid} classCode={this.props.classCode} discussion={this.props.discussion}/>
       </div>
     );
   }
