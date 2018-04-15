@@ -606,9 +606,8 @@ class GenHomework extends Component {
                     </Nav>
                   </Col>
                   :
-                  <Col>
-                    <h4>Make sure all questions are answered</h4>
-                    <h4>Then press submit</h4>
+                  <Col xs={4}>
+                    <h4>Make sure all questions are answered then press submit</h4>
                   </Col>
                 }
               </Row>
