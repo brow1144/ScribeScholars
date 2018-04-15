@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {Table, Button, Container, Row, Col, Input} from 'reactstrap';
+import {Label, FormGroup, Form, Table, Button, Container, Row, Col, Input} from 'reactstrap';
 import {NavLink as RouterLink} from 'react-router-dom';
 import Modal from 'react-modal';
 import './Table.css'
 import { firestore } from '../base.js'
+import FIBForm from "../CreateActivity/FIBForm";
 
 
 class HomeworkTable extends Component {
@@ -16,8 +17,11 @@ class HomeworkTable extends Component {
             role: null,
             phrase: new Array(100),
             avail: null,
+
           modalAssignment: null,
+          modalCode: null,
           modalOpen: false,
+
           doneLoading: false,
         }
     }
@@ -87,13 +91,14 @@ class HomeworkTable extends Component {
     });
   };
 
-  getAssignment = (homework) => {
+  getAssignmentForModal = (code) => {
     let self = this;
-    let homeworkRef = firestore.collection("classes").doc(this.props.code).collection("homework").doc(homework.lessonCode);
+    let homeworkRef = firestore.collection("classes").doc(this.props.code).collection("homework").doc(code);
 
     homeworkRef.get().then((doc) => {
       if (doc.exists) {
         self.setState({
+          modalCode: code,
           modalAssignment: doc.data(),
         });
       }
@@ -106,8 +111,8 @@ class HomeworkTable extends Component {
     });
   };
 
-  openModal = (homework) => {
-      this.getAssignment(homework);
+  openModal = (code) => {
+      this.getAssignmentForModal(code);
       this.setState({
           modalOpen: true
       });
@@ -116,13 +121,38 @@ class HomeworkTable extends Component {
   closeModal = () => {
     this.setState({
       modalAssignment: null,
+      modalCode: null,
       modalOpen: false,
       doneLoading: false,
     });
   };
 
+  updateDeadline = (ev) => {
+    ev.preventDefault();
+
+    if(this.state.modalAssignment != null && this.state.modalOpen){
+      let self = this;
+      let deadline = ev.target.date.value + " " + ev.target.time.value;
+      let homeworkRef = firestore.collection("classes").doc(this.props.code).collection("homework").doc(this.state.modalCode);
+
+      homeworkRef.get().then((doc) => {
+        if (doc.exists) {
+          homeworkRef.update({
+            due: deadline,
+          }).then(function () {
+            self.getAssignmentForModal(self.state.modalCode);
+            self.forceUpdate();
+          });
+        }
+      }).catch((error) => {
+        console.log("Error getting document:", error);
+      });
+    }
+  };
+
   getModalContent(){
     if (this.state.modalOpen && this.state.modalAssignment != null && this.state.doneLoading){
+      let deadline = new Date(this.state.modalAssignment.due);
       return (
         <Modal
           className={"modalStyle"}
@@ -135,7 +165,22 @@ class HomeworkTable extends Component {
           </h2>
           <h2>Assignment: {this.state.modalAssignment.name}</h2>
           <h2>Max Score: {this.state.modalAssignment.maxScore}</h2>
-          <h2>Deadline: {this.state.modalAssignment.due}</h2>
+          <h2>Deadline: {deadline.toString()}</h2>
+
+          <div className={"makeSpace"}/>
+
+          <h2> Update Deadline:</h2>
+          <Form onSubmit={(ev) => this.updateDeadline(ev)}>
+            <FormGroup row>
+              <Col sm={2}>
+                <Input bsSize="lg" type="date" name="date" id="date"/>
+              </Col>
+              <Col sm={2}>
+                <Input bsSize="lg" type="time" name="time" id="time"/>
+              </Col>
+            </FormGroup>
+            <Button type='submit'>Update</Button>
+          </Form>
 
           <div className={"makeSpace"}/>
 
@@ -229,7 +274,7 @@ class HomeworkTable extends Component {
                                       {this.state.role === "teacher"
                                         ?
                                         <td>
-                                          <Button onClick={() => this.openModal(this.state.homeworks[index])}>View</Button>
+                                          <Button onClick={() => this.openModal(this.state.homeworks[index].lessonCode)}>View</Button>
                                         </td>
                                         :
                                         <td/>
