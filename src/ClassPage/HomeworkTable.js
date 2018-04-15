@@ -114,7 +114,11 @@ class HomeworkTable extends Component {
   };
 
   closeModal = () => {
-    this.setState({ modalOpen: false });
+    this.setState({
+      modalAssignment: null,
+      modalOpen: false,
+      doneLoading: false,
+    });
   };
 
   getModalContent(){
