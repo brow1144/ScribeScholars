@@ -32,7 +32,7 @@ class DiscussionBoard extends Component {
     let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard");
 
     let discussionsObj = {'': {}};
-    let originalDiscussions = [];
+    let originalDiscussions = {};
 
     docRef.onSnapshot(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
@@ -41,8 +41,8 @@ class DiscussionBoard extends Component {
         Object.keys(discussionsObj).forEach((key) => (key === '') && delete discussionsObj[key]);
         self.setState({discussionsObj: discussionsObj, originalDiscussions: originalDiscussions}, () => {
           let discussions = [];
-          for (let i in discussionsObj) {
-            discussions.push(discussionsObj[i]);
+          for (let j in discussionsObj) {
+            discussions.push(discussionsObj[j]);
           }
           let temp = discussions.sort(self.dateComare);
           self.setState({discussions: temp});
@@ -85,8 +85,8 @@ class DiscussionBoard extends Component {
   handleSearch = (ev) => {
     let temp = [];
 
-    for (let i in this.state.originalDiscussions) {
-      let data = this.state.originalDiscussions[i];
+    for (let k in this.state.originalDiscussions) {
+      let data = this.state.originalDiscussions[k];
       if (data.hashtag.toLowerCase().includes(ev.target.value.toLowerCase())) {
         temp.push(data);
       }
@@ -97,7 +97,7 @@ class DiscussionBoard extends Component {
   render() {
 
     let discussion = {
-      views: 0,
+      views: {},
       studentAns: '',
       teacherAns: '',
       uid: this.props.uid,

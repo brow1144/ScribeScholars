@@ -47,20 +47,17 @@ class DiscussionQuestion extends Component {
 
   handleExpand = (id) => {
     let self = this;
-    this.setState({accVisible: !this.state.accVisible}, () => {
-      let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard").doc(this.props.discussion.id);
+    let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard").doc(this.props.discussion.id);
 
-      console.log('Test');
-
-      docRef.onSnapshot(function (doc) {
-        if (doc.exists) {
-          let views = doc.data().views;
-          views[self.props.uid] = self.props.uid;
-          docRef.update({views: views})
-        }
-      })
-
+    docRef.onSnapshot(function (doc) {
+      if (doc.exists) {
+        let views = doc.data().views;
+        views[self.props.uid] = self.props.uid;
+        docRef.update({views: views})
+      }
     });
+
+    this.setState({accVisible: !this.state.accVisible});
   };
 
   render() {

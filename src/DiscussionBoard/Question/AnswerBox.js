@@ -20,9 +20,7 @@ class AnswerBox extends Component {
   render() {
     return (
       <div>
-
         <br/>
-
         <Row>
           <Col sm='1'/>
           <Col className='answerBoxBackground' sm='11'>
