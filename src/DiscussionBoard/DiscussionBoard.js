@@ -20,11 +20,20 @@ class DiscussionBoard extends Component {
       discussionsObj: {'': {}},
       discussions: [],
       originalDiscussions: {'': {}},
+      role: null,
     }
   };
 
   componentWillMount() {
     this.getDiscussions();
+
+    let self = this;
+    let docRef = firestore.collection("users").doc(this.props.uid)
+    docRef.onSnapshot(function(doc) {
+      if (doc.exists) {
+        self.setState({role: doc.data().role})
+      }
+    })
   }
 
   getDiscussions = () => {
@@ -184,7 +193,7 @@ class DiscussionBoard extends Component {
 
         {this.state.discussions.map((key, index) => {
           return (
-            <DiscussionQuestion uid={this.props.uid} classCode={this.props.classCode} discussion={key} key={index}/>
+            <DiscussionQuestion role={this.state.role} uid={this.props.uid} classCode={this.props.classCode} discussion={key} key={index}/>
           )
         })}
 
