@@ -29,14 +29,10 @@ class AnswerBox extends Component {
             <br/>
           </Col>
         </Row>
-          {this.props.role === 'teacher'
-              ?
               <TeacherAnswer role={this.props.role} uid={this.props.uid} classCode={this.props.classCode}
                              discussion={this.props.discussion}/>
-              :
               <StudentAnswer role={this.props.role} uid={this.props.uid} classCode={this.props.classCode}
                              discussion={this.props.discussion}/>
-          }
       </div>
     );
   }
