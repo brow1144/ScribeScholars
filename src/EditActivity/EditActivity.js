@@ -11,11 +11,11 @@ import {
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
 import './EditActivity.css';
 import {firestore} from "../base";
-import MCQForm from '../CreateActivity/MCQForm';
-import FRQForm from '../CreateActivity/FRQForm';
-import SMQForm from '../CreateActivity/SMQForm';
-import VideoForm from '../CreateActivity/VideoForm';
-import FIBForm from '../CreateActivity/FIBForm';
+import MCQForm from './MCQEdit';
+import FRQForm from './FRQEdit';
+import SMQForm from './SMQEdit';
+import VideoForm from './VideoEdit';
+import FIBForm from './FIBEdit';
 
 
 
@@ -33,6 +33,7 @@ class EditActivity extends Component {
       hwCode: null,
       title: "",
       totalPoints: 0,
+      key: true,
     };
   }
 
@@ -40,13 +41,26 @@ class EditActivity extends Component {
     this.grabQuestions()
   };
 
+  recordQuestion = (quest, index) => {
+
+    let tempArr = this.state.questions;
+
+    tempArr.splice(index, 1, quest);
+
+    let tempTotalPoints = this.state.totalPoints + tempArr[index].points;
+
+    this.setState({
+      questions: tempArr,
+      totalPoints: tempTotalPoints,
+    });
+  };
+
   grabQuestions = () => {
     let self = this;
 
     // the classes' assignment collection reference
     let assRef;
-    console.log(this.props.class);
-    console.log(this.props.lessonNumber);
+
 
     if (this.props.assType === "Lesson")
       assRef = firestore.collection("classes").doc(this.props.class).collection("inClass").doc(this.props.lessonNumber);
@@ -70,13 +84,77 @@ class EditActivity extends Component {
     });
   };
 
+  onFormSubmit = (ev) => {
+    ev.preventDefault();
+    let tempArr = this.state.questions;
+    let tempQ;
+    switch (ev.target.select.value) {
+      case "Multiple Choice":
+        tempQ = {
+          correctAns: "",
+          option1: "",
+          option2: "",
+          option3: "",
+          option4: "",
+          prompt: "",
+          points: "",
+          type: "MCQ",
+        };
+        tempArr.push(tempQ);
+        break;
+      case "Fill in the Blank":
+        tempQ = {
+          correctAns: "",
+          prompt: "",
+          points: "",
+          type: "FIB",
+        };
+        tempArr.push(tempQ);
+        break;
+      case "Select Multiple":
+        tempQ = {
+          correctAns: [],
+          option1: "",
+          option2: "",
+          option3: "",
+          option4: "",
+          prompt: "",
+          points: "",
+          type: "SMQ",
+        };
+        tempArr.push(tempQ);
+        break;
+      case "Free Response":
+        tempQ = {
+          prompt: "",
+          points: "",
+          type: "FRQ",
+        };
+        tempArr.push(tempQ);
+        break;
+      case "Video Page":
+        tempQ = {
+          url: "",
+          points: "",
+          type: "VIDEO",
+        };
+        tempArr.push(tempQ);
+        break;
+      default:
+        console.log("Error");
+    }
+    this.setState({
+      questions: tempArr,
+    });
+  };
+
   publishAss = () => {
     let self = this;
     let homeworkRef;// = firestore.collection("classes").doc(this.props.code).collection("Homework").doc("39489037");
     if (this.props.assType === "Lesson")
-      homeworkRef = firestore.collection("classes").doc(self.props.class).collection("inClass").doc(self.state.hwCode);
+      homeworkRef = firestore.collection("classes").doc(self.props.class).collection("inClass").doc(self.props.lessonNumber);
     else
-      homeworkRef = firestore.collection("classes").doc(self.props.class).collection("homework").doc(self.state.hwCode);
+      homeworkRef = firestore.collection("classes").doc(self.props.class).collection("homework").doc(self.props.lessonNumber);
 
     homeworkRef.update({
       questions: self.state.questions,
@@ -111,10 +189,26 @@ class EditActivity extends Component {
         for (let i = 0; i < tempArr.length; i++) {
           let studentRef;
           if (self.props.assType === "Lesson") {
-            studentRef = firestore.collection("users").doc(tempArr[i]).collection("inClass").doc(self.state.hwCode);
+            studentRef = firestore.collection("users").doc(tempArr[i]).collection("inClass").doc(self.props.lessonNumber);
             studentRef.get().then(function (doc) {
               if (doc.exists) {
-                self.setNewDoc();
+                studentRef.update({
+                  answerHistory: tempAnsHis,
+                  class: self.props.class,
+                  completed: "",
+                  currentQuestion: 1,
+                  currentScore: 0,
+                  maxScore: self.state.totalPoints,
+                  name: self.state.title,
+                  numOfQuestions: self.state.questions.length,
+                  questions: tempQuests,
+                  history: tempHist,
+
+                }).then(function () {
+                  console.log("successfully written!");
+                }).catch(function (error) {
+                  console.log(error);
+                });
               } else {
                 studentRef.set({
                   answerHistory: tempAnsHis,
@@ -139,10 +233,26 @@ class EditActivity extends Component {
             });
           }
           else {
-            studentRef = firestore.collection("users").doc(tempArr[i]).collection("homework").doc(self.state.hwCode);
+            studentRef = firestore.collection("users").doc(tempArr[i]).collection("homework").doc(self.props.lessonNumber);
             studentRef.get().then(function (doc) {
               if (doc.exists) {
-                self.setNewDoc();
+                studentRef.update({
+                  answers: tempHist,
+                  class: self.props.class,
+                  completed: 0,
+                  currentQuestion: 1,
+                  currentScore: 0,
+                  mcq: 0,
+                  maxScore: self.state.totalPoints,
+                  name: self.state.title,
+                  numOfQuestions: self.state.questions.length,
+                  history: tempHist,
+
+                }).then(function () {
+                  console.log("successfully written!");
+                }).catch(function (error) {
+                  console.log(error);
+                })
               } else {
                 studentRef.set({
                   answers: tempHist,
@@ -169,8 +279,15 @@ class EditActivity extends Component {
         }
       }
     })
+  };
 
-
+  handleDeleteClick = (index) => {
+    let tempArr = this.state.questions;
+    tempArr.splice(index, 1);
+    this.setState({
+      questions: tempArr,
+      key: !this.state.key,
+    });
   };
 
 
@@ -224,29 +341,32 @@ class EditActivity extends Component {
                           <AccordionItemBody className={"accordBody"}>
                             {quest.type === "MCQ"
                               ?
-                              <MCQForm question={quest} index={index}
+                              <MCQForm key={this.state.key} question={quest} index={index}
                                        recordQuestion={this.recordQuestion}/>
                               : (quest.type === "FRQ")
                                 ?
-                                <FRQForm question={quest} index={index}
+                                <FRQForm key={this.state.key} question={quest} index={index}
                                          recordQuestion={this.recordQuestion}/>
                                 : (quest.type === "VIDEO")
                                   ?
-                                  <VideoForm question={quest} index={index}
+                                  <VideoForm key={this.state.key} question={quest} index={index}
                                              recordQuestion={this.recordQuestion}/>
                                   : (quest.type === "FIB")
                                     ?
-                                    <FIBForm question={quest} index={index}
+                                    <FIBForm key={this.state.key} question={quest} index={index}
                                              recordQuestion={this.recordQuestion}/>
                                     :
                                     (quest.type === "SMQ")
                                       ?
-                                      <SMQForm question={quest} index={index}
+                                      <SMQForm key={this.state.key} question={quest} index={index}
                                                recordQuestion={this.recordQuestion}/>
                                       :
                                       <div/>
 
                             }
+                            <span onClick={() => this.handleDeleteClick(index)} className={"clickableIcon float-right"} style={{fontSize: '2rem', marginTop: '1rem', marginRight: '0.35rem'}}>
+                              <i style={{cursor: 'pointer'}} className="fas fa-trash-alt"/>
+                            </span>
                           </AccordionItemBody>
                         </AccordionItem>
 
@@ -262,7 +382,6 @@ class EditActivity extends Component {
               <Button color={"secondary"} size={"lg"} block onClick={this.publishAss}>Publish</Button>
             </Col>
           </div>
-        }
         <Row className={"Filler"}> </Row>
         <Row className={"Filler"}> </Row>
 
