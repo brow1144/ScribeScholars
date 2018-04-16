@@ -84,10 +84,9 @@ class AddDiscussion extends Component {
             body: self.state.text,
             studentAns: '',
             teacherAns: '',
-            views: {},
+            views: 0,
             uid: self.props.uid,
             id: code,
-            date: new Date(),
           }).then(function () {
             self.props.successfulNewQuestion();
           }).catch(function (error) {

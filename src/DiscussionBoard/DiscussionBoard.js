@@ -17,46 +17,25 @@ class DiscussionBoard extends Component {
     this.state = {
       newQVisible: false,
       visible: false,
-      discussionsObj: {'': {}},
-      discussions: [],
-      originalDiscussions: {'': {}},
-      role: null,
+      discussions: {'': {}},
     }
   };
 
   componentWillMount() {
     this.getDiscussions();
-
-    let self = this;
-    let docRef = firestore.collection("users").doc(this.props.uid)
-    docRef.onSnapshot(function(doc) {
-      if (doc.exists) {
-        self.setState({role: doc.data().role})
-      }
-    })
   }
 
   getDiscussions = () => {
     let self = this;
     let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard");
 
-    let discussionsObj = {'': {}};
-    let originalDiscussions = {};
+    let discussions = {'': {}};
 
     docRef.onSnapshot(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
-        discussionsObj[doc.id] = doc.data();
-        originalDiscussions[doc.id] = doc.data();
-        Object.keys(discussionsObj).forEach((key) => (key === '') && delete discussionsObj[key]);
-        self.setState({discussionsObj: discussionsObj, originalDiscussions: originalDiscussions}, () => {
-          let discussions = [];
-          for (let j in discussionsObj) {
-            discussions.push(discussionsObj[j]);
-          }
-          let temp = discussions.sort(self.dateComare);
-          self.setState({discussions: temp});
-        });
-
+        discussions[doc.id] = doc.data();
+        Object.keys(discussions).forEach((key) => (key === '') && delete discussions[key]);
+        self.setState({discussions: discussions});
       });
     });
   };
@@ -71,42 +50,14 @@ class DiscussionBoard extends Component {
     this.setState({visible: true});
   };
 
-  dateComare = (a, b) => {
-    if (a.date< b.date)
-      return 1;
-    if (a.date > b.date)
-      return -1;
-    return 0;
-  };
-
-  compare = (a, b) => {
-    if (a.hashtag< b.hashtag)
-      return -1;
-    if (a.hashtag > b.hashtag)
-      return 1;
-    return 0;
-  };
-
   onDismiss = () => {
     this.setState({visible: false});
-  };
-
-  handleSearch = (ev) => {
-    let temp = [];
-
-    for (let k in this.state.originalDiscussions) {
-      let data = this.state.originalDiscussions[k];
-      if (data.hashtag.toLowerCase().includes(ev.target.value.toLowerCase())) {
-        temp.push(data);
-      }
-    }
-    this.setState({discussions: temp});
   };
 
   render() {
 
     let discussion = {
-      views: {},
+      views: 0,
       studentAns: '',
       teacherAns: '',
       uid: this.props.uid,
@@ -137,7 +88,7 @@ class DiscussionBoard extends Component {
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">#
                   </InputGroupAddon>
-                  <Input onChange={this.handleSearch} placeholder="search" />
+                  <Input placeholder="search" />
                 </InputGroup>
               </Col>
               <Col md="1"/>
@@ -191,11 +142,13 @@ class DiscussionBoard extends Component {
           <Col xs='0' md='2'/>
         </Row>
 
-        {this.state.discussions.map((key, index) => {
+
+        {Object.keys(this.state.discussions).map((key, index) => {
           return (
-            <DiscussionQuestion role={this.state.role} uid={this.props.uid} classCode={this.props.classCode} discussion={key} key={index}/>
+            <DiscussionQuestion uid={this.props.uid} classCode={this.props.classCode} discussion={this.state.discussions[key]} key={key}/>
           )
         })}
+
 
         <br/>
         <br/>
