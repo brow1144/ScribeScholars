@@ -33,6 +33,14 @@ class AnswerBox extends Component {
                              discussion={this.props.discussion}/>
               <StudentAnswer role={this.props.role} uid={this.props.uid} classCode={this.props.classCode}
                              discussion={this.props.discussion}/>
+        <Row>
+          <Col xs='1'/>
+          <Col>
+            <h2>Follow up</h2>
+          </Col>
+        </Row>
+
+
       </div>
     );
   }
