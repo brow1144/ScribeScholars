@@ -23,6 +23,8 @@ class HomeworkTable extends Component {
           modalOpen: false,
 
           doneLoading: false,
+
+          selectedEndMethod: "deadline"
         }
     }
 
@@ -127,6 +129,12 @@ class HomeworkTable extends Component {
     });
   };
 
+  changeEndMethod = (method) => {
+    this.setState({
+      selectedEndMethod: method,
+    });
+  }
+
   updateDeadline = (ev) => {
     ev.preventDefault();
 
@@ -150,6 +158,51 @@ class HomeworkTable extends Component {
     }
   };
 
+  getFormContent() {
+    if(this.state.selectedEndMethod === 'deadline'){
+      return (
+        <Form onSubmit={(ev) => this.updateDeadline(ev)}>
+          <FormGroup row>
+            <Col sm={2}>
+              <Input bsSize="lg" type="date" name="date" id="date"/>
+            </Col>
+            <Col sm={2}>
+              <Input bsSize="lg" type="time" name="time" id="time"/>
+            </Col>
+          </FormGroup>
+          <Button type='submit'>Update</Button>
+        </Form>
+      );
+    
+    } else if (this.state.selectedEndMethod === 'time span'){
+      return (
+        <Form onSubmit={(ev) => this.updateDeadline(ev)}>
+          <FormGroup row>
+            <Col sm={2}>
+              <Input bsSize="lg" type="date" name="startDate" id="startDate"/>
+            </Col>
+            <Col sm={2}>
+              <Input bsSize="lg" type="time" name="startTime" id="startTime"/>
+            </Col>
+
+            <Col sm={1}>
+              <h3> until </h3>
+            </Col>
+
+            <Col sm={2}>
+              <Input bsSize="lg" type="date" name="startDate" id="startTime"/>
+            </Col>
+            <Col sm={2}>
+              <Input bsSize="lg" type="time" name="endTime" id="endTime"/>
+            </Col>
+          </FormGroup>
+          <Button type='submit'>Update</Button>
+        </Form>
+      );
+    }
+  }
+
+
   getModalContent(){
     if (this.state.modalOpen && this.state.modalAssignment != null && this.state.doneLoading){
       let deadline = new Date(this.state.modalAssignment.due);
@@ -169,18 +222,21 @@ class HomeworkTable extends Component {
 
           <div className={"makeSpace"}/>
 
-          <h2> Update Deadline:</h2>
-          <Form onSubmit={(ev) => this.updateDeadline(ev)}>
-            <FormGroup row>
-              <Col sm={2}>
-                <Input bsSize="lg" type="date" name="date" id="date"/>
-              </Col>
-              <Col sm={2}>
-                <Input bsSize="lg" type="time" name="time" id="time"/>
-              </Col>
-            </FormGroup>
-            <Button type='submit'>Update</Button>
-          </Form>
+          <Row>
+            <Col sm={3}>
+              <h2> Update Deadline:</h2>
+            </Col>
+            <Col sm={1}>
+              <Button onClick={() => this.changeEndMethod('deadline')}> Deadline </Button>
+            </Col>
+            <Col sm={1}>
+              <Button onClick={() => this.changeEndMethod('time span')}> Time Span </Button>
+            </Col>
+          </Row>
+
+          <div className='small'/>
+
+          {this.getFormContent()}
 
           <div className={"makeSpace"}/>
 
