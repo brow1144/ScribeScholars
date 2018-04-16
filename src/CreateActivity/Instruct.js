@@ -73,7 +73,7 @@ class Instruct extends Component {
                             </FormGroup>
 
                             <br/>
-                          <Label size="lg" for="exampleText" sm={6}> Activity Deadline:</Label>
+                          <Label size="lg" for="date" sm={6}> Activity Deadline:</Label>
 
                           <FormGroup row>
                             <Col sm={7}>
