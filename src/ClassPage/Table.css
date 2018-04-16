@@ -3,6 +3,10 @@
     text-align: center;
 }
 
+.small {
+    height: 2em;
+}
+
 .makeSpace {
     height: 4em;
 }

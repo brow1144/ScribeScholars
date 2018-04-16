@@ -388,6 +388,7 @@ class EditActivity extends Component {
       </Container>
     );
   }
+
 }
 
 export default EditActivity

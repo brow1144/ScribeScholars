@@ -35,7 +35,7 @@ class CreateActivity extends Component {
         };
     }
 
-    createHomework = (title, descript) => {
+    createHomework = (title, descript, dueDate) => {
 
         let self = this;
         this.flipComp();
@@ -56,6 +56,8 @@ class CreateActivity extends Component {
                 classRef.set({
                     name: title,
                     description: descript,
+                    due: dueDate,
+                    available: false,
                 }).then(function () {
                     console.log("successfully written!");
                 }).catch(function (error) {
