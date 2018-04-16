@@ -7,7 +7,9 @@ import '../CreateActivity/SMQForm.css';
 class SMQEdit extends Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      question: this.props.question,
+    }
 
   }
 
@@ -36,49 +38,44 @@ class SMQEdit extends Component {
         <br/>
         <FormGroup row>
           <Label size="lg" for="exampleNumber" sm={3}>Question Prompt:</Label>
-
           <Col sm={6}>
-            <Input bsSize="lg" type="username" name="promptQ" id="exampleNumber"/>
+            <Input bsSize="lg" type="username" name="promptQ" id="exampleNumber" defaultValue={this.state.question.prompt}/>
           </Col>
         </FormGroup>
         <FormGroup row>
           <Label size="lg" for="exampleNumber" sm={3}>Selection 1:</Label>
-
           <Col sm={6}>
-            <Input bsSize="lg" type="username" name="opt1" id="exampleNumber"/>
+            <Input bsSize="lg" type="username" name="opt1" id="exampleNumber" defaultValue={this.state.question.option1}/>
           </Col>
         </FormGroup>
         <FormGroup row>
           <Label size="lg" for="exampleNumber" sm={3}>Selection 2:</Label>
-
           <Col sm={6}>
-            <Input bsSize="lg" type="username" name="opt2" id="exampleNumber"/>
+            <Input bsSize="lg" type="username" name="opt2" id="exampleNumber" defaultValue={this.state.question.option2}/>
           </Col>
         </FormGroup>
         <FormGroup row>
           <Label size="lg" for="exampleNumber" sm={3}>Selection 3:</Label>
-
           <Col sm={6}>
-            <Input bsSize="lg" type="username" name="opt3" id="exampleNumber"/>
+            <Input bsSize="lg" type="username" name="opt3" id="exampleNumber" defaultValue={this.state.question.option3}/>
           </Col>
         </FormGroup>
         <FormGroup row>
           <Label size="lg" for="exampleNumber" sm={3}>Selection 4:</Label>
-
           <Col sm={6}>
-            <Input bsSize="lg" type="username" name="opt4" id="exampleNumber"/>
+            <Input bsSize="lg" type="username" name="opt4" id="exampleNumber" defaultValue={this.state.question.option4}/>
           </Col>
         </FormGroup>
         <Label for="exampleSelect" style={{fontSize: '1.25rem'}}>Enter all answers separated by commas (Eg "1, 3, 4"):</Label>
         <Col sm={4}>
-          <Input bsSize="lg" type="username" name="ans" id="exampleSelect"/>
+          <Input bsSize="lg" type="username" name="ans" id="exampleSelect" defaultValue={this.state.question.correctAns}/>
         </Col>
         <br/>
         <FormGroup row>
           <Label size="lg" for="examplePoints" sm={3}>Points:</Label>
 
           <Col sm={2}>
-            <Input bsSize="lg" type="number" name="points" id="examplePoints" defaultValue="1"/>
+            <Input bsSize="lg" type="number" name="points" id="examplePoints" defaultValue={this.state.question.points}/>
           </Col>
         </FormGroup>
         <br/>
