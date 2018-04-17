@@ -53,6 +53,7 @@ class ClassHome extends Component {
       regradeRequestsActive: false,
       gradesActive: false,
     };
+    //console.log(this.props);
 
     this.getRole();
   };
@@ -73,6 +74,8 @@ class ClassHome extends Component {
       this.setState({regradeRequestsActive: true})
     } else if (this.props.tab === 'games') {
       this.setState({gamesActive: true})
+    } else if (this.props.tab === 'grades') {
+      this.setState({gradesActive: true})
     }
 
     this.props.selectClass(this.props.path);
@@ -241,7 +244,7 @@ class ClassHome extends Component {
               ?
               <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/myStudents`}>
 
-                  <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive} code={this.props.code} lessonNumber={this.props.lessonNumber}>My Students</NavLink>
+                  <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive}>My Students</NavLink>
                 
               </RouterLink>
               :
@@ -292,7 +295,7 @@ class ClassHome extends Component {
           {this.state.homeworkActive
             ?
             <div>
-              <HomeworkTable uid={this.props.uid} code = {this.props.code} lessonNumber = {this.props.lessonNumber} homeworks={this.props.homeworks} />
+              <HomeworkTable uid={this.props.uid} code = {this.props.classCode} lessonNumber = {this.props.lessonNumber} homeworks={this.props.homeworks} />
             </div>
             :
             <div>
@@ -300,7 +303,7 @@ class ClassHome extends Component {
           }
           {this.state.lessonsActive
             ?
-            <AssignTable uid={this.props.uid} code={this.props.code} lessonNumber={this.props.lessonNumber} assignments={this.props.assignments} />
+            <AssignTable uid={this.props.uid} code={this.props.classCode} lessonNumber={this.props.lessonNumber} assignments={this.props.assignments} />
             :
             <div>
             </div>
@@ -308,23 +311,21 @@ class ClassHome extends Component {
 
           {this.state.myStudentsActive
             ?
-            <div>
-              <MyStudents code={this.props.code}/>
-            </div>
+            <MyStudents code={this.props.classCode} uid={this.props.uid}/>
             :
             <div>
             </div>
           }
           {this.state.gradesActive
             ?
-            <GradesTable code={this.props.code} uid={this.props.uid}/>
+            <GradesTable code={this.props.classCode} uid={this.props.uid}/>
             :
             <div>
             </div>
           }
           {this.state.regradeRequestsActive
             ?
-            <RegradeTable code={this.props.code} uid={this.props.uid}/>
+            <RegradeTable code={this.props.classCode} uid={this.props.uid}/>
             :
             <div>
             </div>
