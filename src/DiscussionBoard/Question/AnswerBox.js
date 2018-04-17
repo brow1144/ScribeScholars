@@ -21,6 +21,7 @@ class AnswerBox extends Component {
       replies: [{
         userID: null,
         reply: null,
+        userImage: null,
       }],
 
       buttonVis: false,
@@ -39,6 +40,7 @@ class AnswerBox extends Component {
         object.unshift({
           userID: doc.data().userID,
           reply: doc.data().reply,
+          userImage: doc.data().userImage,
         });
         self.setState({
           replies: object,
@@ -74,6 +76,11 @@ class AnswerBox extends Component {
   }
 
   render() {
+    const actions = {
+      setVis: this.setVis,
+
+    };
+
     return (
       <div>
         <br/>
@@ -88,6 +95,7 @@ class AnswerBox extends Component {
                              discussion={this.props.discussion}/>
               <StudentAnswer role={this.props.role} uid={this.props.uid} classCode={this.props.classCode}
                              discussion={this.props.discussion}/>
+        <br/>
         <Row>
           <Col xs='1'/>
           <Col>
@@ -102,7 +110,9 @@ class AnswerBox extends Component {
         </Row>
         {this.state.buttonVis
           ?
-           <AddFollowUp/>
+           <AddFollowUp userImage={this.props.userImage} role={this.state.role} uid={this.props.uid}
+                        classCode={this.props.classCode} discussion={this.props.discussion}
+                        buttonVis={this.state.buttonVis} {...actions}/>
           : null
         }
         {this.state.replies.map((key, index) => {

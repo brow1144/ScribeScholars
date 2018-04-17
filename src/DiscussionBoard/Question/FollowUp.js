@@ -17,7 +17,6 @@ class FollowUp extends Component {
     super(props);
 
     this.state = {
-      ansImage: '',
       name: '',
 
       newAnswer: '',
@@ -56,57 +55,7 @@ class FollowUp extends Component {
     })
   };
 
-  addNewReply = (ev) => {
-    ev.preventDefault();
-
-    if (this.state.newAnswer === '' || this.state.newAnswer === "<p><br></p>") {
-      this.setState({
-        visible: true,
-        message: 'Please fill out an answer!'
-      });
-    } else {
-      let object = [{}];
-      let self = this;
-      let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard").collection("replies").doc(this.props.index);
-
-      // TODO fix this so it updates the collection
-      object.unshift({
-        'reply': this.state.newAnswer,
-        'replyID': this.props.uid,
-      });
-
-      // TODO figure out pictures, make each reply contain one
-      let userRef = firestore.collection("users").doc(this.props.uid);
-      userRef.get().then(function (doc) {
-        if (doc.exists) {
-          let name = doc.data().firstName + ' ' + doc.data().lastName;
-          self.setState({
-            teacherAnsImage: doc.data().userImage,
-            name: name,
-          });
-
-        } else {
-          console.log("No such document!");
-        }
-      }).catch(function (error) {
-        console.log("Error getting document:", error);
-      });
-    }
-  };
-
-  updateReply = (ans) => {
-    this.setState({newAnswer: ans});
-  };
-
-  onDismiss = () => {
-    this.setState({visible: false})
-  };
-
   render() {
-
-    const actions = {
-      updateReply: this.updateReply,
-    };
 
     return (
       <div>
@@ -117,10 +66,10 @@ class FollowUp extends Component {
             <Row>
               <Col sm='1'/>
               <Col sm='1'>
-                {this.props.userImage
+                {this.props.curReply.userImage
                   ?
                   <img className="userImage"
-                       src={this.props.userImage}
+                       src={this.props.curReply.userImage}
                        alt="userIcon"/>
                   :
                   <img className="userImage"
@@ -162,7 +111,7 @@ class FollowUp extends Component {
           : null
         }
 
-        {this.state.buttonVis
+        {/*{this.state.buttonVis
           ?
           <div>
             <Row>
@@ -192,13 +141,13 @@ class FollowUp extends Component {
               <Col xs='12' md='1'/>
               <Col xs='12' md='11'>
 
-                {/*This is where the AddFollowUp goes*/}
+                This is where the AddFollowUp goes
               </Col>
             </Row>
 
           </div>
           : null
-        }
+        }*/}
 
       </div>
     );

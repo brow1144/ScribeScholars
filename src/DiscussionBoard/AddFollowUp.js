@@ -17,15 +17,75 @@ class AddFollowUp extends Component {
     super(props);
 
     this.state = {
-      teacherAnsImage: '',
-      teacherAnsName: '',
+      name: '',
+
+      newAnswer: '',
+
+      visible: false,
+      message: '',
+
+      replies: [{}],
     }
   }
 
+  /*
+   * Puts the reply into firebase
+   */
+  addNewReply = (ev) => {
+    ev.preventDefault();
+
+    if (this.state.newAnswer === '' || this.state.newAnswer === "<p><br></p>") {
+      this.setState({
+        visible: true,
+        message: 'Please fill out an answer!'
+      });
+    } else {
+      let object = [{}];
+      let self = this;
+      let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard").collection("replies").doc(this.props.index);
+
+      // TODO fix this so it updates the collection
+      object.unshift({
+        'reply': this.state.newAnswer,
+        'replyID': this.props.uid,
+        'userImage': this.props.userImage,
+      });
+
+      // TODO figure out pictures, make each reply contain one
+      let userRef = firestore.collection("users").doc(this.props.uid);
+      userRef.get().then(function (doc) {
+        if (doc.exists) {
+          let name = doc.data().firstName + ' ' + doc.data().lastName;
+          self.setState({
+            teacherAnsImage: doc.data().userImage,
+            name: name,
+          });
+
+        } else {
+          console.log("No such document!");
+        }
+      }).catch(function (error) {
+        console.log("Error getting document:", error);
+      });
+    }
+  };
+
+  /*
+   * Handles the button pressing
+   */
   handleChange = (content) => {
+    this.updateReply(content);
+  };
 
-    /*this.props.updateTeacherAns(content);*/
+  /*
+   * Sets the new reply
+   */
+  updateReply = (ans) => {
+    this.setState({newAnswer: ans});
+  };
 
+  onDismiss = () => {
+    this.setState({visible: false})
   };
 
   render() {
@@ -60,6 +120,20 @@ class AddFollowUp extends Component {
     return (
       <div>
         <Row>
+          <Col sm='1'/>
+          <Col sm='11'>
+            <hr/>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs='12' md='1'/>
+          <Col xs='12' md='11'>
+            <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
+              {this.state.message}
+            </Alert>
+          </Col>
+        </Row>
+        <Row>
           <Col xs='12'>
             <InputGroup className='txt'>
               <div className='wrapper'>
@@ -74,6 +148,13 @@ class AddFollowUp extends Component {
                   theme={"snow"} />
               </div>
             </InputGroup>
+          </Col>
+        </Row>
+        <br/>
+        <Row>
+          <Col xs='12' md='9'/>
+          <Col xs='12' md='2'>
+            <Button onClick={this.addNewReply} className='exSpace' color='success'>Submit Follow Up</Button>
           </Col>
         </Row>
       </div>
