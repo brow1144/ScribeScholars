@@ -151,7 +151,11 @@ class TeacherAnswer extends Component {
                 </Col>
               </Row>
               <Row>
-                <Col xs='12' md='9'/>
+                <Col xs='12' md='1'/>
+                <Col xs='12' md='4'>
+                  <p className='teacherAnswer'>Enter a Teacher Answer!</p>
+                </Col>
+                <Col xs='12' md='4'/>
                 <Col xs='12' md='2'>
                   <Button onClick={this.addNewTeacherAns} className='exSpace' color='success'>Submit Teacher Answer</Button>
                 </Col>
