@@ -36,7 +36,7 @@ class MCQForm extends Component {
             option3: ev.target.opt3.value,
             option4: ev.target.opt4.value,
             correctAns: ans,
-            points: parseInt(ev.target.points.value),
+            points: parseInt(ev.target.points.value, 10),
         };
 
         this.props.recordQuestion(quest, this.props.index);

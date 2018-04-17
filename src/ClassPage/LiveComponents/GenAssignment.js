@@ -140,8 +140,8 @@ class GenAssignment extends Component {
           }).then(function() {
             self.getUserAssignment(self.props.code)
           });
-        }
-        else if(doc.data().currentQuestion+1 == self.state.numOfQuestions+1) {
+        }// CHANGED EQUALS
+        else if(doc.data().currentQuestion+1 === self.state.numOfQuestions+1) {
           user.update({
             history: self.state.history,
             questions: self.state.status,
@@ -208,8 +208,9 @@ class GenAssignment extends Component {
     let tmpStat = self.state.status;
 
     //Update history array
+    // CHANGED EQUALS
     for(let i in tmpHis) {
-      if(i == self.state.currentQuestion-1)
+      if(Number(i) === self.state.currentQuestion-1)
       {
         tmpHis[i] = answer
       }
@@ -217,7 +218,8 @@ class GenAssignment extends Component {
 
     //Update status array
     for(let i in tmpStat) {
-      if(i == self.state.currentQuestion-1)
+      // CHANGED EQUALS
+      if(Number(i) === self.state.currentQuestion-1)
       {
         if(answer === self.state.correctAns){
           tmpStat[i] = "1";
@@ -266,13 +268,16 @@ class GenAssignment extends Component {
     let tmpGradeScore = this.state.gradeScore;
     let percentage = 0;
 
-    if (this.state.status[this.state.currentQuestion - 1] == "1")
+    // CHANGED EQUALS
+    if (this.state.status[this.state.currentQuestion - 1] === "1")
       tmpGradeScore += this.state.points;
 
-    for(let i in tmpGrade) {                              //i starts at 0 and is the index for tmp grade array
-      if(i == self.state.currentQuestion-1) {             //find the current question which we want to update
+    for(let i in tmpGrade) {
+      // CHANGED EQUALS
+      // i starts at 0 and is the index for tmp grade array
+      if(Number(i) === self.state.currentQuestion-1) {             //find the current question which we want to update
         for(let j = 0;  j <= i; j++) {                  //loop over previous questions to find current
-          if(self.state.status[j] == "1") {             //if the question is wrong, take the percentage and divide it by
+          if(self.state.status[j] === "1") {             //if the question is wrong, take the percentage and divide it by
             percentage += 1;
           }
         }
@@ -314,32 +319,9 @@ class GenAssignment extends Component {
     });
   };
 
-  /*
-   * Reset the currentQuestion to 1 when you return to the homepage
-   */
-  resetQuest = () => {
-    let self = this;
-
-    let user = firestore.collection("users").doc(this.state.uid).collection("inClass").doc(this.state.lessonNumber)
-
-    user.get().then((doc) => {
-      if (doc.exists) {
-        user.update({
-          currentQuestion: 1,
-        }).then(function () {
-          self.setState({
-            currentQuestions: self.state.currentQuestions
-          });
-        });
-      }
-    }).catch((error) => {
-      console.log("Error getting document:", error);
-    });
-  };
-
   render() {
     return (
-      <div className={"center"}>
+      <div>
         <Container fluid>
           <Card style={{boxShadow: '8px 8px 3px rgba(0, 0, 0, 0.2)'}}>
             <Row>
@@ -351,14 +333,14 @@ class GenAssignment extends Component {
             {this.state.finalPage
               ?
               <Row>
-                <Col xs={6}>
+                <Col xs={{size: 3, offset: 1}}>
                   <div className={"space"}/>
                   <Button onClick={this.decPage}>Last Question</Button>
                   <br/>
                 </Col>
                 {this.state.completed === "2"
                   ?
-                  <Col xs={6}>
+                  <Col xs={{size: 4, offset: 2}}>
                     <div className={"space"}/>
                     <Nav pills>
                       <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.state.code}/announcements`}>
@@ -373,13 +355,20 @@ class GenAssignment extends Component {
                    </Col>
                 }
               </Row>
-              :
-              <Row>
-                <Col xs={{size: 5, offset: 1}}>
-                  <Button onClick={this.decPage}>Last Question</Button>
-                  <Button onClick={this.incPage}>Next Question</Button>
-                </Col>
-              </Row>
+              : this.state.currentQuestion === 1
+                ?
+                <Row>
+                  <Col xs={{size: 5, offset: 1}}>
+                    <Button onClick={this.incPage}>Next Question</Button>
+                  </Col>
+                </Row>
+                :
+                <Row>
+                  <Col xs={{size: 5, offset: 1}}>
+                    <Button onClick={this.decPage}>Last Question</Button>
+                    <Button onClick={this.incPage}>Next Question</Button>
+                  </Col>
+                </Row>
             }
             <br/>
           </Card>

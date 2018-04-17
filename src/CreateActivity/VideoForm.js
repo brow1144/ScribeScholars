@@ -13,7 +13,7 @@ class VideoForm extends Component {
         let quest = {
             type: "VIDEO",
             url: ev.target.promptQ.value,
-            points: parseInt(ev.target.points.value),
+            points: parseInt(ev.target.points.value, 10),
         };
 
         this.props.recordQuestion(quest, this.props.index);

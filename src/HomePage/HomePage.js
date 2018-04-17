@@ -16,6 +16,7 @@ import LiveFeed from '../ClassPage/LiveFeed';
 import GradingPage from '../MyStudents/GradingPage';
 
 import CreateActivity from '../CreateActivity/CreateActivity';
+import EditActivity from '../EditActivity/EditActivity'
 
 import Settings from '../Settings/Settings';
 
@@ -84,6 +85,8 @@ class HomePage extends Component {
         message: null,
         class: null,
       }],
+
+      calendarEvents: [],
 
       lessonNumber: this.props.lessonNumber,
       class: this.props.class,
@@ -354,7 +357,8 @@ class HomePage extends Component {
           });
 
           self.getUserImage();
-          self.getDeadlines();
+          self.getCalendarEvents();
+          //self.getDeadlines();
           self.getAnnouncements();
         }
         if (doc.data().firstName !== null && doc.data().lastName !== null && doc.data().role !== null) {
@@ -440,58 +444,58 @@ class HomePage extends Component {
 
   /**
    *
-   * Now that we have the teacher uid and the students
-   * array of classes,
-   *
-   * 1. We got to the teachers uid and find her classes
-   *
-   * 2. When then find the classes that correlate with the
-   *    student and the teacher
-   *
-   * 3. Then we get the deadlines from the central classroom data
-   *    and set state to update the calendar
+   * This method goes through all the students homeworks and inClass
+   * assignments, gets the due date from them, and adds them to dates.
    *
    */
   getDeadlines = () => {
-
-    let object = [{}];
-
     let self = this;
+    let dates = [];
 
     for (let j in self.state.classes) {
+      let homeworkRef = firestore.collection("classes").doc(self.state.classes[j].code).collection('homework');
 
-      let docRef = firestore.collection("classes").doc(self.state.classes[j].code);
-
-      docRef.get().then(function (doc) {
-        if (doc.exists) {
-          let data = doc.data();
-          for (let i in data.deadlines) {
-            if (data.deadlines.hasOwnProperty(i)) {
-              object.unshift({
-                title: data.deadlines[i].title,
-                start: new Date(data.deadlines[i].startYear, data.deadlines[i].startMonth, data.deadlines[i].startDay, data.deadlines[i].startHour, data.deadlines[i].startMinute, 0),
-                end: new Date(data.deadlines[i].endYear, data.deadlines[i].endMonth, data.deadlines[i].endDay, data.deadlines[i].endHour, data.deadlines[i].endMinute, 0),
-              });
-              self.setState({
-                dates: object,
-              })
-            }
+      homeworkRef.get().then((docs) => {
+        docs.forEach((doc) => {
+          if (doc.data().due != null){
+            let deadline = {};
+            deadline.title = doc.data().name;
+            deadline.start = new Date(doc.data().due);
+            deadline.end = new Date(doc.data().due);
+            dates.push(deadline);
           }
-        } else {
-          console.log("No such document!");
-        }
-        self.getAlerts();
-        self.props.updateDates(self.state.dates);
-      }).catch(function (error) {
+        });
+      }).catch((error) => {
+        console.log("Error getting document:", error);
+      });
+
+      let inClassRef = firestore.collection("classes").doc(self.state.classes[j].code).collection('inClass');
+      inClassRef.get().then((docs) => {
+        docs.forEach((doc) => {
+          if (doc.data().due != null){
+            let deadline = {};
+            deadline.title = doc.data().name;
+            deadline.start = new Date(doc.data().due);
+            deadline.end = new Date(doc.data().due);
+            dates.push(deadline);
+          }
+        });
+      }).catch((error) => {
         console.log("Error getting document:", error);
       });
     }
-    object.pop();
 
-    self.setState({
-      dates: object
+    let allEvents = dates;
+    for(let i = 0; i < this.state.calendarEvents.length; i++){
+      allEvents.push(this.state.calendarEvents[i]);
+    }
+    this.setState({
+      dates: allEvents,
     });
 
+    this.getAlerts();
+    this.props.updateDates(this.state.dates);
+    this.forceUpdate();
   };
 
   /**
@@ -550,6 +554,49 @@ class HomePage extends Component {
 
   };
 
+  /**
+   *
+   * Get Calendar Events from Firebase
+   * Calendar Events are manually created by the user where deadlines are added by teacher
+   * when an assignment is created
+   *
+   * Called after getAnnouncements() from getClasses()
+   *
+   * Format for calendar events is
+   * name: ''
+   * time: MM/DD/YYYY TT:TT
+   *
+   */
+
+  getCalendarEvents = () => {
+    let self = this;
+    let userRef = firestore.collection("users").doc(this.state.uid);
+
+    userRef.get().then(function (doc){
+      if (doc.exists){
+        let data = doc.data();
+        for (let i in data.events) {
+          if (data.events.hasOwnProperty(i)) {
+            let object = {
+              title: data.events[i].title,
+              start: new Date(data.events[i].start),
+              end: new Date(data.events[i].end),
+            };
+            let cEvents = self.state.calendarEvents;
+            cEvents.push(object);
+
+            self.setState({
+              calendarEvents: cEvents,
+            });
+          }
+        }
+      } else {
+        console.log("No such document!");
+      }
+    }).then(function (){
+      self.getDeadlines();
+    });
+  };
 
   /**
    *
@@ -720,10 +767,12 @@ class HomePage extends Component {
               <Col md="1"/>
               <Col md="7">
                 <BigCalendar
-                  events={this.props.dates}
+                  selectable
+                  events={this.state.dates}
                   style={calendarStyles}
                   defaultDate={new Date()}
                   eventPropGetter={(this.eventStyleGetter)}
+                  onSelectEvent={event => alert(event.title)}
                 />
               </Col>
 
@@ -767,13 +816,15 @@ class HomePage extends Component {
 
             <Row>
               <Col md="1"/>
-              <Col md="8">
+              <Col md="7">
                 <BigCalendar
                   toolbar={false}
-                  events={this.props.dates}
+                  selectable
+                  events={this.state.dates}
                   style={calendarStyles}
                   defaultDate={new Date()}
                   eventPropGetter={(this.eventStyleGetter)}
+                  onSelectEvent={event => alert(event.title)}
                 />
               </Col>
               <Col md="3"/>
@@ -851,22 +902,36 @@ class HomePage extends Component {
       );
 
     } else if (this.props.page === "createActivity") {
-      return (
-        <Sidebar {...sideData}>
+        return (
+            <Sidebar {...sideData}>
 
-          <HomeNav firstName={"Create: " + this.props.assType} lastName={""} expand={this.dockSideBar}
-                   width={this.state.width}/>
+                <HomeNav firstName={"Create: " + this.props.assType} lastName={""} expand={this.dockSideBar}
+                         width={this.state.width}/>
 
-          <Row>
-            <Col>
-              <CreateActivity {...classData} class={this.props.class} assType={this.props.assType} uid={this.state.uid}/>
-            </Col>
-          </Row>
-        </Sidebar>
-      );
+                <Row>
+                    <Col>
+                        <CreateActivity {...classData} class={this.props.class} assType={this.props.assType}
+                                        uid={this.state.uid}/>
+                    </Col>
+                </Row>
+            </Sidebar>
+        );
 
+    } else if (this.props.page === "editActivity") {
+            return (
+                <Sidebar {...sideData}>
+                    <HomeNav firstName={"Editing: " + this.props.assType} lastName={""} expand={this.dockSideBar}
+                             width={this.state.width}/>
+                    <Row>
+                        <Col>
+                            <EditActivity {...classData} class={this.props.class} assType={this.props.assType}
+                                          uid={this.state.uid} lessonNumber={this.props.lessonNumber}/>
+                        </Col>
+                    </Row>
+                </Sidebar>
+            );
 
-    }else if (this.props.page === "gradingPage") {
+    } else if (this.props.page === "gradingPage") {
         let assRef = firestore.collection("classes").doc(this.props.class).collection(this.props.assCol).doc(this.props.assKey);
         let self = this;
 
