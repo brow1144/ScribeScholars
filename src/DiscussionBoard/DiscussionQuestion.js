@@ -24,7 +24,6 @@ class DiscussionQuestion extends Component {
 
   componentWillMount() {
     if (this.props.discussion.uid !== undefined && this.props.discussion.uid !== null) {
-
       let docRef = firestore.collection("users").doc(this.props.discussion.uid);
       let self = this;
 
@@ -43,6 +42,7 @@ class DiscussionQuestion extends Component {
         console.log("Error getting document:", error);
       })
     }
+
   }
 
   handleExpand = (id) => {
@@ -115,8 +115,13 @@ class DiscussionQuestion extends Component {
                 }              </Row>
             </Col>
             <Col xs='11' md='1'>
-              <h4 className='replyNum'>{Object.keys(this.props.discussion.views).length}</h4>
-              <p className='replies'>Views</p>
+              {this.props.discussion.views !== undefined
+                ?
+                <h4 className='replyNum'>{Object.keys(this.props.discussion.views).length}</h4>
+                :
+                <h4 className='replyNum'>Loading</h4>
+              }
+                <p className='replies'>Views</p>
             </Col>
           </Row>
           {this.state.accVisible === true

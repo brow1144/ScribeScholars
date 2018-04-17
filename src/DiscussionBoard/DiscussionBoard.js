@@ -17,10 +17,9 @@ class DiscussionBoard extends Component {
     this.state = {
       newQVisible: false,
       visible: false,
-      discussionsObj: {'': {}},
       discussions: [],
-      originalDiscussions: {'': {}},
-      role: null,
+      origDiscussions: [],
+      role: '',
     }
   };
 
@@ -40,24 +39,16 @@ class DiscussionBoard extends Component {
     let self = this;
     let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard");
 
-    let discussionsObj = {'': {}};
-    let originalDiscussions = {};
-
     docRef.onSnapshot(function(querySnapshot) {
+      let discussions = [];
+      let origDiscussions = [];
       querySnapshot.forEach(function(doc) {
-        discussionsObj[doc.id] = doc.data();
-        originalDiscussions[doc.id] = doc.data();
-        Object.keys(discussionsObj).forEach((key) => (key === '') && delete discussionsObj[key]);
-        self.setState({discussionsObj: discussionsObj, originalDiscussions: originalDiscussions}, () => {
-          let discussions = [];
-          for (let j in discussionsObj) {
-            discussions.push(discussionsObj[j]);
-          }
-          let temp = discussions.sort(self.dateComare);
-          self.setState({discussions: temp});
-        });
-
+        origDiscussions.unshift(doc.data());
+        discussions.unshift(doc.data());
+        self.setState({origDiscussions: origDiscussions, discussions: discussions});
       });
+      let final = discussions.sort(self.dateCompare);
+      self.setState({discussions: final, origDiscussions: final}, () => {self.forceUpdate()});
     });
   };
 
@@ -71,22 +62,6 @@ class DiscussionBoard extends Component {
     this.setState({visible: true});
   };
 
-  dateComare = (a, b) => {
-    if (a.date< b.date)
-      return 1;
-    if (a.date > b.date)
-      return -1;
-    return 0;
-  };
-
-  compare = (a, b) => {
-    if (a.hashtag< b.hashtag)
-      return -1;
-    if (a.hashtag > b.hashtag)
-      return 1;
-    return 0;
-  };
-
   onDismiss = () => {
     this.setState({visible: false});
   };
@@ -94,19 +69,53 @@ class DiscussionBoard extends Component {
   handleSearch = (ev) => {
     let temp = [];
 
-    for (let k in this.state.originalDiscussions) {
-      let data = this.state.originalDiscussions[k];
+    for (let i in this.state.origDiscussions) {
+      let data = this.state.origDiscussions[i];
+
       if (data.hashtag.toLowerCase().includes(ev.target.value.toLowerCase())) {
-        temp.push(data);
+        temp.unshift(data);
       }
+
     }
     this.setState({discussions: temp});
+    let final = temp.sort(this.dateCompare);
+    this.setState({discussions: final, origDiscussion: final});
+
+  };
+
+  handleRecent = () => {
+    let final = this.state.discussions.sort(this.dateCompare);
+    this.setState({discussions: final, origDiscussion: final});
+  };
+
+  handlePopular = () => {
+    let final = this.state.discussions.sort(this.popCompare);
+    this.setState({discussions: final, origDiscussion: final});
+  };
+
+  popCompare = (a, b) => {
+    let aData = Object.keys(a.views).length;
+    let bData = Object.keys(b.views).length;
+    if (aData < bData)
+      return 1;
+    if (aData > bData)
+      return -1;
+    return 0;
+  };
+
+
+  dateCompare = (a, b) => {
+    if (a.date< b.date)
+      return 1;
+    if (a.date > b.date)
+      return -1;
+    return 0;
   };
 
   render() {
 
     let discussion = {
-      views: {},
+      views: 0,
       studentAns: '',
       teacherAns: '',
       uid: this.props.uid,
@@ -175,15 +184,12 @@ class DiscussionBoard extends Component {
           <Col xs='12' md='8'>
             <Row>
               <Col className='center' md='2'>
-                <h4 className='recent'>Recent</h4>
+                <h4 onClick={this.handleRecent} className='recent'>Recent</h4>
               </Col>
               <Col className='center' md='2'>
-                <h4 className='popular'>Popular</h4>
+                <h4 onClick={this.handlePopular} className='popular'>Popular</h4>
               </Col>
-              <Col className='center' md='2'>
-                <h4 className='lastReply'>Last Reply</h4>
-              </Col>
-              <Col md='4'/>
+              <Col md='6'/>
               <Col md='2'>
                 <Button onClick={this.addNewDiscussion} className='exSpace' color='success'>+ New Thread</Button>
               </Col>
@@ -192,9 +198,10 @@ class DiscussionBoard extends Component {
           <Col xs='0' md='2'/>
         </Row>
 
-        {this.state.discussions.map((key, index) => {
+        {this.state.discussions.map((key) => {
           return (
-            <DiscussionQuestion role={this.state.role} uid={this.props.uid} classCode={this.props.classCode} discussion={key} key={index}/>
+            <DiscussionQuestion role={this.state.role} uid={this.props.uid} classCode={this.props.classCode}
+                                discussion={key} key={key.date}/>
           )
         })}
 

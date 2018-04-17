@@ -128,12 +128,10 @@ class TeacherAnswer extends Component {
                 <p className='teacherAnswer'>{this.state.name}'s Answer!</p>
               </Col>
             </Row>
-
             <Row>
               <Col sm='1'/>
               <Col sm='11'><hr/></Col>
             </Row>
-
             <Row>
               <Col sm='1'/>
               <Col sm='11'>
@@ -144,61 +142,43 @@ class TeacherAnswer extends Component {
           </div>
           :
           this.props.role === 'teacher'
-          ?
-          <div>
-            <Row>
-              <Col sm='1'/>
-              <Col sm='11'>
-                <hr/>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col xs='12' md='9'/>
-              <Col xs='12' md='2'>
-                <Button onClick={this.addNewTeacherAns} className='exSpace' color='success'>Submit Teacher Answer</Button>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col xs='12' md='1'/>
-              <Col xs='12' md='11'>
-                <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
-                  {this.state.message}
-                </Alert>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col xs='12' md='1'/>
-              <Col xs='12' md='11'>
-                <AddTeacherAns discussion={this.props.discussion} {...actions}/>
-              </Col>
-            </Row>
-
-          </div>
+            ?
+            <div>
+              <Row>
+                <Col sm='1'/>
+                <Col sm='11'>
+                  <hr/>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs='12' md='1'/>
+                <Col xs='12' md='4'>
+                  <p className='teacherAnswer'>Enter a Teacher Answer!</p>
+                </Col>
+                <Col xs='12' md='4'/>
+                <Col xs='12' md='2'>
+                  <Button onClick={this.addNewTeacherAns} className='exSpace' color='success'>Submit Teacher Answer</Button>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs='12' md='1'/>
+                <Col xs='12' md='11'>
+                  <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
+                    {this.state.message}
+                  </Alert>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs='12' md='1'/>
+                <Col xs='12' md='11'>
+                  <AddTeacherAns discussion={this.props.discussion} {...actions}/>
+                </Col>
+              </Row>
+            </div>
             : null
-
         }
       </div>
     );
   }
 }
-
-
 export default TeacherAnswer;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

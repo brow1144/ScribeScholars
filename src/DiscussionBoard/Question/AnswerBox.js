@@ -85,7 +85,9 @@ class AnswerBox extends Component {
 
     return (
       <div>
+
         <br/>
+
         <Row>
           <Col sm='1'/>
           <Col className='answerBoxBackground' sm='11'>
@@ -124,7 +126,6 @@ class AnswerBox extends Component {
                       buttonVis={this.state.buttonVis} theKey={key}/>
           )
         })}
-
       </div>
     );
   }

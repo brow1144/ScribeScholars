@@ -12,8 +12,6 @@ class MCQEdit extends Component {
     };
   }
 
-
-
   onFormSubmit = (ev) => {
     ev.preventDefault();
 
