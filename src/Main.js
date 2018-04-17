@@ -648,6 +648,18 @@ class Main extends Component {
 
         )}/>
 
+        <Route path="/ScribeScholars/HomePage/:class/games/:lessonNumber/student" render={(match) => (
+
+          <HomePage
+            class={match.match.params.class}
+            lessonNumber={match.match.params.lessonNumber}
+            page="studGame"
+            {...data}
+            {...actions}
+          />
+
+        )}/>
+
         <Route path="/ScribeScholars/HomePage/:class/homework/:lessonNumber" render={(match) => (
           this.state.role === "teacher"
             ?
