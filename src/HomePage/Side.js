@@ -66,7 +66,7 @@ class Side extends Component {
 
   render() {
 
-    if (this.props.page === "home" || this.props.page === "classes" || this.props.page === "liveFeed" || this.props.page === "createActivity" || this.props.page === "gradingPage" || this.props.page === "homeworks" || this.props.page === "inclass" || this.props.page === "studentLiveFeed" || this.props.page === "discussion" || this.props.page === "editActivity") {
+    if (this.props.page === "home" || this.props.page === "classes" || this.props.page === "liveFeed" || this.props.page === "createActivity" || this.props.page === "gradingPage" || this.props.page === "homeworks" || this.props.page === "inclass" || this.props.page === "studentLiveFeed" || this.props.page === "discussion" || this.props.page === "editActivity" || this.props.page === "studGame") {
 
       return (
         <div>
