@@ -1,12 +1,15 @@
 import React, {Component} from 'react';
 
-import {Row, Col} from 'reactstrap';
+import {Row, Col, Button} from 'reactstrap';
 
 import 'react-quill/dist/quill.core.css';
 import './AnswerBox.css'
 
 import TeacherAnswer from './TeacherAnswer';
 import StudentAnswer from './StudentAnswer';
+import FollowUp from './FollowUp';
+import AddFollowUp from '../AddFollowUp'
+import {firestore} from "../../base";
 
 class AnswerBox extends Component {
 
@@ -14,7 +17,59 @@ class AnswerBox extends Component {
     super(props);
 
     this.state = {
+      discussion: {},
+      replies: [{
+        userID: null,
+        reply: null,
+      }],
 
+      buttonVis: false,
+    }
+  }
+
+  getReplies = () => {
+    let object = [{}];
+
+    let self = this;
+
+    let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard").doc(this.props.discussion.id).collection("replies");
+
+    docRef.get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        object.unshift({
+          userID: doc.data().userID,
+          reply: doc.data().reply,
+        });
+        self.setState({
+          replies: object,
+          discussion: self.props.discussion,
+        })
+      })
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+
+    object.pop();
+
+    self.setState({
+      replies: object
+    });
+  };
+
+  componentWillMount() {
+    this.getReplies();
+  }
+
+  setVis = () => {
+    let self = this;
+    if (this.state.buttonVis) {
+      self.setState({
+        buttonVis: false,
+      })
+    } else {
+      self.setState({
+        buttonVis: true,
+      })
     }
   }
 
@@ -39,7 +94,24 @@ class AnswerBox extends Component {
             <h2>Follow up</h2>
           </Col>
         </Row>
-
+        <Row>
+          <Col xs='12' md='9'/>
+          <Col xs='12' md='2'>
+            <Button onClick={this.setVis} className='exSpace' color='success'>Create Follow Up</Button>
+          </Col>
+        </Row>
+        {this.state.buttonVis
+          ?
+           <AddFollowUp/>
+          : null
+        }
+        {this.state.replies.map((key, index) => {
+          return (
+            <FollowUp userImage={this.props.userImage} role={this.state.role} uid={this.props.uid}
+                      classCode={this.props.classCode} curReply={this.state.replies[index]} index={index}
+                      buttonVis={this.state.buttonVis}/>
+          )
+        })}
 
       </div>
     );

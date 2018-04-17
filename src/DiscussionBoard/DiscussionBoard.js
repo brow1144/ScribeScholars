@@ -110,6 +110,7 @@ class DiscussionBoard extends Component {
       studentAns: '',
       teacherAns: '',
       uid: this.props.uid,
+      replies: [{}],
     };
 
     return (
