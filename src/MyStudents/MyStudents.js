@@ -203,7 +203,7 @@ class MyStudents extends Component {
       if (this.state.classAssignments.hasOwnProperty(i)) {
         let assignment = this.getStudentAssignment(uid, this.state.classAssignments[i]);
 
-        if (assignment.data.score != null) {
+        if (assignment != null && assignment.data.score != null) {
           let name = assignment.data.name;
           let grade = (assignment.data.score / assignment.data.maxScore) * 100;
           let avg = this.getAverageScore(this.state.classAssignments[i], true);
