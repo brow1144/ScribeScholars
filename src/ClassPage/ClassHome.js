@@ -231,13 +231,13 @@ class ClassHome extends Component {
               <NavLink onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
             </RouterLink>
 
+            <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/games`}>
+              <NavLink onClick={this.switchGames} active={this.state.gamesActive}>Class Games</NavLink>
+            </RouterLink>
+
             <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/discussion`}>
               <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
                 Board</NavLink>
-            </RouterLink>
-
-            <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/games`}>
-              <NavLink onClick={this.switchGames} active={this.state.gamesActive}>Class Games</NavLink>
             </RouterLink>
 
             {this.state.gotRole && this.state.role === "teacher"
