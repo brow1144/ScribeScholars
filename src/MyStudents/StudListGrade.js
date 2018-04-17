@@ -3,10 +3,7 @@ import {FormGroup, Input, Row, Col, Button, Table} from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom';
 
 const StudListGrade = (props) => {
-
-
     return (
-
         <Col>
             <h1>Students</h1>
             <Row>
@@ -16,8 +13,8 @@ const StudListGrade = (props) => {
                         <tr>
                             <th>Name</th>
                             <th>Current Score</th>
-                            <th>Multi-Choice Score</th>
-                            <th>Grade ( out of {props.maxScore} )</th>
+                            <th>Ungraded Points</th>
+                            <th>Grade (out of {props.maxScore})</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -25,15 +22,15 @@ const StudListGrade = (props) => {
                             return (
                                 <tr key={key}>
                                     <td>{props.students[index].name}</td>
-                                    <td>{props.students[index].currentScore}</td>
-                                    <td>{props.students[index].mcq}</td>
+                                    <td>{props.students[index].score}</td>
+                                    <td>{props.students[index]}</td>
                                     <td>
                                         <FormGroup>
                                             <Row>
                                                 <Col xs={4}/>
                                                 <Col xs={4}>
-                                                    <Input onChange={(score) => props.updateGrades(props.students[index].key,props.assCol, props.assKey, score.target.value)} name="text" id="exampleText"/>
-
+                                                    <Input onChange={(score) => props.updateScore(props.students[index], parseInt(score.target.value))}
+                                                           type="number"/>
                                                 </Col>
                                                 <Col xs={4}>
                                                     <p className={"assTitle"}>/{props.maxScore}</p>
@@ -62,9 +59,6 @@ const StudListGrade = (props) => {
                 <Col xs={0} md={2}/>
             </Row>
         </Col>
-
-
-
     )
 };
 

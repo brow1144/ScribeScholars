@@ -101,7 +101,6 @@ class HomePage extends Component {
       open: props.open,
 
       gradeName : null,
-      gradeMax : null,
 
       myAssignments: [],
       eventButtonOpen: false,
@@ -965,7 +964,7 @@ class HomePage extends Component {
                 <Row>
                     <Col>
                         <GradingPage {...classData} assRef={assRef} class={this.props.class} assCol={this.props.assCol}
-                                     assKey={this.props.assKey} maxScore={this.props.gradeMax} uid={this.state.uid}/>
+                                     assKey={this.props.assKey} uid={this.state.uid}/>
                     </Col>
                 </Row>
             </Sidebar>
