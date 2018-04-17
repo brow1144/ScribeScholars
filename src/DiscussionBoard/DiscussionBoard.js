@@ -17,26 +17,38 @@ class DiscussionBoard extends Component {
     this.state = {
       newQVisible: false,
       visible: false,
-      discussions: {'': {}},
+      discussions: [],
+      origDiscussions: [],
+      role: '',
     }
   };
 
   componentWillMount() {
     this.getDiscussions();
+
+    let self = this;
+    let docRef = firestore.collection("users").doc(this.props.uid)
+    docRef.onSnapshot(function(doc) {
+      if (doc.exists) {
+        self.setState({role: doc.data().role})
+      }
+    })
   }
 
   getDiscussions = () => {
     let self = this;
     let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard");
 
-    let discussions = {'': {}};
-
     docRef.onSnapshot(function(querySnapshot) {
+      let discussions = [];
+      let origDiscussions = [];
       querySnapshot.forEach(function(doc) {
-        discussions[doc.id] = doc.data();
-        Object.keys(discussions).forEach((key) => (key === '') && delete discussions[key]);
-        self.setState({discussions: discussions});
+        origDiscussions.unshift(doc.data());
+        discussions.unshift(doc.data());
+        self.setState({origDiscussions: origDiscussions, discussions: discussions});
       });
+      let final = discussions.sort(self.dateCompare);
+      self.setState({discussions: final, origDiscussions: final}, () => {self.forceUpdate()});
     });
   };
 
@@ -52,6 +64,52 @@ class DiscussionBoard extends Component {
 
   onDismiss = () => {
     this.setState({visible: false});
+  };
+
+  handleSearch = (ev) => {
+    let temp = [];
+
+    for (let i in this.state.origDiscussions) {
+      let data = this.state.origDiscussions[i];
+
+      if (data.hashtag.toLowerCase().includes(ev.target.value.toLowerCase())) {
+        temp.unshift(data);
+      }
+
+    }
+    this.setState({discussions: temp});
+    let final = temp.sort(this.dateCompare);
+    this.setState({discussions: final, origDiscussion: final});
+
+  };
+
+  handleRecent = () => {
+    let final = this.state.discussions.sort(this.dateCompare);
+    this.setState({discussions: final, origDiscussion: final});
+  };
+
+  handlePopular = () => {
+    let final = this.state.discussions.sort(this.popCompare);
+    this.setState({discussions: final, origDiscussion: final});
+  };
+
+  popCompare = (a, b) => {
+    let aData = Object.keys(a.views).length;
+    let bData = Object.keys(b.views).length;
+    if (aData < bData)
+      return 1;
+    if (aData > bData)
+      return -1;
+    return 0;
+  };
+
+
+  dateCompare = (a, b) => {
+    if (a.date< b.date)
+      return 1;
+    if (a.date > b.date)
+      return -1;
+    return 0;
   };
 
   render() {
@@ -88,7 +146,7 @@ class DiscussionBoard extends Component {
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">#
                   </InputGroupAddon>
-                  <Input placeholder="search" />
+                  <Input onChange={this.handleSearch} placeholder="search" />
                 </InputGroup>
               </Col>
               <Col md="1"/>
@@ -125,15 +183,12 @@ class DiscussionBoard extends Component {
           <Col xs='12' md='8'>
             <Row>
               <Col className='center' md='2'>
-                <h4 className='recent'>Recent</h4>
+                <h4 onClick={this.handleRecent} className='recent'>Recent</h4>
               </Col>
               <Col className='center' md='2'>
-                <h4 className='popular'>Popular</h4>
+                <h4 onClick={this.handlePopular} className='popular'>Popular</h4>
               </Col>
-              <Col className='center' md='2'>
-                <h4 className='lastReply'>Last Reply</h4>
-              </Col>
-              <Col md='4'/>
+              <Col md='6'/>
               <Col md='2'>
                 <Button onClick={this.addNewDiscussion} className='exSpace' color='success'>+ New Thread</Button>
               </Col>
@@ -142,13 +197,13 @@ class DiscussionBoard extends Component {
           <Col xs='0' md='2'/>
         </Row>
 
-
-        {Object.keys(this.state.discussions).map((key, index) => {
+        {this.state.discussions.map((key) => {
+          console.log(key.title);
           return (
-            <DiscussionQuestion uid={this.props.uid} classCode={this.props.classCode} discussion={this.state.discussions[key]} key={key}/>
+            <DiscussionQuestion role={this.state.role} uid={this.props.uid} classCode={this.props.classCode}
+                                discussion={key} key={key.date}/>
           )
         })}
-
 
         <br/>
         <br/>
