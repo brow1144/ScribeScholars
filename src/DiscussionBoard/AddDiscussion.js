@@ -4,6 +4,8 @@ import { Row, Col, InputGroup, Form, InputGroupAddon, Input, Button, Alert} from
 
 import { firestore } from "../base";
 
+import defaultUser from '../HomePage/defUser.png';
+
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
@@ -165,9 +167,16 @@ class AddDiscussion extends Component {
 
           <Row className='questionBox'>
             <Col xs='4' md='1'>
-              <img className="userImage"
-                   src={this.state.userImage}
-                   alt="userIcon"/>
+              {this.state.userImage
+                ?
+                <img className="userImage"
+                     src={this.state.userImage}
+                     alt="userIcon"/>
+                :
+                <img className="userImage"
+                     src={defaultUser}
+                     alt="userIcon"/>
+              }
             </Col>
             <Col xs='8' md='5'>
               <h3 className='questionText'>

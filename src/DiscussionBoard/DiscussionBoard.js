@@ -158,10 +158,7 @@ class DiscussionBoard extends Component {
               <Col className='center' md='2'>
                 <h4 className='popular'>Popular</h4>
               </Col>
-              <Col className='center' md='2'>
-                <h4 className='lastReply'>Last Reply</h4>
-              </Col>
-              <Col md='4'/>
+              <Col md='6'/>
               <Col md='2'>
                 <Button onClick={this.addNewDiscussion} className='exSpace' color='success'>+ New Thread</Button>
               </Col>
