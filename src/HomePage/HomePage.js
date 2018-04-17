@@ -252,9 +252,8 @@ class HomePage extends Component {
     studentRef.get().then((doc) => {
       if (doc.exists) {
         self.getAssignmentsOfType("homework");
-        //self.getAssignmentsOfType("quizzes");
-        //self.getAssignmentsOfType("tests");
         self.getAssignmentsOfType("inClass");
+        self.getAssignmentsOfType("games");
 
         studentRef.get().then(() => {
           let gpa = self.calcGPA();
@@ -723,6 +722,7 @@ class HomePage extends Component {
       classImage: this.props.classImage,
       assignments: this.props.assignments,
       homeworks: this.props.homeworks,
+      games: this.props.games,
     };
 
     const actions = {
@@ -737,6 +737,7 @@ class HomePage extends Component {
       getClassAnnouncements: this.props.getClassAnnouncements,
       getAssignments: this.props.getAssignments,
       getHomeworks: this.props.getHomeworks,
+      getGames: this.props.getGames,
     };
 
     if (this.props.page === "home") {
