@@ -114,6 +114,12 @@ class AssignTable extends Component {
                     :
                     <th/>
                   }
+                  {this.state.role === "teacher"
+                    ?
+                    <th>Edit Link</th>
+                    :
+                    <th/>
+                  }
                 </tr>
                 </thead>
                 {Object.keys(this.state.assignments).map((key, index) => {
@@ -170,6 +176,17 @@ class AssignTable extends Component {
                             <Button
                               onClick={() => this.changeAvail(this.state.assignments[index])}>Enable</Button>
                           }
+                        </td>
+                        :
+                        <td/>
+                      }
+                      {this.state.role === "teacher"
+                        ?
+                        <td>
+                          <RouterLink
+                            to={`/ScribeScholars/HomePage/${this.props.code}/lessons/edit-activity/${this.state.assignments[index].lessonCode}`}>
+                            Edit
+                          </RouterLink>
                         </td>
                         :
                         <td/>
