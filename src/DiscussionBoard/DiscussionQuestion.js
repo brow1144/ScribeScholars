@@ -42,6 +42,7 @@ class DiscussionQuestion extends Component {
         console.log("Error getting document:", error);
       })
     }
+
   }
 
   handleExpand = (id) => {
@@ -125,7 +126,7 @@ class DiscussionQuestion extends Component {
           </Row>
           {this.state.accVisible === true
             ?
-              <AnswerBox uid={this.props.uid} classCode={this.props.classCode} discussion={this.props.discussion}/>
+              <AnswerBox role={this.props.role} uid={this.props.uid} classCode={this.props.classCode} discussion={this.props.discussion}/>
             :
             null
           }

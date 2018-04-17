@@ -19,11 +19,20 @@ class DiscussionBoard extends Component {
       visible: false,
       discussions: [],
       origDiscussions: [],
+      role: '',
     }
   };
 
   componentWillMount() {
     this.getDiscussions();
+
+    let self = this;
+    let docRef = firestore.collection("users").doc(this.props.uid)
+    docRef.onSnapshot(function(doc) {
+      if (doc.exists) {
+        self.setState({role: doc.data().role})
+      }
+    })
   }
 
   getDiscussions = () => {
@@ -78,7 +87,7 @@ class DiscussionBoard extends Component {
     let final = this.state.discussions.sort(this.dateCompare);
     this.setState({discussions: final, origDiscussion: final});
   };
-  
+
   handlePopular = () => {
     let final = this.state.discussions.sort(this.popCompare);
     this.setState({discussions: final, origDiscussion: final});
@@ -191,7 +200,7 @@ class DiscussionBoard extends Component {
         {this.state.discussions.map((key) => {
           console.log(key.title);
           return (
-            <DiscussionQuestion uid={this.props.uid} classCode={this.props.classCode}
+            <DiscussionQuestion role={this.state.role} uid={this.props.uid} classCode={this.props.classCode}
                                 discussion={key} key={key.date}/>
           )
         })}
