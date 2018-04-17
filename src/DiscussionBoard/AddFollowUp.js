@@ -27,6 +27,13 @@ class AddFollowUp extends Component {
       replies: [{}],
     }
   }
+  componentWillMount() {
+    this.getReply();
+  }
+
+  getReply = () => {
+    this.state.replies = this.props.replies;
+  };
 
   /*
    * Puts the reply into firebase
@@ -40,33 +47,20 @@ class AddFollowUp extends Component {
         message: 'Please fill out an answer!'
       });
     } else {
-      let object = [{}];
       let self = this;
-      let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard").collection("replies").doc(this.props.index);
+      let obj = {
+        reply: self.state.newAnswer,
+        replyID: self.props.uid,
+        userImage: self.props.userImage,
+      };
+      // Set firebase TODO make it randomly make a document, its hard coded
+      let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard").doc(this.props.discussion.id).collection("replies").doc().set(obj);
 
-      // TODO fix this so it updates the collection
-      object.unshift({
-        'reply': this.state.newAnswer,
-        'replyID': this.props.uid,
-        'userImage': this.props.userImage,
+      this.setState({
+        newAnswer: "",
       });
-
-      // TODO figure out pictures, make each reply contain one
-      let userRef = firestore.collection("users").doc(this.props.uid);
-      userRef.get().then(function (doc) {
-        if (doc.exists) {
-          let name = doc.data().firstName + ' ' + doc.data().lastName;
-          self.setState({
-            teacherAnsImage: doc.data().userImage,
-            name: name,
-          });
-
-        } else {
-          console.log("No such document!");
-        }
-      }).catch(function (error) {
-        console.log("Error getting document:", error);
-      });
+      this.props.setVis();
+      this.props.getReplies();
     }
   };
 

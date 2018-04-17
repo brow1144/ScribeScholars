@@ -78,7 +78,7 @@ class AnswerBox extends Component {
   render() {
     const actions = {
       setVis: this.setVis,
-
+      getReplies: this.getReplies,
     };
 
     return (
@@ -112,14 +112,14 @@ class AnswerBox extends Component {
           ?
            <AddFollowUp userImage={this.props.userImage} role={this.state.role} uid={this.props.uid}
                         classCode={this.props.classCode} discussion={this.props.discussion}
-                        buttonVis={this.state.buttonVis} {...actions}/>
+                        buttonVis={this.state.buttonVis} replies={this.state.replies} {...actions}/>
           : null
         }
         {this.state.replies.map((key, index) => {
           return (
             <FollowUp userImage={this.props.userImage} role={this.state.role} uid={this.props.uid}
                       classCode={this.props.classCode} curReply={this.state.replies[index]} index={index}
-                      buttonVis={this.state.buttonVis}/>
+                      buttonVis={this.state.buttonVis} theKey={key}/>
           )
         })}
 
