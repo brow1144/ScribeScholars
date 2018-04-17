@@ -74,6 +74,27 @@ class DiscussionBoard extends Component {
 
   };
 
+  handleRecent = () => {
+    let final = this.state.discussions.sort(this.dateCompare);
+    this.setState({discussions: final, origDiscussion: final});
+  };
+  
+  handlePopular = () => {
+    let final = this.state.discussions.sort(this.popCompare);
+    this.setState({discussions: final, origDiscussion: final});
+  };
+
+  popCompare = (a, b) => {
+    let aData = Object.keys(a.views).length;
+    let bData = Object.keys(b.views).length;
+    if (aData < bData)
+      return 1;
+    if (aData > bData)
+      return -1;
+    return 0;
+  };
+
+
   dateCompare = (a, b) => {
     if (a.date< b.date)
       return 1;
@@ -153,10 +174,10 @@ class DiscussionBoard extends Component {
           <Col xs='12' md='8'>
             <Row>
               <Col className='center' md='2'>
-                <h4 className='recent'>Recent</h4>
+                <h4 onClick={this.handleRecent} className='recent'>Recent</h4>
               </Col>
               <Col className='center' md='2'>
-                <h4 className='popular'>Popular</h4>
+                <h4 onClick={this.handlePopular} className='popular'>Popular</h4>
               </Col>
               <Col md='6'/>
               <Col md='2'>
