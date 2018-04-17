@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 
-import {Row, Col, Button, Alert} from 'reactstrap';
+import {Row, Col} from 'reactstrap';
 
 import { firestore } from "../../base";
 
 import 'react-quill/dist/quill.core.css';
 import './FollowUp.css'
 
-import AddTeacherAns from '../AddTeacherAns';
 
 import defaultUser from '../../HomePage/defUser.png';
 

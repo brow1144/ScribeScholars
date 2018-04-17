@@ -199,7 +199,6 @@ class DiscussionBoard extends Component {
         </Row>
 
         {this.state.discussions.map((key) => {
-          console.log(key.title);
           return (
             <DiscussionQuestion role={this.state.role} uid={this.props.uid} classCode={this.props.classCode}
                                 discussion={key} key={key.date}/>

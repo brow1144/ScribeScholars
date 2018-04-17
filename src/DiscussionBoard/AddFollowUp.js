@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import { Row, Col, InputGroup, Form, InputGroupAddon, Input, Button, Alert} from 'reactstrap';
+import { Row, Col, InputGroup, Button, Alert} from 'reactstrap';
 
 import { firestore } from "../base";
 
@@ -32,7 +32,10 @@ class AddFollowUp extends Component {
   }
 
   getReply = () => {
-    this.state.replies = this.props.replies;
+    this.setState = ({
+      replies: this.props.replies,
+    })
+
   };
 
   /*
@@ -53,10 +56,11 @@ class AddFollowUp extends Component {
         replyID: self.props.uid,
         userImage: self.props.userImage,
       };
-      // Set firebase TODO make it randomly make a document, its hard coded
-      let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard").doc(this.props.discussion.id).collection("replies").doc().set(obj);
 
-      this.setState({
+      // Set firebase TODO make it randomly make a document, its hard coded
+      firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard").doc(this.props.discussion.id).collection("replies").doc().set(obj);
+
+      self.setState({
         newAnswer: "",
       });
       this.props.setVis();

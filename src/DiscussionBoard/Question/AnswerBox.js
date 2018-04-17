@@ -64,7 +64,8 @@ class AnswerBox extends Component {
 
   setVis = () => {
     let self = this;
-    if (this.state.buttonVis) {
+    console.log("Before :" + self.state.buttonVis);
+    if (self.state.buttonVis) {
       self.setState({
         buttonVis: false,
       })
@@ -73,7 +74,8 @@ class AnswerBox extends Component {
         buttonVis: true,
       })
     }
-  }
+    console.log(self.state.buttonVis)
+  };
 
   render() {
     const actions = {
