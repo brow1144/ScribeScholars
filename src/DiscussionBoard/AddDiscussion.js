@@ -80,6 +80,7 @@ class AddDiscussion extends Component {
         if (!doc.exists) {
           classRef.set({
             title: title,
+            date: new Date(),
             hashtag: hashtag,
             body: self.state.text,
             studentAns: '',

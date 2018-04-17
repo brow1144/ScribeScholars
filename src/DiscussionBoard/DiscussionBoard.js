@@ -17,8 +17,8 @@ class DiscussionBoard extends Component {
     this.state = {
       newQVisible: false,
       visible: false,
-      // discussions: {'': {}},
       discussions: [],
+      origDiscussions: [],
     }
   };
 
@@ -30,16 +30,16 @@ class DiscussionBoard extends Component {
     let self = this;
     let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard");
 
-    // let discussions = {'': {}};
-
     docRef.onSnapshot(function(querySnapshot) {
       let discussions = [];
+      let origDiscussions = [];
       querySnapshot.forEach(function(doc) {
-        // discussions[doc.id] = doc.data();
-        // Object.keys(discussions).forEach((key) => (key === '') && delete discussions[key]);
-        discussions.push(doc.data());
-        self.setState({discussions: discussions});
+        origDiscussions.unshift(doc.data());
+        discussions.unshift(doc.data());
+        self.setState({origDiscussions: origDiscussions, discussions: discussions});
       });
+      let final = discussions.sort(self.dateCompare);
+      self.setState({discussions: final, origDiscussions: final}, () => {self.forceUpdate()});
     });
   };
 
@@ -55,6 +55,31 @@ class DiscussionBoard extends Component {
 
   onDismiss = () => {
     this.setState({visible: false});
+  };
+
+  handleSearch = (ev) => {
+    let temp = [];
+
+    for (let i in this.state.origDiscussions) {
+      let data = this.state.origDiscussions[i];
+
+      if (data.hashtag.toLowerCase().includes(ev.target.value.toLowerCase())) {
+        temp.unshift(data);
+      }
+
+    }
+    this.setState({discussions: temp});
+    let final = temp.sort(this.dateCompare);
+    this.setState({discussions: final, origDiscussion: final});
+
+  };
+
+  dateCompare = (a, b) => {
+    if (a.date< b.date)
+      return 1;
+    if (a.date > b.date)
+      return -1;
+    return 0;
   };
 
   render() {
@@ -91,7 +116,7 @@ class DiscussionBoard extends Component {
                 <InputGroup>
                   <InputGroupAddon addonType="prepend">#
                   </InputGroupAddon>
-                  <Input placeholder="search" />
+                  <Input onChange={this.handleSearch} placeholder="search" />
                 </InputGroup>
               </Col>
               <Col md="1"/>
@@ -145,22 +170,13 @@ class DiscussionBoard extends Component {
           <Col xs='0' md='2'/>
         </Row>
 
-
-
-        {/*{Object.keys(this.state.discussions).map((key, index) => {*/}
-          {/*return (*/}
-            {/*<DiscussionQuestion uid={this.props.uid} classCode={this.props.classCode}*/}
-                                {/*discussion={this.state.discussions[key]} key={key}/>*/}
-          {/*)*/}
-        {/*})}*/}
-
-        {this.state.discussions.map((key, index) => {
+        {this.state.discussions.map((key) => {
+          console.log(key.title);
           return (
             <DiscussionQuestion uid={this.props.uid} classCode={this.props.classCode}
-                                discussion={key} key={index}/>
+                                discussion={key} key={key.date}/>
           )
         })}
-
 
         <br/>
         <br/>
