@@ -25,6 +25,7 @@ class DiscussionQuestion extends Component {
   componentWillMount() {
     if (this.props.discussion.uid !== undefined && this.props.discussion.uid !== null) {
 
+      console.log('getting stuff');
       let docRef = firestore.collection("users").doc(this.props.discussion.uid);
       let self = this;
 
@@ -46,6 +47,17 @@ class DiscussionQuestion extends Component {
   }
 
   handleExpand = (id) => {
+    let self = this;
+    let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard").doc(this.props.discussion.id);
+
+    docRef.onSnapshot(function (doc) {
+      if (doc.exists) {
+        let views = doc.data().views;
+        views[self.props.uid] = self.props.uid;
+        docRef.update({views: views})
+      }
+    });
+
     this.setState({accVisible: !this.state.accVisible});
   };
 
@@ -104,8 +116,13 @@ class DiscussionQuestion extends Component {
                 }              </Row>
             </Col>
             <Col xs='11' md='1'>
-              <h4 className='replyNum'>{this.props.discussion.views}</h4>
-              <p className='replies'>Views</p>
+              {this.props.discussion.views !== undefined
+                ?
+                <h4 className='replyNum'>{Object.keys(this.props.discussion.views).length}</h4>
+                :
+                <h4 className='replyNum'>Loading</h4>
+              }
+                <p className='replies'>Views</p>
             </Col>
           </Row>
           {this.state.accVisible === true
