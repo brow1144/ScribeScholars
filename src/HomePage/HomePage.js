@@ -779,7 +779,7 @@ class HomePage extends Component {
               </Col>
 
               <Col md="3">
-                <EventButton uid={this.state.uid} expanded={this.state.eventButtonOpen}/>
+                <EventButton uid={this.state.uid} expanded={this.state.eventButtonOpen} role={this.state.role}/>
               </Col>
             </Row>
 
