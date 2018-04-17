@@ -61,14 +61,6 @@ class Main extends Component {
         available: null,
       }],
 
-      games: [{
-        lessonCode: null,
-        name: null,
-        class: null,
-        questions: null,
-        active: null,
-      }],
-
       assignments: [{
         lessonCode: null,
         maxScore: null,
@@ -255,7 +247,6 @@ class Main extends Component {
       this.getClassImage(classCode);
       this.getAssignments(classCode);
       this.getHomeworks(classCode);
-      this.getGames(classCode);
     };
 
     updateClassPicture = (classImage) => {
@@ -454,38 +445,6 @@ class Main extends Component {
 
   };
 
-  getGames = (classCode) => {
-
-    let object = [{}];
-
-    let self = this;
-
-    let docRef = firestore.collection("classes").doc(classCode).collection("games");
-
-    docRef.get().then(function (querySnapshot) {
-      querySnapshot.forEach(function (doc) {
-        object.unshift({
-          lessonCode: doc.id,
-          name: doc.data().name,
-          class: classCode,
-          questions: doc.data().questions,
-          active: doc.data().active,
-        });
-        self.setState({
-          games: object,
-        })
-      })
-    }).catch(function (error) {
-      console.log("Error getting document:", error);
-    });
-
-    object.pop();
-
-    self.setState({
-      games: object
-    });
-
-  };
     render()
     {
       const data = {
@@ -503,7 +462,6 @@ class Main extends Component {
         classImage: this.state.classImage,
         assignments: this.state.assignments,
         homeworks: this.state.homeworks,
-        games: this.state.games,
       };
 
       const actions = {
@@ -522,7 +480,6 @@ class Main extends Component {
         getClassAnnouncements: this.getClassAnnouncements,
         getAssignments: this.getAssignments,
         getHomeworks: this.getHomeworks,
-        getGames: this.getGames,
       };
 
     return (
@@ -642,18 +599,6 @@ class Main extends Component {
             class={match.match.params.class}
             lessonNumber={match.match.params.lessonNumber}
             page="inclass"
-            {...data}
-            {...actions}
-          />
-
-        )}/>
-
-        <Route path="/ScribeScholars/HomePage/:class/games/:lessonNumber/student" render={(match) => (
-
-          <HomePage
-            class={match.match.params.class}
-            lessonNumber={match.match.params.lessonNumber}
-            page="studGame"
             {...data}
             {...actions}
           />

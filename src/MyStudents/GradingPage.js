@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {firestore} from "../base";
-import {Container, Row, Col } from 'reactstrap';
-
+import {Container, Row, Col} from 'reactstrap';
 
 import './MyStudents.css';
+import {firestore} from "../base";
 import StudListGrade from "./StudListGrade";
+
 
 class GradingPage extends Component {
 
@@ -22,6 +22,8 @@ class GradingPage extends Component {
 
             maxScore : 0
         };
+
+
     }
 
     componentWillMount() {
@@ -58,22 +60,48 @@ class GradingPage extends Component {
                                 curScore = deepDoc.data().currentScore;
 
                                 if (self.props.assCol === "homework") {
-                                    object.unshift({
-                                        name: data.firstName + " " + data.lastName,
-                                        email: data.email,
-                                        key: id,
-                                        currentScore: curScore,
-                                        mcq: deepDoc.data().mcq
-                                    });
+                                    if (isNaN(data.gpa)) {
+                                        console.log(data.firstName + " did not have a valid GPA.");
+                                        object.unshift({
+                                            name: data.firstName + " " + data.lastName,
+                                            email: data.email,
+                                            key: id,
+                                            currentScore: curScore,
+                                            gpa: 0,
+                                            mcq: deepDoc.data().mcq
+                                        });
+                                    } else {
+                                        object.unshift({
+                                            name: data.firstName + " " + data.lastName,
+                                            email: data.email,
+                                            key: id,
+                                            currentScore: curScore,
+                                            gpa: data.gpa,
+                                            mcq: deepDoc.data().mcq
+                                        });
+                                    }
                                 }
                                 else if (self.props.assCol === "inClass") {
-                                    object.unshift({
-                                        name: data.firstName + " " + data.lastName,
-                                        email: data.email,
-                                        key: id,
-                                        currentScore: curScore,
-                                        mcq: curScore
-                                    });
+                                    if (isNaN(data.gpa)) {
+                                        console.log(data.firstName + " did not have a valid GPA.");
+                                        object.unshift({
+                                            name: data.firstName + " " + data.lastName,
+                                            email: data.email,
+                                            key: id,
+                                            currentScore: curScore,
+                                            gpa: 0,
+                                            mcq: curScore
+                                        });
+                                    } else {
+                                        object.unshift({
+                                            name: data.firstName + " " + data.lastName,
+                                            email: data.email,
+                                            key: id,
+                                            currentScore: curScore,
+                                            gpa: data.gpa,
+                                            mcq: curScore
+                                        });
+                                    }
                                 }
 
 
@@ -112,7 +140,7 @@ class GradingPage extends Component {
         let self = this;
         assRef.get().then(function (doc) {
             self.setState({
-                maxScore : doc.data().maxScore
+                maxScore : doc.data().questions.length
             })
         });
     };
@@ -138,7 +166,12 @@ class GradingPage extends Component {
             console.log(score)
             return score;
         });
+
+
     };
+
+
+
 
 
     render() {

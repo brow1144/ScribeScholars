@@ -12,6 +12,7 @@ const StudList = (props) => {
 
                         <th scope="row">{index + 1}</th>
                         <td>{props.students[index].grade}</td>
+                        <th>{props.students[index].gpa}</th>
                         <td>{props.students[index].name}</td>
                         <td>{props.students[index].email}</td>
                         <td>

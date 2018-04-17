@@ -19,7 +19,6 @@ import CreateActivity from '../CreateActivity/CreateActivity';
 import EditActivity from '../EditActivity/EditActivity'
 
 import Settings from '../Settings/Settings';
-import StudentMC from '../ClassPage/GameComponents/StudentMC';
 
 import './HomePage.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -253,8 +252,9 @@ class HomePage extends Component {
     studentRef.get().then((doc) => {
       if (doc.exists) {
         self.getAssignmentsOfType("homework");
+        //self.getAssignmentsOfType("quizzes");
+        //self.getAssignmentsOfType("tests");
         self.getAssignmentsOfType("inClass");
-        self.getAssignmentsOfType("games");
 
         studentRef.get().then(() => {
           let gpa = self.calcGPA();
@@ -723,7 +723,6 @@ class HomePage extends Component {
       classImage: this.props.classImage,
       assignments: this.props.assignments,
       homeworks: this.props.homeworks,
-      games: this.props.games,
     };
 
     const actions = {
@@ -738,7 +737,6 @@ class HomePage extends Component {
       getClassAnnouncements: this.props.getClassAnnouncements,
       getAssignments: this.props.getAssignments,
       getHomeworks: this.props.getHomeworks,
-      getGames: this.props.getGames,
     };
 
     if (this.props.page === "home") {
@@ -779,7 +777,7 @@ class HomePage extends Component {
               </Col>
 
               <Col md="3">
-                <EventButton uid={this.state.uid} expanded={this.state.eventButtonOpen} role={this.state.role}/>
+                <EventButton uid={this.state.uid} expanded={this.state.eventButtonOpen}/>
               </Col>
             </Row>
 
@@ -887,20 +885,6 @@ class HomePage extends Component {
         </Sidebar>
       );
 
-    } else if (this.props.page === "studGame"){
-      return (
-        <Sidebar {...sideData}>
-
-          <HomeNav firstName={"In-Class Game: Student"} lastName={""} expand={this.dockSideBar}
-                   width={this.state.width}/>
-
-          <Row>
-            <Col>
-              <StudentMC {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} uid={this.state.uid}/>
-            </Col>
-          </Row>
-        </Sidebar>
-      );
     } else if (this.props.page === "studentLiveFeed") {
 
       return (

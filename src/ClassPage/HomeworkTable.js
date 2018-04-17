@@ -286,12 +286,6 @@ class HomeworkTable extends Component {
                                     :
                                     <th/>
                                   }
-                                  {this.state.role === "teacher"
-                                    ?
-                                    <th>Edit Link</th>
-                                    :
-                                    <th/>
-                                  }
                                 </tr>
                                 </thead>
                               {Object.keys(this.state.homeworks).map((key, index) => {
@@ -336,17 +330,6 @@ class HomeworkTable extends Component {
                                         ?
                                         <td>
                                           <Button onClick={() => this.openModal(this.state.homeworks[index].lessonCode)}>View</Button>
-                                        </td>
-                                        :
-                                        <td/>
-                                      }
-                                      {this.state.role === "teacher"
-                                        ?
-                                        <td>
-                                          <RouterLink
-                                            to={`/ScribeScholars/HomePage/${this.props.code}/homework/edit-activity/${this.state.homeworks[index].lessonCode}`}>
-                                            Edit
-                                          </RouterLink>
                                         </td>
                                         :
                                         <td/>

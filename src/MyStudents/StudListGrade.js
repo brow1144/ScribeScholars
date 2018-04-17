@@ -1,6 +1,8 @@
 import React from 'react'
 import {FormGroup, Input, Row, Col, Button, Table} from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom';
+import {firestore} from "../base";
+
 
 const StudListGrade = (props) => {
 
@@ -14,6 +16,7 @@ const StudListGrade = (props) => {
                     <Table striped>
                         <thead>
                         <tr>
+                            <th>GPA</th>
                             <th>Name</th>
                             <th>Current Score</th>
                             <th>Multi-Choice Score</th>
@@ -24,6 +27,7 @@ const StudListGrade = (props) => {
                         {Object.keys(props.students).map((key, index) => {
                             return (
                                 <tr key={key}>
+                                    <th scope="row">{props.students[index].gpa}</th>
                                     <td>{props.students[index].name}</td>
                                     <td>{props.students[index].currentScore}</td>
                                     <td>{props.students[index].mcq}</td>

@@ -227,6 +227,7 @@ class CreateActivity extends Component {
         });
     };
 
+
     publishAss = () => {
         let self = this;
         let homeworkRef;// = firestore.collection("classes").doc(this.props.code).collection("Homework").doc("39489037");

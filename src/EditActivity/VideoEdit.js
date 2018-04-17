@@ -5,9 +5,7 @@ import {Form, FormGroup, Col, Input, Label, Button} from 'reactstrap';
 class VideoEdit extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      question: this.props.question,
-    }
+    this.state = {}
   }
 
   onFormSubmit = (ev) => {
@@ -27,15 +25,17 @@ class VideoEdit extends Component {
         <br/>
         <FormGroup row>
           <Label size="lg" for="exampleNumber" sm={3}>Video URL:</Label>
+
           <Col sm={6}>
-            <Input bsSize="lg" type="username" name="promptQ" id="exampleNumber" defaultValue={this.state.question.url}/>
+            <Input bsSize="lg" type="username" name="promptQ" id="exampleNumber"/>
           </Col>
         </FormGroup>
         <br/>
         <FormGroup row>
           <Label size="lg" for="examplePoints" sm={3}>Points:</Label>
+
           <Col sm={2}>
-            <Input bsSize="lg" type="number" name="points" id="examplePoints" defaultValue={this.state.question.points}/>
+            <Input bsSize="lg" type="number" name="points" id="examplePoints" defaultValue="1"/>
           </Col>
         </FormGroup>
         <br/>

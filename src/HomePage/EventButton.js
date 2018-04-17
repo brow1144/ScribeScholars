@@ -25,12 +25,6 @@ class EventButton extends Component {
     };
   };
 
-  componentWillMount(){
-    this.setState({
-      role: this.props.role,
-    });
-  };
-
   onFormSubmit = (ev) => {
     ev.preventDefault();
     let self = this;

@@ -24,7 +24,7 @@ class GradesTable extends Component {
       }
     }
 
-    let classAssignmentRef = firestore.collection("classes").doc(this.props.code)
+    let classAssignmentRef = firestore.collection("classes").doc(this.state.code)
       .collection(assignment.type).doc(assignment.assignment_code);
 
     classAssignmentRef.update({
@@ -89,7 +89,7 @@ class GradesTable extends Component {
   // get assignments and students for a particular class
   getClassInfo = () => {
     let self = this;
-    let classRef = firestore.collection("classes").doc(this.props.code);
+    let classRef = firestore.collection("classes").doc(this.state.code);
 
     classRef.get().then((doc) => {
       if (doc.exists) {
@@ -116,7 +116,7 @@ class GradesTable extends Component {
   getClassAssignmentsOfType = (type) => {
     let self = this;
 
-    firestore.collection("classes").doc(this.props.code).collection(type).get().then((snapshot) => {
+    firestore.collection("classes").doc(this.state.code).collection(type).get().then((snapshot) => {
       snapshot.forEach((doc) => {
         self.setState({
           classAssignments: self.state.classAssignments.concat({data: doc.data(), type: type, assignment_code: doc.id}),
@@ -646,7 +646,7 @@ class GradesTable extends Component {
 
     let request = {
       name: this.state.modal_assignment.data.name,
-      class: this.props.code,
+      class: this.state.code,
       maxScore: this.state.modal_assignment.data.maxScore,
       reason: this.state.reason_input,
       score: this.state.modal_assignment.data.score,
