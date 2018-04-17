@@ -6,6 +6,7 @@ import './MyStudents.css';
 import StudList from '../Dashboard/StudList'
 import HomeCards from '../Dashboard/HomeCards'
 import InClassCards from '../Dashboard/InClassCards'
+import Graphs from '../Dashboard/Dashboard'
 import QuizCards from '../Dashboard/QuizCards'
 import {firestore} from "../base";
 
@@ -131,7 +132,7 @@ class MyStudents extends Component {
     for (let i in this.state.studentsList) {
       if (this.state.studentsList.hasOwnProperty(i)) {
         self.getAssignmentsOfType(self.state.studentsList[i], "homework");
-        self.getAssignmentsOfType(self.state.studentsList[i], "quizzes");
+        //self.getAssignmentsOfType(self.state.studentsList[i], "quizzes");
         self.getAssignmentsOfType(self.state.studentsList[i], "tests");
         self.getAssignmentsOfType(self.state.studentsList[i], "inClass");
 
@@ -278,7 +279,7 @@ class MyStudents extends Component {
     this.getClassInfo();
     this.getHomeworks();
     this.getInClass();
-    this.getQuizzes();
+    //this.getQuizzes();
   };
 
   getHomeworks = () => {
@@ -465,9 +466,7 @@ class MyStudents extends Component {
   };
 
   // TODO deleted from down below, don't reference Graphs
-/*<Row className="chartAlign">
-<Graphs lessonNumber={this.props.lessonNumber} code={this.props.code}/>
-</Row>*/
+
 
   render() {
     this.state.students.sort(this.compareValues("grade")).reverse();
@@ -486,10 +485,13 @@ class MyStudents extends Component {
           <Row>
             <Col className={"mainPage"}>
               <Row>
-                <Col className={"mainPage"}>
-                  <h1>Dashboard</h1>
-                </Col>
+                  <Col className={"mainPage"}>
+                      <h1>Dashboard</h1>
+                  </Col>
               </Row>
+                <Row className="chartAlign">
+                    <Graphs lessonNumber={this.props.lessonNumber} code={this.props.code}/>
+                </Row>
             </Col>
           </Row>
           <Row>
@@ -557,8 +559,7 @@ class MyStudents extends Component {
                 <InClassCards code={this.props.code} inclass={this.state.inclass}/>
               </Col>
               <Col>
-                <h1>Quizzes</h1>
-                <QuizCards code={this.props.code} quizzes={this.state.quizzes}/>
+
               </Col>
             </Col>
           </Row>
