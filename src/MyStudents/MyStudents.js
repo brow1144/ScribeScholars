@@ -471,11 +471,6 @@ class MyStudents extends Component {
     });
   };
 
-  // TODO deleted from down below, don't reference Graphs
-/*<Row className="chartAlign">
-<Graphs lessonNumber={this.props.lessonNumber} code={this.props.code}/>
-</Row>*/
-
   render() {
     this.state.students.sort(this.compareValues("grade")).reverse();
 
