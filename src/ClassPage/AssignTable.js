@@ -146,10 +146,6 @@ class AssignTable extends Component {
                             :
                             <p>Closed</p>
                           }
-                          <RouterLink
-                            to={`/ScribeScholars/HomePage/${this.props.code}/lessons/edit-activity/${this.state.assignments[index].lessonCode}`}>
-                            Edit
-                          </RouterLink>
                         </td>
                         :
                         <td>
