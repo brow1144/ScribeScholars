@@ -6,8 +6,10 @@ import './MyStudents.css';
 import StudList from '../Dashboard/StudList'
 import HomeCards from '../Dashboard/HomeCards'
 import InClassCards from '../Dashboard/InClassCards'
+
 import Graphs from '../Dashboard/Dashboard'
 import QuizCards from '../Dashboard/QuizCards'
+
 import {firestore} from "../base";
 
 
@@ -36,11 +38,11 @@ class MyStudents extends Component {
         max: null
       }],
 
-      quizzes: [{
+      /*quizzes: [{
         id: null,
         name: null,
         max: null
-      }],
+      }],*/
 
       uid: this.props.uid,
       code: this.props.code,
@@ -58,8 +60,18 @@ class MyStudents extends Component {
       assignmentGrades: [],   // individual grades for each assignment
 
       graphVisible: false,
+
+      inClassWeight: null,
+      homeworkWeight: null,
     }
   }
+
+  componentWillMount() {
+    this.getClassInfo();
+    this.getHomeworks();
+    this.getInClass();
+    //this.getQuizzes();
+  };
 
   // get assignments and students for a particular class
   getClassInfo = () => {
@@ -71,15 +83,17 @@ class MyStudents extends Component {
         if (doc.data().students != null) {
           self.setState({
             studentsList: doc.data().students,
+            inClassWeight: doc.data().inClassWeight / 100,
+            homeworkWeight: doc.data().homeworkWeight / 100,
           });
+
+          self.getClassAssignmentsOfType("homework");
+          //self.getClassAssignmentsOfType("quizzes");
+          //self.getClassAssignmentsOfType("tests");
+          self.getClassAssignmentsOfType("inClass");
+
+          self.getAllAssignments();
         }
-
-        self.getClassAssignmentsOfType("homework");
-        //self.getClassAssignmentsOfType("quizzes");
-        //self.getClassAssignmentsOfType("tests");
-        self.getClassAssignmentsOfType("inClass");
-
-        self.getAllAssignments();
       }
     }).catch((error) => {
       console.log("Error getting document:", error);
@@ -92,7 +106,7 @@ class MyStudents extends Component {
     firestore.collection("classes").doc(this.state.code).collection(type).get().then((snapshot) => {
       snapshot.forEach((doc) => {
         self.setState({
-          classAssignments: self.state.classAssignments.concat({data: doc.data()}),
+          classAssignments: self.state.classAssignments.concat({data: doc.data(), type: type}),
         });
       });
     }).catch((error) => {
@@ -107,7 +121,7 @@ class MyStudents extends Component {
       snapshot.forEach((doc) => {
         if (doc.data().class === self.state.code && doc.data().score != null) {
           self.setState({
-            allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid}),
+            allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid, type: type}),
           });
         }
       });
@@ -133,7 +147,8 @@ class MyStudents extends Component {
       if (this.state.studentsList.hasOwnProperty(i)) {
         self.getAssignmentsOfType(self.state.studentsList[i], "homework");
         //self.getAssignmentsOfType(self.state.studentsList[i], "quizzes");
-        self.getAssignmentsOfType(self.state.studentsList[i], "tests");
+
+        //self.getAssignmentsOfType(self.state.studentsList[i], "tests");
         self.getAssignmentsOfType(self.state.studentsList[i], "inClass");
 
         let studentRef = firestore.collection("users").doc(this.state.studentsList[i]);
@@ -150,19 +165,33 @@ class MyStudents extends Component {
 
   // get overall grade in class
   getGrade = (uid) => {
-    let total = 0;
-    let max = 0;
+    let inClassTotal = 0;
+    let homeworkTotal = 0;
+    let inClassMax = 0;
+    let homeworkMax = 0;
 
     for (let i in this.state.allAssignments) {
       if (this.state.allAssignments.hasOwnProperty(i)) {
         if (this.state.allAssignments[i].uid === uid && this.state.allAssignments[i].data.score != null) {
-          total += this.state.allAssignments[i].data.score;
-          max += this.state.allAssignments[i].data.maxScore;
+          if (this.state.allAssignments[i].type === "inClass") {
+            inClassTotal += this.state.allAssignments[i].data.score;
+            inClassMax += this.state.allAssignments[i].data.maxScore;
+          } else if (this.state.allAssignments[i].type === "homework") {
+            homeworkTotal += this.state.allAssignments[i].data.score;
+            homeworkMax += this.state.allAssignments[i].data.maxScore;
+          }
         }
       }
     }
 
-    let grade = (total / max) * 100;
+    let grade;
+
+    if (inClassMax !== 0 && homeworkMax !== 0)
+      grade = ((inClassTotal / inClassMax) * this.state.inClassWeight + (homeworkTotal / homeworkMax) * this.state.homeworkWeight) * 100;
+    else if (inClassMax !== 0)
+      grade = (inClassTotal / inClassMax) * 100;
+    else if (homeworkMax !== 0)
+      grade = (homeworkTotal / homeworkMax) * 100;
 
     if (grade % 1 !== 0)
       grade = Math.round(grade * 100) / 100;
@@ -178,7 +207,7 @@ class MyStudents extends Component {
       if (this.state.classAssignments.hasOwnProperty(i)) {
         let assignment = this.getStudentAssignment(uid, this.state.classAssignments[i]);
 
-        if (assignment.data.score != null) {
+        if (assignment != null && assignment.data.score != null) {
           let name = assignment.data.name;
           let grade = (assignment.data.score / assignment.data.maxScore) * 100;
           let avg = this.getAverageScore(this.state.classAssignments[i], true);
@@ -275,13 +304,6 @@ class MyStudents extends Component {
     }
   };
 
-  componentWillMount() {
-    this.getClassInfo();
-    this.getHomeworks();
-    this.getInClass();
-    //this.getQuizzes();
-  };
-
   getHomeworks = () => {
     let object = [{}];
 
@@ -344,7 +366,7 @@ class MyStudents extends Component {
     });
   };
 
-  getQuizzes = () => {
+  /*getQuizzes = () => {
     let object = [{}];
 
     let self = this;
@@ -373,7 +395,7 @@ class MyStudents extends Component {
     self.setState({
       quizzes: object
     });
-  };
+  };*/
 
   getStudents = () => {
     let object = [];
@@ -395,24 +417,12 @@ class MyStudents extends Component {
             studRef.get().then(function (doc) {
               let data = doc.data();
 
-              if (data.gpa == null) {
-                console.log(data.firstName + " did not have a valid GPA.");
-                object.unshift({
-                  name: data.firstName + " " + data.lastName,
-                  email: data.email,
-                  uid: id,
-                  gpa: 0,
-                  grade: self.getGrade(id),
-                });
-              } else {
-                object.unshift({
-                  name: data.firstName + " " + data.lastName,
-                  email: data.email,
-                  uid: id,
-                  gpa: data.gpa,
-                  grade: self.getGrade(id),
-                });
-              }
+              object.unshift({
+                name: data.firstName + " " + data.lastName,
+                email: data.email,
+                uid: id,
+                grade: self.getGrade(id),
+              });
 
               self.setState({
                 students: object,
@@ -534,7 +544,6 @@ class MyStudents extends Component {
                         <tr>
                           <th>Rank</th>
                           <th>Grade</th>
-                          <th>GPA</th>
                           <th>Name</th>
                           <th>Email</th>
                           <th/>
@@ -557,9 +566,6 @@ class MyStudents extends Component {
               <Col>
                 <h1>In-Class Lessons</h1>
                 <InClassCards code={this.props.code} inclass={this.state.inclass}/>
-              </Col>
-              <Col>
-
               </Col>
             </Col>
           </Row>
