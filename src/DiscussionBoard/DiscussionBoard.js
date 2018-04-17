@@ -17,7 +17,8 @@ class DiscussionBoard extends Component {
     this.state = {
       newQVisible: false,
       visible: false,
-      discussions: {'': {}},
+      // discussions: {'': {}},
+      discussions: [],
     }
   };
 
@@ -29,12 +30,14 @@ class DiscussionBoard extends Component {
     let self = this;
     let docRef = firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard");
 
-    let discussions = {'': {}};
+    // let discussions = {'': {}};
 
     docRef.onSnapshot(function(querySnapshot) {
+      let discussions = [];
       querySnapshot.forEach(function(doc) {
-        discussions[doc.id] = doc.data();
-        Object.keys(discussions).forEach((key) => (key === '') && delete discussions[key]);
+        // discussions[doc.id] = doc.data();
+        // Object.keys(discussions).forEach((key) => (key === '') && delete discussions[key]);
+        discussions.push(doc.data());
         self.setState({discussions: discussions});
       });
     });
@@ -144,10 +147,17 @@ class DiscussionBoard extends Component {
 
 
 
-        {Object.keys(this.state.discussions).map((key, index) => {
+        {/*{Object.keys(this.state.discussions).map((key, index) => {*/}
+          {/*return (*/}
+            {/*<DiscussionQuestion uid={this.props.uid} classCode={this.props.classCode}*/}
+                                {/*discussion={this.state.discussions[key]} key={key}/>*/}
+          {/*)*/}
+        {/*})}*/}
+
+        {this.state.discussions.map((key, index) => {
           return (
             <DiscussionQuestion uid={this.props.uid} classCode={this.props.classCode}
-                                discussion={this.state.discussions[key]} key={key}/>
+                                discussion={key} key={index}/>
           )
         })}
 

@@ -24,8 +24,6 @@ class DiscussionQuestion extends Component {
 
   componentWillMount() {
     if (this.props.discussion.uid !== undefined && this.props.discussion.uid !== null) {
-
-      console.log('getting stuff');
       let docRef = firestore.collection("users").doc(this.props.discussion.uid);
       let self = this;
 
