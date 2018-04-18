@@ -1,19 +1,17 @@
 import React, {Component} from 'react';
 import {Container, Row, Col, Table, Button} from 'reactstrap';
 import {XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, ResponsiveContainer } from 'recharts';
+import {firestore} from "../base";
 
 import './MyStudents.css';
+import GradingPage from "./GradingPage";
+import Graphs from '../Dashboard/Dashboard'
 import StudList from '../Dashboard/StudList'
 import HomeCards from '../Dashboard/HomeCards'
 import InClassCards from '../Dashboard/InClassCards'
-
-import Graphs from '../Dashboard/Dashboard'
-
-import {firestore} from "../base";
-
+//import QuizCards from '../Dashboard/QuizCards'
 
 class MyStudents extends Component {
-
   constructor(props) {
     super(props);
 
@@ -46,8 +44,6 @@ class MyStudents extends Component {
       uid: this.props.uid,
       code: this.props.code,
 
-      doneLoading: false,
-
       myAssignments: [],  // all the user's assignments from this class
       myScore: null,  // user's score on current assignment
 
@@ -62,6 +58,9 @@ class MyStudents extends Component {
 
       inClassWeight: null,
       homeworkWeight: null,
+
+      page: "dashboard",
+      activeAss: null,
     }
   }
 
@@ -118,6 +117,7 @@ class MyStudents extends Component {
 
     firestore.collection("users").doc(uid).collection(type).get().then((snapshot) => {
       snapshot.forEach((doc) => {
+        console.log("in loop");
         if (doc.data().class === self.state.code && doc.data().score != null) {
           self.setState({
             allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid, type: type}),
@@ -141,18 +141,18 @@ class MyStudents extends Component {
 
   getAllAssignments = () => {
     let self = this;
-
+console.log("getting all assignments");
     for (let i in this.state.studentsList) {
       if (this.state.studentsList.hasOwnProperty(i)) {
         self.getAssignmentsOfType(self.state.studentsList[i], "homework");
         //self.getAssignmentsOfType(self.state.studentsList[i], "quizzes");
-
         //self.getAssignmentsOfType(self.state.studentsList[i], "tests");
         self.getAssignmentsOfType(self.state.studentsList[i], "inClass");
 
         let studentRef = firestore.collection("users").doc(this.state.studentsList[i]);
         studentRef.get().then(() => {
           if (parseInt(i, 10) === self.state.studentsList.length - 1) {
+            console.log("got all assignments");
             self.getStudents();
           }
         }).catch(function (error) {
@@ -168,7 +168,7 @@ class MyStudents extends Component {
     let homeworkTotal = 0;
     let inClassMax = 0;
     let homeworkMax = 0;
-
+console.log(this.state);
     for (let i in this.state.allAssignments) {
       if (this.state.allAssignments.hasOwnProperty(i)) {
         if (this.state.allAssignments[i].uid === uid && this.state.allAssignments[i].data.score != null) {
@@ -413,12 +413,12 @@ class MyStudents extends Component {
 
             let studRef = firestore.collection("users").doc(id);
 
-            studRef.get().then(function (doc) {
-              let data = doc.data();
+            studRef.get().then(function (studDoc) {
+              let studData = studDoc.data();
 
               object.unshift({
-                name: data.firstName + " " + data.lastName,
-                email: data.email,
+                name: studData.firstName + " " + studData.lastName,
+                email: studData.email,
                 uid: id,
                 grade: self.getGrade(id),
               });
@@ -474,100 +474,121 @@ class MyStudents extends Component {
     });
   };
 
+  returnToDashboard = () => {
+    this.setState({
+      activeAss: null,
+      page: "dashboard",
+    });
+  };
+
+  goToAssignment = (assignment) => {
+    this.setState({
+      activeAss: assignment,
+      page: "grading",
+    })
+  };
+
   render() {
     this.state.students.sort(this.compareValues("grade")).reverse();
 
-    return (
-      <div>
-        <Container fluid>
+    if (this.state.page === "dashboard") {
+      return (
+        <div>
+          <Container fluid>
 
-        </Container>
-        <Container fluid >
-          <Row>
-            <Col className={"mainPage"}>
-              <p>My Students</p>
-            </Col>
-          </Row>
-          <Row>
-            <Col className={"mainPage"}>
-              <Row>
-                  <Col className={"mainPage"}>
-                      <h1>Dashboard</h1>
-                  </Col>
-              </Row>
-                <Row className="chartAlign">
-                    <Graphs lessonNumber={this.props.lessonNumber} code={this.props.code}/>
-                </Row>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Col>
-                <div className="mainPage">
-                  <h1>Students</h1>
-                </div>
+          </Container>
+          <Container fluid >
+            <Row>
+              <Col className={"mainPage"}>
+                <p>My Students</p>
+              </Col>
+            </Row>
+            <Row>
+              <Col className={"mainPage"}>
                 <Row>
-                  <Col>
-                    {this.state.graphVisible
-                      ?
-                      <Row>
-                        <Col xs={{size: 1, offset: 0}}>
-                          <Button onClick={this.hideGraph}>
-                            <i className="fas fa-arrow-left graphIcon"/>
-                          </Button>
-                        </Col>
-                        <Col xs={12} className="graph">
-                          <ResponsiveContainer width="100%" height={300}>
-                            <BarChart data={this.state.assignmentGrades}
-                                      margin={{top: 30, right: 30, left: 30, bottom: 30}}>
-                              <XAxis dataKey="name"/>
-                              <YAxis/>
-                              <CartesianGrid strokeDasharray="3 3"/>
-                              <Tooltip className="graph"/>
-                              <Legend verticalAlign="top" height={36}/>
-                              <Bar dataKey="grade" fill="#21CE99"/>
-                              <Bar dataKey="average" fill="#bf8bff"/>
-                              <Bar dataKey="median" fill="#f1cbff"/>
-                            </BarChart>
-                          </ResponsiveContainer>
-                        </Col>
-                        <Col>
-                        </Col>
-                      </Row>
-                      :
-                      <Table striped>
-                        <thead>
-                        <tr>
-                          <th>Rank</th>
-                          <th>Grade</th>
-                          <th>Name</th>
-                          <th>Email</th>
-                          <th/>
-                        </tr>
-                        </thead>
-
-                        <StudList students={this.state.students} assignments={this.state.allAssignments} showGraph={this.showGraph}/>
-
-                      </Table>
-                    }
+                  <Col className={"mainPage"}>
+                    <h1>Dashboard</h1>
                   </Col>
                 </Row>
+                <Row className="chartAlign">
+                  <Graphs lessonNumber={this.props.lessonNumber} code={this.props.code}/>
+                </Row>
               </Col>
-            </Col>
-            <Col className="mainPage">
+            </Row>
+            <Row>
               <Col>
-                <h1>Homework</h1>
-                <HomeCards code={this.props.code} homeworks={this.state.homeworks}/>
+                <Col>
+                  <div className="mainPage">
+                    <h1>Students</h1>
+                  </div>
+                  <Row>
+                    <Col>
+                      {this.state.graphVisible
+                        ?
+                        <Row>
+                          <Col xs={{size: 1, offset: 0}}>
+                            <Button onClick={this.hideGraph}>
+                              <i className="fas fa-arrow-left graphIcon"/>
+                            </Button>
+                          </Col>
+                          <Col xs={12} className="graph">
+                            <ResponsiveContainer width="100%" height={300}>
+                              <BarChart data={this.state.assignmentGrades}
+                                        margin={{top: 30, right: 30, left: 30, bottom: 30}}>
+                                <XAxis dataKey="name"/>
+                                <YAxis/>
+                                <CartesianGrid strokeDasharray="3 3"/>
+                                <Tooltip className="graph"/>
+                                <Legend verticalAlign="top" height={36}/>
+                                <Bar dataKey="grade" fill="#21CE99"/>
+                                <Bar dataKey="average" fill="#bf8bff"/>
+                                <Bar dataKey="median" fill="#f1cbff"/>
+                              </BarChart>
+                            </ResponsiveContainer>
+                          </Col>
+                          <Col>
+                          </Col>
+                        </Row>
+                        :
+                        <Table striped>
+                          <thead>
+                          <tr>
+                            <th>Rank</th>
+                            <th>Grade</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th/>
+                          </tr>
+                          </thead>
+
+                          <StudList students={this.state.students} assignments={this.state.allAssignments} showGraph={this.showGraph}/>
+
+                        </Table>
+                      }
+                    </Col>
+                  </Row>
+                </Col>
               </Col>
-              <Col>
-                <h1>In-Class Lessons</h1>
-                <InClassCards code={this.props.code} inclass={this.state.inclass}/>
+              <Col className="mainPage">
+                <Col>
+                  <h1>Homework</h1>
+                  <HomeCards code={this.props.code} homeworks={this.state.homeworks} goToAssignment={this.goToAssignment}/>
+                </Col>
+                <Col>
+                  <h1>In-Class Lessons</h1>
+                  <InClassCards code={this.props.code} inclass={this.state.inclass} goToAssignment={this.goToAssignment}/>
+                </Col>
               </Col>
-            </Col>
-          </Row>
-        </Container>
-      </div>
-    )
+            </Row>
+          </Container>
+        </div>
+      )
+    } else if (this.state.page === "grading") {
+      return (
+        <GradingPage code={this.props.code} assignment={this.state.activeAss} assCol={this.state.activeAss.colRef}
+                     assKey={this.state.activeAss.id} returnToDashboard={this.returnToDashboard}/>
+      )
+    }
   }
 }
 
