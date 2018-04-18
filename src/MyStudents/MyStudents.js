@@ -8,7 +8,6 @@ import HomeCards from '../Dashboard/HomeCards'
 import InClassCards from '../Dashboard/InClassCards'
 
 import Graphs from '../Dashboard/Dashboard'
-import QuizCards from '../Dashboard/QuizCards'
 
 import {firestore} from "../base";
 

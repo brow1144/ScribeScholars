@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { InputGroupText, InputGroup, InputGroupAddon, Button, Row, Col, Form, FormGroup, Alert, Input } from 'reactstrap';
+import { Label,InputGroupText, InputGroup, InputGroupAddon, Button, Row, Col, Form, FormGroup, Alert, Input } from 'reactstrap';
 import { Accordion, AccordionItem, AccordionItemTitle, AccordionItemBody } from 'react-accessible-accordion';
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
 import { firestore } from "../base";
 import './EventButton.css';
+import EventClasses from './EventClasses'
 
 class EventButton extends Component {
 
@@ -17,15 +18,22 @@ class EventButton extends Component {
       startTime: null,
       endDate: null,
       endTime: null,
+      selectedClass: null,
+
+      classes: [{
+        name: null,
+      }],
 
       errorMessage: null,
       errorVisible: false,
+      addToStudent: false,
 
       submitting: false,
     };
   };
 
   componentWillMount(){
+    this.getClasses();
     this.setState({
       role: this.props.role,
     });
@@ -40,6 +48,8 @@ class EventButton extends Component {
     let startTime = ev.target.startTime.value;
     let endDate = ev.target.endDate.value;
     let endTime = ev.target.endTime.value;
+    //riley stuff
+      let addClassCode = ev.target.select.value;
 
     if (title === "") {
       self.setState({
@@ -92,6 +102,50 @@ class EventButton extends Component {
     };
 
     let userRef = firestore.collection("users").doc(this.props.uid);
+    let classRef;
+
+
+    if (addClassCode != null && addClassCode !== "Do Not Add To Class") {
+        let theRealCode = addClassCode.split(" : ")[1];
+      classRef = firestore.collection("classes").doc(theRealCode);
+      let classStudents;
+        classRef.get().then(function (doc) {
+            classStudents = doc.data().students;
+            let i = 0;
+
+            //adding event to all students within the selected class
+            for (i = 0; i < classStudents.length; i++) {
+                let studCode = classStudents[i];
+                let studRef = firestore.collection("users").doc(studCode);
+
+                studRef.get().then(function (doc) {
+                    let currentEvents = doc.data().events;
+                    if (currentEvents == null) {
+                        currentEvents = [];
+                    }
+                    currentEvents.push(event);
+
+                    studRef.update({
+                        events: currentEvents,
+                    }).catch(function (error) {
+                        console.error("Error updating events list" + (error));
+                    });
+                }).then(function () {
+                    self.setState({
+                        submitting: false,
+                    });
+                }).catch(function (error) {
+                    console.error("Error getting user doc" + (error));
+                });
+
+            }
+        });
+
+
+    }
+
+    //adding the event to the controlling user
+
     userRef.get().then(function (doc) {
       let currentEvents = doc.data().events;
       if(currentEvents == null){
@@ -118,6 +172,30 @@ class EventButton extends Component {
     self.setState({ visible: false });
   };
 
+  getClasses = () => {
+        let object = [{}];
+
+        let self = this;
+
+        let userRef = firestore.collection("users").doc(this.props.uid);
+        userRef.get().then(function (doc) {
+                // doc.data() is never undefined for query doc snapshots
+                object = doc.data().classes
+                self.setState({
+                    classes: object,
+                });
+
+        }).catch(function (error) {
+            console.log("Error getting document:", error);
+        });
+
+        object.pop();
+
+        self.setState({
+            classes: object
+        });
+  };
+
   render() {
 
     if(!this.state.submitting) {
@@ -136,6 +214,11 @@ class EventButton extends Component {
 
                       <Form onSubmit={(ev) => this.onFormSubmit(ev)}>
                         <div className="divider"/>
+
+                          <FormGroup>
+                              <Label for="exampleSelect">Select if you want a class event</Label>
+                              <EventClasses classes={this.state.classes}/>
+                          </FormGroup>
 
                         <FormGroup>
                           <InputGroup>
@@ -219,5 +302,10 @@ class EventButton extends Component {
     }
   }
 }
+
+/*{(this.props.role === "teacher")
+                              ? <EventClasses radioCheck={this.radioCheck} addClass={this.setAddClass} classes={this.state.classes} classToAdd={this.state.classToAdd}/>
+                              : <div/>
+                          }*/
 
 export default EventButton;
