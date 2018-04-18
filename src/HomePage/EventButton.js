@@ -215,10 +215,15 @@ class EventButton extends Component {
                       <Form onSubmit={(ev) => this.onFormSubmit(ev)}>
                         <div className="divider"/>
 
-                          <FormGroup>
-                              <Label for="exampleSelect">Select if you want a class event</Label>
-                              <EventClasses classes={this.state.classes}/>
-                          </FormGroup>
+                          {this.props.role === "teacher"
+
+                              ?<FormGroup >
+                                <Label for= "exampleSelect" > Select if you want a class event</Label>
+                                <EventClasses classes={this.state.classes}/>
+                              </FormGroup>
+                              :<div/>
+
+                          }
 
                         <FormGroup>
                           <InputGroup>
