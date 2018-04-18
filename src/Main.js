@@ -25,6 +25,7 @@ class Main extends Component {
 
       uid: this.props.uid,
       showGPA: null,
+      showAlerts: null,
 
       userImage: null,
 
@@ -53,18 +54,28 @@ class Main extends Component {
 
       homeworks: [{
         lessonCode: null,
-        maxscore: null,
+        maxScore: null,
         name: null,
         class: null,
         questions: null,
+        available: null,
+      }],
+
+      games: [{
+        lessonCode: null,
+        name: null,
+        class: null,
+        questions: null,
+        active: null,
       }],
 
       assignments: [{
         lessonCode: null,
-        maxscore: null,
+        maxScore: null,
         name: null,
         class: null,
         questions: null,
+        available: null,
       }],
 
       myAssignments: [],
@@ -221,7 +232,7 @@ class Main extends Component {
       this.setState({
         role: role,
       });
-    }
+    };
 
     updateAnnouncements = (announcements) => {
       this.setState({
@@ -244,6 +255,7 @@ class Main extends Component {
       this.getClassImage(classCode);
       this.getAssignments(classCode);
       this.getHomeworks(classCode);
+      this.getGames(classCode);
     };
 
     updateClassPicture = (classImage) => {
@@ -310,6 +322,22 @@ class Main extends Component {
       });
     };
 
+  getShowAlerts = () => {
+    let self = this;
+
+    let studentRef = firestore.collection("users").doc(this.state.uid);
+
+    studentRef.get().then((doc) => {
+      if (doc.exists) {
+        self.setState({
+          showAlerts: doc.data().showAlerts,
+        });
+      }
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
+
   toggleGPA = () => {
       let old_state = this.state.showGPA;
 
@@ -326,6 +354,22 @@ class Main extends Component {
       });
     };
 
+  toggleAlerts = () => {
+    let old_state = this.state.showAlerts;
+
+    this.setState({
+      showAlerts: !this.state.showAlerts,
+    });
+
+    let studentRef = firestore.collection("users").doc(this.state.uid);
+
+    studentRef.update({
+      "showAlerts": !old_state,
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
+
   getAssignments = (classCode) => {
 
     let object = [{}];
@@ -339,10 +383,11 @@ class Main extends Component {
 
         object.unshift({
           lessonCode: doc.id,
-          maxscore: doc.data().maxscore,
+          maxScore: doc.data().maxScore,
           name: doc.data().name,
           class: classCode,
           questions: doc.data().questions,
+          available: doc.data().available,
         });
         self.setState({
           assignments: object,
@@ -387,10 +432,11 @@ class Main extends Component {
       querySnapshot.forEach(function (doc) {
         object.unshift({
           lessonCode: doc.id,
-          maxscore: doc.data().maxscore,
+          maxScore: doc.data().maxScore,
           name: doc.data().name,
           class: classCode,
           questions: doc.data().questions,
+          available: doc.data().available,
         });
         self.setState({
           homeworks: object,
@@ -408,6 +454,38 @@ class Main extends Component {
 
   };
 
+  getGames = (classCode) => {
+
+    let object = [{}];
+
+    let self = this;
+
+    let docRef = firestore.collection("classes").doc(classCode).collection("games");
+
+    docRef.get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        object.unshift({
+          lessonCode: doc.id,
+          name: doc.data().name,
+          class: classCode,
+          questions: doc.data().questions,
+          active: doc.data().active,
+        });
+        self.setState({
+          games: object,
+        })
+      })
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    });
+
+    object.pop();
+
+    self.setState({
+      games: object
+    });
+
+  };
     render()
     {
       const data = {
@@ -415,6 +493,7 @@ class Main extends Component {
         role: this.state.role,
         classes: this.state.classes,
         showGPA: this.state.showGPA,
+        showAlerts: this.state.showAlerts,
         dates: this.state.dates,
         announcements: this.state.announcements,
         userImage: this.state.userImage,
@@ -424,6 +503,7 @@ class Main extends Component {
         classImage: this.state.classImage,
         assignments: this.state.assignments,
         homeworks: this.state.homeworks,
+        games: this.state.games,
       };
 
       const actions = {
@@ -435,17 +515,20 @@ class Main extends Component {
         updateUserImage: this.updateUserImage,
         getShowGPA: this.getShowGPA,
         toggleGPA: this.toggleGPA,
+        getShowAlerts: this.getShowAlerts,
+        toggleAlerts: this.toggleAlerts,
         selectClass: this.selectClass,
         updateClassPicture: this.updateClassPicture,
         getClassAnnouncements: this.getClassAnnouncements,
         getAssignments: this.getAssignments,
         getHomeworks: this.getHomeworks,
+        getGames: this.getGames,
       };
 
     return (
       <Switch>
 
-        <Route path="/HomePage/:class/lesson/create-activity" render={(match) => (
+        <Route path="/ScribeScholars/HomePage/:class/lesson/create-activity" render={(match) => (
           <HomePage
             class={match.match.params.class}
             assType="Lesson"
@@ -455,7 +538,7 @@ class Main extends Component {
           />
         )}/>
 
-        <Route path="/HomePage/:class/homework/create-activity" render={(match) => (
+        <Route path="/ScribeScholars/HomePage/:class/homework/create-activity" render={(match) => (
           <HomePage
             class={match.match.params.class}
             assType="Homework"
@@ -465,7 +548,38 @@ class Main extends Component {
           />
         )}/>
 
-        <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber/:uid" render={(match) => (
+        <Route path="/ScribeScholars/HomePage/:class/games/create-game" render={(match) => (
+          <HomePage
+            class={match.match.params.class}
+            page="createGame"
+            {...data}
+            {...actions}
+          />
+        )}/>
+
+          <Route path="/ScribeScholars/HomePage/:class/homework/edit-activity/:lessonNumber" render={(match) => (
+              <HomePage
+                  class={match.match.params.class}
+                  assType="Homework"
+                  lessonNumber={match.match.params.lessonNumber}
+                  page="editActivity"
+                  {...data}
+                  {...actions}
+              />
+          )}/>
+
+          <Route path="/ScribeScholars/HomePage/:class/lessons/edit-activity/:lessonNumber" render={(match) => (
+              <HomePage
+                  class={match.match.params.class}
+                  assType="Lesson"
+                  lessonNumber={match.match.params.lessonNumber}
+                  page="editActivity"
+                  {...data}
+                  {...actions}
+              />
+          )}/>
+
+        <Route path="/ScribeScholars/HomePage/:class/lessons/liveFeed/:lessonNumber/:uid" render={(match) => (
 
           <HomePage
             studUid={match.match.params.uid}
@@ -477,7 +591,7 @@ class Main extends Component {
           />
         )}/>
 
-        <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber" render={(match) => (
+        <Route path="/ScribeScholars/HomePage/:class/lessons/liveFeed/:lessonNumber" render={(match) => (
 
           <HomePage
             class={match.match.params.class}
@@ -487,7 +601,7 @@ class Main extends Component {
             {...actions}
           />
         )}/>
-          <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber/:uid" render={(match) => (
+          <Route path="/ScribeScholars/HomePage/:class/lessons/liveFeed/:lessonNumber/:uid" render={(match) => (
             this.state.role  === "teacher"
               ?
                 <HomePage
@@ -509,7 +623,7 @@ class Main extends Component {
                 )}/>
           )}/>
 
-          <Route path="/HomePage/:class/lessons/liveFeed/:lessonNumber" render={(match) => (
+          <Route path="/ScribeScholars/HomePage/:class/lessons/liveFeed/:lessonNumber" render={(match) => (
             this.state.role  === "teacher"
               ?
             <HomePage
@@ -520,7 +634,7 @@ class Main extends Component {
               {...actions}
             />
               :
-              <Route path="/homepage/:class" render={(match) => (
+              <Route path="/ScribeScholars/homepage/:class" render={(match) => (
                 <HomePage
                   path={match.match.params.class}
                   page="classes"
@@ -531,7 +645,7 @@ class Main extends Component {
           )}/>
         }
 
-        <Route path="/HomePage/:class/lessons/:lessonNumber" render={(match) => (
+        <Route path="/ScribeScholars/HomePage/:class/lessons/:lessonNumber" render={(match) => (
 
           <HomePage
             class={match.match.params.class}
@@ -543,7 +657,19 @@ class Main extends Component {
 
         )}/>
 
-        <Route path="/HomePage/:class/homework/:lessonNumber" render={(match) => (
+        <Route path="/ScribeScholars/HomePage/:class/games/:lessonNumber/student" render={(match) => (
+
+          <HomePage
+            class={match.match.params.class}
+            lessonNumber={match.match.params.lessonNumber}
+            page="studGame"
+            {...data}
+            {...actions}
+          />
+
+        )}/>
+
+        <Route path="/ScribeScholars/HomePage/:class/homework/:lessonNumber" render={(match) => (
           this.state.role === "teacher"
             ?
             <HomePage
@@ -563,7 +689,7 @@ class Main extends Component {
             />
         )}/>
 
-          <Route path="/HomePage/:class/myStudents/:assCol/:assKey" render={(match) => (
+          <Route path="/ScribeScholars/HomePage/:class/myStudents/:assCol/:assKey" render={(match) => (
 
               <HomePage
                   class={match.match.params.class}
@@ -575,8 +701,9 @@ class Main extends Component {
               />
           )}/>
 
-        <Route path="/homepage/:class" render={(match) => (
+        <Route path="/ScribeScholars/homepage/:class/:tab" render={(match) => (
           <HomePage
+            tab={match.match.params.tab}
             path={match.match.params.class}
             page="classes"
             {...data}
@@ -584,7 +711,17 @@ class Main extends Component {
           />
         )}/>
 
-        <Route path="/homepage" render={() => (
+        <Route path="/ScribeScholars/homepage/:class" render={(match) => (
+          <HomePage
+            tab='announcements'
+            path={match.match.params.class}
+            page="classes"
+            {...data}
+            {...actions}
+          />
+        )}/>
+
+        <Route path="/ScribeScholars/homepage" render={() => (
           <HomePage
             page={this.props.page}
             {...data}
@@ -592,7 +729,7 @@ class Main extends Component {
           />
         )}/>
 
-        <Route path="/settings" render={() => (
+        <Route path="/ScribeScholars/settings" render={() => (
           <HomePage
             page={this.props.page}
             {...data}

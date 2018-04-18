@@ -9,18 +9,14 @@ import {
     AccordionItemBody,
 } from 'react-accessible-accordion';
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
-
-
 import './CreateActivity.css';
-//import MCQ from './MCQForm';
-// import VideoForm from './VideoForm';
-// import FRQ from './FRQForm';
 import Instruct from './Instruct';
-
 import {firestore} from "../base";
 import MCQForm from "./MCQForm";
 import FRQForm from "./FRQForm";
 import VideoForm from "./VideoForm";
+import FIBForm from "./FIBForm";
+import SMQForm from "./SMQForm";
 
 class CreateActivity extends Component {
     constructor(props) {
@@ -35,10 +31,11 @@ class CreateActivity extends Component {
             question: {},
             hwCode: null,
             title: "",
+            totalPoints: 0,
         };
     }
 
-    createHomework = (title, descript) => {
+    createHomework = (title, descript, dueDate) => {
 
         let self = this;
         this.flipComp();
@@ -50,7 +47,7 @@ class CreateActivity extends Component {
         else
             classRef = firestore.collection("classes").doc(self.props.class).collection("homework").doc(code);
 
-        self.setState({hwCode: code, title: title,});
+        self.setState({hwCode: code, title: title});
 
         classRef.get().then(function (doc) {
             if (doc.exists) {
@@ -59,6 +56,8 @@ class CreateActivity extends Component {
                 classRef.set({
                     name: title,
                     description: descript,
+                    due: dueDate,
+                    available: false,
                 }).then(function () {
                     console.log("successfully written!");
                 }).catch(function (error) {
@@ -163,13 +162,37 @@ class CreateActivity extends Component {
                     option3: "",
                     option4: "",
                     prompt: "",
+                    points: "",
                     type: "MCQ",
+                };
+                tempArr.push(tempQ);
+                break;
+            case "Fill in the Blank":
+                tempQ = {
+                    correctAns: "",
+                    prompt: "",
+                    points: "",
+                    type: "FIB",
+                };
+                tempArr.push(tempQ);
+                break;
+            case "Select Multiple":
+                tempQ = {
+                    correctAns: [],
+                    option1: "",
+                    option2: "",
+                    option3: "",
+                    option4: "",
+                    prompt: "",
+                    points: "",
+                    type: "SMQ",
                 };
                 tempArr.push(tempQ);
                 break;
             case "Free Response":
                 tempQ = {
                     prompt: "",
+                    points: "",
                     type: "FRQ",
                 };
                 tempArr.push(tempQ);
@@ -177,6 +200,7 @@ class CreateActivity extends Component {
             case "Video Page":
                 tempQ = {
                     url: "",
+                    points: "",
                     type: "VIDEO",
                 };
                 tempArr.push(tempQ);
@@ -195,11 +219,13 @@ class CreateActivity extends Component {
 
         tempArr.splice(index, 1, quest);
 
+        let tempTotalPoints = this.state.totalPoints + tempArr[index].points;
+
         this.setState({
             questions: tempArr,
+            totalPoints: tempTotalPoints,
         });
     };
-
 
     publishAss = () => {
         let self = this;
@@ -209,10 +235,9 @@ class CreateActivity extends Component {
         else
             homeworkRef = firestore.collection("classes").doc(self.props.class).collection("homework").doc(self.state.hwCode);
 
-
         homeworkRef.update({
             questions: self.state.questions,
-            maxscore: self.state.questions.length,
+            maxScore: self.state.totalPoints,
         }).then(function () {
             console.log("Successfully added a question");
 
@@ -251,11 +276,10 @@ class CreateActivity extends Component {
                                 studentRef.set({
                                     answerHistory: tempAnsHis,
                                     class: self.props.class,
-
-                                    completed: 0,
+                                    completed: "",
                                     currentQuestion: 1,
                                     currentScore: 0,
-                                    maxscore: self.state.questions.length,
+                                    maxScore: self.state.totalPoints,
                                     name: self.state.title,
                                     numOfQuestions: self.state.questions.length,
                                     questions: tempQuests,
@@ -284,7 +308,7 @@ class CreateActivity extends Component {
                                     currentQuestion: 1,
                                     currentScore: 0,
                                     mcq: 0,
-                                    maxscore: self.state.questions.length,
+                                    maxScore: self.state.totalPoints,
                                     name: self.state.title,
                                     numOfQuestions: self.state.questions.length,
                                     history: tempHist,
@@ -309,7 +333,7 @@ class CreateActivity extends Component {
                                                     completed: "",
                                                     currentQuestion: 1,
                                                     currentScore: 0,
-                                                    maxscore: self.state.questions.length,
+                                                    maxScore: self.state.questions.length,
                                                     name: self.state.title,
                                                     numOfQuestions: self.state.questions.length,
                                                     questions: tempQuests,
@@ -352,12 +376,16 @@ class CreateActivity extends Component {
                                             ?
                                             <Input bsSize="lg" type="select" name="select" id="exampleSelect">
                                                 <option>Multiple Choice</option>
+                                                <option>Fill in the Blank</option>
+                                                <option>Select Multiple</option>
                                                 <option>Free Response</option>
                                                 <option>Video Page</option>
                                             </Input>
                                             :
                                             <Input bsSize="lg" type="select" name="select" id="exampleSelect">
                                                 <option>Multiple Choice</option>
+                                                <option>Fill in the Blank</option>
+                                                <option>Select Multiple</option>
                                             </Input>
                                         }
                                     </Col>
@@ -393,8 +421,18 @@ class CreateActivity extends Component {
                                                                     ?
                                                                     <VideoForm question={quest} index={index}
                                                                                recordQuestion={this.recordQuestion}/>
-                                                                    :
-                                                                    <div/>
+                                                                    : (quest.type === "FIB")
+                                                                        ?
+                                                                        <FIBForm question={quest} index={index}
+                                                                                 recordQuestion={this.recordQuestion} />
+                                                                        :
+                                                                        (quest.type === "SMQ")
+                                                                            ?
+                                                                            <SMQForm question={quest} index={index}
+                                                                                     recordQuestion={this.recordQuestion} />
+                                                                            :
+                                                                            <div/>
+
                                                         }
                                                     </AccordionItemBody>
                                                 </AccordionItem>
@@ -423,43 +461,3 @@ class CreateActivity extends Component {
 }
 
 export default CreateActivity
-
-
-/*
-<Accordion>
-{this.states.questions != null && Object.keys(this.state.questions).map((key, index) => {
-    return <AccordionItem key={key}>
-        <AccordionItemTitle>
-            <h3>
-                {this.props.classes[index].class}
-            </h3>
-        </AccordionItemTitle>
-        <AccordionItemBody className={"accordBody"}>
-            <div className="inside">
-                <Row>
-                    <Col sm="12">
-                        <Form onSubmit={this.onFormSubmit}>
-
-                            <FormGroup row>
-                                <Col xs="7">
-                                    <InputGroup size="10">
-                                        <InputGroupAddon addonType="prepend">Class Name</InputGroupAddon>
-                                        <Input bsSize="md" type="username" name="className" id="exampleClassName" defaultValue={this.props.classes[index].class} />
-                                    </InputGroup>
-
-                                </Col>
-                            </FormGroup>
-                            <Button outline color="success" size={"lg"}>
-                                <i className="far fa-save" />
-                            </Button>
-                            <span className="deleteIcon" onClick={ () => this.toggle(this.props.classes[index].code)}>
-                                                <i className="fas fa-trash-alt picIcon"/>
-                                              </span>
-                        </Form>
-                    </Col>
-                </Row>
-                </div>
-        </AccordionItemBody>
-    </AccordionItem>
-})}
-</Accordion>*/

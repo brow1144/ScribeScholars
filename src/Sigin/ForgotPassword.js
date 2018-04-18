@@ -40,7 +40,7 @@ class SignIn extends Component {
             <Button className="createAccountButton" type="submit" size="lg" block>Reset Password</Button>
           </Form>
           <hr />
-          <NavLink style={{ textDecoration: 'none' }} to="/sign-in">
+          <NavLink style={{ textDecoration: 'none' }} to="/ScribeScholars/sign-in">
             <Button className="createAccountButton" size="lg" block>Back to Sign In</Button>
           </NavLink>
         </div>

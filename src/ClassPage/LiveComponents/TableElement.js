@@ -25,7 +25,7 @@ class TableElement extends Component {
 
     if (this.state.redirect) {
       return <Redirect push
-                       to={`/HomePage/${this.props.class}/lessons/liveFeed/${this.props.lessonNumber}/${individualStudent.uid}`}/>;
+                       to={`/ScribeScholars/HomePage/${this.props.class}/lessons/liveFeed/${this.props.lessonNumber}/${individualStudent.uid}`}/>;
     }
 
     return (

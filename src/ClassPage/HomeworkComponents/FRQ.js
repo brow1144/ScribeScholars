@@ -22,6 +22,7 @@ class FRQ extends Component {
               <Input onChange={(ev) => this.props.setFRQ(ev.target.value)} value={this.props.frqResponse}
                      style={{height: '20rem'}} type="textarea"
                      name="here" id="exampleText"/>
+
             </Col>
           </FormGroup>
         </Col>

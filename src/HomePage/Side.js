@@ -66,31 +66,31 @@ class Side extends Component {
 
   render() {
 
-    if (this.props.page === "home" || this.props.page === "classes" || this.props.page === "liveFeed" || this.props.page === "createActivity" || this.props.page === "gradingPage" || this.props.page === "homeworks" || this.props.page === "inclass" || this.props.page === "studentLiveFeed") {
+    if (this.props.page === "home" || this.props.page === "classes" || this.props.page === "liveFeed" || this.props.page === "createActivity" || this.props.page === "createGame" || this.props.page === "gradingPage" || this.props.page === "homeworks" || this.props.page === "inclass" || this.props.page === "studentLiveFeed" || this.props.page === "discussion" || this.props.page === "editActivity" || this.props.page === "studGame") {
 
       return (
         <div>
-            <NavLink style={{textDecoration: 'none'}} to={`/HomePage`}>
+            <NavLink style={{textDecoration: 'none'}} to={`/ScribeScholars/HomePage`}>
                 <img className="logo" src={logo} alt="Logo"/>
             </NavLink>
 
           {this.props.classes != null && Object.keys(this.props.classes).map((key, index) => {
             return <NavLink onClick={() => this.props.selectClass(this.props.classes[index].code)} key={key}
                             style={{textDecoration: 'none'}}
-                            to={`/HomePage/${this.props.classes[index].code}`}>
+                            to={`/ScribeScholars/HomePage/${this.props.classes[index].code}`}>
                 <p className="classSide">{this.props.classes[index].class}</p>
             </NavLink>
           })}
 
           {this.props.userImage
             ?
-            <NavLink style={{textDecoration: 'none'}} to={`/settings`}>
+            <NavLink style={{textDecoration: 'none'}} to={`/ScribeScholars/settings`}>
                 <img className="settingsLogo"
                      src={this.props.userImage}
                      alt="userIcon"/>
             </NavLink>
             :
-            <NavLink style={{textDecoration: 'none'}} to={`/settings`}>
+            <NavLink style={{textDecoration: 'none'}} to={`/ScribeScholars/settings`}>
                 <img className="settingsLogo"
                      src={defaultUser}
                      alt="userIcon"/>
@@ -102,20 +102,20 @@ class Side extends Component {
     } else if (this.props.page === "settings") {
       return (
         <div>
-            <NavLink style={{textDecoration: 'none'}} to={`/HomePage`}>
+            <NavLink style={{textDecoration: 'none'}} to={`/ScribeScholars/HomePage`}>
                 <img className="logo" src={logo} alt="Logo"/>
             </NavLink>
 
             <NavLink onClick={this.props.flipPersonal} style={{textDecoration: 'none'}}
-                     to={`/settings/Personal`}>
+                     to={`/ScribeScholars/settings/Personal`}>
                 <p className="settingsSide">Personal</p>
             </NavLink>
 
-            <NavLink onClick={this.props.flipClass} style={{textDecoration: 'none'}} to={`/settings/Classroom`}>
+            <NavLink onClick={this.props.flipClass} style={{textDecoration: 'none'}} to={`/ScribeScholars/settings/Classroom`}>
                 <p className="settingsSide">Classroom</p>
             </NavLink>
 
-            <NavLink onClick={this.handleSignOut} style={{textDecoration: 'none'}} to={`/settings`}>
+            <NavLink onClick={this.handleSignOut} style={{textDecoration: 'none'}} to={`/ScribeScholars/settings`}>
                 <i className="fas fa-sign-out-alt singOutIcon"/>
             </NavLink>
 

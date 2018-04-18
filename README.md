@@ -12,7 +12,7 @@
 * [Sprint One Retrospective](https://docs.google.com/document/d/1yMVFxJHI-4-e0wsalpkqN_lhRHtu4SOmGs5g9iRtiHY/edit?usp=sharing)
 * [Sprint Two Planning Document](https://docs.google.com/document/d/1E95wpwxAkO4JMBk9_e1CfbztLuDWOejOz_JOIvg5QNs/edit?usp=sharing)
 * [Sprint Two Manual Testing Document](https://docs.google.com/document/d/1gyjJ_W_TerqAMYJy49DdXuhuEmemlseDFPhD-ovzHJ4/edit?usp=sharing)
-
+* [Sprint Three Planning Document](https://docs.google.com/document/d/16-PqLWOJw6Ftuw5NgxZHfEszIwHyYmdA3rp8G2iZ2LY/edit?usp=sharing)
 
 
 ## Using the Repository

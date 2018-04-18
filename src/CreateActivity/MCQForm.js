@@ -36,6 +36,7 @@ class MCQForm extends Component {
             option3: ev.target.opt3.value,
             option4: ev.target.opt4.value,
             correctAns: ans,
+            points: parseInt(ev.target.points.value, 10),
         };
 
         this.props.recordQuestion(quest, this.props.index);
@@ -89,6 +90,14 @@ class MCQForm extends Component {
                         <option>Selection 4</option>
                     </Input>
                 </Col>
+                <br/>
+                <FormGroup row>
+                  <Label size="lg" for="examplePoints" sm={3}>Points:</Label>
+
+                  <Col sm={2}>
+                    <Input bsSize="lg" type="number" name="points" id="examplePoints" defaultValue="1"/>
+                  </Col>
+                </FormGroup>
                 <br/>
                 <FormGroup check style={{paddingLeft: '0'}}>
                     <Col sm={{size: 6, offset: 3}} style={{paddingLeft: '0'}}>

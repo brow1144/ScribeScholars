@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300');
+
+.newQuestion {
+    background-color: #e8e8e8;
+    /*color: white;*/
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+    font-family: 'Roboto', sans-serif;
+}
+
+.createDiscussion {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 2em;
+    color: #21CE99;
+}
+
+.wrapper {
+    width: 100%;
+}
+
+.text-area {
+    height: 100%
+}
+
+.buttonSpace {
+    margin-top: 4em;
+}

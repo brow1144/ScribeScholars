@@ -19,9 +19,6 @@ import DashboardInfo from "./DashboardInfo/DashboardInfoPage";
 import MyStudents from "./MyStudents/MyStudents";
 import MakeWork from "./WorkForm/MakeWork";
 import ForgotPassword from './Sigin/ForgotPassword';
-
-import Graphs from "./Graphs";
-
 import CreateActivity from './CreateActivity/CreateActivity';
 
 
@@ -74,108 +71,104 @@ class App extends Component {
     return (
       <Switch>
 
-        <Route path='/HomePage' render={() => (
+        <Route path='/ScribeScholars/HomePage' render={() => (
           this.signedIn()
             ? <Main page={"home"} uid={this.state.uid}/>
-            : <Redirect to="/About"/>
+            : <Redirect to="/ScribeScholars/About"/>
         )}/>
 
-        <Route path='/LiveFeed' render={() => (
+        <Route path='/ScribeScholars/LiveFeed' render={() => (
           this.signedIn()
             ? <LiveFeed uid={this.state.uid}/>
-            : <Redirect to="/About"/>
+            : <Redirect to="/ScribeScholars/About"/>
         )}/>
 
-        <Route exact path='/sign-in' render={() => (
+        <Route path='/ScribeScholars/sign-in' render={() => (
           !this.signedIn()
             ? <SignIn/>
-            : <Redirect to="/HomePage"/>
+            : <Redirect to="/ScribeScholars/HomePage"/>
         )}/>
 
-        <Route exact path='/forgotPassword' render={() => (
+        <Route exact path='/ScribeScholars/forgotPassword' render={() => (
           !this.signedIn()
             ? <ForgotPassword />
-            : <Redirect to="/HomePage"/>
+            : <Redirect to="/ScribeScholars/HomePage"/>
         )}/>
 
-        <Route path='/About' render={() => (
+        <Route path='/ScribeScholars/About' render={() => (
           <About/>
         )}/>
 
-        <Route path='/DashboardInfo' render={() => (
+        <Route path='/ScribeScholars/DashboardInfo' render={() => (
           this.signedIn()
             ? <DashboardInfo/>
-            : <Redirect to="/About"/>
+            : <Redirect to="/ScribeScholars/About"/>
         )}/>
 
-        <Route path='/MyStudents' render={() => (
+        <Route path='/ScribeScholars/MyStudents' render={() => (
           this.signedIn()
             ? <MyStudents/>
-            : <Redirect to="/About"/>
+            : <Redirect to="/ScribeScholars/About"/>
         )}/>
 
-        <Route path='/Announcements' render={() => (
+        <Route path='/ScribeScholars/Announcements' render={() => (
           this.signedIn()
             ? <Announcements/>
-            : <Redirect to="/About"/>
+            : <Redirect to="/ScribeScholars/About"/>
         )}/>
 
-        <Route path='/CreateAnnouncements' render={() => (
+        <Route path='/ScribeScholars/CreateAnnouncements' render={() => (
           this.signedIn()
             ? <CreateAnn/>
-            : <Redirect to="/About"/>
+            : <Redirect to="/ScribeScholars/About"/>
         )}/>
 
-        <Route path='/SetRoomPicture' render={() => (
+        <Route path='/ScribeScholars/SetRoomPicture' render={() => (
           this.signedIn()
             ? <SetRoomPic/>
-            : <Redirect to="/About"/>
+            : <Redirect to="/ScribeScholars/About"/>
         )}/>
 
-        <Route path='/MakeWork' render={() => (
+        <Route path='/ScribeScholars/MakeWork' render={() => (
           this.signedIn()
             ? <MakeWork/>
-            : <Redirect to="/About"/>
+            : <Redirect to="/ScribeScholars/About"/>
         )}/>
 
-        <Route exact path='/create-account' render={() => (
+        <Route exact path='/ScribeScholars/create-account' render={() => (
           !this.signedIn()
             ? <CreateAccount/>
-            : <Redirect to="/HomePage"/>
+            : <Redirect to="/ScribeScholars/HomePage"/>
         )}/>
 
-        <Route exact path='/create-class' render={() => (
+        <Route exact path='/ScribeScholars/create-class' render={() => (
           this.signedIn()
             ? <CreateClass uid={this.state.uid}/>
-            : <Redirect to="/About"/>
+            : <Redirect to="/ScribeScholars/About"/>
         )}/>
 
-        <Route exact path='/create-class-success' render={() => (
+        <Route exact path='/ScribeScholars/create-class-success' render={() => (
           this.signedIn()
             ? <ClassSuccess uid={this.state.uid}/>
-            : <Redirect to="/About"/>
+            : <Redirect to="/ScribeScholars/About"/>
 
         )}/>
 
-        <Route path='/settings' render={() => (
+        <Route path='/ScribeScholars/settings' render={() => (
           this.signedIn()
             ? <Main page={"settings"} uid={this.state.uid}/>
-            : <Redirect to="/sign-in"/>
+            : <Redirect to="/ScribeScholars/sign-in"/>
         )}/>
 
-        <Route path='/graphs' render={() => (
-          <Graphs uid={this.state.uid}/>
-        )}/>
+        <Route render={() => <Redirect to="/ScribeScholars/HomePage"/>}/>
 
-        <Route render={() => <Redirect to="/HomePage"/>}/>
-
-        <Route exact path='/create-activity' render={() => (
+        <Route exact path='/ScribeScholars/create-activity' render={() => (
           this.signedIn()
             ? <CreateActivity uid={this.state.uid}/>
-            : <Redirect to="/About"/>
+            : <Redirect to="/ScribeScholars/About"/>
         )}/>
 
-        <Route render={() => <Redirect to='/HomePage'/>}/>
+        <Route render={() => <Redirect to='/ScribeScholars/HomePage'/>}/>
 
 
       </Switch>
