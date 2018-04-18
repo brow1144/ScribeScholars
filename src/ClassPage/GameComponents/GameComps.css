@@ -1,0 +1,20 @@
+.cardTitleHov
+{
+    font-size: 2.5rem;
+    font-family: "Garamond",sans-serif;
+    cursor: pointer;
+    transition:.5s;
+}
+
+.cardTitleHov:hover
+{
+    font-size: 3.5rem;
+    font-family: "Garamond",sans-serif;
+    background-color: #d6b1d6;
+}
+
+.cardTextStyle
+{
+    font-size: 1.75rem;
+    font-family: "Garamond",serif;
+}

@@ -104,7 +104,7 @@ class HomePage extends Component {
       gradeMax : null,
 
       myAssignments: [],
-      eventButtonOpen: false,
+      eventButtonOpen: true,
 
       alerts: [],
       hiddenAlerts: [],
