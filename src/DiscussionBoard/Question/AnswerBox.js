@@ -63,18 +63,12 @@ class AnswerBox extends Component {
   }
 
   setVis = () => {
-    let self = this;
-    console.log("Before :" + self.state.buttonVis);
-    if (self.state.buttonVis) {
-      self.setState({
-        buttonVis: false,
-      })
-    } else {
-      self.setState({
-        buttonVis: true,
-      })
-    }
-    console.log(self.state.buttonVis)
+    console.log("Before :" + this.state.buttonVis);
+    this.setState({
+        buttonVis: !this.state.buttonVis,
+    }, () => {
+      console.log(`After: ${this.state.buttonVis}`)
+    })
   };
 
   render() {
