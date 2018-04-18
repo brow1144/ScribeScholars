@@ -95,7 +95,7 @@ class AnswerBox extends Component {
 
   render() {
     const actions = {
-      // setVis: this.setVis,
+      setVis: this.setVis,
       getReplies: this.getReplies,
     };
 

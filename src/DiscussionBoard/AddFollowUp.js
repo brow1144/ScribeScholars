@@ -71,7 +71,7 @@ class AddFollowUp extends Component {
       firestore.collection("classes").doc(this.props.classCode)
         .collection("discussionBoard").doc(this.props.discussion.id)
         .collection("replies")
-        .doc().set(obj);
+        .doc(String(size)).set(obj);
 
       self.setState({
         newAnswer: "",
