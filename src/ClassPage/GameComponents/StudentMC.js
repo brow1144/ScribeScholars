@@ -8,6 +8,8 @@ import Game from './StudentGame';
 import Bonus from './StudentBonus';
 import Score from './StudentScore';
 
+import ReactLoading from 'react-loading';
+
 class StudentMC extends Component {
   constructor(props) {
     super(props);
@@ -56,7 +58,7 @@ class StudentMC extends Component {
         <br/>
         <br/>
         <Row>
-          <Col xs={{size: 10, offset: 2}} lg={{size: 6, offset: 3}} style={{paddingRight: '4rem'}}>
+          <Col xs={{size: 10, offset: 1}} xl={{size: 6, offset: 3}} style={{paddingRight: '4rem'}}>
             <Card style={{boxShadow: '8px 8px 3px rgba(0, 0, 0, 0.2)'}}>
               <CardHeader tag="h2" className={"cardTitleText"}>Game Lobby</CardHeader>
               <CardBody >
@@ -85,6 +87,11 @@ class StudentMC extends Component {
             </Card>
           </Col>
         </Row>
+        <Row>
+          <Col xs={{size: 10, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 6, offset: 4}}>
+            <ReactLoading type={'bars'} width={'26rem'} height={'18rem'} color={'#21CE99'}/>
+          </Col>
+        </Row>
       </Container>
     );
     } else if (this.state.game.bonusStage) {
@@ -106,7 +113,14 @@ class StudentMC extends Component {
       return(
         <div>
           <br/>
-          <h1 style={{textAlign: 'center'}}> Game Loading</h1>
+          <br/>
+          <Row>
+            <Col xs={{size: 4, offset: 4}}>
+              <br/>
+              <br/>
+              <ReactLoading type={'bars'} width={'26rem'} height={'18rem'} color={'#21CE99'}/>
+            </Col>
+          </Row>
         </div>
       );
     }
