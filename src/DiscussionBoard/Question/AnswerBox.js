@@ -125,7 +125,12 @@ class AnswerBox extends Component {
         <Row>
           <Col xs='12' md='9'/>
           <Col xs='12' md='2'>
-            <Button onClick={this.setVis} className='exSpace' color='success'>Create Follow Up</Button>
+            {this.state.buttonVis === true
+              ?
+              <Button onClick={this.setVis} className='exSpace' color='success'>Hide Follow Up</Button>
+              :
+              <Button onClick={this.setVis} className='exSpace' color='success'>Create Follow Up</Button>
+            }
           </Col>
         </Row>
         {this.state.buttonVis === true

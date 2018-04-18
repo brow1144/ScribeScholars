@@ -110,44 +110,6 @@ class FollowUp extends Component {
           : null
         }
 
-        {/*{this.state.buttonVis
-          ?
-          <div>
-            <Row>
-              <Col sm='1'/>
-              <Col sm='11'>
-                <hr/>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col xs='12' md='9'/>
-              <Col xs='12' md='2'>
-                <Button onClick={this.addNewReply} className='exSpace' color='success'>Submit Follow Up</Button>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col xs='12' md='1'/>
-              <Col xs='12' md='11'>
-                <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
-                  {this.state.message}
-                </Alert>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col xs='12' md='1'/>
-              <Col xs='12' md='11'>
-
-                This is where the AddFollowUp goes
-              </Col>
-            </Row>
-
-          </div>
-          : null
-        }*/}
-
       </div>
     );
   }

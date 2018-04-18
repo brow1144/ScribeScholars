@@ -66,8 +66,6 @@ class AddFollowUp extends Component {
         size = 0;
       }
 
-      // Set firebase TODO make it randomly make a document, its hard coded
-
       firestore.collection("classes").doc(this.props.classCode)
         .collection("discussionBoard").doc(this.props.discussion.id)
         .collection("replies")

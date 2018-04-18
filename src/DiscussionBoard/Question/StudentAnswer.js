@@ -24,6 +24,8 @@ class StudentAnswer extends Component {
 
             visible: false,
             message: '',
+
+            createVis: false,
         }
     }
 
@@ -97,6 +99,12 @@ class StudentAnswer extends Component {
         this.setState({visible: false})
     };
 
+  changeVis = () => {
+    this.setState({
+      createVis: !this.state.createVis,
+    })
+  };
+
     render() {
 
         const actions = {
@@ -125,7 +133,7 @@ class StudentAnswer extends Component {
                             </Col>
                             <Col sm='10'>
                                 <br/>
-                                <p className='studentAnswer'>{this.state.name}'s Answer!</p>
+                                <p className='teacherAnswer'>{this.state.name}'s Answer!</p>
                             </Col>
                         </Row>
 
@@ -154,27 +162,52 @@ class StudentAnswer extends Component {
                             </Row>
 
                             <Row>
+                              <Col xs='12' md='1'/>
+                              <Col xs='12' md='4'>
+                                {this.state.createVis
+                                  ?
+                                  <p className='teacherAnswer'>Enter a Student Answer</p>
+                                  : null
+                                }
+                              </Col>
+                              <Col xs='12' md='4'/>
+                              <Col xs='12' md='2'>
+                                {this.state.createVis
+                                  ?
+                                  <Button onClick={this.changeVis} className='exSpace' color='success'>Hide Student
+                                    Answer</Button>
+                                  :
+                                  <Button onClick={this.changeVis} className='exSpace' color='success'>Create Student
+                                    Answer</Button>
+                                }
+                              </Col>
+                            </Row>
+
+                          {this.state.createVis
+                            ?
+                            <div>
+                              <Row>
+                                <Col xs='12' md='1'/>
+                                <Col xs='12' md='11'>
+                                  <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
+                                    {this.state.message}
+                                  </Alert>
+                                </Col>
+                              </Row>
+
+                              <Row>
+                                <Col xs='12' md='1'/>
+                                <Col xs='12' md='11'>
+                                  <AddStudentAns discussion={this.props.discussion} {...actions}/>
+                                </Col>
                                 <Col xs='12' md='9'/>
                                 <Col xs='12' md='2'>
-                                    <Button onClick={this.addNewStudentAns} className='exSpace' color='success'>Submit Student Answer</Button>
+                                  <Button onClick={this.addNewStudentAns} className='exSpace' color='success'>Submit Student Answer</Button>
                                 </Col>
-                            </Row>
-
-                            <Row>
-                                <Col xs='12' md='1'/>
-                                <Col xs='12' md='11'>
-                                    <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
-                                        {this.state.message}
-                                    </Alert>
-                                </Col>
-                            </Row>
-
-                            <Row>
-                                <Col xs='12' md='1'/>
-                                <Col xs='12' md='11'>
-                                    <AddStudentAns discussion={this.props.discussion} {...actions}/>
-                                </Col>
-                            </Row>
+                              </Row>
+                            </div>
+                            : null
+                          }
 
                         </div>
                         : null
