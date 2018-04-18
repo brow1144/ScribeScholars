@@ -4,11 +4,11 @@ import {XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, ResponsiveC
 import {firestore} from "../base";
 
 import './MyStudents.css';
+import GradingPage from "./GradingPage";
 import Graphs from '../Dashboard/Dashboard'
 import StudList from '../Dashboard/StudList'
 import HomeCards from '../Dashboard/HomeCards'
 import InClassCards from '../Dashboard/InClassCards'
-import GradingPage from "./GradingPage";
 //import QuizCards from '../Dashboard/QuizCards'
 
 class MyStudents extends Component {
