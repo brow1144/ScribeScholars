@@ -6,7 +6,10 @@ import './MyStudents.css';
 import StudList from '../Dashboard/StudList'
 import HomeCards from '../Dashboard/HomeCards'
 import InClassCards from '../Dashboard/InClassCards'
+
+import Graphs from '../Dashboard/Dashboard'
 //import QuizCards from '../Dashboard/QuizCards'
+
 import {firestore} from "../base";
 
 
@@ -144,6 +147,7 @@ class MyStudents extends Component {
       if (this.state.studentsList.hasOwnProperty(i)) {
         self.getAssignmentsOfType(self.state.studentsList[i], "homework");
         //self.getAssignmentsOfType(self.state.studentsList[i], "quizzes");
+
         //self.getAssignmentsOfType(self.state.studentsList[i], "tests");
         self.getAssignmentsOfType(self.state.studentsList[i], "inClass");
 
@@ -488,10 +492,13 @@ class MyStudents extends Component {
           <Row>
             <Col className={"mainPage"}>
               <Row>
-                <Col className={"mainPage"}>
-                  <h1>Dashboard</h1>
-                </Col>
+                  <Col className={"mainPage"}>
+                      <h1>Dashboard</h1>
+                  </Col>
               </Row>
+                <Row className="chartAlign">
+                    <Graphs lessonNumber={this.props.lessonNumber} code={this.props.code}/>
+                </Row>
             </Col>
           </Row>
           <Row>
