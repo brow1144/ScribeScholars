@@ -25,6 +25,7 @@ class AddFollowUp extends Component {
       message: '',
 
       replies: [{}],
+      image: null,
     }
   }
   componentWillMount() {
@@ -32,7 +33,7 @@ class AddFollowUp extends Component {
   }
 
   getReply = () => {
-    this.setState = ({
+    this.setState ({
       replies: this.props.replies,
     })
 
@@ -54,11 +55,18 @@ class AddFollowUp extends Component {
       let obj = {
         reply: self.state.newAnswer,
         replyID: self.props.uid,
-        userImage: self.props.userImage,
+        userImage: self.props.image,
       };
+      console.log(obj);
+
+      let size = this.props.replies.length;
+
+      if (size === null) {
+        size = 0;
+      }
 
       // Set firebase TODO make it randomly make a document, its hard coded
-      firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard").doc(this.props.discussion.id).collection("replies").doc().set(obj);
+      firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard").doc(this.props.discussion.id).collection("replies").doc(String(size)).set(obj);
 
       self.setState({
         newAnswer: "",

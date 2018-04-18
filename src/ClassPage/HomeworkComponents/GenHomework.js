@@ -280,7 +280,6 @@ class GenHomework extends Component {
     //Update answers array
     for(let i in ansArr) {
       // CHANGED EQUALS
-      console.log(i);
       if(Number(i) === self.state.currentQuestion-1)
       {
         ansArr[i] = self.state.correctAns
@@ -369,8 +368,6 @@ class GenHomework extends Component {
           let tmpScore = 0;
           // Loop over the answer array and check the answers
           for (let k = 0; k < correctAnswer.length; k ++) {
-            console.log(studentAns[k]);
-            console.log(correctAnswer[k]);
 
             if (studentAns[k] !== correctAnswer[k]) {
               // If one of them doesn't match, break

@@ -24,9 +24,37 @@ class AnswerBox extends Component {
         userImage: null,
       }],
 
+      image: null,
       buttonVis: false,
     }
   }
+
+  componentWillMount() {
+    this.updateImage();
+    this.getReplies();
+  }
+
+  updateImage = () => {
+
+    let docRef = firestore.collection("users").doc(this.props.uid);
+    let self = this;
+
+    docRef.get().then(function (doc) {
+      if (doc.exists) {
+        self.setState({
+          image: doc.data().userImage,
+        }, () => {
+          console.log("The image " + self.state.image)
+        });
+
+      } else {
+        console.log("No such document!");
+      }
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+    })
+
+  };
 
   getReplies = () => {
     let object = [{}];
@@ -58,16 +86,9 @@ class AnswerBox extends Component {
     });
   };
 
-  componentWillMount() {
-    this.getReplies();
-  }
-
   setVis = () => {
-    console.log("Before :" + this.state.buttonVis);
     this.setState({
         buttonVis: !this.state.buttonVis,
-    }, () => {
-      console.log(`After: ${this.state.buttonVis}`)
     })
   };
 
@@ -108,14 +129,14 @@ class AnswerBox extends Component {
         </Row>
         {this.state.buttonVis
           ?
-           <AddFollowUp userImage={this.props.userImage} role={this.state.role} uid={this.props.uid}
+           <AddFollowUp image={this.state.image} role={this.props.role} uid={this.props.uid}
                         classCode={this.props.classCode} discussion={this.props.discussion}
                         buttonVis={this.state.buttonVis} replies={this.state.replies} {...actions}/>
           : null
         }
         {this.state.replies.map((key, index) => {
           return (
-            <FollowUp userImage={this.props.userImage} role={this.state.role} uid={this.props.uid}
+            <FollowUp image={this.state.image} role={this.props.role} uid={this.props.uid}
                       classCode={this.props.classCode} curReply={this.state.replies[index]} index={index}
                       buttonVis={this.state.buttonVis} theKey={key}/>
           )
