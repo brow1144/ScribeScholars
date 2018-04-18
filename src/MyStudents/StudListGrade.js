@@ -31,8 +31,8 @@ class StudListGrade extends Component {
 
     renderItem = (student) => {
         let itemRows = [
-            <tr onClick={() => this.handleRowClick(student.key)} key={student.key} className="mainRow">
-                <td>{student.name}</td>
+            <tr key={student.key} className="mainRow">
+                <td onClick={() => this.handleRowClick(student.key)} className="nameCell">{student.name}</td>
                 <td>{student.score}</td>
                 <td>{this.props.ungradedPoints}</td>
                 <td>
@@ -40,7 +40,7 @@ class StudListGrade extends Component {
                         <Row>
                             <Col xs={4}/>
                             <Col xs={4}>
-                                <Input onChange={(score) => this.props.updateScore(student, parseInt(score.target.value))}
+                                <Input onChange={(score) => this.props.updateScore(student, parseInt(score.target.value, 10))}
                                     type="number" defaultValue={student.score}/>
                             </Col>
                         </Row>
@@ -113,7 +113,7 @@ class StudListGrade extends Component {
                     {this.props.maxScore != null
                         ?
                         <Col xs={{size: 2}}>
-                            <Input onChange={(score) => this.props.curveGrade(parseInt(score.target.value))}
+                            <Input onChange={(score) => this.props.curveGrade(parseInt(score.target.value, 10))}
                                 type="number" defaultValue={this.props.maxScore}/>
                         </Col>
                         :
@@ -124,9 +124,7 @@ class StudListGrade extends Component {
                 <Row>
                     <Col xs={0} md={8}/>
                     <Col xs={12} md={2}>
-                        <RouterLink to={"/ScribeScholars/HomePage/" + this.props.code + "/myStudents"}>
-                            <Button>Return to Dashboard</Button>
-                        </RouterLink>
+                        <Button onClick={this.props.returnToDashboard}>Return to Dashboard</Button>
                     </Col>
                     <Col xs={0} md={2}/>
                 </Row>
@@ -135,4 +133,5 @@ class StudListGrade extends Component {
     };
 }
 
+//                        <RouterLink to={"/ScribeScholars/HomePage/" + this.props.code + "/myStudents"}>
 export default StudListGrade

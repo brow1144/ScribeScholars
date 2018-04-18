@@ -10,3 +10,7 @@
 .curveLabel {
     font-weight: bold;
 }
+
+.nameCell {
+    cursor: pointer;
+}
