@@ -963,7 +963,7 @@ class HomePage extends Component {
 
                 <Row>
                     <Col>
-                        <GradingPage {...classData} assRef={assRef} class={this.props.class} assCol={this.props.assCol}
+                        <GradingPage {...classData} assRef={assRef} code={this.props.class} assCol={this.props.assCol}
                                      assKey={this.props.assKey} uid={this.state.uid}/>
                     </Col>
                 </Row>

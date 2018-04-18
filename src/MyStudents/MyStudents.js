@@ -26,19 +26,19 @@ class MyStudents extends Component {
       homeworks: [{
         id: null,
         name: null,
-        max: null
+        maxScore: null
       }],
 
       inclass: [{
         id: null,
         name: null,
-        max: null
+        maxScore: null
       }],
 
       /*quizzes: [{
         id: null,
         name: null,
-        max: null
+        maxScore: null
       }],*/
 
       uid: this.props.uid,
@@ -314,7 +314,7 @@ class MyStudents extends Component {
           id: doc.id,
           colRef: colRef.id,
           name: doc.data().name,
-          max: doc.data().questions.length
+          maxScore: doc.data().maxScore,
         });
         self.setState({
           homeworks: object,
@@ -345,7 +345,7 @@ class MyStudents extends Component {
           id: doc.id,
           colRef: colRef.id,
           name: doc.data().name,
-          max: doc.data().questions.length
+          maxScore: doc.data().maxScore,
         });
         self.setState({
           inclass: object,
@@ -376,7 +376,7 @@ class MyStudents extends Component {
           id: doc.id,
           colRef: colRef.id,
           name: doc.data().name,
-          max: doc.data().questions.length
+          maxScore: doc.data().maxScore
         });
         self.setState({
           quizzes: object,

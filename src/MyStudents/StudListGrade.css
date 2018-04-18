@@ -1,7 +1,12 @@
 .mainRow {
     font-weight: bold;
+    font-size: 1.2em;
 }
 
 .subRow {
     font-weight: normal;
+}
+
+.curveLabel {
+    font-weight: bold;
 }

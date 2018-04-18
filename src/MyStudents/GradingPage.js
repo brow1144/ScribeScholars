@@ -14,10 +14,12 @@ class GradingPage extends Component {
                 name: null,
                 email: null,
                 key: null,
-                currentScore: null,
+                score: null,
+                answers: [],
             }],
 
             maxScore: null,
+            oldMaxScore: null,
             ungradedPoints: null,
             questions: [],
         };
@@ -45,6 +47,7 @@ class GradingPage extends Component {
 
             self.setState({
                 maxScore : doc.data().maxScore,
+                oldMaxScore: doc.data().oldMaxScore,
                 ungradedPoints: ungradedPoints,
                 questions: doc.data().questions,
             });
@@ -54,7 +57,7 @@ class GradingPage extends Component {
     getStudents = () => {
         let object = [{}];
         let self = this;
-        let classRef = firestore.collection("classes").doc(this.props.class);
+        let classRef = firestore.collection("classes").doc(this.props.code);
 
         classRef.get().then(function (doc) {
             if (doc.exists) {
@@ -66,23 +69,13 @@ class GradingPage extends Component {
                             let studAssRef = studRef.collection(self.props.assCol).doc(self.props.assKey);
 
                             studAssRef.get().then((assDoc) => {
-                                if (self.props.assCol === "homework") {
-                                    object.unshift({
-                                        name: studDoc.data().firstName + " " + studDoc.data().lastName,
-                                        email: studDoc.data().email,
-                                        key: doc.data().students[i],
-                                        score: assDoc.data().score,
-                                        answers: assDoc.data().history,
-                                    });
-                                } else if (self.props.assCol === "inClass") {
-                                    object.unshift({
-                                        name: studDoc.data().firstName + " " + studDoc.data().lastName,
-                                        email: studDoc.data().email,
-                                        key: doc.data().students[i],
-                                        score: assDoc.data().score,
-                                        answers: assDoc.data().history,
-                                    });
-                                }
+                                object.unshift({
+                                    name: studDoc.data().firstName + " " + studDoc.data().lastName,
+                                    email: studDoc.data().email,
+                                    key: doc.data().students[i],
+                                    score: assDoc.data().score,
+                                    answers: assDoc.data().history,
+                                });
 
                                 self.setState({
                                     students: object,
@@ -104,6 +97,9 @@ class GradingPage extends Component {
     };
 
     curveGrade = (newMaxScore) => {
+        if (isNaN(newMaxScore) || newMaxScore <= 0)
+          return;
+
         let self = this;
 
         for (let i in this.state.students) {
@@ -111,31 +107,45 @@ class GradingPage extends Component {
                 let assignmentRef = firestore.collection("users").doc(this.state.students[i].key)
                   .collection(this.props.assCol).doc(this.props.assKey);
 
-                assignmentRef.update({
-                    oldMaxScore: self.state.maxScore,
-                    maxScore: newMaxScore,
-                }).catch((error) => {
-                    console.log("Error getting document:", error);
-                });
+                if (self.state.oldMaxScore != null) {
+                    assignmentRef.update({
+                        maxScore: newMaxScore,
+                    }).catch((error) => {
+                        console.log("Error getting document:", error);
+                    });
+                } else {
+                    assignmentRef.update({
+                        oldMaxScore: self.state.oldMaxScore,
+                        maxScore: newMaxScore,
+                    }).catch((error) => {
+                        console.log("Error getting document:", error);
+                    });
+                }
             }
         }
 
         let classAssignmentRef = firestore.collection("classes").doc(this.props.code)
           .collection(this.props.assCol).doc(this.props.assKey);
 
-        classAssignmentRef.update({
-            oldMaxScore: self.state.maxScore,
-            maxScore: newMaxScore,
-        }).catch((error) => {
-            console.log("Error getting document:", error);
-        });
+        if (self.state.oldMaxScore != null) {
+            classAssignmentRef.update({
+                maxScore: newMaxScore,
+            }).catch((error) => {
+                console.log("Error getting document:", error);
+            });
+        } else {
+            classAssignmentRef.update({
+                oldMaxScore: self.state.oldMaxScore,
+                maxScore: newMaxScore,
+            }).catch((error) => {
+                console.log("Error getting document:", error);
+            });
+        }
     };
 
     updateScore = (student, score) => {
-      console.log(student);
-      console.log(score);
-        if (isNaN(score) || score < student.score)
-            score = student.score;
+        if (isNaN(score) || score < 0)
+            return;
 
         if (score > this.state.maxScore)
             score = this.state.maxScore;
@@ -158,7 +168,7 @@ class GradingPage extends Component {
                     </Row>
                     <Row>
                         <Col>
-                            <StudListGrade code={this.props.class} assKey={this.props.assKey} assCol={this.props.assCol}
+                            <StudListGrade code={this.props.code} assKey={this.props.assKey} assCol={this.props.assCol}
                                            maxScore={this.state.maxScore} students={this.state.students} ungradedPoints={this.state.ungradedPoints}
                                            questions={this.state.questions} updateScore={this.updateScore} curveGrade={this.curveGrade}/>
                         </Col>
