@@ -17,7 +17,7 @@ const InClassCards = (props) => {
                             <h1 className={"assTitle"}>
                                 {props.inclass[index].name}
                             </h1>
-                            <h2 className={"assText"}>Max Score: {props.inclass[index].max}</h2>
+                            <h2 className={"assText"}>Max Score: {props.inclass[index].maxScore}</h2>
                         </Button>
                     </RouterLink>
                 </Col>

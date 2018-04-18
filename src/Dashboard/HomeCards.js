@@ -14,7 +14,7 @@ const HomeCards = (props) => {
                             <h1 className={"assTitle"}>
                                 {props.homeworks[index].name}
                             </h1>
-                            <h2 className={"assText"}>Max Score: {props.homeworks[index].max}</h2>
+                            <h2 className={"assText"}>Max Score: {props.homeworks[index].maxScore}</h2>
                         </Button>
                     </RouterLink>
                 </Col>
