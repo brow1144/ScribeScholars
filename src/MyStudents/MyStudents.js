@@ -540,7 +540,7 @@ class MyStudents extends Component {
                         </tr>
                         </thead>
 
-                        <StudList students={this.state.students} showGraph={this.showGraph}/>
+                        <StudList students={this.state.students} assignments={this.state.allAssignments} showGraph={this.showGraph}/>
 
                       </Table>
                     }
