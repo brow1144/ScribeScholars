@@ -1,71 +1,138 @@
-import React from 'react'
-import {FormGroup, Input, Row, Col, Button, Table} from 'reactstrap';
+import React, {Component} from 'react'
+import {FormGroup, Input, Row, Col, Button, Table, Label} from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom';
 
-const StudListGrade = (props) => {
+import './StudListGrade.css'
 
+class StudListGrade extends Component {
+    constructor(props) {
+        super(props);
 
-    return (
+        this.state = {
+            expandedRows: [],
+        };
+    }
 
-        <Col>
-            <h1>Students</h1>
-            <Row>
-                <Col>
-                    <Table striped>
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Current Score</th>
-                            <th>Multi-Choice Score</th>
-                            <th>Grade ( out of {props.maxScore} )</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {Object.keys(props.students).map((key, index) => {
-                            return (
-                                <tr key={key}>
-                                    <td>{props.students[index].name}</td>
-                                    <td>{props.students[index].currentScore}</td>
-                                    <td>{props.students[index].mcq}</td>
-                                    <td>
-                                        <FormGroup>
-                                            <Row>
-                                                <Col xs={4}/>
-                                                <Col xs={4}>
-                                                    <Input onChange={(score) => props.updateGrades(props.students[index].key,props.assCol, props.assKey, score.target.value)} name="text" id="exampleText"/>
+    handleRowClick = (uid) => {
+        if (this.props.ungradedPoints === 0)
+            return;
 
-                                                </Col>
-                                                <Col xs={4}>
-                                                    <p className={"assTitle"}>/{props.maxScore}</p>
-                                                </Col>
-                                            </Row>
-                                        </FormGroup>
-                                    </td>
+        let newExpandedRows = [];
+
+        if (this.state.expandedRows.includes(uid))
+            newExpandedRows = this.state.expandedRows.filter((id) => id !== uid);
+        else
+            newExpandedRows = this.state.expandedRows.concat(uid);
+
+        this.setState({
+            expandedRows: newExpandedRows,
+        });
+    };
+
+    renderItem = (student) => {
+        let itemRows = [
+            <tr onClick={() => this.handleRowClick(student.key)} key={student.key} className="mainRow">
+                <td>{student.name}</td>
+                <td>{student.score}</td>
+                <td>{this.props.ungradedPoints}</td>
+                <td>
+                    <FormGroup>
+                        <Row>
+                            <Col xs={4}/>
+                            <Col xs={4}>
+                                <Input onChange={(score) => this.props.updateScore(student, parseInt(score.target.value))}
+                                    type="number" defaultValue={student.score}/>
+                            </Col>
+                        </Row>
+                    </FormGroup>
+                </td>
+            </tr>
+        ];
+
+        if (this.state.expandedRows.includes(student.key)) {
+            itemRows.push(
+                <tr key={"expanded-head-" + student.key}>
+                    <th>Question</th>
+                    <th>Points Possible</th>
+                    <th>Question Prompt</th>
+                    <th>Student's Answer</th>
+                </tr>
+            );
+
+            for (let i in this.props.questions) {
+                if (this.props.questions.hasOwnProperty(i)) {
+                    if (this.props.questions.type === "FRQ" || this.props.questions[i].type === "VIDEO") {
+                        itemRows.push(
+                            <tr key={"expanded-" + i + "-" + student.key} className="subRow">
+                                <td>Question {i}</td>
+                                <td>{this.props.questions[i].points}</td>
+                                <td>{this.props.questions[i].prompt}</td>
+                                <td>{student.answers[i]}</td>
+                            </tr>
+                      );
+                    }
+                }
+            }
+        }
+
+        return itemRows;
+    };
+
+    render() {
+        let allItemRows = [];
+
+        this.props.students.forEach((student) => {
+            let studentRow = this.renderItem(student);
+            allItemRows = allItemRows.concat(studentRow);
+        });
+
+        return (
+            <Col>
+                <h1>Students</h1>
+                <Row>
+                    <Col>
+                        <Table striped>
+                            <thead>
+                                <tr className="mainRow">
+                                    <th>Name</th>
+                                    <th>Current Score</th>
+                                    <th>Ungraded Points</th>
+                                    <th>Grade (out of {this.props.maxScore})</th>
                                 </tr>
-                            )
-                        })
-                        }
-                        </tbody>
-                    </Table>
-                </Col>
-            </Row>
-            <Row>
-                <Col xs={0} md={8}/>
-                <Col xs={12} md={2}>
-                    <RouterLink
-                        to={"/ScribeScholars/HomePage/" + props.code + "/myStudents"}>
-                        <Button>
-                            Commit
-                        </Button>
-                    </RouterLink>
-                </Col>
-                <Col xs={0} md={2}/>
-            </Row>
-        </Col>
-
-
-
-    )
-};
+                            </thead>
+                            <tbody>
+                                {allItemRows}
+                            </tbody>
+                        </Table>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={{ size: 2, offset: 8 }} className="curveLabel">
+                        <Label>Curve (adjust max score):</Label>
+                    </Col>
+                    {this.props.maxScore != null
+                        ?
+                        <Col xs={{size: 2}}>
+                            <Input onChange={(score) => this.props.curveGrade(parseInt(score.target.value))}
+                                type="number" defaultValue={this.props.maxScore}/>
+                        </Col>
+                        :
+                        <Col/>
+                    }
+                </Row>
+                <br/>
+                <Row>
+                    <Col xs={0} md={8}/>
+                    <Col xs={12} md={2}>
+                        <RouterLink to={"/ScribeScholars/HomePage/" + this.props.code + "/myStudents"}>
+                            <Button>Return to Dashboard</Button>
+                        </RouterLink>
+                    </Col>
+                    <Col xs={0} md={2}/>
+                </Row>
+            </Col>
+        )
+    };
+}
 
 export default StudListGrade

@@ -102,7 +102,6 @@ class HomePage extends Component {
       open: props.open,
 
       gradeName : null,
-      gradeMax : null,
 
       myAssignments: [],
       eventButtonOpen: false,
@@ -197,7 +196,7 @@ class HomePage extends Component {
     if (gpa % 1 !== 0)
       gpa = Math.round(gpa * 100) / 100;
 
-    if (!isNaN(gpa)) {
+    /*if (!isNaN(gpa)) {
       let studentRef = firestore.collection("users").doc(this.state.uid);
       studentRef.set({
         gpa: gpa,
@@ -205,7 +204,7 @@ class HomePage extends Component {
       ).catch((error) => {
         console.log("Error getting document:", error);
       });
-    }
+    }*/
 
     return gpa;
   };
@@ -492,11 +491,11 @@ class HomePage extends Component {
     }
     this.setState({
       dates: allEvents,
+    }, () => {
+      this.getAlerts();
+      this.props.updateDates(this.state.dates);
+      this.forceUpdate();
     });
-
-    this.getAlerts();
-    this.props.updateDates(this.state.dates);
-    this.forceUpdate();
   };
 
   /**
@@ -980,8 +979,8 @@ class HomePage extends Component {
 
                 <Row>
                     <Col>
-                        <GradingPage {...classData} assRef={assRef} class={this.props.class} assCol={this.props.assCol}
-                                     assKey={this.props.assKey} maxScore={this.props.gradeMax} uid={this.state.uid}/>
+                        <GradingPage {...classData} assRef={assRef} code={this.props.class} assCol={this.props.assCol}
+                                     assKey={this.props.assKey} uid={this.state.uid}/>
                     </Col>
                 </Row>
             </Sidebar>
