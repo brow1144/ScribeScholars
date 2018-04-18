@@ -102,7 +102,7 @@ class HomePage extends Component {
       open: props.open,
 
       myAssignments: [],
-      eventButtonOpen: false,
+      eventButtonOpen: true,
 
       alerts: [],
       hiddenAlerts: [],
