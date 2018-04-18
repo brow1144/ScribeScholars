@@ -58,6 +58,9 @@ class MyStudents extends Component {
 
       inClassWeight: null,
       homeworkWeight: null,
+
+      page: "dashboard",
+      activeAss: null,
     }
   }
 
@@ -473,15 +476,15 @@ console.log(this.state);
 
   returnToDashboard = () => {
     this.setState({
+      activeAss: null,
       page: "dashboard",
     });
   };
 
-  changeAssignment = (type, id) => {
+  goToAssignment = (assignment) => {
     this.setState({
-      assType: type,
-      assKey: id,
-      page: type,
+      activeAss: assignment,
+      page: "grading",
     })
   };
 
@@ -569,25 +572,21 @@ console.log(this.state);
               <Col className="mainPage">
                 <Col>
                   <h1>Homework</h1>
-                  <HomeCards code={this.props.code} homeworks={this.state.homeworks} changeAssignment={this.changeAssignment}/>
+                  <HomeCards code={this.props.code} homeworks={this.state.homeworks} goToAssignment={this.goToAssignment}/>
                 </Col>
                 <Col>
                   <h1>In-Class Lessons</h1>
-                  <InClassCards code={this.props.code} inclass={this.state.inclass} changeAssignment={this.changeAssignment}/>
+                  <InClassCards code={this.props.code} inclass={this.state.inclass} goToAssignment={this.goToAssignment}/>
                 </Col>
               </Col>
             </Row>
           </Container>
         </div>
       )
-    } else if (this.state.page === "homework") {
+    } else if (this.state.page === "grading") {
       return (
-        <GradingPage {...classData} assRef={assRef} code={this.props.code} assCol={this.state.assCol}
-                     assKey={this.state.assKey} uid={this.state.uid} returnToDashboard={this.returnToDashboard}/>
-      )
-    } else if (this.state.page === "inClass") {
-      return (
-        <GradingPage/>
+        <GradingPage code={this.props.code} assignment={this.state.activeAss} assCol={this.state.activeAss.colRef}
+                     assKey={this.state.activeAss.id} returnToDashboard={this.returnToDashboard}/>
       )
     }
   }

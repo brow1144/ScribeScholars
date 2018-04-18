@@ -33,7 +33,7 @@ class GradingPage extends Component {
     setAssInfo = () => {
         let self = this;
         let assRef = firestore.collection("classes").doc(this.props.code).collection(this.props.assCol).doc(this.props.assKey);
-        // TODO new assref
+
         assRef.get().then(function(doc) {
             let ungradedPoints = 0;
 
@@ -165,12 +165,12 @@ class GradingPage extends Component {
                 <Container fluid className={"mainPage"}>
                     <Row>
                         <Col className={"mainPage"}>
-                            <p>Grading</p>
+                            <p>Currently Grading: {this.props.assignment.name}</p>
                         </Col>
                     </Row>
                     <Row>
                         <Col>
-                            <StudListGrade code={this.props.code} assKey={this.props.assKey} assCol={this.props.assCol}
+                            <StudListGrade assKey={this.props.assKey} assCol={this.props.assCol}
                                            maxScore={this.state.maxScore} students={this.state.students} ungradedPoints={this.state.ungradedPoints}
                                            questions={this.state.questions} updateScore={this.updateScore} curveGrade={this.curveGrade}
                                            returnToDashboard={this.props.returnToDashboard}/>
