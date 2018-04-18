@@ -8,7 +8,7 @@ import './AnswerBox.css'
 import TeacherAnswer from './TeacherAnswer';
 import StudentAnswer from './StudentAnswer';
 import FollowUp from './FollowUp';
-import AddFollowUp from '../AddFollowUp'
+import AddFollowUp from '../AddFollowUp';
 import {firestore} from "../../base";
 
 class AnswerBox extends Component {
@@ -17,14 +17,13 @@ class AnswerBox extends Component {
     super(props);
 
     this.state = {
+      buttonVis: false,
       discussion: {},
       replies: [{
         userID: null,
         reply: null,
         userImage: null,
       }],
-
-      buttonVis: false,
     }
   }
 
@@ -63,17 +62,12 @@ class AnswerBox extends Component {
   }
 
   setVis = () => {
-    console.log("Before :" + this.state.buttonVis);
-    this.setState({
-        buttonVis: !this.state.buttonVis,
-    }, () => {
-      console.log(`After: ${this.state.buttonVis}`)
-    })
+    this.setState({buttonVis: !this.state.buttonVis})
   };
 
   render() {
     const actions = {
-      setVis: this.setVis,
+      // setVis: this.setVis,
       getReplies: this.getReplies,
     };
 
@@ -106,12 +100,18 @@ class AnswerBox extends Component {
             <Button onClick={this.setVis} className='exSpace' color='success'>Create Follow Up</Button>
           </Col>
         </Row>
-        {this.state.buttonVis
+        {this.state.buttonVis === true
           ?
-           <AddFollowUp userImage={this.props.userImage} role={this.state.role} uid={this.props.uid}
-                        classCode={this.props.classCode} discussion={this.props.discussion}
-                        buttonVis={this.state.buttonVis} replies={this.state.replies} {...actions}/>
-          : null
+          <Row>
+            <Col xs='12' md='1'/>
+            <Col xs='12' md='11'>
+              <AddFollowUp userImage={this.props.userImage} role={this.state.role} uid={this.props.uid}
+                           classCode={this.props.classCode} discussion={this.props.discussion}
+                           buttonVis={this.state.buttonVis} replies={this.state.replies} {...actions} />
+            </Col>
+          </Row>
+          :
+          null
         }
         {this.state.replies.map((key, index) => {
           return (

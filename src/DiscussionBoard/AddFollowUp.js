@@ -29,6 +29,7 @@ class AddFollowUp extends Component {
   }
   componentWillMount() {
     this.getReply();
+    console.log('AddFollow Up Is loading!')
   }
 
   getReply = () => {
@@ -58,7 +59,10 @@ class AddFollowUp extends Component {
       };
 
       // Set firebase TODO make it randomly make a document, its hard coded
-      firestore.collection("classes").doc(this.props.classCode).collection("discussionBoard").doc(this.props.discussion.id).collection("replies").doc().set(obj);
+      firestore.collection("classes").doc(this.props.classCode)
+        .collection("discussionBoard").doc(this.props.discussion.id)
+        .collection("replies")
+        .doc().set(obj);
 
       self.setState({
         newAnswer: "",
