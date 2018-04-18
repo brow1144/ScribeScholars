@@ -7,10 +7,6 @@ class TeacherScore extends Component {
     super(props);
 
     this.state = {
-      game: {},
-      mcqSubmitted: false,
-      bonusSubmitted: false,
-
       topScores: [],
     };
   };
@@ -19,21 +15,9 @@ class TeacherScore extends Component {
     this.grabGameDetails();
   };
 
-  grabGameDetails = () => {
-    let self = this;
-    let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
-
-    gameRef.onSnapshot(function (doc) {
-      console.log(doc.data());
-      self.setState({game: doc.data()});
-      self.createLeaderboard();
-    })
-  };
 
   getTopScores = () => {
-    this.state.game.questScores.sort();
-
-
+    this.props.game.questScores.sort();
 
   };
 
@@ -56,9 +40,9 @@ class TeacherScore extends Component {
     let tmpTopScores;
     let topScores = [];
 
-    for (let i in this.state.game.userScores) {
-      if (this.state.game.userScores.hasOwnProperty(i)) {
-        let userScore = this.state.game.userScores[i];
+    for (let i in this.props.game.userScores) {
+      if (this.props.game.userScores.hasOwnProperty(i)) {
+        let userScore = this.props.game.userScores[i];
         totalScores.push({uid: userScore.uid, score: userScore.score});
       }
     }
