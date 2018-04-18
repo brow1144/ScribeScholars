@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import {Label, FormGroup, Form, Table, Button, Container, Row, Col, Input} from 'reactstrap';
+import {FormGroup, Form, Table, Button, Container, Row, Col, Input} from 'reactstrap';
 import {NavLink as RouterLink} from 'react-router-dom';
 import Modal from 'react-modal';
 import './Table.css'
 import { firestore } from '../base.js'
-import FIBForm from "../CreateActivity/FIBForm";
 
 
 class HomeworkTable extends Component {

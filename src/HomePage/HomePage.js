@@ -101,8 +101,6 @@ class HomePage extends Component {
       docked: props.docked,
       open: props.open,
 
-      gradeName : null,
-
       myAssignments: [],
       eventButtonOpen: false,
 
@@ -961,30 +959,6 @@ class HomePage extends Component {
                     </Row>
                 </Sidebar>
             );
-
-    } else if (this.props.page === "gradingPage") {
-        let assRef = firestore.collection("classes").doc(this.props.class).collection(this.props.assCol).doc(this.props.assKey);
-        let self = this;
-
-        assRef.get().then(function (doc) {
-          self.setState({
-              gradeName : doc.data().name,
-          })
-        });
-
-        return (
-            <Sidebar {...sideData}>
-                <HomeNav firstName={"Currently grading: " + this.state.gradeName} lastName={""} expand={this.dockSideBar}
-                         width={this.state.width}/>
-
-                <Row>
-                    <Col>
-                        <GradingPage {...classData} assRef={assRef} code={this.props.class} assCol={this.props.assCol}
-                                     assKey={this.props.assKey} uid={this.state.uid}/>
-                    </Col>
-                </Row>
-            </Sidebar>
-        );
 
     } else if (this.props.page === "homeworks") {
 

@@ -26,10 +26,10 @@ class StudList extends Component {
 
   renderItem = (student, index) => {
     let itemRows = [
-      <tr onClick={() => this.handleRowClick(student.uid)} key={student.uid} className="curveLabel">
+      <tr key={student.uid} className="curveLabel">
         <th scope="row">{parseInt(index) + 1}</th>
         <td>{student.grade}</td>
-        <td>{student.name}</td>
+        <td onClick={() => this.handleRowClick(student.uid)} className="nameCell">{student.name}</td>
         <td>{student.email}</td>
         <td>
           <span onClick={() => this.props.showGraph(student.uid)}>
@@ -73,7 +73,6 @@ class StudList extends Component {
   render() {
     let allItemRows = [];
 
-    //this.props.students.forEach((student) => {
     for (let i in this.props.students) {
       if (this.props.students.hasOwnProperty(i)) {
         let studentRow = this.renderItem(this.props.students[i], i);

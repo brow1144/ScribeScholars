@@ -126,7 +126,8 @@ class DiscussionQuestion extends Component {
           </Row>
           {this.state.accVisible === true
             ?
-              <AnswerBox role={this.props.role} uid={this.props.uid} classCode={this.props.classCode} discussion={this.props.discussion}/>
+              <AnswerBox userImage={this.state.userImage} role={this.props.role} uid={this.props.uid}
+                         classCode={this.props.classCode} discussion={this.props.discussion}/>
             :
             null
           }
