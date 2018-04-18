@@ -548,6 +548,15 @@ class Main extends Component {
           />
         )}/>
 
+        <Route path="/ScribeScholars/HomePage/:class/games/create-game" render={(match) => (
+          <HomePage
+            class={match.match.params.class}
+            page="createGame"
+            {...data}
+            {...actions}
+          />
+        )}/>
+
           <Route path="/ScribeScholars/HomePage/:class/homework/edit-activity/:lessonNumber" render={(match) => (
               <HomePage
                   class={match.match.params.class}

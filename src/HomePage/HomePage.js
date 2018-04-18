@@ -16,6 +16,7 @@ import LiveFeed from '../ClassPage/LiveFeed';
 import GradingPage from '../MyStudents/GradingPage';
 
 import CreateActivity from '../CreateActivity/CreateActivity';
+import CreateGame from '../CreateGame/CreateGame';
 import EditActivity from '../EditActivity/EditActivity'
 
 import Settings from '../Settings/Settings';
@@ -932,6 +933,21 @@ class HomePage extends Component {
                 </Row>
             </Sidebar>
         );
+
+    } else if (this.props.page === "createGame") {
+      return (
+        <Sidebar {...sideData}>
+
+          <HomeNav firstName={"Create: Game"} lastName={""} expand={this.dockSideBar}
+                   width={this.state.width}/>
+
+          <Row>
+            <Col>
+              <CreateGame {...classData} class={this.props.class} uid={this.state.uid}/>
+            </Col>
+          </Row>
+        </Sidebar>
+      );
 
     } else if (this.props.page === "editActivity") {
             return (
