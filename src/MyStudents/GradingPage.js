@@ -33,7 +33,7 @@ class GradingPage extends Component {
         this.props.assRef.get().then(function(doc) {
             let ungradedPoints = 0;
 
-            if (doc.exists() && doc.data() != null) {
+            if (doc.exists && doc.data() != null) {
                 for (let i in doc.data().questions) {
                     if (doc.data().questions.hasOwnProperty(i)) {
                         if (doc.data().questions[i].type === "FRQ" || doc.data().questions[i].type === "VIDEO") {
@@ -103,6 +103,34 @@ class GradingPage extends Component {
         });
     };
 
+    curveGrade = (newMaxScore) => {
+        let self = this;
+
+        for (let i in this.state.students) {
+            if (this.state.students.hasOwnProperty(i)) {
+                let assignmentRef = firestore.collection("users").doc(this.state.students[i].key)
+                  .collection(this.props.assCol).doc(this.props.assKey);
+
+                assignmentRef.update({
+                    oldMaxScore: self.state.maxScore,
+                    maxScore: newMaxScore,
+                }).catch((error) => {
+                    console.log("Error getting document:", error);
+                });
+            }
+        }
+
+        let classAssignmentRef = firestore.collection("classes").doc(this.props.code)
+          .collection(this.props.assCol).doc(this.props.assKey);
+
+        classAssignmentRef.update({
+            oldMaxScore: self.state.maxScore,
+            maxScore: newMaxScore,
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+        });
+    };
+
     updateScore = (student, score) => {
       console.log(student);
       console.log(score);
@@ -112,9 +140,9 @@ class GradingPage extends Component {
         if (score > this.state.maxScore)
             score = this.state.maxScore;
 
-        /*firestore.collection("users").doc(student.key).collection(this.props.assCol).doc(this.props.assKey).update({
+        firestore.collection("users").doc(student.key).collection(this.props.assCol).doc(this.props.assKey).update({
             score: score,
-        });*/
+        });
     };
 
     render() {
@@ -131,7 +159,8 @@ class GradingPage extends Component {
                     <Row>
                         <Col>
                             <StudListGrade code={this.props.class} assKey={this.props.assKey} assCol={this.props.assCol}
-                                           maxScore={this.state.maxScore} students={this.state.students} updateScore={this.updateScore}/>
+                                           maxScore={this.state.maxScore} students={this.state.students} ungradedPoints={this.state.ungradedPoints}
+                                           questions={this.state.questions} updateScore={this.updateScore} curveGrade={this.curveGrade}/>
                         </Col>
                     </Row>
                 </Container>
