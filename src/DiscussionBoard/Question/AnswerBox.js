@@ -8,7 +8,7 @@ import './AnswerBox.css'
 import TeacherAnswer from './TeacherAnswer';
 import StudentAnswer from './StudentAnswer';
 import FollowUp from './FollowUp';
-import AddFollowUp from '../AddFollowUp'
+import AddFollowUp from '../AddFollowUp';
 import {firestore} from "../../base";
 
 class AnswerBox extends Component {
@@ -17,6 +17,7 @@ class AnswerBox extends Component {
     super(props);
 
     this.state = {
+      buttonVis: false,
       discussion: {},
       replies: [{
         userID: null,
@@ -94,7 +95,7 @@ class AnswerBox extends Component {
 
   render() {
     const actions = {
-      setVis: this.setVis,
+      // setVis: this.setVis,
       getReplies: this.getReplies,
     };
 
@@ -127,7 +128,7 @@ class AnswerBox extends Component {
             <Button onClick={this.setVis} className='exSpace' color='success'>Create Follow Up</Button>
           </Col>
         </Row>
-        {this.state.buttonVis
+        {this.state.buttonVis === true
           ?
            <AddFollowUp image={this.state.image} role={this.props.role} uid={this.props.uid}
                         classCode={this.props.classCode} discussion={this.props.discussion}
