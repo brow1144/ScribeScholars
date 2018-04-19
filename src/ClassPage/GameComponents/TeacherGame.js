@@ -6,8 +6,6 @@ import Score from './TeacherScore';
 import MC from './TeacherMC';
 import Bonus from './TeacherBonus';
 
-import ReactLoading from 'react-loading';
-
 class TeacherGame extends Component {
   constructor(props) {
     super(props);
@@ -92,9 +90,11 @@ class TeacherGame extends Component {
         <div>
           <Container>
             <Row>
-              <Button onClick={this.enterGame}>
-                Advance to first Question
-              </Button>
+              <Col>
+                <Button onClick={this.enterGame}>
+                  Advance to first Question
+                </Button>
+              </Col>
             </Row>
           </Container>
         </div>
@@ -106,28 +106,13 @@ class TeacherGame extends Component {
     }
     else if (this.state.game.scoreStage) {
       return (
-        <Score key={this.state.key} game={this.state.game} theClick={this.scoreToNextQuestion} endGame={this.resetGame}
-               final={this.state.game.questIndex === this.state.game.questions.length - 1}/>
+        <Score key={this.state.key} game={this.state.game} code={this.props.class} theClick={this.scoreToNextQuestion}
+               endGame={this.resetGame} final={this.state.game.questIndex === this.state.game.questions.length - 1}/>
       );
     }
     else if (this.state.game.mcStage) {
       return (
         <MC key={this.state.key} game={this.state.game} theClick={this.mcToScore}/>
-      );
-    }
-    else {
-      return(
-        <div>
-          <br/>
-          <br/>
-          <Row>
-            <Col xs={{size: 4, offset: 4}}>
-              <br/>
-              <br/>
-              <ReactLoading type={'bars'} width={'26rem'} height={'18rem'} color={'#21CE99'}/>
-            </Col>
-          </Row>
-        </div>
       );
     }
   }
