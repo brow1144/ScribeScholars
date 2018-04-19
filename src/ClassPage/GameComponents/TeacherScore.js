@@ -137,9 +137,11 @@ class TeacherScore extends Component {
           </Row>
           <Row>
             <Col xs={{size: '8', offset: '2'}}>
-              <Button onClick={this.props.endGame} style={{fontSize: '1.25rem'}} color="info">
-                End Game
-              </Button>
+              <RouterLink to={"/ScribeScholars/HomePage/" + this.props.code + "/games"}>
+                <Button onClick={this.props.endGame} style={{fontSize: '1.25rem'}} color="info">
+                  End Game
+                </Button>
+              </RouterLink>
             </Col>
           </Row>
         </div>
