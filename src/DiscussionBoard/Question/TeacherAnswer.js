@@ -6,6 +6,7 @@ import { firestore } from "../../base";
 
 import 'react-quill/dist/quill.core.css';
 import './AnswerBox.css'
+import './TeacherAnswer.css'
 
 import AddTeacherAns from '../AddTeacherAns';
 
@@ -132,7 +133,8 @@ class TeacherAnswer extends Component {
               </Col>
               <Col sm='10'>
                 <br/>
-                <p className='teacherAnswer'>{this.state.name}'s Answer!</p>
+                <p className='teacherAnswer'>{this.state.name}'s Answer</p>
+                <p className={'teachAns'}>Teacher Answer</p>
               </Col>
             </Row>
             <Row>

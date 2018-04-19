@@ -120,6 +120,7 @@ class AnswerBox extends Component {
           <Col xs='1'/>
           <Col>
             <h2>Follow up</h2>
+            <hr/>
           </Col>
         </Row>
         <Row>
@@ -133,6 +134,8 @@ class AnswerBox extends Component {
             }
           </Col>
         </Row>
+        <br/>
+
         {this.state.buttonVis === true
           ?
            <AddFollowUp image={this.state.image} role={this.props.role} uid={this.props.uid}
