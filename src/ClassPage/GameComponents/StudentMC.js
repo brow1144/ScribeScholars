@@ -59,6 +59,11 @@ class StudentMC extends Component {
         self.setState({
           game: doc.data(),
           key: !self.state.key,
+        });
+      if (doc.data().scoreStage)
+        self.setState({
+          mcqFlip: false,
+          bonusFlip: false,
         })
     })
   };
@@ -121,6 +126,7 @@ class StudentMC extends Component {
 
     let arr = self.state.game;
     arr.userScores[self.state.userIndex].score = self.state.score;
+    arr.questScores[self.state.game.questIndex] = arr.questScores[self.state.game.questIndex] + self.state.score;
     /*self.setState({
       game: arr,
     });*/
