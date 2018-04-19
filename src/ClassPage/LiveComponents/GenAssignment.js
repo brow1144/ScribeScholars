@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Nav, NavLink, Container, Row, Col, Button, Card} from 'reactstrap';
+import { Nav, Container, Row, Col, Button, Card, CardTitle, CardHeader, CardBody} from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom'
 import {firestore} from "../../base";
 import MCQ from "./MCQ";
@@ -322,58 +322,92 @@ class GenAssignment extends Component {
   render() {
     return (
       <div>
-        <Container fluid>
-          <Card style={{boxShadow: '8px 8px 3px rgba(0, 0, 0, 0.2)'}}>
+        {!this.state.finalPage
+          ?
+          <Container fluid>
             <Row>
-              <MCQ currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
-                   setAns = {this.setAns} finalPage = {this.state.finalPage} oldAns = {this.state.history[this.state.currentQuestion-1]}
-                   option1={this.state.option1} option2={this.state.option2} option3={this.state.option3} option4={this.state.option4}/>
+              <Col>
+                <Card style={{
+                  boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+                  margin: 'auto',
+                  width: '40%'
+                }}>
+                  <CardHeader tag="h2" >{this.state.name}: Question {this.state.currentQuestion}</CardHeader>
+                  <MCQ currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
+                       setAns={this.setAns} finalPage={this.state.finalPage}
+                       oldAns={this.state.history[this.state.currentQuestion - 1]}
+                       option1={this.state.option1} option2={this.state.option2} option3={this.state.option3}
+                       option4={this.state.option4}/>
+
+                  {this.state.currentQuestion === 1
+                    ?
+                    <Row>
+                      <Col xs={{size: 5, offset: 1}}>
+                        <Button onClick={this.incPage}>Next Question</Button>
+                      </Col>
+                    </Row>
+                    :
+                    <Row>
+                      <Col xs={{size: 5, offset: 1}}>
+                        <Button onClick={this.decPage}>Last Question</Button>
+                      </Col>
+                      <Col xs={{size: 3, offset: 3}}>
+                        <Button onClick={this.incPage}>Next Question</Button>
+                      </Col>
+                    </Row>
+                  }
+                  <br/>
+                </Card>
+              </Col>
             </Row>
 
-            {this.state.finalPage
-              ?
-              <Row>
-                <Col xs={{size: 3, offset: 1}}>
-                  <div className={"space"}/>
-                  <Button onClick={this.decPage}>Last Question</Button>
+          </Container>
+          :
+          <Container fluid>
+            <Row>
+              <Col>
+                <Card style={{
+                  boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+                  margin: 'auto',
+                  width: '40%'
+                }}>
+                  <CardHeader tag="h3" className={"titleCar"}>End of the Assignment</CardHeader>
+                  {this.state.completed !== "2"
+                    ?
+                    <CardBody>
+                      <CardTitle tag={"p"} className={"cardTextStyle"}>
+                        Not all questions are completed! Answer all questions before continuing
+                      </CardTitle>
+                    </CardBody>
+                    : null
+                  }
                   <br/>
-                </Col>
-                {this.state.completed === "2"
-                  ?
-                  <Col xs={{size: 4, offset: 2}}>
-                    <div className={"space"}/>
-                    <Nav pills>
-                      <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.state.code}/announcements`}>
-                        <NavLink >Return to the classroom page</NavLink>
-                      </RouterLink>
-                    </Nav>
-                  </Col>
-                  :
-                   <Col>
-                     <h3>Not all questions are completed!</h3>
-                     <h3>Please answer all questions before continuing.</h3>
-                   </Col>
-                }
-              </Row>
-              : this.state.currentQuestion === 1
-                ?
-                <Row>
-                  <Col xs={{size: 5, offset: 1}}>
-                    <Button onClick={this.incPage}>Next Question</Button>
-                  </Col>
-                </Row>
-                :
-                <Row>
-                  <Col xs={{size: 5, offset: 1}}>
-                    <Button onClick={this.decPage}>Last Question</Button>
-                    <Button onClick={this.incPage}>Next Question</Button>
-                  </Col>
-                </Row>
-            }
-            <br/>
-          </Card>
+                  <Row>
+                    <Col xs={{size: 3, offset: 1}}>
+                      <div className={"space"}/>
+                      <Button onClick={this.decPage}>Last Question</Button>
+                      <br/>
+                    </Col>
+                    {this.state.completed === "2"
+                      ?
+                      <Col xs={{size: 4, offset: 3}}>
+                        <div className={"space"}/>
+                        <Nav pills>
+                          <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.state.code}/lessons`}>
+                            <Button>Return to the classroom page</Button>
+                          </RouterLink>
+                        </Nav>
+                      </Col>
+                      : null
+                    }
+                  </Row>
+                  <br/>
 
-        </Container>
+                </Card>
+              </Col>
+            </Row>
+          </Container>
+        }
       </div>
     )
   }
