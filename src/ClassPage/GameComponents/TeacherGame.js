@@ -103,16 +103,30 @@ class TeacherGame extends Component {
       return (
         <Bonus key={this.state.key} game={this.state.game} theClick={this.bonusToMC}/>
       );
-    }
-    else if (this.state.game.scoreStage) {
+    } else if (this.state.game.scoreStage) {
       return (
         <Score key={this.state.key} game={this.state.game} code={this.props.class} theClick={this.scoreToNextQuestion}
                endGame={this.resetGame} final={this.state.game.questIndex === this.state.game.questions.length - 1}/>
       );
-    }
-    else if (this.state.game.mcStage) {
+    } else if (this.state.game.mcStage) {
       return (
         <MC key={this.state.key} game={this.state.game} theClick={this.mcToScore}/>
+      );
+    } else {
+      return(
+        <div>
+          <br/>
+          <br/>
+          <Row>
+            <Col xs={{size: 4, offset: 1}} lg={{size: 4, offset: 4}}>
+              <br/>
+              <br/>
+              <div style={{margin: 'auto', width: '50%'}}>
+                <ReactLoading type={'bars'} width={250} height={100} color={'#21CE99'}/>
+              </div>
+            </Col>
+          </Row>
+        </div>
       );
     }
   }
