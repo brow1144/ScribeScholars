@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { firestore } from "../../base";
-import {Table} from 'reactstrap';
+import { Table, Row, Col, Button } from 'reactstrap';
 
 import { NavLink as RouterLink } from 'react-router-dom'
 
@@ -86,25 +86,38 @@ class TeacherScore extends Component {
 
   render() {
     return (
-      <Table>
-        <thead>
-        <tr>
-          <th>Name</th>
-          <th>Score</th>
-        </tr>
-        </thead>
-        <tbody>
-        {Object.keys(this.state.topScores).map((key, index) => {
-          return (
-            <tr key={key}>
-              <td>{this.state.topScores[index].name}</td>
-              <td>{this.state.topScores[index].score}</td>
-            </tr>
-          )
-        })
-        }
-        </tbody>
-      </Table>
+      <div>
+        <Row>
+          <Col>
+            <Table>
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>Score</th>
+              </tr>
+              </thead>
+              <tbody>
+              {Object.keys(this.state.topScores).map((key, index) => {
+                return (
+                  <tr key={key}>
+                    <td>{this.state.topScores[index].name}</td>
+                    <td>{this.state.topScores[index].score}</td>
+                  </tr>
+                )
+              })
+              }
+              </tbody>
+            </Table>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={{size: '8', offset: '2'}}>
+            <Button onClick={this.props.theClick} style={{fontSize: '1.25rem'}} color="info">
+              End Bonus
+            </Button>
+          </Col>
+        </Row>
+      </div>
     )
   }
 }

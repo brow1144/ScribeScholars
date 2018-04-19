@@ -21,6 +21,7 @@ class TeacherGame extends Component {
       class: this.props.class,
       lessonNumber: this.props.lessonNumber,
       key: false,
+      gameRef: firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber),
     };
   };
 
@@ -30,10 +31,7 @@ class TeacherGame extends Component {
 
   grabGameDetails = () => {
     let self = this;
-    let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
-
-    gameRef.onSnapshot(function (doc) {
-      console.log(doc.data());
+    this.state.gameRef.onSnapshot(function (doc) {
       self.setState({
         game: doc.data(),
         key: !self.state.key,
@@ -42,51 +40,85 @@ class TeacherGame extends Component {
   };
 
   enterGame = () => {
-    let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
-
-    gameRef.update({
+    this.state.gameRef.update({
       lobbyStage: false,
       bonusStage: true,
+    }).catch((error) => {
+      console.log("Error getting document:", error);
     });
   };
 
   bonusToMC = () => {
-    let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
-
-    gameRef.update({
+    this.state.gameRef.update({
       bonusStage: false,
       mcStage: true,
+    }).catch((error) => {
+      console.log("Error getting document:", error);
     });
   };
 
-  advanceQuestion = () => {
-    let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
+  mcToScore = () => {
+    this.state.gameRef.update({
+      mcStage: false,
+      scoreStage: true,
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
 
-    gameRef.get().then(function (doc) {
+  scoreToNextQuestion = () => {
+    let self = this;
+
+    if (this.state.game.questIndex === this.state.game.questions.length - 1) {
+      // TODO final score page
+      this.state.gameRef.update({
+        scoreStage: false,
+        bonusStage: true,
+      }).catch((error) => {
+        console.log("Error getting document:", error);
+      });
+    } else {
+      this.state.gameRef.update({
+        questIndex: self.state.game.questIndex + 1,
+        scoreStage: false,
+        bonusStage: true,
+      }).catch((error) => {
+        console.log("Error getting document:", error);
+      });
+    }
+  };
+
+  advanceQuestion = () => {
+    let self = this;
+    this.state.gameRef.get().then(function (doc) {
       let data = doc.data();
       let index = data.questIndex;
       if (index < data.questions.length - 1) {
-        gameRef.update({
+        self.state.gameRef.update({
           questIndex: data.questIndex + 1,
+        }).catch((error) => {
+          console.log("Error getting document:", error);
         });
       } else {
-        gameRef.update({
+        self.state.gameRef.update({
           mcStage: false,
           scoreStage: true,
+        }).catch((error) => {
+          console.log("Error getting document:", error);
         });
       }
     });
   };
 
   resetGame = () => {
-    let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
-
-    gameRef.update({
+    this.state.gameRef.update({
       bonusStage: false,
       scoreStage: false,
       mcStage: false,
       lobbyStage: true,
       questIndex: 0,
+    }).catch((error) => {
+      console.log("Error getting document:", error);
     });
   };
 
@@ -110,12 +142,12 @@ class TeacherGame extends Component {
     }
     else if (this.state.game.scoreStage) {
       return (
-        <Score key={this.state.key} game={this.state.game} theClick={this.resetGame} code={this.props.class}/>
+        <Score key={this.state.key} game={this.state.game} theClick={this.scoreToNextQuestion} code={this.props.class}/>
       );
     }
     else if (this.state.game.mcStage) {
       return (
-        <MC key={this.state.key} game={this.state.game} theClick={this.advanceQuestion}/>
+        <MC key={this.state.key} game={this.state.game} theClick={this.mcToScore}/>
       );
     }
     else {
