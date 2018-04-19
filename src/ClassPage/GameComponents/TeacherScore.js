@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { firestore } from "../../base";
 import {Container, Row, Col, Input, Label, Form, FormGroup, Button} from 'reactstrap';
 
+import { NavLink as RouterLink } from 'react-router-dom'
+
 class TeacherScore extends Component {
   constructor(props) {
     super(props);
@@ -12,13 +14,13 @@ class TeacherScore extends Component {
   };
 
   componentWillMount() {
-    this.grabGameDetails();
+    //this.grabGameDetails();
+      this.createLeaderboard();
   };
 
 
   getTopScores = () => {
     this.props.game.questScores.sort();
-
   };
 
   getName = (uid) => {
@@ -94,6 +96,10 @@ class TeacherScore extends Component {
         )
       })
       }
+      <RouterLink style={{display: 'inline-block', width: '1rem'}}
+                  to={`/ScribeScholars/HomePage/${this.props.code}/games`}>
+          <Button /*onClick={this.props.theClick()}*/>Enter Lobby</Button>
+      </RouterLink>
       </tbody>
     )
   }

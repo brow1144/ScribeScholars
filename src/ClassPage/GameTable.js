@@ -121,7 +121,7 @@ class GameTable extends Component {
                         <td>
                           <RouterLink style={{display: 'inline-block', width: '1rem'}}
                                       to={`/ScribeScholars/HomePage/${this.props.code}/games/${this.state.games[index].lessonCode}/teacher`}>
-                            <Button>Enter Game</Button>
+                            <Button>Enter Lobby</Button>
                           </RouterLink>
                           <span style={{display: 'inline-block', width: '1rem'}}> </span>
                         </td>

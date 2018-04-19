@@ -15,6 +15,7 @@ class StudentBonus extends Component {
 
   recordResponse = () => {
     console.log(this.state.inputValue);
+    this.props.theClick();
   };
 
   updateInputValue = (ev) => {
