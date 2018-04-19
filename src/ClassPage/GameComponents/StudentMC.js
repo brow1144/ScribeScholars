@@ -126,7 +126,7 @@ class StudentMC extends Component {
 
     let arr = self.state.game;
     arr.userScores[self.state.userIndex].score = self.state.score;
-    arr.questScores[self.state.game.questIndex] = arr.questScores[self.state.game.questIndex] + self.state.score;
+    arr.questScores[self.state.game.questIndex]++;
     /*self.setState({
       game: arr,
     });*/
