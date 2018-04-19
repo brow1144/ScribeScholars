@@ -21,7 +21,6 @@ import EditActivity from '../EditActivity/EditActivity'
 
 import Settings from '../Settings/Settings';
 import StudentMC from '../ClassPage/GameComponents/StudentMC';
-import TeacherMC from '../ClassPage/GameComponents/TeacherMC';
 
 import './HomePage.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
