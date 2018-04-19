@@ -147,7 +147,6 @@ class StudentGame extends Component {
               </div>
             </Col>
           </Row>
-
         </div>
       );
     }
