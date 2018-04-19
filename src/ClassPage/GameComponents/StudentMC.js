@@ -59,6 +59,11 @@ class StudentMC extends Component {
         self.setState({
           game: doc.data(),
           key: !self.state.key,
+        });
+      if (doc.data().scoreStage)
+        self.setState({
+          mcqFlip: false,
+          bonusFlip: false,
         })
     })
   };
