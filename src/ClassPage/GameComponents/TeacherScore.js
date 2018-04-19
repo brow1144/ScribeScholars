@@ -56,7 +56,7 @@ class TeacherScore extends Component {
       }
     }
 
-    totalScores.sort(this.compareValues("score"));
+    totalScores.sort(this.compareValues("score")).reverse();
     tmpTopScores = totalScores.slice(0, 5);
 
     for (let i in tmpTopScores) {
