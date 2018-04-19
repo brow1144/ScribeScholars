@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { firestore } from "../../base";
 import {Container, Row, Col, Button} from 'reactstrap';
+import ReactLoading from 'react-loading';
 
 import Score from './TeacherScore';
 import MC from './TeacherMC';
