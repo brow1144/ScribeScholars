@@ -23,7 +23,6 @@ class MSQ extends Component {
       return (
         <Col sm={{size: 8, offset: 2}}>
           <FormGroup tag={"fieldset"}>
-            <legend className={"RadioTitle"}>{this.props.name}: Question {this.props.currentQuestion}</legend>
             <legend className={"RadioTitle"}>{this.props.prompt}</legend>
             <Col>
               <FormGroup>
