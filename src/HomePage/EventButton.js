@@ -218,8 +218,13 @@ class EventButton extends Component {
                           {this.props.role === "teacher"
 
                               ?<FormGroup >
-                                <Label for= "exampleSelect" > Select if you want a class event</Label>
+                                <InputGroup>
+                                  <InputGroupAddon>
+                                      <InputGroupText>Class Event</InputGroupText>
+                                  </InputGroupAddon>
                                 <EventClasses classes={this.state.classes}/>
+                                </InputGroup>
+                                <br/>
                               </FormGroup>
                               :<div/>
 
