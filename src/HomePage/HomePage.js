@@ -447,7 +447,6 @@ class HomePage extends Component {
    *
    */
   getDeadlines = () => {
-    console.log('reached get Deadlines');
     let self = this;
     let dates = [];
 
@@ -472,7 +471,6 @@ class HomePage extends Component {
       homeworkRef = firestore.collection("classes").doc(self.state.classes[j].code);
       homeworkRef.get().then(() => {
         if(parseInt(j, 10) === self.state.classes.length-1) {
-          console.log('reached end of getdeadlines');
           self.getInClassDates(dates);
         }
       });
@@ -482,7 +480,6 @@ class HomePage extends Component {
 
 
   getInClassDates = (dates) => {
-    console.log('reached get inclass');
     let self = this;
     for (let j in self.state.classes) {
 
@@ -504,7 +501,6 @@ class HomePage extends Component {
       inClassRef = firestore.collection("classes").doc(self.state.classes[j].code);
       inClassRef.get().then(() => {
         if (parseInt(j, 10) === self.state.classes.length - 1) {
-          console.log('reached end of getdeadlines');
           self.handleDates(dates);
         }
       });
@@ -512,7 +508,6 @@ class HomePage extends Component {
   };
 
   handleDates = (dates) => {
-    console.log('reached handle dates')
     let self = this;
     let allEvents = dates;
     for(let i = 0; i < self.state.calendarEvents.length; i++){
