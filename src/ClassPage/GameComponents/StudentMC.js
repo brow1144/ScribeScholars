@@ -133,6 +133,7 @@ class StudentMC extends Component {
 
     gameRef.update({
       userScores: arr.userScores,
+      questScores: arr.questScores,
     }).catch()
 
   };
