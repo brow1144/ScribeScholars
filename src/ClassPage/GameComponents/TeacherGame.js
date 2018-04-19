@@ -42,8 +42,12 @@ class TeacherGame extends Component {
   };
 
   render() {
+    console.log(this.state.game);
     if (this.state.game.lobbyStage) {
       // TODO probably ignore
+      return (
+        <div>You are adopted</div>
+      )
     } else if (this.state.game.bonusStage) {
       return (
         <Bonus key={this.state.key} game={this.state.game}/>
