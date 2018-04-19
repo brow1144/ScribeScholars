@@ -8,11 +8,40 @@ class TeacherScore extends Component {
 
     this.state = {
       topScores: [],
+      leastMissed: null,
+      mostMissed: null,
     };
   };
 
   componentWillMount() {
     this.createLeaderboard();
+    this.setQuestionStats();
+  };
+
+  setQuestionStats = () => {
+    let max = 0;
+    let maxIndex = 0;
+    let min = 0;
+    let minIndex = 0;
+
+    for (let i in this.props.game.questScores) {
+      if (this.props.game.questScores.hasOwnProperty(i)) {
+        let score = this.props.game.questScores[i];
+
+        if (score < min) {
+          min = score;
+          minIndex = i;
+        } else if (score > max) {
+          max = score;
+          maxIndex = i;
+        }
+      }
+    }
+
+    this.setState({
+      leastMissed: maxIndex,
+      mostMissed: minIndex,
+    });
   };
 
   createLeaderboard = () => {
@@ -72,47 +101,68 @@ class TeacherScore extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <Row>
-          <Col>
-            <Table>
-              <thead>
-              <tr>
-                <th>Name</th>
-                <th>Score</th>
-              </tr>
-              </thead>
-              <tbody>
-              {Object.keys(this.state.topScores).map((key, index) => {
-                return (
-                  <tr key={key}>
-                    <td>{this.state.topScores[index].name}</td>
-                    <td>{this.state.topScores[index].score}</td>
-                  </tr>
-                )
-              })
-              }
-              </tbody>
-            </Table>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={{size: '8', offset: '2'}}>
-            {this.props.game.questIndex === this.props.game.questions.length - 1
-              ?
-              <Button onClick={this.props.theClick} style={{fontSize: '1.25rem'}} color="info">
+    if (this.props.final) {
+      return (
+        <div>
+          <Row>
+            <Col>
+              <Table>
+                <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Score</th>
+                </tr>
+                </thead>
+                <tbody>
+                {Object.keys(this.state.topScores).map((key, index) => {
+                  return (
+                    <tr key={key}>
+                      <td>{this.state.topScores[index].name}</td>
+                      <td>{this.state.topScores[index].score}</td>
+                    </tr>
+                  )
+                })
+                }
+                </tbody>
+              </Table>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={{size: '8', offset: '2'}}>
+              <p>Least-Missed Question: {this.props.game.questions[this.state.leastMissed].prompt}</p>
+              <p>({(this.props.game.userScores.length) - this.props.game.questScores[this.state.leastMissed]} missed)</p>
+              <p>Most-Missed Question: {this.props.game.questions[this.state.mostMissed].prompt}</p>
+              <p>({(this.props.game.userScores.length) - this.props.game.questScores[this.state.mostMissed]} missed)</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={{size: '8', offset: '2'}}>
+              <Button onClick={this.props.endGame} style={{fontSize: '1.25rem'}} color="info">
                 End Game
               </Button>
-              :
+            </Col>
+          </Row>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <Row>
+            <Col>
+              <p>Number right: {this.props.game.questScores[this.props.game.questIndex]}</p>
+              <p>Number wrong: {(this.props.game.userScores.length) - this.props.game.questScores[this.props.game.questIndex]}</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={{size: '8', offset: '2'}}>
               <Button onClick={this.props.theClick} style={{fontSize: '1.25rem'}} color="info">
                 Next Question
               </Button>
-            }
-          </Col>
-        </Row>
-      </div>
-    )
+            </Col>
+          </Row>
+        </div>
+      )
+    }
   }
 }
 
