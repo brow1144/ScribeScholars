@@ -598,7 +598,7 @@ class GenHomework extends Component {
                     <div className={"space"}/>
                     <Nav pills>
                       <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.state.code}/announcements`}>
-                        <NavLink >Return to the classroom page</NavLink>
+                        <Button >Return to the classroom page</Button>
                       </RouterLink>
                     </Nav>
                   </Col>
@@ -619,6 +619,8 @@ class GenHomework extends Component {
                 <Row>
                   <Col xs={{size: 5, offset: 1}}>
                     <Button onClick={this.decPage}>Last Question</Button>
+                  </Col>
+                  <Col xs={{size: 3, offset: 3}}>
                     <Button onClick={this.incPage}>Next Question</Button>
                   </Col>
                 </Row>

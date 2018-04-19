@@ -323,7 +323,7 @@ class GenAssignment extends Component {
     return (
       <div>
         <Container fluid>
-          <Card style={{boxShadow: '8px 8px 3px rgba(0, 0, 0, 0.2)'}}>
+          <Card style={{boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)', margin: 'auto', width: '40%'}}>
             <Row>
               <MCQ currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
                    setAns = {this.setAns} finalPage = {this.state.finalPage} oldAns = {this.state.history[this.state.currentQuestion-1]}
@@ -344,7 +344,7 @@ class GenAssignment extends Component {
                     <div className={"space"}/>
                     <Nav pills>
                       <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.state.code}/announcements`}>
-                        <NavLink >Return to the classroom page</NavLink>
+                        <Button >Return to the classroom page</Button>
                       </RouterLink>
                     </Nav>
                   </Col>
@@ -366,6 +366,8 @@ class GenAssignment extends Component {
                 <Row>
                   <Col xs={{size: 5, offset: 1}}>
                     <Button onClick={this.decPage}>Last Question</Button>
+                  </Col>
+                  <Col xs={{size: 3, offset: 3}}>
                     <Button onClick={this.incPage}>Next Question</Button>
                   </Col>
                 </Row>
