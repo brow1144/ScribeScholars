@@ -76,12 +76,6 @@ class HomePage extends Component {
         code: null,
       }],
 
-      dates: [{
-        title: null,
-        start: null,
-        end: null,
-      }],
-
       announcements: [{
         title: null,
         subtitle: null,
@@ -89,6 +83,7 @@ class HomePage extends Component {
         class: null,
       }],
 
+      dates: [],
       calendarEvents: [],
 
       lessonNumber: this.props.lessonNumber,
@@ -417,7 +412,11 @@ class HomePage extends Component {
     let tmpAlerts = [];
     let self = this;
 
+    console.log(this.state.dates);
+    console.log(this.state.dates.length);
+
     this.state.dates.forEach(function(date) {
+      console.log(date);
       let diff = (date.end - now) / (60 * 60 * 1000);  // get difference in hours
       if (diff >= 0 && diff < 24 && !self.isHidden(date.title)) {  // if deadline is less than 24 hours away
         let endHours = date.end.getHours();
@@ -448,6 +447,7 @@ class HomePage extends Component {
    *
    */
   getDeadlines = () => {
+    console.log('reached get Deadlines');
     let self = this;
     let dates = [];
 
@@ -464,14 +464,32 @@ class HomePage extends Component {
             dates.push(deadline);
           }
         });
+
       }).catch((error) => {
         console.log("Error getting document:", error);
       });
 
+      homeworkRef = firestore.collection("classes").doc(self.state.classes[j].code);
+      homeworkRef.get().then(() => {
+        if(parseInt(j, 10) === self.state.classes.length-1) {
+          console.log('reached end of getdeadlines');
+          self.getInClassDates(dates);
+        }
+      });
+    }
+
+  };
+
+
+  getInClassDates = (dates) => {
+    console.log('reached get inclass');
+    let self = this;
+    for (let j in self.state.classes) {
+
       let inClassRef = firestore.collection("classes").doc(self.state.classes[j].code).collection('inClass');
       inClassRef.get().then((docs) => {
         docs.forEach((doc) => {
-          if (doc.data().due != null){
+          if (doc.data().due != null) {
             let deadline = {};
             deadline.title = doc.data().name;
             deadline.start = new Date(doc.data().due);
@@ -482,18 +500,31 @@ class HomePage extends Component {
       }).catch((error) => {
         console.log("Error getting document:", error);
       });
+
+      inClassRef = firestore.collection("classes").doc(self.state.classes[j].code);
+      inClassRef.get().then(() => {
+        if (parseInt(j, 10) === self.state.classes.length - 1) {
+          console.log('reached end of getdeadlines');
+          self.handleDates(dates);
+        }
+      });
+    }
+  };
+
+  handleDates = (dates) => {
+    console.log('reached handle dates')
+    let self = this;
+    let allEvents = dates;
+    for(let i = 0; i < self.state.calendarEvents.length; i++){
+      allEvents.push(self.state.calendarEvents[i]);
     }
 
-    let allEvents = dates;
-    for(let i = 0; i < this.state.calendarEvents.length; i++){
-      allEvents.push(this.state.calendarEvents[i]);
-    }
-    this.setState({
+    self.setState({
       dates: allEvents,
     }, () => {
-      this.getAlerts();
-      this.props.updateDates(this.state.dates);
-      this.forceUpdate();
+      self.getAlerts();
+      self.props.updateDates(self.state.dates);
+      self.forceUpdate();
     });
   };
 
