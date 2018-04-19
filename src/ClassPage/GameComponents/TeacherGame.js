@@ -72,8 +72,8 @@ class TeacherGame extends Component {
     if (this.state.game.questIndex === this.state.game.questions.length - 1) {
       // TODO final score page
       this.state.gameRef.update({
-        scoreStage: false,
-        bonusStage: true,
+        active: false,
+        scoreStage: true,
       }).catch((error) => {
         console.log("Error getting document:", error);
       });
@@ -142,7 +142,7 @@ class TeacherGame extends Component {
     }
     else if (this.state.game.scoreStage) {
       return (
-        <Score key={this.state.key} game={this.state.game} theClick={this.scoreToNextQuestion} code={this.props.class}/>
+        <Score key={this.state.key} game={this.state.game} theClick={this.scoreToNextQuestion}/>
       );
     }
     else if (this.state.game.mcStage) {

@@ -17,11 +17,6 @@ class TeacherMC extends Component {
         }
     };
 
-    recordChoice = (ev) => {
-        console.log(ev);
-        this.props.theClick();
-    };
-
     render() {
         return(
             <div>
@@ -50,7 +45,7 @@ class TeacherMC extends Component {
               <Row>
                 <Col xs={{size: '8', offset: '2'}}>
                   <Button onClick={this.props.theClick} style={{fontSize: '1.25rem'}} color="info">
-                    End Bonus
+                    End Question
                   </Button>
                 </Col>
               </Row>

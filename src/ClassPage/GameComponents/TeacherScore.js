@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { firestore } from "../../base";
 import { Table, Row, Col, Button } from 'reactstrap';
 
-import { NavLink as RouterLink } from 'react-router-dom'
-
 class TeacherScore extends Component {
   constructor(props) {
     super(props);
@@ -14,31 +12,10 @@ class TeacherScore extends Component {
   };
 
   componentWillMount() {
-    //this.grabGameDetails();
     this.createLeaderboard();
   };
 
-
-  getTopScores = () => {
-    this.props.game.questScores.sort();
-  };
-
-  getName = (uid) => {
-    let name;
-    let studentRef = firestore.collection("users").doc(uid);
-
-    studentRef.get().then((doc) => {
-      if (doc.exists && doc.data() != null) {
-        name = doc.data().firstName + " " + doc.data().lastName;
-        return name;
-      }
-    }).catch((error) => {
-      console.log("Error getting document:", error);
-    });
-  };
-
   createLeaderboard = () => {
-    let self = this;
     let totalScores = [];
     let tmpTopScores;
     let topScores = [];
@@ -54,13 +31,23 @@ class TeacherScore extends Component {
     tmpTopScores = totalScores.slice(0, 5);
 
     for (let i in tmpTopScores) {
-      let userScore = tmpTopScores[i];
-      topScores.push({name: this.getName(userScore.uid), score: userScore.score});
-    }
+      let name;
+      let self = this;
+      let studentRef = firestore.collection("users").doc(tmpTopScores[i].uid);
 
-    self.setState({
-      topScores: topScores,
-    });
+      studentRef.get().then((doc) => {
+        if (doc.exists && doc.data() != null) {
+          name = doc.data().firstName + " " + doc.data().lastName;
+          topScores.push({name: name, score: tmpTopScores[i].score});
+
+          self.setState({
+            topScores: topScores,
+          });
+        }
+      }).catch((error) => {
+        console.log("Error getting document:", error);
+      });
+    }
   };
 
   // custom sorting function
@@ -112,9 +99,16 @@ class TeacherScore extends Component {
         </Row>
         <Row>
           <Col xs={{size: '8', offset: '2'}}>
-            <Button onClick={this.props.theClick} style={{fontSize: '1.25rem'}} color="info">
-              End Bonus
-            </Button>
+            {this.props.game.questIndex === this.props.game.questions.length - 1
+              ?
+              <Button onClick={this.props.theClick} style={{fontSize: '1.25rem'}} color="info">
+                End Game
+              </Button>
+              :
+              <Button onClick={this.props.theClick} style={{fontSize: '1.25rem'}} color="info">
+                Next Question
+              </Button>
+            }
           </Col>
         </Row>
       </div>
