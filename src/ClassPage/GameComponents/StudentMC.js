@@ -15,15 +15,19 @@ class StudentMC extends Component {
     super(props);
 
     this.state = {
-      game: {},
+      game: {
+
+      },
       mcqFlip: false,
       bonusFlip: false,
       correct: false,
+      score: 0,
       uid: this.props.uid,
       class: this.props.class,
       lessonNumber: this.props.lessonNumber,
       key: false,
       currentScore: 0,
+      userIndex: null,
     };
 
   };
@@ -36,67 +40,94 @@ class StudentMC extends Component {
     let self = this;
     let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
 
+    let changeScore = false;
     gameRef.onSnapshot(function (doc) {
-      self.setState({
-        game: doc.data(),
-        key: !self.state.key,
-      })
+      for (let i in doc.data().userScores) {
+        if (doc.data().userScores[i].uid === self.state.uid) {
+          changeScore = doc.data().userScores[i].score;
+          self.setState({userIndex: i});
+          break;
+        }
+      }
+      if (changeScore >= self.state.score)
+        self.setState({
+          game: doc.data(),
+          key: !self.state.key,
+          score: changeScore,
+        });
+      else
+        self.setState({
+          game: doc.data(),
+          key: !self.state.key,
+        })
     })
   };
 
   submitBonus = (resp) => {
     resp = resp.toUpperCase();
-    let currentScore;
-    for (let i in this.state.game.userScores) {
+    let currentScore = this.state.score;
+/*    for (let i in this.state.game.userScores) {
       if (this.state.game.userScores[i].uid === this.state.uid) {
         currentScore = this.state.game.userScores[i].score;
         break;
       }
-    }
+    }*/
     if (resp === this.state.game.questions[this.state.game.questIndex].strAns.toUpperCase()) {
       currentScore += 3;
       this.setState({
         bonusFlip: true,
-        currentScore: currentScore,
+        score: currentScore,
         correct: true,
-      });
+      }, () => {this.updateFirebase();});
     }
     else {
       this.setState({
         bonusFlip: true,
-        currentScore: currentScore,
+        score: currentScore,
         correct: false,
-      });
+      }, () => {this.updateFirebase();});
     }
   };
 
   submitMCQ = (resp) => {
     resp = resp.toUpperCase();
-    let currentScore;
-    for (let i in this.state.game.userScores) {
+    let currentScore = this.state.score;
+/*    for (let i in this.state.game.userScores) {
       if (this.state.game.userScores[i].uid === this.state.uid) {
         currentScore = this.state.game.userScores[i].score;
         break;
       }
-    }
+    }*/
     if (resp === this.state.game.questions[this.state.game.questIndex].strAns.toUpperCase()) {
       currentScore += 1;
       this.setState({
         mcqFlip: true,
-        currentScore: currentScore,
+        score: currentScore,
         correct: true,
-      });
+      }, () => {this.updateFirebase();});
     }
     else {
       this.setState({
         bonusFlip: true,
-        currentScore: currentScore,
+        score: currentScore,
         correct: false,
-      });
+      }, () => {this.updateFirebase();});
     }
   };
 
   updateFirebase = () => {
+    let self = this;
+    let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
+
+    let arr = self.state.game;
+    arr.userScores[self.state.userIndex].score = self.state.score;
+    /*self.setState({
+      game: arr,
+    });*/
+
+    gameRef.update({
+      userScores: arr.userScores,
+    }).catch()
 
   };
 
@@ -123,7 +154,7 @@ class StudentMC extends Component {
                 </CardTitle>
                 <CardTitle tag={"p"} className={"cardTextStyle"}>
                   The bonus point will a fill in the blank version of the question, all questions are multiple choice but the answers will be hidden for this round.
-                  If you abstain from the bonus point portion, or you get it wrong, there will still be the option to earn the normal amount of points in when the answers appear.
+                  If you abstain from the bonus point portion, there will still be the option to earn the normal amount of points in when the answers appear. Be careful! You can't answer the multiple choice portion if you get the bonus wrong
                 </CardTitle>
                 <br/>
                 <hr/>
@@ -150,7 +181,7 @@ class StudentMC extends Component {
     }
     else if (this.state.game.scoreStage) {
       return (
-        <Score key={this.state.key} game={this.state.game}/>
+        <Score key={this.state.key} game={this.state.game} correct={this.state.correct} userIndex={this.state.userIndex}/>
         );
     }
     else if (this.state.game.mcStage) {
