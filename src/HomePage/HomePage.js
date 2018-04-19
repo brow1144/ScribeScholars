@@ -21,6 +21,7 @@ import EditActivity from '../EditActivity/EditActivity'
 
 import Settings from '../Settings/Settings';
 import StudentMC from '../ClassPage/GameComponents/StudentMC';
+import TeacherMC from '../ClassPage/GameComponents/TeacherMC';
 
 import './HomePage.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -30,6 +31,7 @@ import GenAssignment from "../ClassPage/LiveComponents/GenAssignment";
 import EventButton from "./EventButton"
 
 import StudentLiveFeed from "../ClassPage/StudentLiveFeed";
+import TeacherGame from "../ClassPage/GameComponents/TeacherGame";
 
 const mql = window.matchMedia(`(min-width: 600px)`);
 
@@ -102,7 +104,7 @@ class HomePage extends Component {
       open: props.open,
 
       myAssignments: [],
-      eventButtonOpen: false,
+      eventButtonOpen: true,
 
       alerts: [],
       hiddenAlerts: [],
@@ -899,6 +901,20 @@ class HomePage extends Component {
           </Row>
         </Sidebar>
       );
+    } else if (this.props.page === "teachGame"){
+        return (
+            <Sidebar {...sideData}>
+
+                <HomeNav firstName={"In-Class Game: Teacher"} lastName={""} expand={this.dockSideBar}
+                         width={this.state.width}/>
+
+                <Row>
+                    <Col>
+                        <TeacherGame {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} uid={this.state.uid}/>
+                    </Col>
+                </Row>
+            </Sidebar>
+        );
     } else if (this.props.page === "studentLiveFeed") {
 
       return (

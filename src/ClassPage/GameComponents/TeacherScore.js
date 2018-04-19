@@ -2,39 +2,25 @@ import React, { Component } from 'react';
 import { firestore } from "../../base";
 import {Container, Row, Col, Input, Label, Form, FormGroup, Button} from 'reactstrap';
 
+import { NavLink as RouterLink } from 'react-router-dom'
+
 class TeacherScore extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      game: {},
-      mcqSubmitted: false,
-      bonusSubmitted: false,
-
       topScores: [],
     };
   };
 
   componentWillMount() {
-    this.grabGameDetails();
+    //this.grabGameDetails();
+      this.createLeaderboard();
   };
 
-  grabGameDetails = () => {
-    let self = this;
-    let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
-
-    gameRef.onSnapshot(function (doc) {
-      console.log(doc.data());
-      self.setState({game: doc.data()});
-      self.createLeaderboard();
-    })
-  };
 
   getTopScores = () => {
-    this.state.game.questScores.sort();
-
-
-
+    this.props.game.questScores.sort();
   };
 
   getName = (uid) => {
@@ -52,13 +38,14 @@ class TeacherScore extends Component {
   };
 
   createLeaderboard = () => {
+    let self = this;
     let totalScores = [];
     let tmpTopScores;
     let topScores = [];
 
-    for (let i in this.state.game.userScores) {
-      if (this.state.game.userScores.hasOwnProperty(i)) {
-        let userScore = this.state.game.userScores[i];
+    for (let i in this.props.game.userScores) {
+      if (this.props.game.userScores.hasOwnProperty(i)) {
+        let userScore = this.props.game.userScores[i];
         totalScores.push({uid: userScore.uid, score: userScore.score});
       }
     }
@@ -109,6 +96,10 @@ class TeacherScore extends Component {
         )
       })
       }
+      <RouterLink style={{display: 'inline-block', width: '1rem'}}
+                  to={`/ScribeScholars/HomePage/${this.props.code}/games`}>
+          <Button onClick={this.props.theClick}>Enter Lobby</Button>
+      </RouterLink>
       </tbody>
     )
   }

@@ -120,8 +120,8 @@ class GameTable extends Component {
                       {this.state.role === "teacher" ?
                         <td>
                           <RouterLink style={{display: 'inline-block', width: '1rem'}}
-                                      to={`/ScribeScholars/HomePage/${this.props.code}/games/${this.state.games[index].lessonCode}`}>
-                            Enter Game
+                                      to={`/ScribeScholars/HomePage/${this.props.code}/games/${this.state.games[index].lessonCode}/teacher`}>
+                            <Button>Enter Lobby</Button>
                           </RouterLink>
                           <span style={{display: 'inline-block', width: '1rem'}}> </span>
                         </td>
