@@ -73,11 +73,13 @@ class TeacherGame extends Component {
 
   resetGame = () => {
     this.state.gameRef.update({
+
       active: false,
       bonusStage: false,
       scoreStage: false,
       mcStage: false,
       lobbyStage: false,
+
       questIndex: 0,
     }).catch((error) => {
       console.log("Error getting document:", error);
