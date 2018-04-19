@@ -116,6 +116,7 @@ class AnswerBox extends Component {
               <StudentAnswer role={this.props.role} uid={this.props.uid} classCode={this.props.classCode}
                              discussion={this.props.discussion}/>
         <br/>
+        <br/>
         <Row>
           <Col xs='1'/>
           <Col>
