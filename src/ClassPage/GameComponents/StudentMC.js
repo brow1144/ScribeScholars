@@ -126,13 +126,19 @@ class StudentMC extends Component {
 
     let arr = self.state.game;
     arr.userScores[self.state.userIndex].score = self.state.score;
-    arr.questScores[self.state.game.questIndex] = arr.questScores[self.state.game.questIndex] + self.state.score;
+    arr.questScores[self.state.game.questIndex]++;
     /*self.setState({
       game: arr,
     });*/
+    console.log(arr.questScores[self.state.game.questIndex]);
+
+    firestore.runTransaction(function(transaction) {
+      transaction.update(gameRef, {questScores: arr.questScores});
+    });
 
     gameRef.update({
       userScores: arr.userScores,
+      //questScores: arr.questScores,
     }).catch()
 
   };

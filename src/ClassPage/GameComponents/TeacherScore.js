@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { firestore } from "../../base";
 import { Table, Row, Col, Button } from 'reactstrap';
+import { NavLink as RouterLink } from 'react-router-dom';
 
 class TeacherScore extends Component {
   constructor(props) {
@@ -56,7 +57,7 @@ class TeacherScore extends Component {
       }
     }
 
-    totalScores.sort(this.compareValues("score"));
+    totalScores.sort(this.compareValues("score")).reverse();
     tmpTopScores = totalScores.slice(0, 5);
 
     for (let i in tmpTopScores) {
@@ -137,9 +138,11 @@ class TeacherScore extends Component {
           </Row>
           <Row>
             <Col xs={{size: '8', offset: '2'}}>
-              <Button onClick={this.props.endGame} style={{fontSize: '1.25rem'}} color="info">
-                End Game
-              </Button>
+              <RouterLink to={"/ScribeScholars/HomePage/" + this.props.code + "/games"}>
+                <Button onClick={this.props.endGame} style={{fontSize: '1.25rem'}} color="info">
+                  End Game
+                </Button>
+              </RouterLink>
             </Col>
           </Row>
         </div>
