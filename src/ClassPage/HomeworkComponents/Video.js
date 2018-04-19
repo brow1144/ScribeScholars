@@ -12,7 +12,6 @@ class Video extends Component {
       return (
         <Col sm={{size: 10, offset: 1}} className='player-wrapper centerContent'>
           <FormGroup tag={"fieldset"}>
-            <legend className={"RadioTitle"}>{this.props.name}: Question {this.props.currentQuestion}</legend>
             <legend className={"RadioTitle"}>{this.props.prompt}</legend>
             <ReactPlayer
               url={this.props.url}

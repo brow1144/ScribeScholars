@@ -17,7 +17,6 @@ class FIB extends Component {
                 <Col sm={{size: 10, offset: 1}}>
                     <br/>
                     <FormGroup tag={"fieldset"}>
-                        <legend className={"RadioTitle"}>{this.props.name}: Question {this.props.currentQuestion}</legend>
                         <legend className={"RadioTitle"}>String({this.props.prompt})</legend>
                         <Col sm={{size: 10, offset: 1}}>
                             <Input onChange={(ev) => this.props.setFIB(ev.target.value)} value={this.props.frqResponse}
