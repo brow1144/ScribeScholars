@@ -4,7 +4,7 @@ import {Container, Row, Col, Input, Label, Form, FormGroup, Button} from 'reacts
 
 import Score from './TeacherScore';
 import MC from './TeacherMC';
-import Bonus from './StudentBonus';
+import Bonus from './TeacherBonus';
 
 import ReactLoading from 'react-loading';
 
@@ -42,72 +42,66 @@ class TeacherGame extends Component {
   };
 
   enterGame = () => {
-      let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
+    let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
 
-      gameRef.update({
-          lobbyStage: false,
-          bonusStage: true,
-      })
+    gameRef.update({
+      lobbyStage: false,
+      bonusStage: true,
+    });
   };
 
   bonusToMC = () => {
-      let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
+    let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
 
-      gameRef.update({
-          bonusStage: false,
-          mcStage: true,
-      })
+    gameRef.update({
+      bonusStage: false,
+      mcStage: true,
+    });
   };
 
-    advanceQuestion = () => {
-        let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
+  advanceQuestion = () => {
+    let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
 
-        gameRef.get().then(function (doc) {
-          let data = doc.data();
-          let index = data.questIndex;
-          if (index < data.questions.length - 1) {
-              gameRef.update({
-                  questIndex: data.questIndex + 1,
-              })
-          } else {
-              gameRef.update({
-                  mcStage: false,
-                  scoreStage: true,
-              })
-          }
-        })
-
-    };
-
-    resetGame = () => {
-        let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
-
+    gameRef.get().then(function (doc) {
+      let data = doc.data();
+      let index = data.questIndex;
+      if (index < data.questions.length - 1) {
         gameRef.update({
-            bonusStage: false,
-            scoreStage: false,
-            mcStage: false,
-            lobbyStage: true,
-            questIndex: 0,
-        })
-    };
+          questIndex: data.questIndex + 1,
+        });
+      } else {
+        gameRef.update({
+          mcStage: false,
+          scoreStage: true,
+        });
+      }
+    });
+  };
+
+  resetGame = () => {
+    let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
+
+    gameRef.update({
+      bonusStage: false,
+      scoreStage: false,
+      mcStage: false,
+      lobbyStage: true,
+      questIndex: 0,
+    });
+  };
 
   render() {
-    console.log(this.state.game);
     if (this.state.game.lobbyStage) {
       return (
-          <div>
-            <Container>
-              <Row>
-                  <Button onClick={this.enterGame}>
-                    Advance to first Question
-                  </Button>
-              </Row>
-            </Container>
-          </div>
-      )
-      // TODO probably ignore
-      return (
-        <div>You are adopted</div>
+        <div>
+          <Container>
+            <Row>
+              <Button onClick={this.enterGame}>
+                Advance to first Question
+              </Button>
+            </Row>
+          </Container>
+        </div>
       )
     } else if (this.state.game.bonusStage) {
       return (

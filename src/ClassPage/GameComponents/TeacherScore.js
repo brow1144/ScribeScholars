@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { firestore } from "../../base";
-import {Container, Row, Col, Input, Label, Form, FormGroup, Button} from 'reactstrap';
+import {Table} from 'reactstrap';
 
 import { NavLink as RouterLink } from 'react-router-dom'
 
@@ -15,7 +15,7 @@ class TeacherScore extends Component {
 
   componentWillMount() {
     //this.grabGameDetails();
-      this.createLeaderboard();
+    this.createLeaderboard();
   };
 
 
@@ -86,21 +86,25 @@ class TeacherScore extends Component {
 
   render() {
     return (
-      <tbody>
-      {Object.keys(this.state.topScores).map((key, index) => {
-        return (
-          <tr key={key}>
-            <td>{this.state.topScores[index].name}</td>
-            <td>{this.state.topScores[index].score}</td>
-          </tr>
-        )
-      })
-      }
-      <RouterLink style={{display: 'inline-block', width: '1rem'}}
-                  to={`/ScribeScholars/HomePage/${this.props.code}/games`}>
-          <Button onClick={this.props.theClick}>Enter Lobby</Button>
-      </RouterLink>
-      </tbody>
+      <Table>
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Score</th>
+        </tr>
+        </thead>
+        <tbody>
+        {Object.keys(this.state.topScores).map((key, index) => {
+          return (
+            <tr key={key}>
+              <td>{this.state.topScores[index].name}</td>
+              <td>{this.state.topScores[index].score}</td>
+            </tr>
+          )
+        })
+        }
+        </tbody>
+      </Table>
     )
   }
 }
