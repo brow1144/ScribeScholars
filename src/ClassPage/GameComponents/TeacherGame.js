@@ -6,7 +6,9 @@ import Score from './TeacherScore';
 import MC from './TeacherMC';
 import Bonus from './TeacherBonus';
 
-class TeacherScore extends Component {
+import ReactLoading from 'react-loading';
+
+class TeacherGame extends Component {
   constructor(props) {
     super(props);
 

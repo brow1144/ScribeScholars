@@ -36,6 +36,7 @@ class TeacherScore extends Component {
   };
 
   createLeaderboard = () => {
+    let self = this;
     let totalScores = [];
     let tmpTopScores;
     let topScores = [];
