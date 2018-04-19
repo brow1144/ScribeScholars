@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Container, Row, Col, Input, Label, Form, FormGroup, Button} from 'reactstrap';
-import {NavLink as RouterLink, Route} from 'react-router-dom';
+
 import {firestore} from '../base';
 import {
   Accordion,
@@ -8,7 +8,7 @@ import {
   AccordionItemTitle,
   AccordionItemBody,
 } from 'react-accessible-accordion';
-import MCQForm from "../CreateActivity/MCQForm";
+import MCQForm from "./MCQGame";
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
 import '../CreateActivity/CreateActivity.css';
 
@@ -120,8 +120,7 @@ class CreateGame extends Component {
       option3: "",
       option4: "",
       prompt: "",
-      points: "",
-      type: "MCQ",
+      strAns: "",
     };
     tempArr.push(tempQ);
 
