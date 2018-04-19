@@ -7,34 +7,6 @@ import Modal from 'react-modal';
 import './GradesTable.css'
 
 class GradesTable extends Component {
-
-  // TODO move to correct class, TBD
-  curveGrade = (assignment, newMaxScore) => {
-    for (let i in this.state.students) {
-      if (this.state.students.hasOwnProperty(i)) {
-        let assignmentRef = firestore.collection("users").doc(this.state.students[i])
-          .collection(assignment.type).doc(assignment.assignment_code);
-
-        assignmentRef.update({
-          oldMaxScore: assignment.data.maxScore,
-          maxScore: newMaxScore,
-        }).catch((error) => {
-          console.log("Error getting document:", error);
-        });
-      }
-    }
-
-    let classAssignmentRef = firestore.collection("classes").doc(this.props.code)
-      .collection(assignment.type).doc(assignment.assignment_code);
-
-    classAssignmentRef.update({
-      oldMaxScore: assignment.data.maxScore,
-      maxScore: newMaxScore,
-    }).catch((error) => {
-      console.log("Error getting document:", error);
-    });
-  };
-
   constructor(props) {
     super(props);
 

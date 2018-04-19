@@ -21,9 +21,8 @@ class MCQ extends Component {
   render() {
     if (this.props.finalPage === false) {
       return (
-        <Col sm={{size: 8, offset: 2}}>
+        <Col sm={{size: 2, offset: 1}} md={{size: 8, offset: 2}}>
           <FormGroup tag={"fieldset"}>
-            <legend className={"RadioTitle"}>{this.props.name}: Question {this.props.currentQuestion}</legend>
             <legend className={"RadioTitle"}>{this.props.prompt}</legend>
             <Col>
               <FormGroup>

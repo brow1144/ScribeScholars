@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
 import {firestore} from "../base";
-import {Container, Row, Col } from 'reactstrap';
-
+import { Container, Row, Col } from 'reactstrap';
 
 import './MyStudents.css';
 import StudListGrade from "./StudListGrade";
 
 class GradingPage extends Component {
-
     constructor (props) {
         super(props);
 
@@ -16,152 +14,166 @@ class GradingPage extends Component {
                 name: null,
                 email: null,
                 key: null,
-                currentScore: null,
-                mcq: null
+                score: null,
+                answers: [],
             }],
 
-            maxScore : 0
+            maxScore: null,
+            oldMaxScore: null,
+            ungradedPoints: null,
+            questions: [],
         };
     }
 
     componentWillMount() {
+        this.setAssInfo();
         this.getStudents();
-        this.setMaxScore();
     };
 
+    setAssInfo = () => {
+        let self = this;
+        let assRef = firestore.collection("classes").doc(this.props.code).collection(this.props.assCol).doc(this.props.assKey);
+
+        assRef.get().then(function(doc) {
+            let ungradedPoints = 0;
+
+            if (doc.exists && doc.data() != null) {
+                for (let i in doc.data().questions) {
+                    if (doc.data().questions.hasOwnProperty(i)) {
+                        if (doc.data().questions[i].type === "FRQ" || doc.data().questions[i].type === "VIDEO") {
+                            ungradedPoints += doc.data().questions[i].points;
+                        }
+                    }
+                }
+            }
+
+            self.setState({
+                maxScore : doc.data().maxScore,
+                oldMaxScore: doc.data().oldMaxScore,
+                ungradedPoints: ungradedPoints,
+                questions: doc.data().questions,
+            });
+        });
+    };
 
     getStudents = () => {
-
         let object = [{}];
-
         let self = this;
+        let classRef = firestore.collection("classes").doc(this.props.code);
 
-
-        let docRef = firestore.collection("classes").doc(this.props.class);
-
-        docRef.get().then(function (doc) {
+        classRef.get().then(function (doc) {
             if (doc.exists) {
-                let data = doc.data();
-                for (let i in data.students) {
+                for (let i in doc.data().students) {
+                    if (doc.data().students.hasOwnProperty(i)) {
+                        let studRef = firestore.collection("users").doc(doc.data().students[i]);
 
-                    if (data.students.hasOwnProperty(i)) {
-                        let id = data.students[i];
-                        let studRef = firestore.collection("users").doc(id);
+                        studRef.get().then((studDoc) => {
+                            let studAssRef = studRef.collection(self.props.assCol).doc(self.props.assKey);
 
-                        studRef.get().then(function (doc) {
-                            let data = doc.data();
-
-                            let curScore = 1;
-
-
-                            studRef.collection(self.props.assCol).doc(self.props.assKey).get().then(function (deepDoc) {
-                                curScore = deepDoc.data().currentScore;
-
-                                if (self.props.assCol === "homework") {
-                                    object.unshift({
-                                        name: data.firstName + " " + data.lastName,
-                                        email: data.email,
-                                        key: id,
-                                        currentScore: curScore,
-                                        mcq: deepDoc.data().mcq
-                                    });
-                                }
-                                else if (self.props.assCol === "inClass") {
-                                    object.unshift({
-                                        name: data.firstName + " " + data.lastName,
-                                        email: data.email,
-                                        key: id,
-                                        currentScore: curScore,
-                                        mcq: curScore
-                                    });
-                                }
-
-
+                            studAssRef.get().then((assDoc) => {
+                                object.unshift({
+                                    name: studDoc.data().firstName + " " + studDoc.data().lastName,
+                                    email: studDoc.data().email,
+                                    key: doc.data().students[i],
+                                    score: assDoc.data().score,
+                                    answers: assDoc.data().history,
+                                });
 
                                 self.setState({
                                     students: object,
                                 });
-                            }, () => {
-
                             });
-
-
-
-
-
                         });
                     }
                 }
-            } else {
-                console.log("No such document!");
             }
-        }).catch(function (error) {
+        }).catch(function(error) {
             console.log("Error getting document:", error);
         });
 
         object.pop();
 
         self.setState({
-            students: object
+            students: object,
         });
-
     };
 
-    setMaxScore = () => {
-        let assRef = this.props.assRef;
+    curveGrade = (newMaxScore) => {
+        if (isNaN(newMaxScore) || newMaxScore <= 0)
+          return;
+
         let self = this;
-        assRef.get().then(function (doc) {
-            self.setState({
-                maxScore : doc.data().maxScore
-            })
-        });
+
+        for (let i in this.state.students) {
+            if (this.state.students.hasOwnProperty(i)) {
+                let assignmentRef = firestore.collection("users").doc(this.state.students[i].key)
+                  .collection(this.props.assCol).doc(this.props.assKey);
+
+                if (self.state.oldMaxScore != null) {
+                    assignmentRef.update({
+                        maxScore: newMaxScore,
+                    }).catch((error) => {
+                        console.log("Error getting document:", error);
+                    });
+                } else {
+                    assignmentRef.update({
+                        oldMaxScore: self.state.oldMaxScore,
+                        maxScore: newMaxScore,
+                    }).catch((error) => {
+                        console.log("Error getting document:", error);
+                    });
+                }
+            }
+        }
+
+        let classAssignmentRef = firestore.collection("classes").doc(this.props.code)
+          .collection(this.props.assCol).doc(this.props.assKey);
+
+        if (self.state.oldMaxScore != null) {
+            classAssignmentRef.update({
+                maxScore: newMaxScore,
+            }).catch((error) => {
+                console.log("Error getting document:", error);
+            });
+        } else {
+            classAssignmentRef.update({
+                oldMaxScore: self.state.oldMaxScore,
+                maxScore: newMaxScore,
+            }).catch((error) => {
+                console.log("Error getting document:", error);
+            });
+        }
     };
 
-    updateGrades = (student, collection, document, score ) => {
-        if (score === "") {
-            score = "0";
-        }
-        if (score > this.state.maxScore) {
+    updateScore = (student, score) => {
+        if (isNaN(score) || score < 0)
+            return;
+
+        if (score > this.state.maxScore)
             score = this.state.maxScore;
-        }
-        firestore.collection("users").doc(student).collection(collection).doc(document).update({
-            currentScore: score
-        })
-    };
 
-    getCurrScore = (student, collection, document) => {
-        let score;
-        firestore.collection("users").doc(student).collection(collection).doc(document).get().then(function (doc) {
-            score = doc.data().currentScore;
-            console.log(score)
-        }, () => {
-            console.log(score)
-            return score;
+        firestore.collection("users").doc(student.key).collection(this.props.assCol).doc(this.props.assKey).update({
+            score: score,
         });
     };
-
 
     render() {
-
-        const actions = {
-            updateGrades: this.updateGrades,
-            getCurrScore: this.getCurrScore
-        };
-
         return (
             <div>
                 <Container fluid>
-
                 </Container>
                 <Container fluid className={"mainPage"}>
                     <Row>
                         <Col className={"mainPage"}>
-                            <p>Grading </p>
+                            <p>Currently Grading: {this.props.assignment.name}</p>
                         </Col>
                     </Row>
                     <Row>
                         <Col>
-                            <StudListGrade code={this.props.class} assKey={this.props.assKey} assCol={this.props.assCol} maxScore={this.state.maxScore} students={this.state.students} {...actions}/>
+                            <StudListGrade assKey={this.props.assKey} assCol={this.props.assCol}
+                                           maxScore={this.state.maxScore} students={this.state.students} ungradedPoints={this.state.ungradedPoints}
+                                           questions={this.state.questions} updateScore={this.updateScore} curveGrade={this.curveGrade}
+                                           returnToDashboard={this.props.returnToDashboard}/>
                         </Col>
                     </Row>
                 </Container>

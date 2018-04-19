@@ -19,7 +19,7 @@ const QuizCards = (props) => {
                             <h1 className={"assTitle"}>
                                 {props.quizzes[index].name}
                             </h1>
-                            <h2 className={"assText"}>Max Score: {props.quizzes[index].max}</h2>
+                            <h2 className={"assText"}>Max Score: {props.quizzes[index].maxScore}</h2>
                         </Button>
                     </RouterLink>
                 </Col>

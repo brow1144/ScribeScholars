@@ -16,7 +16,6 @@ class FRQ extends Component {
       return (
         <Col sm={{size: 10, offset: 1}}>
           <FormGroup tag={"fieldset"}>
-            <legend className={"RadioTitle"}>{this.props.name}: Question {this.props.currentQuestion}</legend>
             <legend className={"RadioTitle"}>{this.props.prompt}</legend>
             <Col sm={{size: 10, offset: 1}}>
               <Input onChange={(ev) => this.props.setFRQ(ev.target.value)} value={this.props.frqResponse}
