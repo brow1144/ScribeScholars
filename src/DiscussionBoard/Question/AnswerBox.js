@@ -116,10 +116,12 @@ class AnswerBox extends Component {
               <StudentAnswer role={this.props.role} uid={this.props.uid} classCode={this.props.classCode}
                              discussion={this.props.discussion}/>
         <br/>
+        <br/>
         <Row>
           <Col xs='1'/>
           <Col>
             <h2>Follow up</h2>
+            <hr/>
           </Col>
         </Row>
         <Row>
@@ -133,6 +135,8 @@ class AnswerBox extends Component {
             }
           </Col>
         </Row>
+        <br/>
+
         {this.state.buttonVis === true
           ?
            <AddFollowUp image={this.state.image} role={this.props.role} uid={this.props.uid}
