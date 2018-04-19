@@ -98,7 +98,7 @@ class TeacherScore extends Component {
       }
       <RouterLink style={{display: 'inline-block', width: '1rem'}}
                   to={`/ScribeScholars/HomePage/${this.props.code}/games`}>
-          <Button /*onClick={this.props.theClick()}*/>Enter Lobby</Button>
+          <Button onClick={this.props.theClick}>Enter Lobby</Button>
       </RouterLink>
       </tbody>
     )
