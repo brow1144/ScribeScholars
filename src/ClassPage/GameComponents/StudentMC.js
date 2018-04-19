@@ -181,7 +181,7 @@ class StudentMC extends Component {
     }
     else if (this.state.game.scoreStage) {
       return (
-        <Score key={this.state.key} game={this.state.game}/>
+        <Score key={this.state.key} game={this.state.game} correct={this.state.correct} userIndex={this.state.userIndex}/>
         );
     }
     else if (this.state.game.mcStage) {
