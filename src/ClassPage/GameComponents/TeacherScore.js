@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { firestore } from "../../base";
 import { Table, Row, Col, Button } from 'reactstrap';
+import { NavLink as RouterLink } from 'react-router-dom';
 
 class TeacherScore extends Component {
   constructor(props) {
