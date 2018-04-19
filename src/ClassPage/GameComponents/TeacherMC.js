@@ -17,11 +17,6 @@ class TeacherMC extends Component {
         }
     };
 
-    recordChoice = (ev) => {
-        console.log(ev);
-        this.props.theClick();
-    };
-
     render() {
         return(
             <div>
@@ -47,43 +42,13 @@ class TeacherMC extends Component {
                 <br/>
                 <br/>
                 <br/>
-                <Row style={{height: '5rem', borderRadius: '25px'}}>
-                    <Col xs={{size: '8', offset: '2'}} style={{borderRadius: '25px'}}>
-                        <Card onClick={() => {this.recordChoice("option1")}} style={{boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
-                            <CardHeader tag="h4" style={{textAlign: 'center'}} className={"cardTitleHov"}>{this.state.game.questions[this.state.game.questIndex].option1}</CardHeader>
-                        </Card>
-                    </Col>
-                </Row>
-                <br/>
-                <br/>
-                <br/>
-                <Row style={{height: '5rem', borderRadius: '25px'}}>
-                    <Col xs={{size: '8', offset: '2'}} style={{borderRadius: '25px'}}>
-                        <Card onClick={() => {this.recordChoice("option2")}} style={{boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
-                            <CardHeader tag="h4" style={{textAlign: 'center'}} className={"cardTitleHov2"}>{this.state.game.questions[this.state.game.questIndex].option2}</CardHeader>
-                        </Card>
-                    </Col>
-                </Row>
-                <br/>
-                <br/>
-                <br/>
-                <Row style={{height: '5rem', borderRadius: '25px'}}>
-                    <Col xs={{size: '8', offset: '2'}} style={{borderRadius: '25px'}}>
-                        <Card onClick={() => {this.recordChoice("option3")}} style={{boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
-                            <CardHeader tag="h4" style={{textAlign: 'center'}} className={"cardTitleHov3"}>{this.state.game.questions[this.state.game.questIndex].option3}</CardHeader>
-                        </Card>
-                    </Col>
-                </Row>
-                <br/>
-                <br/>
-                <br/>
-                <Row style={{height: '5rem', borderRadius: '25px'}}>
-                    <Col xs={{size: '8', offset: '2'}} style={{borderRadius: '25px'}}>
-                        <Card onClick={() => {this.recordChoice("option4")}} style={{boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
-                            <CardHeader tag="h4" style={{textAlign: 'center'}} className={"cardTitleHov4"}>{this.state.game.questions[this.state.game.questIndex].option4}</CardHeader>
-                        </Card>
-                    </Col>
-                </Row>
+              <Row>
+                <Col xs={{size: '8', offset: '2'}}>
+                  <Button onClick={this.props.theClick} style={{fontSize: '1.25rem'}} color="info">
+                    End Question
+                  </Button>
+                </Col>
+              </Row>
             </div>
 
         );

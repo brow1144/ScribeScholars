@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { firestore } from "../../base";
-import {Container, Row, Col, Input, Label, Form, FormGroup, Button} from 'reactstrap';
+import {Container, Row, Col, Button} from 'reactstrap';
 
 import Score from './TeacherScore';
 import MC from './TeacherMC';
-import Bonus from './StudentBonus';
+import Bonus from './TeacherBonus';
 
 import ReactLoading from 'react-loading';
 
@@ -14,13 +14,8 @@ class TeacherGame extends Component {
 
     this.state = {
       game: {},
-      //mcqSubmitted: false,
-      //bonusSubmitted: false,
-      //correct: false,
-      //uid: this.props.uid,
-      class: this.props.class,
-      lessonNumber: this.props.lessonNumber,
       key: false,
+      gameRef: firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber),
     };
   };
 
@@ -30,10 +25,7 @@ class TeacherGame extends Component {
 
   grabGameDetails = () => {
     let self = this;
-    let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
-
-    gameRef.onSnapshot(function (doc) {
-      console.log(doc.data());
+    this.state.gameRef.onSnapshot(function (doc) {
       self.setState({
         game: doc.data(),
         key: !self.state.key,
@@ -42,69 +34,69 @@ class TeacherGame extends Component {
   };
 
   enterGame = () => {
-      let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
-
-      gameRef.update({
-          lobbyStage: false,
-          bonusStage: true,
-      })
+    this.state.gameRef.update({
+      lobbyStage: false,
+      bonusStage: true,
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
   };
 
   bonusToMC = () => {
-      let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
-
-      gameRef.update({
-          bonusStage: false,
-          mcStage: true,
-      })
+    this.state.gameRef.update({
+      bonusStage: false,
+      mcStage: true,
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
   };
 
-    advanceQuestion = () => {
-        let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
+  mcToScore = () => {
+    this.state.gameRef.update({
+      mcStage: false,
+      scoreStage: true,
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
 
-        gameRef.get().then(function (doc) {
-          let data = doc.data();
-          let index = data.questIndex;
-          if (index < data.questions.length - 1) {
-              gameRef.update({
-                  questIndex: data.questIndex + 1,
-              })
-          } else {
-              gameRef.update({
-                  mcStage: false,
-                  scoreStage: true,
-              })
-          }
-        })
+  scoreToNextQuestion = () => {
+    let self = this;
+    this.state.gameRef.update({
+      questIndex: self.state.game.questIndex + 1,
+      scoreStage: false,
+      bonusStage: true,
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
 
-    };
-
-    resetGame = () => {
-        let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
-
-        gameRef.update({
-            bonusStage: false,
-            scoreStage: false,
-            mcStage: false,
-            lobbyStage: true,
-            questIndex: 0,
-        })
-    };
+  resetGame = () => {
+    this.state.gameRef.update({
+      active: false,
+      bonusStage: false,
+      scoreStage: false,
+      mcStage: false,
+      lobbyStage: false,
+      questIndex: 0,
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
 
   render() {
     if (this.state.game.lobbyStage) {
       return (
-          <div>
-            <Container>
-              <Row>
-                  <Button onClick={this.enterGame}>
-                    Advance to first Question
-                  </Button>
-              </Row>
-            </Container>
-          </div>
+        <div>
+          <Container>
+            <Row>
+              <Button onClick={this.enterGame}>
+                Advance to first Question
+              </Button>
+            </Row>
+          </Container>
+        </div>
       )
-      // TODO probably ignore
     } else if (this.state.game.bonusStage) {
       return (
         <Bonus key={this.state.key} game={this.state.game} theClick={this.bonusToMC}/>
@@ -112,12 +104,13 @@ class TeacherGame extends Component {
     }
     else if (this.state.game.scoreStage) {
       return (
-        <Score key={this.state.key} game={this.state.game} theClick={this.resetGame} code={this.props.class}/>
+        <Score key={this.state.key} game={this.state.game} theClick={this.scoreToNextQuestion} endGame={this.resetGame}
+               final={this.state.game.questIndex === this.state.game.questions.length - 1}/>
       );
     }
     else if (this.state.game.mcStage) {
       return (
-        <MC key={this.state.key} game={this.state.game} theClick={this.advanceQuestion}/>
+        <MC key={this.state.key} game={this.state.game} theClick={this.mcToScore}/>
       );
     }
     else {
