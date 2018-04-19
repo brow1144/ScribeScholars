@@ -83,7 +83,9 @@ class TeacherGame extends Component {
         let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
 
         gameRef.update({
+            bonusStage: false,
             scoreStage: false,
+            mcStage: false,
             lobbyStage: true,
             questIndex: 0,
         })
@@ -110,7 +112,7 @@ class TeacherGame extends Component {
     }
     else if (this.state.game.scoreStage) {
       return (
-        <Score key={this.state.key} game={this.state.game} /*theClick={this.resetGame}*/ code={this.props.class}/>
+        <Score key={this.state.key} game={this.state.game} theClick={this.resetGame} code={this.props.class}/>
       );
     }
     else if (this.state.game.mcStage) {
