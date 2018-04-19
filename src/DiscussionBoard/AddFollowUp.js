@@ -128,12 +128,7 @@ class AddFollowUp extends Component {
 
     return (
       <div>
-        <Row>
-          <Col sm='1'/>
-          <Col sm='11'>
-            <hr/>
-          </Col>
-        </Row>
+
         <Row>
           <Col xs='12' md='1'/>
           <Col xs='12' md='11'>
