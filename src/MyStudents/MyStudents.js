@@ -62,9 +62,9 @@ class MyStudents extends Component {
       activeAss: null,
 
 
-      avgGpa: null,
+      avgGrade: null,
       passFail: [],
-      gpaDis: [],
+      gradeDist: [],
     }
   }
 
@@ -430,7 +430,6 @@ class MyStudents extends Component {
               self.setState({
                 students: object,
               }, () => {
-                // TODO sort here maybe?
                 self.getDashboardInfo();
               });
             });
@@ -494,117 +493,57 @@ class MyStudents extends Component {
   };
 
   getDashboardInfo = () => {
+    let pfArr = [];
+    let gradeArr = [];
+
     let totalGrade = 0;
-
-    for (let i in this.state.students) {
-      if (this.state.students.hasOwnProperty(i))
-        totalGrade += this.state.students[i].grade;
-    }
-
-    let avgGpa = totalGrade / this.state.students.length;
-
-    let object;
     let passing = 0;
     let failing = 0;
-    let temp = 0;
-    let pfArr = [];
-    let gpadArr = [];
-
-    let toFour = 0;
-    //let fourHead = "3.0+";
-    let toThree = 0;
-    //let threeHead = "2.0+";
-    let toTwo = 0;
-    //let twoHead = "1.0+";
-    let toD = 0;
-    //let oneHead = "0.0+";
-    let toOne = 0;
-    //let oneHead = "0.0+";
+    let A = 0;
+    let B = 0;
+    let C = 0;
+    let D = 0;
+    let F = 0;
 
     for (let i in this.state.students) {
-      let thisGpa = this.state.students[i].grade;
+      if (this.state.students.hasOwnProperty(i)) {
+        let grade = this.state.students[i].grade;
 
-      if (thisGpa >= 89.5) {
-        toFour++;
-      } else if (thisGpa >= 79.5) {
-        toThree++;
-      } else if (thisGpa >= 69.5) {
-        toTwo++;
-      } else if (thisGpa >= 59.5) {
-        toD++;
-      }
-      else {
-        toOne++;
-      }
+        if (grade >= 89.5)
+          A++;
+        else if (grade >= 79.5)
+          B++;
+        else if (grade >= 69.5)
+          C++;
+        else if (grade >= 59.5)
+          D++;
+        else
+          F++;
 
-      if (thisGpa < 59.5) {
-        failing++;
-      } else {
-        passing++;
-      }
+        if (grade < 59.5)
+          failing++;
+        else
+          passing++;
 
-      temp += thisGpa;
+        totalGrade += grade;
+      }
     }
 
+    let avgGrade = totalGrade / this.state.students.length;
 
-    //let size = this.props.students.length;
-    //temp = temp / size;
-    //temp = Math.round(temp * 100) / 100;
+    pfArr.push({name: "Failing", value: failing});
+    pfArr.push({name: "Passing", value: passing});
 
-    //FOR PASS FAIL
-    object = {
-      name : "Failing",
-      value : failing
-    };
-
-    pfArr.unshift(object);
-
-    object = {
-      name : "Passing",
-      value : passing
-    };
-    pfArr.unshift(object);
-    //END OF PASS FAIL
-
-    //FOR GPA DIS
-    object = {
-      name : "A",
-      value : toFour
-    };
-
-    gpadArr.unshift(object);
-
-    object = {
-      name : "B",
-      value : toThree
-    };
-    gpadArr.unshift(object);
-
-    object = {
-      name : "C",
-      value : toTwo
-    };
-
-    gpadArr.unshift(object);
-
-    object = {
-      name : "D",
-      value : toD
-    };
-
-    gpadArr.unshift(object);
-
-    object = {
-      name : "F",
-      value : toOne
-    };
-    gpadArr.unshift(object);
-    //END OF GPA DIS
+    gradeArr.push({name: "A", value: A});
+    gradeArr.push({name: "B", value: B});
+    gradeArr.push({name: "C", value: C});
+    gradeArr.push({name: "D", value: D});
+    gradeArr.push({name: "F", value: F});
 
     this.setState({
-      avgGpa: avgGpa,//done
-      passFail : pfArr,
-      gpaDis : gpadArr
+      avgGrade: avgGrade,
+      passFail: pfArr,
+      gradeDist: gradeArr,
     });
   };
 
@@ -631,7 +570,7 @@ class MyStudents extends Component {
                   </Col>
                 </Row>
                 <Row className="chartAlign">
-                  <Graphs gpaDis={this.state.gpaDis} passFail={this.state.passFail} avgGpa={this.state.avgGpa}/>
+                  <Graphs gradeDist={this.state.gradeDist} passFail={this.state.passFail} avgGrade={this.state.avgGrade}/>
                 </Row>
               </Col>
             </Row>
