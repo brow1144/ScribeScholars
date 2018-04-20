@@ -538,7 +538,7 @@ class MyStudents extends Component {
       }
     }
 
-    let avgGrade = totalGrade / this.state.students.length;
+    let avgGrade = totalGrade / numStudents;
 
     pfArr.push({name: "Failing", value: failing, color: "#FF8042"});
     pfArr.push({name: "Passing", value: passing, color: "#00C49F"});
