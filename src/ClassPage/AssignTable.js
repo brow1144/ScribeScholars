@@ -110,6 +110,12 @@ class AssignTable extends Component {
                   <th>Links</th>
                   {this.state.role === "teacher"
                     ?
+                    <th>Status</th>
+                    :
+                    <th/>
+                  }
+                  {this.state.role === "teacher"
+                    ?
                     <th>Enable/Disable</th>
                     :
                     <th/>
@@ -139,13 +145,6 @@ class AssignTable extends Component {
                             Live Feed
                           </RouterLink>
                           <span style={{display: 'inline-block', width: '1rem'}}> </span>
-                          {this.state.assignments[index].available
-                            ?
-                            <p>Open</p>
-
-                            :
-                            <p>Closed</p>
-                          }
                         </td>
                         :
                         <td>
@@ -159,6 +158,20 @@ class AssignTable extends Component {
                           <p>Closed</p>
                         }
                         </td>
+                      }
+                      {this.state.role === "teacher"
+                        ?
+                        <td>
+                        {this.state.assignments[index].available
+                          ?
+                          <p>Open</p>
+
+                          :
+                          <p>Closed</p>
+                        }
+                        </td>
+                        :
+                        <td/>
                       }
 
                       {this.state.role === "teacher"
