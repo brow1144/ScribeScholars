@@ -392,7 +392,11 @@ class GenHomework extends Component {
             s += this.state.questions[i].points;
           }
         }
+      } else if (self.state.typeArr[i] === "VIDEO") {
+        // Automatically give in the points
+            s += this.state.questions[i].points;
       }
+
     }
 
 
