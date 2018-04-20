@@ -9,7 +9,7 @@ firebase.initializeApp({
   authDomain: "scribe-92063.firebaseapp.com",
   databaseURL: "https://scribe-92063.firebaseio.com",
   projectId: "scribe-92063",
-  storageBucket: "",
+  storageBucket: "scribe-92063.appspot.com",
   messagingSenderId: "635378838973"
 });
 
