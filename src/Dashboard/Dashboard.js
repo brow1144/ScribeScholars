@@ -5,26 +5,25 @@ import {Row, Col } from 'reactstrap';
 import './Dashboard.css';
 
 class Dashboard extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
+    this.state = {
+      COLORS: [
+        '#FF8042',
+        '#B855D9',
+        '#E8F576',
+        '#55B8D9',
+        '#00C49F',
+      ],
 
-            COLORS: ['#00C49F',
-                '#FF8042',
-                '#B855D9',
-                '#E8F576',
-                '#55B8D9',
-                '#00C49F',
-            ],
-
-            passCOLORS: [
-                '#00C49F',
-                '#FF8042',
-            ]
-        };
+      passCOLORS: [
+        '#00C49F',
+        '#FF8042',
+      ]
     };
-    
+  };
+
   render() {
     return (
       <div>
