@@ -12,12 +12,6 @@ class Dashboard extends Component {
         super(props);
 
         this.state = {
-            gpaDis: [],
-
-            avgGpa: 0,
-
-            passFail: [],
-
             COLORS: ['#00C49F',
                 '#FF8042',
                 '#55B8D9',
