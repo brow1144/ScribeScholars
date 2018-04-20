@@ -32,7 +32,6 @@ class EditActivity extends Component {
       question: {},
       hwCode: null,
       title: "",
-      totalPoints: 0,
       key: true,
     };
   }
@@ -47,11 +46,8 @@ class EditActivity extends Component {
 
     tempArr.splice(index, 1, quest);
 
-    let tempTotalPoints = this.state.totalPoints + tempArr[index].points;
-
     this.setState({
       questions: tempArr,
-      totalPoints: tempTotalPoints,
     });
   };
 
@@ -156,9 +152,15 @@ class EditActivity extends Component {
     else
       homeworkRef = firestore.collection("classes").doc(self.props.class).collection("homework").doc(self.props.lessonNumber);
 
+    let totalPoints = 0;
+    for (let i in this.state.questions) {
+      if (this.state.questions.hasOwnProperty(i))
+        totalPoints += this.state.questions[i].points;
+    }
+
     homeworkRef.update({
       questions: self.state.questions,
-      maxScore: self.state.totalPoints,
+      maxScore: totalPoints,
     }).then(function () {
       console.log("Successfully added a question");
 
@@ -198,7 +200,7 @@ class EditActivity extends Component {
                   completed: "",
                   currentQuestion: 1,
                   currentScore: 0,
-                  maxScore: self.state.totalPoints,
+                  maxScore: totalPoints,
                   name: self.state.title,
                   numOfQuestions: self.state.questions.length,
                   questions: tempQuests,
@@ -216,7 +218,7 @@ class EditActivity extends Component {
                   completed: "",
                   currentQuestion: 1,
                   currentScore: 0,
-                  maxScore: self.state.totalPoints,
+                  maxScore: totalPoints,
                   name: self.state.title,
                   numOfQuestions: self.state.questions.length,
                   questions: tempQuests,
@@ -243,7 +245,7 @@ class EditActivity extends Component {
                   currentQuestion: 1,
                   currentScore: 0,
                   mcq: 0,
-                  maxScore: self.state.totalPoints,
+                  maxScore: totalPoints,
                   name: self.state.title,
                   numOfQuestions: self.state.questions.length,
                   history: tempHist,
@@ -261,7 +263,7 @@ class EditActivity extends Component {
                   currentQuestion: 1,
                   currentScore: 0,
                   mcq: 0,
-                  maxScore: self.state.totalPoints,
+                  maxScore: totalPoints,
                   name: self.state.title,
                   numOfQuestions: self.state.questions.length,
                   history: tempHist,
