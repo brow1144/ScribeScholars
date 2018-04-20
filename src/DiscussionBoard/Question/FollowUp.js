@@ -37,6 +37,7 @@ class FollowUp extends Component {
    */
   getName = () => {
 
+    console.log(this.props.curReply.userID);
     let docRef = firestore.collection("users").doc(this.props.curReply.userID);
     let self = this;
 

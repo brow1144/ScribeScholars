@@ -156,10 +156,11 @@ class AnswerBox extends Component {
           <Col xs='12' md='1'/>
           <Col className='answerBoxBackground' xs='12' md='11'>
             {this.state.replies.map((key, index) => {
+              console.log(key.reply);
               return (
                 <FollowUp image={this.state.image} role={this.props.role} uid={this.props.uid}
                           classCode={this.props.classCode} curReply={this.state.replies[index]} index={index}
-                          buttonVis={this.state.buttonVis} theKey={key}/>
+                          buttonVis={this.state.buttonVis} key={key.reply}/>
               )
             })}
             <br/>
