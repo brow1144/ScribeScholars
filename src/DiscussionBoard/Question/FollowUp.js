@@ -17,6 +17,7 @@ class FollowUp extends Component {
 
     this.state = {
       name: '',
+      pic: null,
 
       newAnswer: '',
 
@@ -36,7 +37,7 @@ class FollowUp extends Component {
    */
   getName = () => {
 
-    let docRef = firestore.collection("users").doc(this.props.uid);
+    let docRef = firestore.collection("users").doc(this.props.curReply.userID);
     let self = this;
 
     docRef.get().then(function (doc) {
