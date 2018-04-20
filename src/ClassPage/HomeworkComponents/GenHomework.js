@@ -630,10 +630,15 @@ class GenHomework extends Component {
                     ?
                     <CardBody>
                       <CardTitle tag={"p"} className={"cardTextStyle"}>
-                        Not all questions are completed! Answer all questions before continuing
+                        When finished with all the questions, click submit to finish.
                       </CardTitle>
                     </CardBody>
-                    : null
+                    :
+                    <CardBody>
+                      <CardTitle tag={"p"} className={"cardTextStyle"}>
+                        All questions answered!
+                      </CardTitle>
+                    </CardBody>
                   }
                   <Row>
                     <Col xs={2} md={{size: 2, offset: 1}}>
