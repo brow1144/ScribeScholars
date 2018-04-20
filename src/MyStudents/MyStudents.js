@@ -450,6 +450,11 @@ class MyStudents extends Component {
       if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key))
         return 0;
 
+      if (isNaN(a[key]))
+        return -1;
+      else if (isNaN(b[key]))
+        return 1;
+
       let val1 = a[key];
       let val2 = b[key];
 
