@@ -665,7 +665,6 @@ class GenHomework extends Component {
           </Container>
         }
 
-        }
       </div>
     )
   }
