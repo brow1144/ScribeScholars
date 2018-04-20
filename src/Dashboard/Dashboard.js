@@ -18,11 +18,12 @@ class Dashboard extends Component {
 
             passFail: [],
 
-            COLORS: ['#00C49F',
+            COLORS: [
                 '#FF8042',
-                '#55B8D9',
                 '#B855D9',
                 '#E8F576',
+                '#55B8D9',
+                '#00C49F',
             ],
         };
     };
