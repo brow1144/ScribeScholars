@@ -381,10 +381,15 @@ class GenAssignment extends Component {
                     ?
                     <CardBody>
                       <CardTitle tag={"p"} className={"cardTextStyle"}>
-                        Not all questions are completed! Answer all questions before continuing
+                        When finished with all the questions, click submit to finish.
                       </CardTitle>
                     </CardBody>
-                    : null
+                    :
+                    <CardBody>
+                      <CardTitle tag={"p"} className={"cardTextStyle"}>
+                        All questions answered!
+                      </CardTitle>
+                    </CardBody>
                   }
                   <br/>
                   <Row>
