@@ -130,6 +130,18 @@ class StudentMC extends Component {
   };
 
   render() {
+    if (!this.state.game.active) {
+      return(
+        <Row>
+          <Col xs={12}>
+            <h1 style={{
+              textAlign: 'center',
+              fontSize: '5rem'
+            }}> Game No Longer In Session</h1>
+          </Col>
+        </Row>
+      );
+    }
     if (this.state.game.lobbyStage) {
     return (
       <Container fluid>
@@ -184,8 +196,9 @@ class StudentMC extends Component {
     }
     else if (this.state.game.mcStage) {
       return (
-        <Game key={this.state.key} flip={this.state.mcqFlip} bonus={this.state.bonusFlip} submit={this.submitMCQ} game={this.state.game}/>
-        );
+        <Game key={this.state.key} flip={this.state.mcqFlip} bonus={this.state.bonusFlip} submit={this.submitMCQ}
+              game={this.state.game}/>
+      );
     }
     else {
       return(

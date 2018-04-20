@@ -37,7 +37,7 @@ class StudentScore extends Component {
                   <hr/>
                   <br/>
                   <CardTitle tag={"p"} className={"cardTextStyle"}>
-                    You're current score is {this.state.game.userScores[this.props.userIndex].score} points!
+                    Your current score is {this.state.game.userScores[this.props.userIndex].score} points!
                   </CardTitle>
                   <br/>
                   <hr/>

@@ -5,12 +5,12 @@ require('firebase/firestore');
 
 
 firebase.initializeApp({
-  apiKey: "AIzaSyChlfKvDE7NooubBJdFgaVuVElhO8h0jm8",
-  authDomain: "scribescholars-ad86f.firebaseapp.com",
-  databaseURL: "https://scribescholars-ad86f.firebaseio.com",
-  projectId: "scribescholars-ad86f",
-  storageBucket: "scribescholars-ad86f.appspot.com",
-  messagingSenderId: "972953349504"
+  apiKey: "AIzaSyB0uaTY4FIulFgiUH2PTLyzP-6vZK3-76U",
+  authDomain: "scribe-92063.firebaseapp.com",
+  databaseURL: "https://scribe-92063.firebaseio.com",
+  projectId: "scribe-92063",
+  storageBucket: "",
+  messagingSenderId: "635378838973"
 });
 
 export const fireauth = firebase.auth();
