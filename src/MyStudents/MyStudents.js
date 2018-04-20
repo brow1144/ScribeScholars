@@ -540,6 +540,9 @@ class MyStudents extends Component {
 
     let avgGrade = totalGrade / numStudents;
 
+    if (avgGrade % 1 !== 0)
+      avgGrade = Math.round(avgGrade * 100) / 100;
+
     pfArr.push({name: "Failing", value: failing, color: "#FF8042"});
     pfArr.push({name: "Passing", value: passing, color: "#00C49F"});
 

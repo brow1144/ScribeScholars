@@ -36,7 +36,7 @@ class Dashboard extends Component {
               <Row className="dbGraphs">
                 <Col>
                   <h3>
-                    {this.props.avgGrade}
+                    {this.props.avgGrade}{" "}%
                   </h3>
                 </Col>
               </Row>

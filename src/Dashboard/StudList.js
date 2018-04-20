@@ -28,7 +28,7 @@ class StudList extends Component {
     let itemRows = [
       <tr key={student.uid} className="curveLabel">
         <th scope="row">{parseInt(index) + 1}</th>
-        <td>{!isNaN(student.grade) ? student.grade : "No Grades"}</td>
+        <td>{!isNaN(student.grade) ? student.grade + " %" : "No Grades"}</td>
         <td onClick={() => this.handleRowClick(student.uid)} className="nameCell">{student.name}</td>
         <td>{student.email}</td>
         <td>
