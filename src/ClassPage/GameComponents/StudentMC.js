@@ -97,12 +97,7 @@ class StudentMC extends Component {
   submitMCQ = (resp) => {
     resp = resp.toUpperCase();
     let currentScore = this.state.score;
-/*    for (let i in this.state.game.userScores) {
-      if (this.state.game.userScores[i].uid === this.state.uid) {
-        currentScore = this.state.game.userScores[i].score;
-        break;
-      }
-    }*/
+
     if (resp === this.state.game.questions[this.state.game.questIndex].strAns.toUpperCase()) {
       currentScore += 1;
       this.setState({
@@ -126,19 +121,11 @@ class StudentMC extends Component {
 
     let arr = self.state.game;
     arr.userScores[self.state.userIndex].score = self.state.score;
-    arr.questScores[self.state.game.questIndex]++;
-    /*self.setState({
-      game: arr,
-    });*/
-    console.log(arr.questScores[self.state.game.questIndex]);
-
-    firestore.runTransaction(function(transaction) {
-      transaction.update(gameRef, {questScores: arr.questScores});
-    });
+    arr.questScores[self.state.game.questIndex] = gameRef.get().questScores[self.state.game.questIndex] + 1;
 
     gameRef.update({
       userScores: arr.userScores,
-      //questScores: arr.questScores,
+      questScores: arr.questScores,
     }).catch()
 
   };

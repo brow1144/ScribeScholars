@@ -2,7 +2,7 @@ import React from 'react'
 import {FormGroup,Label, Input } from 'reactstrap';
 
 const EventClasses = (props) => {
-    if (props.classes !== null) {
+    if (props.classes !== undefined || props.classes !== null) {
         return (
             <Input type="select" name="select">
                 <option>Do Not Add To Class</option>
@@ -13,7 +13,9 @@ const EventClasses = (props) => {
             </Input>
         )
     } else {
-        return
+        return (
+            <div/>
+        )
     }
 };
 
