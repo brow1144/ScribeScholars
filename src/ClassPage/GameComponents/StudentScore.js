@@ -100,6 +100,9 @@ class StudentScore extends Component {
               </Card>
             </Col>
           </Row>
+          <br/>
+          <br/>
+          <br/>
         </Container>
       );
 

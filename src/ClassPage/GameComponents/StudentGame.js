@@ -107,6 +107,9 @@ class StudentGame extends Component {
               </Col>
             </Row>
           </div>
+          <br/>
+          <br/>
+          <br/>
         </div>
       );
     }
@@ -147,6 +150,9 @@ class StudentGame extends Component {
               </div>
             </Col>
           </Row>
+          <br/>
+          <br/>
+          <br/>
         </div>
       );
     }

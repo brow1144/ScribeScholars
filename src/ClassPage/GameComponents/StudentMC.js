@@ -182,6 +182,9 @@ class StudentMC extends Component {
             <ReactLoading type={'bars'} width={250} height={150} color={'#21CE99'}/>
           </Col>
         </Row>
+        <br/>
+        <br/>
+        <br/>
       </Container>
     );
     } else if (this.state.game.bonusStage) {
@@ -214,6 +217,9 @@ class StudentMC extends Component {
               </div>
             </Col>
           </Row>
+          <br/>
+          <br/>
+          <br/>
         </div>
       );
     }
