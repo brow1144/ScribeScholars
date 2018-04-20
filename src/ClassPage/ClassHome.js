@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Nav, NavLink } from 'reactstrap';
+import { Nav, NavLink, Container} from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom'
 import { firestore } from '../base.js'
 
@@ -218,49 +218,37 @@ class ClassHome extends Component {
 
           <Nav horizontal="center" tabs>
 
-            <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/announcements`}>
-              <NavLink onClick={this.switchAnnouncement}
+              <NavLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/announcements`} onClick={this.switchAnnouncement}
                        active={this.state.announcementsActive}>Announcements</NavLink>
-            </RouterLink>
 
-            <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/lessons`}>
-              <NavLink onClick={this.switchLessons} active={this.state.lessonsActive}>In-Class Lessons</NavLink>
-            </RouterLink>
+              <NavLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/lessons`} onClick={this.switchLessons} active={this.state.lessonsActive}>In-Class Lessons</NavLink>
 
-            <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/homework`}>
-              <NavLink onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
-            </RouterLink>
 
-            <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/games`}>
-              <NavLink onClick={this.switchGames} active={this.state.gamesActive}>Class Games</NavLink>
-            </RouterLink>
+              <NavLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/homework`} onClick={this.switchHomework} active={this.state.homeworkActive}>Homework</NavLink>
 
-            <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/discussion`}>
-              <NavLink onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
+
+              <NavLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/games`} onClick={this.switchGames} active={this.state.gamesActive}>Class Games</NavLink>
+
+              <NavLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/discussion`} onClick={this.switchDiscussions} active={this.state.discussionActive}>Discussion
                 Board</NavLink>
-            </RouterLink>
 
             {this.state.gotRole && this.state.role === "teacher"
               ?
-              <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/myStudents`}>
 
-                  <NavLink onClick={this.switchMyStudents} active={this.state.myStudentsActive}>My Students</NavLink>
-                
-              </RouterLink>
+                  <NavLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/myStudents`} onClick={this.switchMyStudents} active={this.state.myStudentsActive}>My Students</NavLink>
+
               :
-              <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/grades`}>
-                <NavLink onClick={this.switchGrades} active={this.state.gradesActive}>Grades</NavLink>
 
-              </RouterLink>
+                <NavLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/grades`} onClick={this.switchGrades} active={this.state.gradesActive}>Grades</NavLink>
+
+
             }
 
             {this.state.gotRole && this.state.role === "teacher"
               ?
-              <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/regradeRequests`}>
-
-                <NavLink onClick={this.switchRegradeRequests} active={this.state.regradeRequestsActive} code={this.props.code} uid={this.state.uid}>Regrade Requests</NavLink>
-
-              </RouterLink>
+              <NavLink onClick={this.switchRegradeRequests} active={this.state.regradeRequestsActive} code={this.props.code} uid={this.state.uid} className="navLinks" to={`/ScribeScholars/HomePage/${this.props.code}/regradeRequests`}>
+                Regrade Requests
+              </NavLink>
               :
               <div>
               </div>

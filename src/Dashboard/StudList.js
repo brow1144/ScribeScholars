@@ -26,7 +26,7 @@ class StudList extends Component {
 
   renderItem = (student, index) => {
     let itemRows = [
-      <tr key={student.uid} className="curveLabel">
+      <tr key={index} className="curveLabel">
         <th scope="row">{parseInt(index) + 1}</th>
         <td>{student.grade}</td>
         <td onClick={() => this.handleRowClick(student.uid)} className="nameCell">{student.name}</td>
