@@ -4,7 +4,7 @@
 
 import React, { Component } from 'react';
 
-import {Container, Row, Col, Input, Label, Form, FormGroup, Button, Card, CardHeader} from 'reactstrap';
+import {Jumbotron, InputGroup, InputGroupAddon, Container, Row, Col, Input, Label, Form, FormGroup, Button, Card, CardHeader} from 'reactstrap';
 
 import './GameComps.css';
 
@@ -20,37 +20,41 @@ class TeacherMC extends Component {
     render() {
         return(
             <div>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <Row>
-                    <Col xs={12}>
-                        <h1 style={{textAlign: 'center', fontSize: '5rem'}}> {this.state.game.questions[this.state.game.questIndex].prompt}</h1>
-                        <p style={{textAlign: 'center'}}>Now select an option for answer!</p>
-                    </Col>
-                </Row>
-                <br/>
-                <br/>
-                <hr/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-              <Row>
-                <Col xs={{size: '8', offset: '2'}}>
-                  <Button onClick={this.props.theClick} style={{fontSize: '1.25rem'}} color="info">
-                    End Question
-                  </Button>
-                </Col>
-              </Row>
-            </div>
+                <Container>
+                    <Jumbotron>
+                        <br/>
+                        <p className={"jumboMini"}>Current Question:</p>
+                        <hr/>
+                        <br/>
+                        <Row>
+                            <Col xs={12}>
+                                <h1 className={"jumboTitle"} style={{
+                                    textAlign: 'center',
+                                    fontSize: '5rem'
+                                }}> {this.state.game.questions[this.state.game.questIndex].prompt}</h1>
+                                <p className={"jumboSub"} style={{textAlign: 'center', fontSize: '2rem'}}>Currently accepting answers for multiple choice question.</p>
+                            </Col>
+                        </Row>
+                        <hr/>
+                        <br/>
+                        <br/>
+                        <br/>
 
+                        <Row>
+                            <Col xs={5} fluid/>
+                            <Col xs={7} fluid>
+                                <InputGroup>
+                                    <InputGroupAddon addonType="append">
+                                        <Button className={"buttBack"} onClick={this.props.theClick} style={{fontSize: '1.25rem'}}>
+                                            End Bonus
+                                        </Button>
+                                    </InputGroupAddon>
+                                </InputGroup>
+                            </Col>
+                        </Row>
+                    </Jumbotron>
+                </Container>
+            </div>
         );
 
     }

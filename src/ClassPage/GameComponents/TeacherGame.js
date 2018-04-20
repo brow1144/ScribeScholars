@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { firestore } from "../../base";
-import {Container, Row, Col, Button} from 'reactstrap';
+import {Container, Row, Col, Button, Jumbotron} from 'reactstrap';
 import ReactLoading from 'react-loading';
 
 import Score from './TeacherScore';
 import MC from './TeacherMC';
 import Bonus from './TeacherBonus';
+
+import './GameComps.css'
 
 class TeacherGame extends Component {
   constructor(props) {
@@ -94,19 +96,37 @@ class TeacherGame extends Component {
 
   render() {
     if (this.state.game.lobbyStage) {
-      return (
-        <div>
-          <Container>
-            <Row>
-              <Col>
-                <Button onClick={this.enterGame}>
-                  Advance to first Question
-                </Button>
-              </Col>
-            </Row>
-          </Container>
-        </div>
-      )
+        return (
+            <div>
+
+                <Container>
+                    <Jumbotron>
+                        <Row>
+                            <Col>
+                                <h1 className={"jumboTitle"}>Get Ready...</h1>
+                                <p className={"jumboSub"}>You're getting ready to start up. Click the 'Begin' button to
+                                    move forward with the game.</p>
+                                <hr/>
+                                <p className={"jumboSub"}>Once clicked, all students in the game will advance in the
+                                    game alongside you</p>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <hr/>
+                        </Row>
+                        <Row>
+                            <Col xs={5}/>
+                            <Col xs={7}>
+                                <Button size={"lg"}onClick={this.enterGame} style={{backgroundColor :'#21CE99'}}>
+                                  <h1 className={"buttText"}>Begin</h1>
+                                </Button>
+                            </Col>
+                        </Row>
+
+                    </Jumbotron>
+                </Container>
+            </div>
+        )
     } else if (this.state.game.bonusStage) {
       return (
         <Bonus key={this.state.key} game={this.state.game} theClick={this.bonusToMC}/>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { firestore } from "../../base";
-import { Table, Row, Col, Button } from 'reactstrap';
+import { Container, Jumbotron, Table, Row, Col, Button } from 'reactstrap';
 import { NavLink as RouterLink } from 'react-router-dom';
 
 class TeacherScore extends Component {
@@ -131,9 +131,14 @@ class TeacherScore extends Component {
     if (this.props.final) {
       return (
         <div>
+          <Container>
+          <Row>
+              <h1 className={"jumboTitle"}>End-Game Leaderboards</h1>
+          </Row>
+          </Container>
           <Row>
             <Col>
-              <Table>
+              <Table striped>
                 <thead>
                 <tr>
                   <th>Name</th>
@@ -144,8 +149,8 @@ class TeacherScore extends Component {
                 {Object.keys(this.state.topScores).map((key, index) => {
                   return (
                     <tr key={key}>
-                      <td>{this.state.topScores[index].name}</td>
-                      <td>{this.state.topScores[index].score}</td>
+                      <td className={"scoreMini"}>{this.state.topScores[index].name}</td>
+                      <td className={"scoreMini"}>{this.state.topScores[index].score}</td>
                     </tr>
                   )
                 })
@@ -154,18 +159,31 @@ class TeacherScore extends Component {
               </Table>
             </Col>
           </Row>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
           <Row>
             <Col xs={{size: '8', offset: '2'}}>
-              <p>Least-Missed Question: {this.props.game.questions[this.state.leastMissed].prompt}</p>
-              <p>({(this.props.game.userScores.length) - this.props.numCorrectArr[this.state.leastMissed]} missed)</p>
-              <p>Most-Missed Question: {this.props.game.questions[this.state.mostMissed].prompt}</p>
-              <p>({(this.props.game.userScores.length) - this.props.numCorrectArr[this.state.mostMissed]} missed)</p>
+              <Row>
+              <p className={"scoreMed"}>Least-Missed Question: {this.props.game.questions[this.state.leastMissed].prompt}</p>
+              <p className={"scoreMini"}>({(this.props.game.userScores.length) - this.props.numCorrectArr[this.state.leastMissed]} missed)</p>
+              </Row>
+              <hr/>
+              <Row>
+              <p className={"scoreMed"}>Most-Missed Question: {this.props.game.questions[this.state.mostMissed].prompt}</p>
+              <p className={"scoreMini"}>({(this.props.game.userScores.length) - this.props.numCorrectArr[this.state.mostMissed]} missed)</p>
+              </Row>
             </Col>
           </Row>
+            <br/>
+            <br/>
+            <br/>
           <Row>
             <Col xs={{size: '8', offset: '2'}}>
               <RouterLink to={"/ScribeScholars/HomePage/" + this.props.code + "/games"}>
-                <Button onClick={this.props.endGame} style={{fontSize: '1.25rem'}} color="info">
+                <Button className={"buttBack"} onClick={this.props.endGame} style={{fontSize: '1.25rem'}} color="info">
                   End Game
                 </Button>
               </RouterLink>
@@ -176,19 +194,36 @@ class TeacherScore extends Component {
     } else {
       return (
         <div>
+          <Container>
+            <Jumbotron>
+                <br/>
+                <p className={"jumboSub"}>Score for previous question:</p>
+                <hr/>
+                <br/>
+
           <Row>
             <Col>
-              <p>Number correct: {this.state.numCorrect}</p>
-              <p>Number incorrect: {this.state.numIncorrect}</p>
+              <p className={"jumboMini"}>Number correct: {this.state.numCorrect}</p>
+              <p className={"jumboMini"}>Number incorrect: {this.state.numIncorrect}</p>
             </Col>
           </Row>
-          <Row>
-            <Col xs={{size: '8', offset: '2'}}>
-              <Button onClick={this.props.theClick} style={{fontSize: '1.25rem'}} color="info">
-                Next Question
-              </Button>
-            </Col>
-          </Row>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+
+                <Row>
+                  <Col xs={3}/>
+                    <Col xs={9}>
+                        <Button className={"buttBack"} onClick={this.props.theClick} style={{fontSize: '1.25rem'}} color="info">
+                            Next Question
+                        </Button>
+                    </Col>
+                </Row>
+            </Jumbotron>
+          </Container>
         </div>
       )
     }
