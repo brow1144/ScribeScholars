@@ -13,7 +13,6 @@ class Video extends Component {
 
           <Col xs={12} className='player-wrapper centerContent'>
             <FormGroup tag={"fieldset"}>
-              <legend className={"RadioTitle"}>{this.props.prompt}</legend>
               <ReactPlayer
                 width={'100%'}
                 url={this.props.url}
