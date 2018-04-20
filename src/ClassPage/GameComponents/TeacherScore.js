@@ -11,12 +11,36 @@ class TeacherScore extends Component {
       topScores: [],
       leastMissed: null,
       mostMissed: null,
+      numCorrect: null,
+      numIncorrect: null,
     };
   };
 
   componentWillMount() {
-    this.createLeaderboard();
-    this.setQuestionStats();
+    if (this.props.final) {
+      this.createLeaderboard();
+      this.setQuestionStats();
+    } else
+      this.setNumCorrect();
+  };
+
+  setNumCorrect = () => {
+    let numCorrect = 0;
+    let numIncorrect  = 0;
+
+    for (let i in this.props.game.userScores) {
+      if (this.props.game.userScores.hasOwnProperty(i)) {
+        if (this.props.game.userScores[i].prevCorrect)
+          numCorrect++;
+        else
+          numIncorrect++;
+      }
+    }
+
+    this.setState({
+      numCorrect: numCorrect,
+      numIncorrect: numIncorrect,
+    });
   };
 
   setQuestionStats = () => {
@@ -152,8 +176,8 @@ class TeacherScore extends Component {
         <div>
           <Row>
             <Col>
-              <p>Number right: {this.props.game.questScores[this.props.game.questIndex]}</p>
-              <p>Number wrong: {(this.props.game.userScores.length) - this.props.game.questScores[this.props.game.questIndex]}</p>
+              <p>Number correct: {this.state.numCorrect}</p>
+              <p>Number incorrect: {this.state.numIncorrect}</p>
             </Col>
           </Row>
           <Row>
