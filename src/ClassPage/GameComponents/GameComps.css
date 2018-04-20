@@ -1,3 +1,61 @@
+.jumboTitle {
+    font-size: 6rem;
+    font-family: "Nunito",sans-serif;
+    color: black !important;
+}
+
+.jumboSub {
+    font-size: 2rem;
+    font-family: "Nunito",sans-serif;
+    color: black !important;
+}
+
+.jumboMini {
+    font-size: 1rem;
+    font-family: "Nunito",sans-serif;
+    color: black !important;
+}
+
+.scoreMini {
+    font-size: 1rem;
+    font-weight: bolder;
+    font-family: "Nunito",sans-serif;
+    color: black !important;
+}
+
+.scoreMed {
+    font-size: 2rem;
+    font-weight: bolder;
+    font-family: "Nunito",sans-serif;
+    color: black !important;
+}
+
+.buttText {
+    font-size: 3rem;
+    font-weight: bold;
+    font-family: "Nunito",sans-serif;
+    color: white !important;
+}
+
+.mlBorder {
+    border: black;
+    border-style: solid;
+}
+
+.begButt {
+    width: 15rem ;
+    height: 5rem;
+    font-size: 3rem;
+}
+
+.buttBack {
+    background-color: #21CE99 !important;
+}
+
+.totalCenter {
+    align-content: center;
+}
+
 .cardTitleHov
 {
     font-size: 2.5rem;

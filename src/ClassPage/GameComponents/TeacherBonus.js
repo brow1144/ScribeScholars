@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Container, Row, Col, Input, Label, Form, FormGroup, Button, InputGroupAddon, InputGroup} from 'reactstrap';
+import {Jumbotron, Container, Row, Col, Input, Label, Form, FormGroup, Button, InputGroupAddon, InputGroup} from 'reactstrap';
 
 class TeacherBonus extends Component {
   constructor(props) {
@@ -12,43 +12,42 @@ class TeacherBonus extends Component {
 
   render() {
     return (
-      <div>
+        <div>
+      <Container>
+          <Jumbotron>
         <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+        <p className={"jumboMini"}>Current Question:</p>
+        <hr/>
         <br/>
         <Row>
           <Col xs={12}>
-            <h1 style={{
+            <h1 className={"jumboTitle"} style={{
               textAlign: 'center',
               fontSize: '5rem'
             }}> {this.state.game.questions[this.state.game.questIndex].prompt}</h1>
-            <p style={{textAlign: 'center', fontSize: '2rem'}}>This is your chance for bonus points!</p>
+            <p className={"jumboSub"} style={{textAlign: 'center', fontSize: '2rem'}}>This is your chance for bonus points!</p>
           </Col>
         </Row>
-        <br/>
-        <br/>
         <hr/>
+              <br/>
+              <br/>
+              <br/>
 
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <Row>
-          <Col xs={{size: '8', offset: '2'}}>
+              <Row>
+            <Col xs={4} fluid/>
+          <Col xs={8} fluid>
             <InputGroup>
               <InputGroupAddon addonType="append">
-                <Button onClick={this.props.theClick} style={{fontSize: '1.25rem'}} color="info">
+                <Button className={"buttBack"} onClick={this.props.theClick} style={{fontSize: '1.25rem'}}>
                   End Bonus
                 </Button>
               </InputGroupAddon>
             </InputGroup>
           </Col>
         </Row>
-      </div>
+          </Jumbotron>
+      </Container>
+        </div>
     );
   }
 }
