@@ -46,7 +46,7 @@ class TeacherMC extends Component {
                                 <InputGroup>
                                     <InputGroupAddon addonType="append">
                                         <Button className={"buttBack"} onClick={this.props.theClick} style={{fontSize: '1.25rem'}}>
-                                            End Bonus
+                                            End Question
                                         </Button>
                                     </InputGroupAddon>
                                 </InputGroup>
