@@ -5,25 +5,6 @@ import {Row, Col } from 'reactstrap';
 import './Dashboard.css';
 
 class Dashboard extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      COLORS: [
-        '#FF8042',
-        '#B855D9',
-        '#E8F576',
-        '#55B8D9',
-        '#00C49F',
-      ],
-
-      passCOLORS: [
-        '#00C49F',
-        '#FF8042',
-      ]
-    };
-  };
-
   render() {
     return (
       <div>
@@ -40,7 +21,7 @@ class Dashboard extends Component {
                 <PieChart className="piePad" width={365} height={250}>
                   <Pie data={this.props.passFail} dataKey="value" nameKey="name" cx="50%" cy="50%"
                        outerRadius={70} fill="#8884d8" label>{
-                    this.props.passFail.map((entry, index) => <Cell key={entry} fill={this.state.passCOLORS[index % this.state.passCOLORS.length]}/>)
+                    this.props.passFail.map((entry, index) => <Cell key={entry} fill={this.props.passFail[index].color}/>)
                   } </Pie><Tooltip/>
                 </PieChart>
               </Row>
@@ -72,7 +53,7 @@ class Dashboard extends Component {
                   <Pie data={this.props.gradeDist} dataKey="value" nameKey="name" cx="50%"
                        cy="50%"
                        outerRadius={70} fill="#8884d8" label>{
-                    this.props.gradeDist.map((entry, index) => <Cell key={entry} fill={this.state.COLORS[index % this.state.COLORS.length]}/>)
+                    this.props.gradeDist.map((entry, index) => <Cell key={entry} fill={this.props.gradeDist[index].color}/>)
                   }</Pie>
                   <Tooltip/>
                 </PieChart>
@@ -85,4 +66,5 @@ class Dashboard extends Component {
     )
   }
 }
+
 export default Dashboard

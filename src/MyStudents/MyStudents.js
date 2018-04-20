@@ -531,14 +531,14 @@ class MyStudents extends Component {
 
     let avgGrade = totalGrade / this.state.students.length;
 
-    pfArr.push({name: "Failing", value: failing});
-    pfArr.push({name: "Passing", value: passing});
+    pfArr.push({name: "Failing", value: failing, color: "#FF8042"});
+    pfArr.push({name: "Passing", value: passing, color: "#00C49F"});
 
-    gradeArr.push({name: "A", value: A});
-    gradeArr.push({name: "B", value: B});
-    gradeArr.push({name: "C", value: C});
-    gradeArr.push({name: "D", value: D});
-    gradeArr.push({name: "F", value: F});
+    gradeArr.push({name: "A", value: A, color: "#00C49F"});
+    gradeArr.push({name: "B", value: B, color: "#55B8D9"});
+    gradeArr.push({name: "C", value: C, color: "#E8F576"});
+    gradeArr.push({name: "D", value: D, color: "#B855D9"});
+    gradeArr.push({name: "F", value: F, color: "#FF8042"});
 
     this.setState({
       avgGrade: avgGrade,
