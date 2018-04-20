@@ -40,9 +40,8 @@ class GradingPage extends Component {
             if (doc.exists && doc.data() != null) {
                 for (let i in doc.data().questions) {
                     if (doc.data().questions.hasOwnProperty(i)) {
-                        if (doc.data().questions[i].type === "FRQ" || doc.data().questions[i].type === "VIDEO") {
+                        if (doc.data().questions[i].type === "FRQ")
                             ungradedPoints += doc.data().questions[i].points;
-                        }
                     }
                 }
             }
@@ -110,18 +109,18 @@ class GradingPage extends Component {
                   .collection(this.props.assCol).doc(this.props.assKey);
 
                 if (self.state.oldMaxScore != null) {
-                    assignmentRef.update({
-                        maxScore: newMaxScore,
-                    }).catch((error) => {
-                        console.log("Error getting document:", error);
-                    });
+                  assignmentRef.update({
+                    oldMaxScore: self.state.oldMaxScore,
+                    maxScore: newMaxScore,
+                  }).catch((error) => {
+                    console.log("Error getting document:", error);
+                  });
                 } else {
-                    assignmentRef.update({
-                        oldMaxScore: self.state.oldMaxScore,
-                        maxScore: newMaxScore,
-                    }).catch((error) => {
-                        console.log("Error getting document:", error);
-                    });
+                  assignmentRef.update({
+                    maxScore: newMaxScore,
+                  }).catch((error) => {
+                    console.log("Error getting document:", error);
+                  });
                 }
             }
         }
