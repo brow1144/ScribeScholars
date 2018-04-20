@@ -201,7 +201,6 @@ class EditActivity extends Component {
                   currentQuestion: 1,
                   currentScore: 0,
                   maxScore: totalPoints,
-                  name: self.state.title,
                   numOfQuestions: self.state.questions.length,
                   questions: tempQuests,
                   history: tempHist,
@@ -219,7 +218,6 @@ class EditActivity extends Component {
                   currentQuestion: 1,
                   currentScore: 0,
                   maxScore: totalPoints,
-                  name: self.state.title,
                   numOfQuestions: self.state.questions.length,
                   questions: tempQuests,
                   history: tempHist,
@@ -246,7 +244,6 @@ class EditActivity extends Component {
                   currentScore: 0,
                   mcq: 0,
                   maxScore: totalPoints,
-                  name: self.state.title,
                   numOfQuestions: self.state.questions.length,
                   history: tempHist,
 
@@ -264,7 +261,6 @@ class EditActivity extends Component {
                   currentScore: 0,
                   mcq: 0,
                   maxScore: totalPoints,
-                  name: self.state.title,
                   numOfQuestions: self.state.questions.length,
                   history: tempHist,
 
