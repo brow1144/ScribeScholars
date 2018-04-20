@@ -581,7 +581,7 @@ class GenHomework extends Component {
                         <FRQ {...action} {...data}/>
                         : this.state.type === "VIDEO"
                           ?
-                          <Video {...action} {...data}/>
+                            <Video {...action} {...data}/>
                           : this.state.type === "SMQ"
                             ?
                             <MSQ {...action} {...data}/>
