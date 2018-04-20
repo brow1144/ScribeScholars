@@ -412,11 +412,7 @@ class HomePage extends Component {
     let tmpAlerts = [];
     let self = this;
 
-    console.log(this.state.dates);
-    console.log(this.state.dates.length);
-
     this.state.dates.forEach(function(date) {
-      console.log(date);
       let diff = (date.end - now) / (60 * 60 * 1000);  // get difference in hours
       if (diff >= 0 && diff < 24 && !self.isHidden(date.title)) {  // if deadline is less than 24 hours away
         let endHours = date.end.getHours();
@@ -455,11 +451,11 @@ class HomePage extends Component {
 
       homeworkRef.get().then((docs) => {
         docs.forEach((doc) => {
-          if (doc.data().due != null){
+          if (doc.data().start != null){
             let deadline = {};
             deadline.title = doc.data().name;
-            deadline.start = new Date(doc.data().due);
-            deadline.end = new Date(doc.data().due);
+            deadline.start = new Date(doc.data().start);
+            deadline.end = new Date(doc.data().end);
             dates.push(deadline);
           }
         });
@@ -486,11 +482,11 @@ class HomePage extends Component {
       let inClassRef = firestore.collection("classes").doc(self.state.classes[j].code).collection('inClass');
       inClassRef.get().then((docs) => {
         docs.forEach((doc) => {
-          if (doc.data().due != null) {
+          if (doc.data().start != null) {
             let deadline = {};
             deadline.title = doc.data().name;
-            deadline.start = new Date(doc.data().due);
-            deadline.end = new Date(doc.data().due);
+            deadline.start = new Date(doc.data().start);
+            deadline.end = new Date(doc.data().end);
             dates.push(deadline);
           }
         });

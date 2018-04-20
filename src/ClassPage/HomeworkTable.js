@@ -132,20 +132,31 @@ class HomeworkTable extends Component {
     this.setState({
       selectedEndMethod: method,
     });
-  }
+  };
 
   updateDeadline = (ev) => {
     ev.preventDefault();
 
     if(this.state.modalAssignment != null && this.state.modalOpen){
       let self = this;
-      let deadline = ev.target.date.value + " " + ev.target.time.value;
+      let start;
+      let end;
+      console.log(self.state.selectedEndMethod);
+      if(self.state.selectedEndMethod === 'deadline') {
+        start = ev.target.date.value + " " + ev.target.time.value;
+        end = ev.target.date.value + " " + ev.target.time.value;
+      } else {
+        start = ev.target.startDate.value + " " + ev.target.startTime.value;
+        end = ev.target.endDate.value + " " + ev.target.endTime.value;
+      }
+
       let homeworkRef = firestore.collection("classes").doc(this.props.code).collection("homework").doc(this.state.modalCode);
 
       homeworkRef.get().then((doc) => {
         if (doc.exists) {
           homeworkRef.update({
-            due: deadline,
+            start: start,
+            end: end,
           }).then(function () {
             self.getAssignmentForModal(self.state.modalCode);
             self.forceUpdate();
@@ -189,7 +200,7 @@ class HomeworkTable extends Component {
             </Col>
 
             <Col sm={2}>
-              <Input bsSize="lg" type="date" name="startDate" id="startTime"/>
+              <Input bsSize="lg" type="date" name="endDate" id="endDate"/>
             </Col>
             <Col sm={2}>
               <Input bsSize="lg" type="time" name="endTime" id="endTime"/>
@@ -204,7 +215,7 @@ class HomeworkTable extends Component {
 
   getModalContent(){
     if (this.state.modalOpen && this.state.modalAssignment != null && this.state.doneLoading){
-      let deadline = new Date(this.state.modalAssignment.due);
+      let deadline = new Date(this.state.modalAssignment.end);
       return (
         <Modal
           className={"modalStyle"}
