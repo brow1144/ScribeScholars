@@ -110,13 +110,13 @@ class GradingPage extends Component {
 
                 if (self.state.oldMaxScore != null) {
                   assignmentRef.update({
-                    oldMaxScore: self.state.oldMaxScore,
                     maxScore: newMaxScore,
                   }).catch((error) => {
                     console.log("Error getting document:", error);
                   });
                 } else {
                   assignmentRef.update({
+                    oldMaxScore: self.state.maxScore,
                     maxScore: newMaxScore,
                   }).catch((error) => {
                     console.log("Error getting document:", error);
@@ -130,13 +130,13 @@ class GradingPage extends Component {
 
         if (self.state.oldMaxScore != null) {
           classAssignmentRef.update({
-            oldMaxScore: self.state.oldMaxScore,
             maxScore: newMaxScore,
           }).catch((error) => {
             console.log("Error getting document:", error);
           });
         } else {
           classAssignmentRef.update({
+            oldMaxScore: self.state.maxScore,
             maxScore: newMaxScore,
           }).catch((error) => {
             console.log("Error getting document:", error);
