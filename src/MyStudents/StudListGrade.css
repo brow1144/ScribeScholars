@@ -3,9 +3,14 @@
     font-size: 1.2em;
 }
 
+.subHead {
+    font-weight: bold;
+    background-color: #c8e6c9 !important;
+}
+
 .subRow {
     font-weight: normal;
-    background-color: #B2FFE8 !important;
+    background-color: #e8f5e9 !important;
 }
 
 .curveLabel {

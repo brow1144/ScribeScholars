@@ -51,7 +51,7 @@ class StudListGrade extends Component {
 
         if (this.state.expandedRows.includes(student.key)) {
             itemRows.push(
-                <tr key={"expanded-head-" + student.key}>
+                <tr key={"expanded-head-" + student.key} className="subHead">
                     <th>Question</th>
                     <th>Points Possible</th>
                     <th>Question Prompt</th>

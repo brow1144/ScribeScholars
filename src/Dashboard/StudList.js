@@ -41,7 +41,7 @@ class StudList extends Component {
 
     if (this.state.expandedRows.includes(student.uid) && !isNaN(student.grade)) {
       itemRows.push(
-        <tr key={"expanded-head-" + student.uid}>
+        <tr key={"expanded-head-" + student.uid} className="subHead">
           <th/>
           <th>Assignment</th>
           <th>Score</th>
