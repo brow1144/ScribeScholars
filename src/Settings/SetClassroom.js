@@ -476,6 +476,8 @@ class SetClassroom extends Component {
     };
 
     updateWeighting = (ev, classCode) => {
+      ev.preventDefault();
+
       let inClassWeight = parseInt(ev.target.inClass.value);
       let homeworkWeight = parseInt(ev.target.homework.value);
 
