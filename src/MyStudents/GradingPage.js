@@ -70,17 +70,19 @@ class GradingPage extends Component {
                             let studAssRef = studRef.collection(self.props.assCol).doc(self.props.assKey);
 
                             studAssRef.get().then((assDoc) => {
-                                object.unshift({
+                                if (assDoc.exists) {
+                                  object.unshift({
                                     name: studDoc.data().firstName + " " + studDoc.data().lastName,
                                     email: studDoc.data().email,
                                     key: doc.data().students[i],
                                     score: assDoc.data().score,
                                     answers: assDoc.data().history,
-                                });
+                                  });
 
-                                self.setState({
+                                  self.setState({
                                     students: object,
-                                });
+                                  });
+                                }
                             });
                         });
                     }

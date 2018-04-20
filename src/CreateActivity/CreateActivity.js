@@ -56,7 +56,8 @@ class CreateActivity extends Component {
                 classRef.set({
                     name: title,
                     description: descript,
-                    due: dueDate,
+                    start: dueDate,
+                    end: dueDate,
                     available: true,
                 }).then(function () {
                     console.log("successfully written!");
