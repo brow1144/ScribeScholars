@@ -129,18 +129,18 @@ class GradingPage extends Component {
           .collection(this.props.assCol).doc(this.props.assKey);
 
         if (self.state.oldMaxScore != null) {
-            classAssignmentRef.update({
-                maxScore: newMaxScore,
-            }).catch((error) => {
-                console.log("Error getting document:", error);
-            });
+          classAssignmentRef.update({
+            oldMaxScore: self.state.oldMaxScore,
+            maxScore: newMaxScore,
+          }).catch((error) => {
+            console.log("Error getting document:", error);
+          });
         } else {
-            classAssignmentRef.update({
-                oldMaxScore: self.state.oldMaxScore,
-                maxScore: newMaxScore,
-            }).catch((error) => {
-                console.log("Error getting document:", error);
-            });
+          classAssignmentRef.update({
+            maxScore: newMaxScore,
+          }).catch((error) => {
+            console.log("Error getting document:", error);
+          });
         }
     };
 
