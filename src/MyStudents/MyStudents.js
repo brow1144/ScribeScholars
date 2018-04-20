@@ -495,7 +495,6 @@ class MyStudents extends Component {
   
   getAvgGpa = () => {
     let totalGrade = 0;
-    console.log(this.state.students);
     for (let i in this.state.students) {
       if (this.state.students.hasOwnProperty(i)) {
         totalGrade += this.state.students[i].grade;
