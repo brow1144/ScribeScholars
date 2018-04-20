@@ -25,6 +25,11 @@ class Dashboard extends Component {
                 '#55B8D9',
                 '#00C49F',
             ],
+
+            passCOLORS: [
+                '#00C49F',
+                '#FF8042',
+            ]
         };
     };
 
@@ -44,7 +49,7 @@ class Dashboard extends Component {
                                     <PieChart className="piePad" width={365} height={250}>
                                         <Pie data={this.props.passFail} dataKey="value" nameKey="name" cx="50%" cy="50%"
                                              outerRadius={70} fill="#8884d8" label>{
-                                            this.props.passFail.map((entry, index) => <Cell key={entry} fill={this.state.COLORS[index % this.state.COLORS.length]}/>)
+                                            this.props.passFail.map((entry, index) => <Cell key={entry} fill={this.state.passCOLORS[index % this.state.passCOLORS.length]}/>)
                                         } </Pie><Tooltip/>
                                     </PieChart>
                                 </Row>
