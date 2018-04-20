@@ -61,7 +61,7 @@ class StudListGrade extends Component {
 
             for (let i in this.props.questions) {
                 if (this.props.questions.hasOwnProperty(i)) {
-                    if (this.props.questions.type === "FRQ") {
+                    if (this.props.questions[i].type === "FRQ") {
                         itemRows.push(
                             <tr key={"expanded-" + i + "-" + student.key} className="subRow">
                                 <td>Question {i}</td>
@@ -87,6 +87,7 @@ class StudListGrade extends Component {
         });
 
         return (
+          <div>
             <Col>
                 <h1>Students</h1>
                 <Row>
@@ -129,6 +130,12 @@ class StudListGrade extends Component {
                     <Col xs={0} md={2}/>
                 </Row>
             </Col>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+          </div>
         )
     };
 }
