@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {Container, Row, Col, Input, Label, Form, FormGroup, Button, Card, CardBody, CardHeader, CardTitle} from 'reactstrap';
+import {Container, Row, Col, Card, CardBody, CardHeader, CardTitle} from 'reactstrap';
 
 
 class StudentScore extends Component {
@@ -9,8 +9,58 @@ class StudentScore extends Component {
 
     this.state = {
       game: this.props.game,
+      num: 0,
     }
   };
+
+  componentWillMount() {
+    this.createLeaderboard();
+  };
+
+  createLeaderboard = () => {
+    let totalScores = [];
+
+    for (let i in this.props.game.userScores) {
+      if (this.props.game.userScores.hasOwnProperty(i)) {
+        let userScore = this.props.game.userScores[i];
+        totalScores.push({uid: userScore.uid, score: userScore.score});
+      }
+    }
+
+    totalScores.sort(this.compareValues("score")).reverse();
+    let num;
+    for (let i in this.props.game.userScores) {
+      if (this.props.game.userScores.hasOwnProperty(i)) {
+        if (this.props.game.userScores[i].uid === this.props.uid) {
+          num = i;
+          break;
+        }
+      }
+    }
+    this.setState({num: num})
+
+  };
+
+  // custom sorting function
+  compareValues(key) {
+    return function (a, b) {
+      // check that input is valid
+      if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key))
+        return 0;
+
+      let val1 = a[key];
+      let val2 = b[key];
+
+      let comparison = 0;
+
+      if (val1 > val2)
+        comparison = 1;
+      else if (val1 < val2)
+        comparison = -1;
+
+      return comparison;
+    };
+  }
 
   render() {
       return(
@@ -43,7 +93,7 @@ class StudentScore extends Component {
                   <hr/>
                   <br/>
                   <CardTitle tag={"p"} className={"cardTextStyle"}>
-                    You're doing better than X classmates!
+                    You're doing better than {this.state.num - 1} classmates!
                   </CardTitle>
                   <br/>
                 </CardBody>
