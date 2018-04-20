@@ -10,16 +10,19 @@ class Video extends Component {
   render() {
     if(this.props.finalPage === false) {
       return (
-        <Col className='player-wrapper centerContent'>
-          <FormGroup tag={"fieldset"}>
-            <legend className={"RadioTitle"}>{this.props.prompt}</legend>
-            <ReactPlayer
-              url={this.props.url}
-              className='react-player'
-              controls
-            />
-          </FormGroup>
-        </Col>
+
+          <Col xs={12} className='player-wrapper centerContent'>
+            <FormGroup tag={"fieldset"}>
+              <legend className={"RadioTitle"}>{this.props.prompt}</legend>
+              <ReactPlayer
+                width={'100%'}
+                url={this.props.url}
+                className='react-player'
+                controls
+              />
+            </FormGroup>
+          </Col>
+
       );
     }
     else {
