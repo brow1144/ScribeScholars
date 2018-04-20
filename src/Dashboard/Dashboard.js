@@ -159,7 +159,7 @@ class Dashboard extends Component {
 
             stud.onSnapshot(function (doc) {
                 if (doc.exists) {
-                    if (isNaN(doc.data().gpa)) {
+                    if (isNaN(this.props.getGrade(doc.data().id))) {
                         gpaMap[element]
                             = 0;
                     } else {
