@@ -106,6 +106,13 @@ class AnswerBox extends Component {
 
         <Row>
           <Col sm='1'/>
+          <Col sm='11'>
+            <p className='teacherAnswer'>Question: </p>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col sm='1'/>
           <Col className='answerBoxBackground' sm='11'>
             <div dangerouslySetInnerHTML={{ __html: this.props.discussion.body }} />
             <br/>
@@ -120,7 +127,7 @@ class AnswerBox extends Component {
         <Row>
           <Col xs='1'/>
           <Col>
-            <h2>Follow up</h2>
+            <h2 className='teacherAnswer'>Follow up</h2>
             <hr/>
           </Col>
         </Row>

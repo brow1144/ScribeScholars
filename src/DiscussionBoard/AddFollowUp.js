@@ -138,7 +138,8 @@ class AddFollowUp extends Component {
           </Col>
         </Row>
         <Row>
-          <Col xs='12'>
+          <Col xs='12' md='1'/>
+          <Col xs='12' md='11'>
             <InputGroup className='txt'>
               <div className='wrapper'>
                 <div id="toolbar">
