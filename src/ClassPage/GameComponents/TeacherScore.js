@@ -26,7 +26,7 @@ class TeacherScore extends Component {
 
   setNumCorrect = () => {
     let numCorrect = 0;
-    let numIncorrect  = 0;
+    let numIncorrect = 0;
 
     for (let i in this.props.game.userScores) {
       if (this.props.game.userScores.hasOwnProperty(i)) {
@@ -41,6 +41,8 @@ class TeacherScore extends Component {
       numCorrect: numCorrect,
       numIncorrect: numIncorrect,
     });
+
+    this.props.setNumCorrectArr(numCorrect);
   };
 
   setQuestionStats = () => {
@@ -49,15 +51,15 @@ class TeacherScore extends Component {
     let min = 0;
     let minIndex = 0;
 
-    for (let i in this.props.game.questScores) {
-      if (this.props.game.questScores.hasOwnProperty(i)) {
-        let score = this.props.game.questScores[i];
+    for (let i in this.props.numCorrectArr) {
+      if (this.props.numCorrectArr.hasOwnProperty(i)) {
+        let count = this.props.numCorrectArr[i];
 
-        if (score < min) {
-          min = score;
+        if (count < min) {
+          min = count;
           minIndex = i;
-        } else if (score > max) {
-          max = score;
+        } else if (count > max) {
+          max = count;
           maxIndex = i;
         }
       }
@@ -155,9 +157,9 @@ class TeacherScore extends Component {
           <Row>
             <Col xs={{size: '8', offset: '2'}}>
               <p>Least-Missed Question: {this.props.game.questions[this.state.leastMissed].prompt}</p>
-              <p>({(this.props.game.userScores.length) - this.props.game.questScores[this.state.leastMissed]} missed)</p>
+              <p>({(this.props.game.userScores.length) - this.props.numCorrectArr[this.state.leastMissed]} missed)</p>
               <p>Most-Missed Question: {this.props.game.questions[this.state.mostMissed].prompt}</p>
-              <p>({(this.props.game.userScores.length) - this.props.game.questScores[this.state.mostMissed]} missed)</p>
+              <p>({(this.props.game.userScores.length) - this.props.numCorrectArr[this.state.mostMissed]} missed)</p>
             </Col>
           </Row>
           <Row>
