@@ -121,7 +121,7 @@ class StudentMC extends Component {
 
     let arr = self.state.game;
     arr.userScores[self.state.userIndex].score = self.state.score;
-    arr.userScores[self.state.userIndex].prevCorrect = self.state.prevCorrect;
+    arr.userScores[self.state.userIndex].prevCorrect = self.state.correct;
 
     gameRef.update({
       userScores: arr.userScores,
