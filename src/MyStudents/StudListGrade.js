@@ -87,6 +87,7 @@ class StudListGrade extends Component {
         });
 
         return (
+          <div>
             <Col>
                 <h1>Students</h1>
                 <Row>
@@ -129,6 +130,12 @@ class StudListGrade extends Component {
                     <Col xs={0} md={2}/>
                 </Row>
             </Col>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+          </div>
         )
     };
 }
