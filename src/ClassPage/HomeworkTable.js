@@ -141,7 +141,6 @@ class HomeworkTable extends Component {
       let self = this;
       let start;
       let end;
-      console.log(self.state.selectedEndMethod);
       if(self.state.selectedEndMethod === 'deadline') {
         start = ev.target.date.value + " " + ev.target.time.value;
         end = ev.target.date.value + " " + ev.target.time.value;
