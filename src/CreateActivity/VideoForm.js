@@ -1,23 +1,36 @@
 import React, { Component } from 'react';
 
-import {Form, FormGroup, Col, Input, Label, Button} from 'reactstrap';
+import {Alert, Form, FormGroup, Col, Input, Label, Button} from 'reactstrap';
 
 class VideoForm extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+          visible: false,
+          errorMessage: '',
+        }
     }
 
     onFormSubmit = (ev) => {
         ev.preventDefault();
+      if (ev.target.promptQ.value === '' || ev.target.points.value === ''){
+        this.setState({errorMessage: 'You didn\'t enter sufficient information!'});
+        this.setState({ visible: true });
+        return;
+      }
         let quest = {
             type: "VIDEO",
             url: ev.target.promptQ.value,
             points: parseInt(ev.target.points.value, 10),
+
         };
 
         this.props.recordQuestion(quest, this.props.index);
     };
+
+  onDismiss = () => {
+    this.setState({ visible: false });
+  };
 
     render() {
         return(
@@ -39,6 +52,11 @@ class VideoForm extends Component {
                   </Col>
                 </FormGroup>
                 <br/>
+              <Col xs={{size: 6, offset: 3}} style={{paddingLeft: '0'}}>
+                <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
+                  {this.state.errorMessage}
+                </Alert>
+              </Col>
                 <FormGroup check style={{paddingLeft: '0'}}>
                     <Col sm={{size: 6, offset: 3}} style={{paddingLeft: '0'}}>
                         <Button color={"secondary"} size={"lg"} block>Save Question</Button>

@@ -172,7 +172,7 @@ class SetPersonal extends Component {
                             </FormGroup>
                             <FormGroup row>
                               <Col sm={6}>
-                                <FormGroup check inline hidden={this.props.role === "teacher"}>
+                                <FormGroup check inline>
                                   <Label check size="lg">
                                     <Input onChange={this.props.toggleAlerts} type="checkbox" id="checkbox"
                                            checked={this.props.showAlerts === true}/> Show Deadline Alerts

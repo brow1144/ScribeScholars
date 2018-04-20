@@ -90,11 +90,11 @@ class StudentScore extends Component {
                     Your current score is {this.state.game.userScores[this.props.userIndex].score} points!
                   </CardTitle>
                   <br/>
-                  <hr/>
+{/*                  <hr/>
                   <br/>
                   <CardTitle tag={"p"} className={"cardTextStyle"}>
                     You're doing better than {this.state.num - 1} classmates!
-                  </CardTitle>
+                  </CardTitle>*/}
                   <br/>
                 </CardBody>
               </Card>

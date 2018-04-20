@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Container, Row, Col, Card, CardTitle, Button, CardHeader, CardBody, FormGroup, Form, Label, Input } from 'reactstrap';
+import { Alert, Container, Row, Col, Card, CardTitle, Button, CardHeader, CardBody, FormGroup, Form, Label, Input } from 'reactstrap';
 
 import './Instruct.css';
 
@@ -10,14 +10,25 @@ class Instruct extends Component {
         this.state = {
             selectedOption: "",
             question: this.props.question,
+          visible: false,
+          errorMessage: '',
         }
     }
 
     onFormSubmit = (ev) => {
         ev.preventDefault();
+      if (ev.target.date.value === '' || ev.target.time.value === '' || ev.target.title.value === '' || ev.target.descriptText.value === ''){
+        this.setState({errorMessage: 'You didn\'t enter sufficient information!'});
+        this.setState({ visible: true });
+        return;
+      }
         let dateAndTime = ev.target.date.value + " " + ev.target.time.value;
         this.props.createHomework(ev.target.title.value, ev.target.descriptText.value, dateAndTime);
     };
+
+  onDismiss = () => {
+    this.setState({ visible: false });
+  };
 
     render() {
         return(
@@ -85,6 +96,11 @@ class Instruct extends Component {
                           </FormGroup>
 
                           <br/>
+                          <Col xs={{size: 8, offset: 1 }} style={{paddingLeft: '0'}}>
+                            <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
+                              {this.state.errorMessage}
+                            </Alert>
+                          </Col>
                             <FormGroup check>
                                 <Col sm={{ size: 9 }}>
                                     <Button color={"info"} size={"lg"} block>Create Activity</Button>

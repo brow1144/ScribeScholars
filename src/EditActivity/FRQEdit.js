@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Col, FormGroup, Label, Input, Form, Button} from 'reactstrap';
+import { Alert, Col, FormGroup, Label, Input, Form, Button} from 'reactstrap';
 
 import '../CreateActivity/FRQForm.css';
 
@@ -9,12 +9,22 @@ class FRQEdit extends Component {
     super(props);
     this.state = {
       question: this.props.question,
+      visible: false,
+      errorMessage: '',
     }
   }
 
+  onDismiss = () => {
+    this.setState({ visible: false });
+  };
 
   onFormSubmit = (ev) => {
     ev.preventDefault();
+    if (ev.target.promptQ.value === '' || ev.target.points.value === ''){
+      this.setState({errorMessage: 'You didn\'t enter sufficient information!'});
+      this.setState({ visible: true });
+      return;
+    }
     let quest = {
       type: "FRQ",
       prompt: ev.target.promptQ.value,
@@ -43,6 +53,11 @@ class FRQEdit extends Component {
           </Col>
         </FormGroup>
         <br/>
+        <Col xs={{size: 6, offset: 3}} style={{paddingLeft: '0'}}>
+          <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
+            {this.state.errorMessage}
+          </Alert>
+        </Col>
         <FormGroup check style={{paddingLeft: '0'}}>
           <Col sm={{size: 6, offset: 3}} style={{paddingLeft: '0'}}>
             <Button color={"secondary"} size={"lg"} block>Save Question</Button>

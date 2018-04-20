@@ -1,21 +1,27 @@
 import React, {Component} from 'react';
 
-import {Col, FormGroup, Form, Button, Label, Input} from 'reactstrap';
+import {Alert, Col, FormGroup, Form, Button, Label, Input} from 'reactstrap';
 
 import './SMQForm.css';
 
 class SMQForm extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+          visible: false,
+          errorMessage: '',
+        }
 
     }
 
     onFormSubmit = (ev) => {
         ev.preventDefault();
 
-        //let ans = ev.target.ans.value.split(", ");
-
+      if (ev.target.promptQ.value === '' || ev.target.opt1.value === '' || ev.target.opt2.value === '' || ev.target.opt3.value === '' || ev.target.opt4.value === '' || ev.target.points.value === '' || ev.target.ans.value === ''){
+        this.setState({errorMessage: 'You didn\'t enter sufficient information!'});
+        this.setState({ visible: true });
+        return;
+      }
         let quest = {
             type: "SMQ",
             prompt: ev.target.promptQ.value,
@@ -29,6 +35,10 @@ class SMQForm extends Component {
 
         this.props.recordQuestion(quest, this.props.index);
     };
+
+  onDismiss = () => {
+    this.setState({ visible: false });
+  };
 
     render() {
         return (
@@ -82,6 +92,11 @@ class SMQForm extends Component {
                   </Col>
                 </FormGroup>
                 <br/>
+              <Col xs={{size: 6, offset: 3}} style={{paddingLeft: '0'}}>
+                <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
+                  {this.state.errorMessage}
+                </Alert>
+              </Col>
                 <FormGroup check style={{paddingLeft: '0'}}>
                     <Col sm={{size: 6, offset: 3}} style={{paddingLeft: '0'}}>
                         <Button color={"secondary"} size={"lg"} block>Save Question</Button>

@@ -63,9 +63,13 @@ class StudentBonus extends Component {
         <br/>
         <br/>
         <br/>
-        <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
-          {this.state.errorMessage}
-        </Alert>
+        <Row>
+          <Col xs={{size: 4, offset: 4}}>
+            <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
+              {this.state.errorMessage}
+              </Alert>
+          </Col>
+        </Row>
           <Row>
             <Col xs={{size: '8', offset: '2'}}>
               <InputGroup>
