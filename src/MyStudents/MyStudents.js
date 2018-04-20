@@ -60,6 +60,11 @@ class MyStudents extends Component {
 
       page: "dashboard",
       activeAss: null,
+
+
+      avgGpa: null,
+      passFail: [],
+      gpaDis: [],
     }
   }
 
@@ -148,10 +153,8 @@ class MyStudents extends Component {
 
         let studentRef = firestore.collection("users").doc(this.state.studentsList[i]);
         studentRef.get().then(() => {
-          if (parseInt(i, 10) === self.state.studentsList.length - 1) {
-            console.log("got all assignments");
+          if (parseInt(i, 10) === self.state.studentsList.length - 1)
             self.getStudents();
-          }
         }).catch(function (error) {
           console.log("Error getting document:", error);
         });
@@ -428,6 +431,7 @@ class MyStudents extends Component {
                 students: object,
               }, () => {
                 // TODO sort here maybe?
+                self.getAvgGpa();
               });
             });
           }
@@ -488,6 +492,122 @@ class MyStudents extends Component {
       page: "grading",
     })
   };
+  
+  getAvgGpa = () => {
+    let totalGrade = 0;
+    console.log(this.state.students);
+    for (let i in this.state.students) {
+      if (this.state.students.hasOwnProperty(i)) {
+        totalGrade += this.state.students[i].grade;
+      }
+    }
+
+    let avgGpa = totalGrade / this.state.students.length;
+
+    let object;
+    let passing = 0;
+    let failing = 0;
+    let temp = 0;
+    let pfArr = [];
+    let gpadArr = [];
+
+    let toFour = 0;
+    //let fourHead = "3.0+";
+    let toThree = 0;
+    //let threeHead = "2.0+";
+    let toTwo = 0;
+    //let twoHead = "1.0+";
+    let toD = 0;
+    //let oneHead = "0.0+";
+    let toOne = 0;
+    //let oneHead = "0.0+";
+
+    for (let i in this.state.students) {
+      let thisGpa = this.state.students[i].grade;
+
+      if (thisGpa >= 89.5) {
+        toFour++;
+      } else if (thisGpa >= 79.5) {
+        toThree++;
+      } else if (thisGpa >= 69.5) {
+        toTwo++;
+      } else if (thisGpa >= 59.5) {
+        toD++;
+      }
+      else {
+        toOne++;
+      }
+
+      if (thisGpa < 59.5) {
+        failing++;
+      } else {
+        passing++;
+      }
+
+      temp += thisGpa;
+    }
+
+
+    //let size = this.props.students.length;
+    //temp = temp / size;
+    //temp = Math.round(temp * 100) / 100;
+
+    //FOR PASS FAIL
+    object = {
+      name : "Failing",
+      value : failing
+    };
+
+    pfArr.unshift(object);
+
+    object = {
+      name : "Passing",
+      value : passing
+    };
+    pfArr.unshift(object);
+    //END OF PASS FAIL
+
+    //FOR GPA DIS
+    object = {
+      name : "A",
+      value : toFour
+    };
+
+    gpadArr.unshift(object);
+
+    object = {
+      name : "B",
+      value : toThree
+    };
+    gpadArr.unshift(object);
+
+    object = {
+      name : "C",
+      value : toTwo
+    };
+
+    gpadArr.unshift(object);
+
+    object = {
+      name : "D",
+      value : toD
+    };
+
+    gpadArr.unshift(object);
+
+    object = {
+      name : "F",
+      value : toOne
+    };
+    gpadArr.unshift(object);
+    //END OF GPA DIS
+
+    this.setState({
+      avgGpa: avgGpa,//done
+      passFail : pfArr,
+      gpaDis : gpadArr
+    });
+  };
 
   render() {
     this.state.students.sort(this.compareValues("grade")).reverse();
@@ -512,7 +632,7 @@ class MyStudents extends Component {
                   </Col>
                 </Row>
                 <Row className="chartAlign">
-                  <Graphs lessonNumber={this.props.lessonNumber} code={this.props.code} getGrade={this.getGrade}/>
+                  <Graphs gpaDis={this.state.gpaDis} passFail={this.state.passFail} avgGpa={this.state.avgGpa}/>
                 </Row>
               </Col>
             </Row>
