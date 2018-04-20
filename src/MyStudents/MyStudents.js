@@ -116,7 +116,6 @@ class MyStudents extends Component {
 
     firestore.collection("users").doc(uid).collection(type).get().then((snapshot) => {
       snapshot.forEach((doc) => {
-        console.log("in loop");
         if (doc.data().class === self.state.code && doc.data().score != null) {
           self.setState({
             allAssignments: self.state.allAssignments.concat({data: doc.data(), uid: uid, type: type}),

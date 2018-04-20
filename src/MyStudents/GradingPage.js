@@ -40,9 +40,8 @@ class GradingPage extends Component {
             if (doc.exists && doc.data() != null) {
                 for (let i in doc.data().questions) {
                     if (doc.data().questions.hasOwnProperty(i)) {
-                        if (doc.data().questions[i].type === "FRQ" || doc.data().questions[i].type === "VIDEO") {
+                        if (doc.data().questions[i].type === "FRQ")
                             ungradedPoints += doc.data().questions[i].points;
-                        }
                     }
                 }
             }
