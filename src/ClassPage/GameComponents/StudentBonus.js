@@ -64,6 +64,9 @@ class StudentBonus extends Component {
               </InputGroup>
             </Col>
           </Row>
+        <br/>
+        <br/>
+        <br/>
       </div>
     );
     }
@@ -104,6 +107,9 @@ class StudentBonus extends Component {
               </div>
             </Col>
           </Row>
+          <br/>
+          <br/>
+          <br/>
 
       </div>
     );
