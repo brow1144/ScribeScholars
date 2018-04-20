@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {Col, FormGroup, Form, Button, Label, Input} from 'reactstrap';
+import { Alert, Col, FormGroup, Form, Button, Label, Input} from 'reactstrap';
 
 import '../CreateActivity/MCQForm.css';
 
@@ -9,11 +9,22 @@ class MCQEdit extends Component {
     super(props);
     this.state = {
       currentQues: this.props.question,
+      visible: false,
+      errorMessage: '',
     };
   }
 
+  onDismiss = () => {
+    this.setState({ visible: false });
+  };
+
   onFormSubmit = (ev) => {
     ev.preventDefault();
+    if (ev.target.promptQ.value === '' || ev.target.opt1.value === '' || ev.target.opt2.value === '' || ev.target.opt3.value === '' || ev.target.opt4.value === '' || ev.target.points.value === ''){
+      this.setState({errorMessage: 'You didn\'t enter sufficient information!'});
+      this.setState({ visible: true });
+      return;
+    }
 
     let ans;
     switch (ev.target.ans.value) {
@@ -126,6 +137,11 @@ class MCQEdit extends Component {
           </Col>
         </FormGroup>
         <br/>
+        <Col xs={{size: 6, offset: 3}} style={{paddingLeft: '0'}}>
+          <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
+            {this.state.errorMessage}
+          </Alert>
+        </Col>
         <FormGroup check style={{paddingLeft: '0'}}>
           <Col sm={{size: 6, offset: 3}} style={{paddingLeft: '0'}}>
             <Button color={"secondary"} size={"lg"} block>Save Question</Button>
