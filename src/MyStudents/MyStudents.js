@@ -497,6 +497,7 @@ class MyStudents extends Component {
     let gradeArr = [];
 
     let totalGrade = 0;
+    let numStudents = 0;
     let passing = 0;
     let failing = 0;
     let A = 0;
@@ -509,23 +510,26 @@ class MyStudents extends Component {
       if (this.state.students.hasOwnProperty(i)) {
         let grade = this.state.students[i].grade;
 
-        if (grade >= 89.5)
-          A++;
-        else if (grade >= 79.5)
-          B++;
-        else if (grade >= 69.5)
-          C++;
-        else if (grade >= 59.5)
-          D++;
-        else
-          F++;
+        if (!isNaN(grade)) {
+          if (grade >= 89.5)
+            A++;
+          else if (grade >= 79.5)
+            B++;
+          else if (grade >= 69.5)
+            C++;
+          else if (grade >= 59.5)
+            D++;
+          else
+            F++;
 
-        if (grade < 59.5)
-          failing++;
-        else
-          passing++;
+          if (grade < 59.5)
+            failing++;
+          else
+            passing++;
 
-        totalGrade += grade;
+          totalGrade += grade;
+          numStudents++;
+        }
       }
     }
 

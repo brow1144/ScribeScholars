@@ -28,18 +28,18 @@ class StudList extends Component {
     let itemRows = [
       <tr key={student.uid} className="curveLabel">
         <th scope="row">{parseInt(index) + 1}</th>
-        <td>{student.grade}</td>
+        <td>{!isNaN(student.grade) ? student.grade : "No Grades"}</td>
         <td onClick={() => this.handleRowClick(student.uid)} className="nameCell">{student.name}</td>
         <td>{student.email}</td>
         <td>
-          <span onClick={() => this.props.showGraph(student.uid)}>
+          <span onClick={() => this.props.showGraph(student.uid)} hidden={isNaN(student.grade)}>
             <i className="fas fa-chart-bar graphIcon"/>
           </span>
         </td>
       </tr>
     ];
 
-    if (this.state.expandedRows.includes(student.uid)) {
+    if (this.state.expandedRows.includes(student.uid) && !isNaN(student.grade)) {
       itemRows.push(
         <tr key={"expanded-head-" + student.uid}>
           <th/>
