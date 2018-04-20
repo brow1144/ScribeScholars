@@ -168,12 +168,12 @@ class TeacherScore extends Component {
             <Col xs={{size: '8', offset: '2'}}>
               <Row>
               <p className={"scoreMed"}>Least-Missed Question: {this.props.game.questions[this.state.leastMissed].prompt}</p>
-              <p className={"scoreMini"}>({(this.props.game.userScores.length) - this.props.numCorrectArr[this.state.leastMissed]} missed)</p>
+              <p className={"scoreMed"}>({(this.props.game.userScores.length) - this.props.numCorrectArr[this.state.leastMissed]} missed)</p>
               </Row>
               <hr/>
               <Row>
               <p className={"scoreMed"}>Most-Missed Question: {this.props.game.questions[this.state.mostMissed].prompt}</p>
-              <p className={"scoreMini"}>({(this.props.game.userScores.length) - this.props.numCorrectArr[this.state.mostMissed]} missed)</p>
+              <p className={"scoreMed"}>({(this.props.game.userScores.length) - this.props.numCorrectArr[this.state.mostMissed]} missed)</p>
               </Row>
             </Col>
           </Row>

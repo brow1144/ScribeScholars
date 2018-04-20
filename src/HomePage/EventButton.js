@@ -49,7 +49,10 @@ class EventButton extends Component {
     let endDate = ev.target.endDate.value;
     let endTime = ev.target.endTime.value;
     //riley stuff
-      let addClassCode = ev.target.select.value;
+      let addClassCode;
+      if (this.props.role === "teacher") {
+          addClassCode = ev.target.select.value;
+      }
 
     if (title === "") {
       self.setState({
