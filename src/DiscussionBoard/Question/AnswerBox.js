@@ -161,7 +161,8 @@ class AnswerBox extends Component {
                           classCode={this.props.classCode} curReply={this.state.replies[index]} index={index}
                           buttonVis={this.state.buttonVis} theKey={key}/>
               )
-            })}            <br/>
+            })}
+            <br/>
           </Col>
         </Row>
 

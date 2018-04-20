@@ -55,7 +55,7 @@ class AddFollowUp extends Component {
       let self = this;
       let obj = {
         reply: self.state.newAnswer,
-        replyID: self.props.uid,
+        userID: self.props.uid,
         userImage: self.props.image,
       };
       console.log(obj);
