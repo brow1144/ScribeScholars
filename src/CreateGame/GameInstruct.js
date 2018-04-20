@@ -24,7 +24,11 @@ class GameInstruct extends Component {
                 <hr/>
                 <br/>
                 <CardTitle tag={"p"} className={"cardTextStyle"}>
-                  Add Description of how to play game.
+                  There are two parts to every question in this game; the bonus point, and the regular point round.
+                </CardTitle>
+                <CardTitle tag={"p"} className={"cardTextStyle"}>
+                  The bonus point will a fill in the blank version of the question, all questions are multiple choice but the answers will be hidden for this round.
+                  If you abstain from the bonus point portion, there will still be the option to earn the normal amount of points in when the answers appear. Be careful! You can't answer the multiple choice portion if you get the bonus wrong
                 </CardTitle>
                 <br/>
                 <hr/>
