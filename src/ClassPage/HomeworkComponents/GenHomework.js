@@ -562,95 +562,106 @@ class GenHomework extends Component {
       <div>
         {!this.state.finalPage
           ?
-          <Container>
-            <Card style={{
-              boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
-              margin: 'auto',
-              width: '50%'
-            }}>
-              <CardHeader tag="h2" >{this.state.name}: Question {this.state.currentQuestion}</CardHeader>
-              <Row>
-                {this.state.type === "MCQ"
-                  ?
-                  <MCQ {...action} {...data}/>
-                  : this.state.type === "FRQ"
-                    ?
-                    <FRQ {...action} {...data}/>
-                    : this.state.type === "VIDEO"
+          <Container fluid>
+            <Row>
+              <Col xs={1} lg={4}/>
+              <Col xs={10} lg={4}>
+                <Card style={{
+                  boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+                  margin: 'auto',
+                }}>
+                  <CardHeader tag="h2">{this.state.name}: Question {this.state.currentQuestion}</CardHeader>
+                  <Row>
+                    <Col xs={1}/>
+                    {this.state.type === "MCQ"
                       ?
-                      <Video {...action} {...data}/>
-                      : this.state.type === "SMQ"
+                      <MCQ {...action} {...data}/>
+                      : this.state.type === "FRQ"
                         ?
-                        <MSQ {...action} {...data}/>
-                        :
-                        <FIB {...action} {...data}/>
+                        <FRQ {...action} {...data}/>
+                        : this.state.type === "VIDEO"
+                          ?
+                          <Video {...action} {...data}/>
+                          : this.state.type === "SMQ"
+                            ?
+                            <MSQ {...action} {...data}/>
+                            :
+                            <FIB {...action} {...data}/>
 
-                }
-              </Row>
-              <br/>
-              {this.state.currentQuestion === 1
-                ?
-                <Row>
-                  <Col xs={{size: 1, offset: 1}} lg={{size: 5, offset: 1}}>
-                    <Button onClick={this.incPage}>Next Question</Button>
-                  </Col>
-                </Row>
-                :
-                <Row>
-                  <Col xs={{size: 1, offset: 1}} lg={{size: 5, offset: 1}}>
-                    <Button onClick={this.decPage}>Last Question</Button>
-                  </Col>
-                  <Col xs={{size: 1, offset: 1}} lg={{size: 3, offset: 3}}>
-                    <Button onClick={this.incPage}>Next Question</Button>
-                  </Col>
-                </Row>
-              }
-              <br/>
-            </Card>
-
+                    }
+                    <Col xs={1}/>
+                  </Row>
+                  <br/>
+                  {this.state.currentQuestion === 1
+                    ?
+                    <Row>
+                      <Col xs={{size: 1, offset: 1}} lg={{size: 5, offset: 1}}>
+                        <Button onClick={this.incPage}>Next Question</Button>
+                      </Col>
+                    </Row>
+                    :
+                    <Row>
+                      <Col xs={{size: 2, offset: 1}} lg={{size: 5, offset: 1}}>
+                        <Button onClick={this.decPage}>Last Question</Button>
+                      </Col>
+                      <Col xs={{size: 2, offset: 3}} lg={{size: 3, offset: 1}}>
+                        <Button onClick={this.incPage}>Next Question</Button>
+                      </Col>
+                    </Row>
+                  }
+                  <br/>
+                </Card>
+              </Col>
+              <Col xs={1} lg={4}/>
+            </Row>
           </Container>
           :
           <Container>
-            {/*TODO set the card width based on screen size, small screens need to be wayy bigger*/}
-            <Card style={{
-              boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
-              margin: 'auto',
-              width: '50%',
-            }}>
-              <CardHeader tag="h3" className={"titleCar"}>End of the Assignment</CardHeader>
-              {this.state.completed !== 2
-                ?
-                <CardBody>
-                  <CardTitle tag={"p"} className={"cardTextStyle"}>
-                    Not all questions are completed! Answer all questions before continuing
-                  </CardTitle>
-                </CardBody>
-                : null
-              }
-              <Row>
-                <Col xs={{size: 3, offset: 1}}>
-                  <div className={"space"}/>
-                  <Button onClick={this.decPage}>Last Question</Button>
-                </Col>
-                <Col xs={4}>
-                  <div className={"space"}/>
-                  <Button onClick={this.checkCompletion}>Submit Answers</Button>
-                </Col>
-                {this.state.completed === 2
-                  ?
-                  <Col xs={"2"}>
-                    <div className={"space"}/>
-                    <Nav pills>
-                      <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.state.code}/homework`}>
-                        <Button>Return to the classroom page</Button>
-                      </RouterLink>
-                    </Nav>
-                  </Col>
-                  : null
-                }
-              </Row>
-              <br/>
-            </Card>
+            <Row>
+              <Col xs={0} lg={0}/>
+              <Col xs={12} lg={12}>
+                {/*TODO set the card width based on screen size, small screens need to be wayy bigger*/}
+                <Card style={{
+                  boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+                  margin: 'auto',
+                }}>
+                  <CardHeader tag="h3" className={"titleCar"}>End of the Assignment</CardHeader>
+                  {this.state.completed !== 2
+                    ?
+                    <CardBody>
+                      <CardTitle tag={"p"} className={"cardTextStyle"}>
+                        Not all questions are completed! Answer all questions before continuing
+                      </CardTitle>
+                    </CardBody>
+                    : null
+                  }
+                  <Row>
+                    <Col xs={2} md={{size: 2, offset: 1}}>
+                      <div className={"space"}/>
+                      <Button onClick={this.decPage}>Last Question</Button>
+                    </Col>
+                    <Col xs={{size: 3, offset: 1}}>
+                      <div className={"space"}/>
+                      <Button onClick={this.checkCompletion}>Submit Answers</Button>
+                    </Col>
+                    {this.state.completed === 2
+                      ?
+                      <Col xs={4}>
+                        <div className={"space"}/>
+                        <Nav pills>
+                          <RouterLink className="navLinks" to={`/ScribeScholars/HomePage/${this.state.code}/homework`}>
+                            <Button>Return to the classroom page</Button>
+                          </RouterLink>
+                        </Nav>
+                      </Col>
+                      : null
+                    }
+                  </Row>
+                  <br/>
+                </Card>
+              </Col>
+              <Col xs={0} lg={0}/>
+            </Row>
           </Container>
         }
 

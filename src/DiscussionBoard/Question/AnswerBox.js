@@ -151,13 +151,20 @@ class AnswerBox extends Component {
                         buttonVis={this.state.buttonVis} replies={this.state.replies} {...actions}/>
           : null
         }
-        {this.state.replies.map((key, index) => {
-          return (
-            <FollowUp image={this.state.image} role={this.props.role} uid={this.props.uid}
-                      classCode={this.props.classCode} curReply={this.state.replies[index]} index={index}
-                      buttonVis={this.state.buttonVis} theKey={key}/>
-          )
-        })}
+
+        <Row>
+          <Col xs='12' md='1'/>
+          <Col className='answerBoxBackground' xs='12' md='11'>
+            {this.state.replies.map((key, index) => {
+              return (
+                <FollowUp image={this.state.image} role={this.props.role} uid={this.props.uid}
+                          classCode={this.props.classCode} curReply={this.state.replies[index]} index={index}
+                          buttonVis={this.state.buttonVis} theKey={key}/>
+              )
+            })}            <br/>
+          </Col>
+        </Row>
+
       </div>
     );
   }
