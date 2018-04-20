@@ -515,7 +515,7 @@ console.log(this.state);
                   </Col>
                 </Row>
                 <Row className="chartAlign">
-                  <Graphs lessonNumber={this.props.lessonNumber} code={this.props.code}/>
+                  <Graphs lessonNumber={this.props.lessonNumber} code={this.props.code} getGrade={this.getGrade}/>
                 </Row>
               </Col>
             </Row>
