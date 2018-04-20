@@ -159,11 +159,12 @@ class Dashboard extends Component {
 
             stud.onSnapshot(function (doc) {
                 if (doc.exists) {
-                    if (isNaN(doc.data().gpa)) {
+                    if (isNaN(self.props.getGrade(doc.data().id))) {
                         gpaMap[element]
                             = 0;
                     } else {
-                        gpaMap[element] = doc.data().gpa;
+                        //gpaMap[element] = doc.data().gpa;
+                        gpaMap[element] = self.props.getGrade(doc.data().id);
                     }
                     //gpaMap[element] = doc.data().gpa;
                     gpaMap[element] = Math.round(gpaMap[element] * 100) / 100;
@@ -195,23 +196,28 @@ class Dashboard extends Component {
         //let threeHead = "2.0+";
         let toTwo = 0;
         //let twoHead = "1.0+";
+        let toD = 0;
+        //let oneHead = "0.0+";
         let toOne = 0;
         //let oneHead = "0.0+";
 
         for (let i in this.state.gpaMap) {
             let thisGpa = this.state.gpaMap[i];
 
-            if (thisGpa >= 3.0) {
+            if (thisGpa >= 89.5) {
                 toFour++;
-            } else if (thisGpa >= 2.0) {
+            } else if (thisGpa >= 79.5) {
                 toThree++;
-            } else if (thisGpa >= 1.0) {
+            } else if (thisGpa >= 69.5) {
                 toTwo++;
-            } else {
+            } else if (thisGpa >= 59.5) {
+                toD++;
+            }
+            else {
                 toOne++;
             }
 
-            if (thisGpa < 1.7) {
+            if (thisGpa < 59.5) {
                 failing++;
             } else {
                 passing++;
@@ -241,27 +247,34 @@ class Dashboard extends Component {
 
         //FOR GPA DIS
         object = {
-            name : "Group 3-4",
+            name : "A",
             value : toFour
         };
 
         gpadArr.unshift(object);
 
         object = {
-            name : "Group 2-3",
+            name : "B",
             value : toThree
         };
         gpadArr.unshift(object);
 
         object = {
-            name : "Group 1-2",
+            name : "C",
             value : toTwo
         };
 
         gpadArr.unshift(object);
 
         object = {
-            name : "Group 0-1",
+            name : "D",
+            value : toD
+        };
+
+        gpadArr.unshift(object);
+
+        object = {
+            name : "F",
             value : toOne
         };
         gpadArr.unshift(object);
