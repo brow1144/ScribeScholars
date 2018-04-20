@@ -21,7 +21,7 @@ class MSQ extends Component {
   render() {
     if (this.props.finalPage === false) {
       return (
-        <Col sm={{size: 8, offset: 2}}>
+        <Col>
           <FormGroup tag={"fieldset"}>
             <legend className={"RadioTitle"}>{this.props.prompt}</legend>
             <Col>

@@ -14,10 +14,10 @@ class FIB extends Component {
     render() {
         if(this.props.finalPage === false) {
             return (
-                <Col sm={{size: 10, offset: 1}}>
+                <Col>
                     <br/>
                     <FormGroup tag={"fieldset"}>
-                        <legend className={"RadioTitle"}>String({this.props.prompt})</legend>
+                        <legend className={"RadioTitle"}>{this.props.prompt}</legend>
                         <Col sm={{size: 10, offset: 1}}>
                             <Input onChange={(ev) => this.props.setFIB(ev.target.value)} value={this.props.frqResponse}
                                     type="username"
