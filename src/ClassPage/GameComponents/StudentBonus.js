@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {Container, Row, Col, Input, Label, Form, FormGroup, Button, InputGroupAddon, InputGroup} from 'reactstrap';
+import {Container, Alert, Row, Col, Input, Label, Form, FormGroup, Button, InputGroupAddon, InputGroup} from 'reactstrap';
 
 import ReactLoading from 'react-loading';
 
@@ -11,10 +11,17 @@ class StudentBonus extends Component {
     this.state = {
       game: this.props.game,
       inputValue: "",
+      visible: false,
+      errorMessage: '',
     }
   };
 
   recordResponse = () => {
+    if (this.state.inputValue === '') {
+      this.setState({errorMessage: 'You didn\'t enter an answer!'});
+      this.setState({ visible: true });
+      return;
+    }
     this.props.submit(this.state.inputValue);
   };
 
@@ -22,6 +29,10 @@ class StudentBonus extends Component {
     this.setState({
       inputValue: ev.target.value,
     })
+  };
+
+  onDismiss = () => {
+    this.setState({ visible: false });
   };
 
   render() {
@@ -52,6 +63,9 @@ class StudentBonus extends Component {
         <br/>
         <br/>
         <br/>
+        <Alert color="danger" isOpen={this.state.visible} toggle={this.onDismiss}>
+          {this.state.errorMessage}
+        </Alert>
           <Row>
             <Col xs={{size: '8', offset: '2'}}>
               <InputGroup>
