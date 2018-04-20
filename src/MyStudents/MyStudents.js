@@ -51,7 +51,6 @@ class MyStudents extends Component {
       studentsList: [],   // all students in the class
       allAssignments: [],   // all assignments from every student
 
-      classOverallGrades: [],   // class overall grades
       assignmentGrades: [],   // individual grades for each assignment
 
       graphVisible: false,
@@ -141,7 +140,6 @@ class MyStudents extends Component {
 
   getAllAssignments = () => {
     let self = this;
-console.log("getting all assignments");
     for (let i in this.state.studentsList) {
       if (this.state.studentsList.hasOwnProperty(i)) {
         self.getAssignmentsOfType(self.state.studentsList[i], "homework");
@@ -168,7 +166,7 @@ console.log("getting all assignments");
     let homeworkTotal = 0;
     let inClassMax = 0;
     let homeworkMax = 0;
-console.log(this.state);
+
     for (let i in this.state.allAssignments) {
       if (this.state.allAssignments.hasOwnProperty(i)) {
         if (this.state.allAssignments[i].uid === uid && this.state.allAssignments[i].data.score != null) {
