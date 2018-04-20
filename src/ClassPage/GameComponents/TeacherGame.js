@@ -108,7 +108,7 @@ class TeacherGame extends Component {
                                     move forward with the game.</p>
                                 <hr/>
                                 <p className={"jumboSub"}>Once clicked, all students in the game will advance in the
-                                    game alongside you</p>
+                                    game along side you</p>
                             </Col>
                         </Row>
                         <Row>
