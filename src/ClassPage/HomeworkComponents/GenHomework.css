@@ -2,3 +2,7 @@
     font-size: 3rem;
     font-family: "Garamond",sans-serif;
 }
+
+.addBorder{
+    border: 1px solid #ff0000;
+}

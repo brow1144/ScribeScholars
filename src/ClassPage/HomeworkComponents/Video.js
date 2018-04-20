@@ -10,7 +10,7 @@ class Video extends Component {
   render() {
     if(this.props.finalPage === false) {
       return (
-        <Col sm={{size: 10, offset: 1}} className='player-wrapper centerContent'>
+        <Col className='player-wrapper centerContent'>
           <FormGroup tag={"fieldset"}>
             <legend className={"RadioTitle"}>{this.props.prompt}</legend>
             <ReactPlayer

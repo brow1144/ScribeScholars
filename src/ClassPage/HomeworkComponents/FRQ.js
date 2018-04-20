@@ -14,7 +14,7 @@ class FRQ extends Component {
   render() {
     if(this.props.finalPage === false) {
       return (
-        <Col sm={{size: 10, offset: 1}}>
+        <Col>
           <FormGroup tag={"fieldset"}>
             <legend className={"RadioTitle"}>{this.props.prompt}</legend>
             <Col sm={{size: 10, offset: 1}}>

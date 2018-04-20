@@ -326,32 +326,36 @@ class GenAssignment extends Component {
           ?
           <Container fluid>
             <Row>
-              <Col>
+              <Col xs={1} lg={4}/>
+              <Col xs={10} lg={4}>
                 <Card style={{
                   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
                   margin: 'auto',
-                  width: '40%'
                 }}>
                   <CardHeader tag="h2" >{this.state.name}: Question {this.state.currentQuestion}</CardHeader>
-                  <MCQ currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
-                       setAns={this.setAns} finalPage={this.state.finalPage}
-                       oldAns={this.state.history[this.state.currentQuestion - 1]}
-                       option1={this.state.option1} option2={this.state.option2} option3={this.state.option3}
-                       option4={this.state.option4}/>
+                  <Row>
+                    <Col xs={1}/>
+                    <MCQ currentQuestion={this.state.currentQuestion} name={this.state.name} prompt={this.state.prompt}
+                         setAns={this.setAns} finalPage={this.state.finalPage}
+                         oldAns={this.state.history[this.state.currentQuestion - 1]}
+                         option1={this.state.option1} option2={this.state.option2} option3={this.state.option3}
+                         option4={this.state.option4}/>
+                    <Col xs={1}/>
+                  </Row>
 
                   {this.state.currentQuestion === 1
                     ?
                     <Row>
-                      <Col xs={{size: 5, offset: 1}}>
+                      <Col xs={{size: 1, offset: 1}}>
                         <Button onClick={this.incPage}>Next Question</Button>
                       </Col>
                     </Row>
                     :
                     <Row>
-                      <Col xs={{size: 5, offset: 1}}>
+                      <Col xs={{size: 2, offset: 1}} lg={{size: 5, offset: 1}}>
                         <Button onClick={this.decPage}>Last Question</Button>
                       </Col>
-                      <Col xs={{size: 3, offset: 3}}>
+                      <Col xs={{size: 2, offset: 3}} lg={{size: 3, offset: 1}}>
                         <Button onClick={this.incPage}>Next Question</Button>
                       </Col>
                     </Row>
@@ -359,17 +363,18 @@ class GenAssignment extends Component {
                   <br/>
                 </Card>
               </Col>
+              <Col xs={1} lg={4}/>
             </Row>
 
           </Container>
           :
           <Container fluid>
             <Row>
-              <Col>
+              <Col xs={0} lg={4}/>
+              <Col xs={12} lg={4}>
                 <Card style={{
                   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
                   margin: 'auto',
-                  width: '40%'
                 }}>
                   <CardHeader tag="h3" className={"titleCar"}>End of the Assignment</CardHeader>
                   {this.state.completed !== "2"
@@ -383,7 +388,7 @@ class GenAssignment extends Component {
                   }
                   <br/>
                   <Row>
-                    <Col xs={{size: 3, offset: 1}}>
+                    <Col xs={{size: 2, offset: 1}}>
                       <div className={"space"}/>
                       <Button onClick={this.decPage}>Last Question</Button>
                       <br/>
@@ -402,9 +407,9 @@ class GenAssignment extends Component {
                     }
                   </Row>
                   <br/>
-
                 </Card>
               </Col>
+              <Col xs={0} lg={4}/>
             </Row>
           </Container>
         }
