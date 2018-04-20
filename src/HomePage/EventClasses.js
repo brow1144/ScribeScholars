@@ -15,7 +15,9 @@ const EventClasses = (props) => {
         )
     } else {
         return (
-            <div/>
+            <Input type="select" name="select">
+                <option>Do Not Add To Class</option>
+            </Input>
         )
     }
 };
