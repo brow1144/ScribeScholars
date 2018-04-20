@@ -382,11 +382,11 @@ class MyStudents extends Component {
           maxScore: doc.data().maxScore
         });
         self.setState({
-<<<<<<< HEAD
+
             students: object
-=======
+
           quizzes: object,
->>>>>>> origin/game/jake
+
         });
       });
     }).catch(function (error) {
@@ -431,7 +431,7 @@ class MyStudents extends Component {
                 students: object,
               }, () => {
                 // TODO sort here maybe?
-                self.getAvgGpa();
+                self.getDashboardInfo();
               });
             });
           }
@@ -492,13 +492,13 @@ class MyStudents extends Component {
       page: "grading",
     })
   };
-  
-  getAvgGpa = () => {
+
+  getDashboardInfo = () => {
     let totalGrade = 0;
+
     for (let i in this.state.students) {
-      if (this.state.students.hasOwnProperty(i)) {
+      if (this.state.students.hasOwnProperty(i))
         totalGrade += this.state.students[i].grade;
-      }
     }
 
     let avgGpa = totalGrade / this.state.students.length;
