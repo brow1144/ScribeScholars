@@ -57,7 +57,7 @@ class CreateActivity extends Component {
                     name: title,
                     description: descript,
                     due: dueDate,
-                    available: false,
+                    available: true,
                 }).then(function () {
                     console.log("successfully written!");
                 }).catch(function (error) {
