@@ -1,53 +1,73 @@
 import React, { Component } from 'react';
 import { firestore } from "../../base";
-import {Container, Row, Col, Input, Label, Form, FormGroup, Button} from 'reactstrap';
+import { Table, Row, Col, Button } from 'reactstrap';
+import { NavLink as RouterLink } from 'react-router-dom';
 
 class TeacherScore extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      game: {},
-      mcqSubmitted: false,
-      bonusSubmitted: false,
-
       topScores: [],
+      leastMissed: null,
+      mostMissed: null,
+      numCorrect: null,
+      numIncorrect: null,
     };
   };
 
   componentWillMount() {
-    this.grabGameDetails();
+    if (this.props.final) {
+      this.createLeaderboard();
+      this.setQuestionStats();
+    } else
+      this.setNumCorrect();
   };
 
-  grabGameDetails = () => {
-    let self = this;
-    let gameRef = firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber);
+  setNumCorrect = () => {
+    let numCorrect = 0;
+    let numIncorrect = 0;
 
-    gameRef.onSnapshot(function (doc) {
-      console.log(doc.data());
-      self.setState({game: doc.data()});
-      self.createLeaderboard();
-    })
-  };
-
-  getTopScores = () => {
-    this.state.game.questScores.sort();
-
-
-
-  };
-
-  getName = (uid) => {
-    let name;
-    let studentRef = firestore.collection("users").doc(uid);
-
-    studentRef.get().then((doc) => {
-      if (doc.exists && doc.data() != null) {
-        name = doc.data().firstName + " " + doc.data().lastName;
-        return name;
+    for (let i in this.props.game.userScores) {
+      if (this.props.game.userScores.hasOwnProperty(i)) {
+        if (this.props.game.userScores[i].prevCorrect)
+          numCorrect++;
+        else
+          numIncorrect++;
       }
-    }).catch((error) => {
-      console.log("Error getting document:", error);
+    }
+
+    this.setState({
+      numCorrect: numCorrect,
+      numIncorrect: numIncorrect,
+    });
+
+    this.props.setNumCorrectArr(numCorrect);
+  };
+
+  setQuestionStats = () => {
+    let max = 0;
+    let maxIndex = 0;
+    let min = 0;
+    let minIndex = 0;
+
+    for (let i in this.props.numCorrectArr) {
+      if (this.props.numCorrectArr.hasOwnProperty(i)) {
+        let count = this.props.numCorrectArr[i];
+
+        if (count < min) {
+          min = count;
+          minIndex = i;
+        } else if (count > max) {
+          max = count;
+          maxIndex = i;
+        }
+      }
+    }
+
+    this.setState({
+      leastMissed: maxIndex,
+      mostMissed: minIndex,
     });
   };
 
@@ -56,24 +76,34 @@ class TeacherScore extends Component {
     let tmpTopScores;
     let topScores = [];
 
-    for (let i in this.state.game.userScores) {
-      if (this.state.game.userScores.hasOwnProperty(i)) {
-        let userScore = this.state.game.userScores[i];
+    for (let i in this.props.game.userScores) {
+      if (this.props.game.userScores.hasOwnProperty(i)) {
+        let userScore = this.props.game.userScores[i];
         totalScores.push({uid: userScore.uid, score: userScore.score});
       }
     }
 
-    totalScores.sort(this.compareValues("score"));
+    totalScores.sort(this.compareValues("score")).reverse();
     tmpTopScores = totalScores.slice(0, 5);
 
     for (let i in tmpTopScores) {
-      let userScore = tmpTopScores[i];
-      topScores.push({name: this.getName(userScore.uid), score: userScore.score});
-    }
+      let name;
+      let self = this;
+      let studentRef = firestore.collection("users").doc(tmpTopScores[i].uid);
 
-    self.setState({
-      topScores: topScores,
-    });
+      studentRef.get().then((doc) => {
+        if (doc.exists && doc.data() != null) {
+          name = doc.data().firstName + " " + doc.data().lastName;
+          topScores.push({name: name, score: tmpTopScores[i].score});
+
+          self.setState({
+            topScores: topScores,
+          });
+        }
+      }).catch((error) => {
+        console.log("Error getting document:", error);
+      });
+    }
   };
 
   // custom sorting function
@@ -98,19 +128,70 @@ class TeacherScore extends Component {
   }
 
   render() {
-    return (
-      <tbody>
-      {Object.keys(this.state.topScores).map((key, index) => {
-        return (
-          <tr key={key}>
-            <td>{this.state.topScores[index].name}</td>
-            <td>{this.state.topScores[index].score}</td>
-          </tr>
-        )
-      })
-      }
-      </tbody>
-    )
+    if (this.props.final) {
+      return (
+        <div>
+          <Row>
+            <Col>
+              <Table>
+                <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Score</th>
+                </tr>
+                </thead>
+                <tbody>
+                {Object.keys(this.state.topScores).map((key, index) => {
+                  return (
+                    <tr key={key}>
+                      <td>{this.state.topScores[index].name}</td>
+                      <td>{this.state.topScores[index].score}</td>
+                    </tr>
+                  )
+                })
+                }
+                </tbody>
+              </Table>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={{size: '8', offset: '2'}}>
+              <p>Least-Missed Question: {this.props.game.questions[this.state.leastMissed].prompt}</p>
+              <p>({(this.props.game.userScores.length) - this.props.numCorrectArr[this.state.leastMissed]} missed)</p>
+              <p>Most-Missed Question: {this.props.game.questions[this.state.mostMissed].prompt}</p>
+              <p>({(this.props.game.userScores.length) - this.props.numCorrectArr[this.state.mostMissed]} missed)</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={{size: '8', offset: '2'}}>
+              <RouterLink to={"/ScribeScholars/HomePage/" + this.props.code + "/games"}>
+                <Button onClick={this.props.endGame} style={{fontSize: '1.25rem'}} color="info">
+                  End Game
+                </Button>
+              </RouterLink>
+            </Col>
+          </Row>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <Row>
+            <Col>
+              <p>Number correct: {this.state.numCorrect}</p>
+              <p>Number incorrect: {this.state.numIncorrect}</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={{size: '8', offset: '2'}}>
+              <Button onClick={this.props.theClick} style={{fontSize: '1.25rem'}} color="info">
+                Next Question
+              </Button>
+            </Col>
+          </Row>
+        </div>
+      )
+    }
   }
 }
 

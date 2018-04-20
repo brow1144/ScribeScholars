@@ -77,6 +77,16 @@ class GameTable extends Component {
     });
   };
 
+  makeActive = (game) => {
+    let gameRef = firestore.collection("classes").doc(this.props.code).collection("games").doc(game.lessonCode);
+
+    gameRef.update({
+      active: true,
+      lobbyStage: true,
+    }).catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  };
 
   render() {
     return (
@@ -120,8 +130,8 @@ class GameTable extends Component {
                       {this.state.role === "teacher" ?
                         <td>
                           <RouterLink style={{display: 'inline-block', width: '1rem'}}
-                                      to={`/ScribeScholars/HomePage/${this.props.code}/games/${this.state.games[index].lessonCode}`}>
-                            Enter Game
+                                      to={`/ScribeScholars/HomePage/${this.props.code}/games/${this.state.games[index].lessonCode}/teacher`}>
+                            <Button onClick={() => {this.makeActive(this.state.games[index])}}>Enter Lobby</Button>
                           </RouterLink>
                           <span style={{display: 'inline-block', width: '1rem'}}> </span>
                         </td>

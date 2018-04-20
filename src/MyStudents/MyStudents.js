@@ -382,7 +382,11 @@ console.log(this.state);
           maxScore: doc.data().maxScore
         });
         self.setState({
+<<<<<<< HEAD
+            students: object
+=======
           quizzes: object,
+>>>>>>> origin/game/jake
         });
       });
     }).catch(function (error) {

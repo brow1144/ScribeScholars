@@ -30,6 +30,7 @@ import GenAssignment from "../ClassPage/LiveComponents/GenAssignment";
 import EventButton from "./EventButton"
 
 import StudentLiveFeed from "../ClassPage/StudentLiveFeed";
+import TeacherGame from "../ClassPage/GameComponents/TeacherGame";
 
 const mql = window.matchMedia(`(min-width: 600px)`);
 
@@ -75,12 +76,6 @@ class HomePage extends Component {
         code: null,
       }],
 
-      dates: [{
-        title: null,
-        start: null,
-        end: null,
-      }],
-
       announcements: [{
         title: null,
         subtitle: null,
@@ -88,6 +83,7 @@ class HomePage extends Component {
         class: null,
       }],
 
+      dates: [],
       calendarEvents: [],
 
       lessonNumber: this.props.lessonNumber,
@@ -102,7 +98,7 @@ class HomePage extends Component {
       open: props.open,
 
       myAssignments: [],
-      eventButtonOpen: false,
+      eventButtonOpen: true,
 
       alerts: [],
       hiddenAlerts: [],
@@ -455,44 +451,71 @@ class HomePage extends Component {
 
       homeworkRef.get().then((docs) => {
         docs.forEach((doc) => {
-          if (doc.data().due != null){
+          if (doc.data().start != null){
             let deadline = {};
             deadline.title = doc.data().name;
-            deadline.start = new Date(doc.data().due);
-            deadline.end = new Date(doc.data().due);
+            deadline.start = new Date(doc.data().start);
+            deadline.end = new Date(doc.data().end);
             dates.push(deadline);
           }
         });
+
       }).catch((error) => {
         console.log("Error getting document:", error);
       });
+
+      homeworkRef = firestore.collection("classes").doc(self.state.classes[j].code);
+      homeworkRef.get().then(() => {
+        if(parseInt(j, 10) === self.state.classes.length-1) {
+          self.getInClassDates(dates);
+        }
+      });
+    }
+
+  };
+
+
+  getInClassDates = (dates) => {
+    let self = this;
+    for (let j in self.state.classes) {
 
       let inClassRef = firestore.collection("classes").doc(self.state.classes[j].code).collection('inClass');
       inClassRef.get().then((docs) => {
         docs.forEach((doc) => {
-          if (doc.data().due != null){
+          if (doc.data().start != null) {
             let deadline = {};
             deadline.title = doc.data().name;
-            deadline.start = new Date(doc.data().due);
-            deadline.end = new Date(doc.data().due);
+            deadline.start = new Date(doc.data().start);
+            deadline.end = new Date(doc.data().end);
             dates.push(deadline);
           }
         });
       }).catch((error) => {
         console.log("Error getting document:", error);
       });
+
+      inClassRef = firestore.collection("classes").doc(self.state.classes[j].code);
+      inClassRef.get().then(() => {
+        if (parseInt(j, 10) === self.state.classes.length - 1) {
+          self.handleDates(dates);
+        }
+      });
+    }
+  };
+
+  handleDates = (dates) => {
+    let self = this;
+    let allEvents = dates;
+    for(let i = 0; i < self.state.calendarEvents.length; i++){
+      allEvents.push(self.state.calendarEvents[i]);
     }
 
-    let allEvents = dates;
-    for(let i = 0; i < this.state.calendarEvents.length; i++){
-      allEvents.push(this.state.calendarEvents[i]);
-    }
-    this.setState({
+    self.setState({
       dates: allEvents,
     }, () => {
-      this.getAlerts();
-      this.props.updateDates(this.state.dates);
-      this.forceUpdate();
+      self.getAlerts();
+      self.props.updateDates(self.state.dates);
+      self.forceUpdate();
     });
   };
 
@@ -899,6 +922,20 @@ class HomePage extends Component {
           </Row>
         </Sidebar>
       );
+    } else if (this.props.page === "teachGame"){
+        return (
+            <Sidebar {...sideData}>
+
+                <HomeNav firstName={"In-Class Game: Teacher"} lastName={""} expand={this.dockSideBar}
+                         width={this.state.width}/>
+
+                <Row>
+                    <Col>
+                        <TeacherGame {...classData} class={this.props.class} lessonNumber={this.props.lessonNumber} uid={this.state.uid}/>
+                    </Col>
+                </Row>
+            </Sidebar>
+        );
     } else if (this.props.page === "studentLiveFeed") {
 
       return (
