@@ -14,6 +14,7 @@ class TeacherGame extends Component {
     this.state = {
       game: {},
       key: false,
+      numCorrectArr: [],
       gameRef: firestore.collection("classes").doc(this.props.class).collection("games").doc(this.props.lessonNumber),
     };
   };
@@ -30,6 +31,12 @@ class TeacherGame extends Component {
         key: !self.state.key,
       });
     })
+  };
+
+  setNumCorrectArr = (numCorrect) => {
+    this.setState({
+      numCorrectArr: this.state.numCorrectArr.concat(numCorrect),
+    });
   };
 
   enterGame = () => {
@@ -107,7 +114,8 @@ class TeacherGame extends Component {
     } else if (this.state.game.scoreStage) {
       return (
         <Score key={this.state.key} game={this.state.game} code={this.props.class} theClick={this.scoreToNextQuestion}
-               endGame={this.resetGame} final={this.state.game.questIndex === this.state.game.questions.length - 1}/>
+               endGame={this.resetGame} numCorrectArr={this.state.numCorrectArr}
+               final={this.state.game.questIndex === this.state.game.questions.length - 1}/>
       );
     } else if (this.state.game.mcStage) {
       return (
