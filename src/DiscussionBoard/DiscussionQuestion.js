@@ -97,22 +97,27 @@ class DiscussionQuestion extends Component {
                 <p className='response'>
                   Teacher:
                 </p>
+
                 {this.props.discussion.teacherAns !== ''
                   ?
-                  <i className="fas fa-check check"/>
+                  <h5 style={{color: '#21ce99'}}>+</h5>
                   :
-                  <i className="fas fa-times times"/>
-                }              </Row>
+                  <h5 style={{color: '#F45531'}}>X</h5>
+
+                }
+              </Row>
               <Row>
                 <p className='response'>
                   Student:
                 </p>
+
                 {this.props.discussion.studentAns !== ''
                   ?
-                  <i className="fas fa-check check"/>
+                  <h5 style={{color: '#21ce99'}}>+</h5>
                   :
-                  <i className="fas fa-times times"/>
-                }              </Row>
+                  <h5 style={{color: '#F45531'}}>X</h5>
+                }
+                </Row>
             </Col>
             <Col xs='11' md='1'>
               {this.props.discussion.views !== undefined
