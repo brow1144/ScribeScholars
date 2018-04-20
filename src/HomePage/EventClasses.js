@@ -2,7 +2,8 @@ import React from 'react'
 import {FormGroup,Label, Input } from 'reactstrap';
 
 const EventClasses = (props) => {
-    if (props.classes !== undefined || props.classes !== null) {
+    console.log(props.classes);
+    if (props.classes !== undefined && props.classes !== null && props.classes.length !== 0) {
         return (
             <Input type="select" name="select">
                 <option>Do Not Add To Class</option>
