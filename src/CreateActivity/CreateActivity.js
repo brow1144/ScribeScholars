@@ -371,7 +371,7 @@ class CreateActivity extends Component {
                             <Form style={{marginLeft: '2rem'}} onSubmit={this.onFormSubmit}>
                                 <FormGroup row>
                                     <Col xs={7}>
-                                        <Label for="exampleSelect">Select a Question Type</Label>
+                                        {/*<Label for="exampleSelect">Select a Question Type</Label>*/}
                                         {this.props.assType === "Homework"
                                             ?
                                             <Input bsSize="lg" type="select" name="select" id="exampleSelect">
@@ -382,10 +382,8 @@ class CreateActivity extends Component {
                                                 <option>Video Page</option>
                                             </Input>
                                             :
-                                            <Input bsSize="lg" type="select" name="select" id="exampleSelect">
+                                            <Input bsSize="lg" type="select" name="select" id="exampleSelect" hidden={true}>
                                                 <option>Multiple Choice</option>
-                                                <option>Fill in the Blank</option>
-                                                <option>Select Multiple</option>
                                             </Input>
                                         }
                                     </Col>
