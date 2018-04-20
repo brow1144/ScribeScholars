@@ -114,7 +114,7 @@ class TeacherGame extends Component {
     } else if (this.state.game.scoreStage) {
       return (
         <Score key={this.state.key} game={this.state.game} code={this.props.class} theClick={this.scoreToNextQuestion}
-               endGame={this.resetGame} numCorrectArr={this.state.numCorrectArr}
+               endGame={this.resetGame} numCorrectArr={this.state.numCorrectArr} setNumCorrectArr={this.setNumCorrectArr}
                final={this.state.game.questIndex === this.state.game.questions.length - 1}/>
       );
     } else if (this.state.game.mcStage) {
