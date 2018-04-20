@@ -11,6 +11,7 @@ import {
 import MCQForm from "./MCQGame";
 import 'react-accessible-accordion/dist/react-accessible-accordion.css';
 import '../CreateActivity/CreateActivity.css';
+import GameInstruct from './GameInstruct';
 
 class CreateGame extends Component {
 
@@ -228,6 +229,12 @@ class CreateGame extends Component {
             </Button>
           </Col>
         </div>
+
+        <Row>
+          <Col>
+            <GameInstruct/>
+          </Col>
+        </Row>
 
         <Row className={"Filler"}> </Row>
         <Row className={"Filler"}> </Row>
