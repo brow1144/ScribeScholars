@@ -25,6 +25,7 @@ class FollowUp extends Component {
       message: '',
 
       replies: [{}],
+      role: null,
     }
   }
 
@@ -46,6 +47,7 @@ class FollowUp extends Component {
         let name = doc.data().firstName + ' ' + doc.data().lastName;
         self.setState({
           name: name,
+          role: doc.data().role,
         });
 
       } else {
@@ -78,7 +80,7 @@ class FollowUp extends Component {
                        alt="userIcon"/>
                 }
               </Col>
-              {this.props.role === "teacher"
+              {this.state.role === "teacher"
                 ?
                 <Col sm='10'>
                   <br/>
