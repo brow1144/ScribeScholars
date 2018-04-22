@@ -68,7 +68,7 @@ class GenHomework extends Component {
     docRef.get().then(function (doc) {
       if (doc.exists) {
         self.setState({
-          descript: doc.data().descript,
+          descript: doc.data().description,
           name: doc.data().name,
           code: self.props.code,
           questions: doc.data().questions,
@@ -115,6 +115,10 @@ class GenHomework extends Component {
     let self = this;
 
     let quest = this.state.questions[this.state.currentQuestion - 1];
+
+    if (this.state.currentQuestion === 0) {
+      return;
+    }
 
     if (quest.type === "MCQ") {
       self.setState({
@@ -242,7 +246,7 @@ class GenHomework extends Component {
 
       user.get().then((doc) => {
         if (doc.exists) {
-          if (doc.data().currentQuestion - 1 > 0) {
+          if (doc.data().currentQuestion - 1 >= 0) {
             user.update({
               history: self.state.history,
               currentQuestion: self.state.currentQuestion - 1,
@@ -575,29 +579,45 @@ class GenHomework extends Component {
                   boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
                   margin: 'auto',
                 }}>
-                  <CardHeader tag="h2">{this.state.name}: Question {this.state.currentQuestion}</CardHeader>
-                  <Row>
-                    <Col xs={1}/>
-                    {this.state.type === "MCQ"
-                      ?
-                      <MCQ {...action} {...data}/>
-                      : this.state.type === "FRQ"
-                        ?
-                        <FRQ {...action} {...data}/>
-                        : this.state.type === "VIDEO"
-                          ?
-                            <Video {...action} {...data}/>
-                          : this.state.type === "SMQ"
-                            ?
-                            <MSQ {...action} {...data}/>
-                            :
-                            <FIB {...action} {...data}/>
 
-                    }
-                    <Col xs={1}/>
-                  </Row>
+                  {this.state.currentQuestion === 0
+                    ?
+                    <div>
+                      <CardHeader tag="h2">{this.state.name}</CardHeader>
+                      <CardBody>
+                        <CardTitle tag={"p"} className={"cardTextStyle"}>
+                          {this.state.descript}
+                        </CardTitle>
+                        <hr/>
+                      </CardBody>
+                    </div>
+                    :
+                    <div>
+                      <CardHeader tag="h2">{this.state.name}: Question {this.state.currentQuestion}</CardHeader>
+                      <Row>
+                        <Col xs={1}/>
+                        {this.state.type === "MCQ"
+                          ?
+                          <MCQ {...action} {...data}/>
+                          : this.state.type === "FRQ"
+                            ?
+                            <FRQ {...action} {...data}/>
+                            : this.state.type === "VIDEO"
+                              ?
+                              <Video {...action} {...data}/>
+                              : this.state.type === "SMQ"
+                                ?
+                                <MSQ {...action} {...data}/>
+                                :
+                                <FIB {...action} {...data}/>
+
+                        }
+                        <Col xs={1}/>
+                      </Row>
+                    </div>
+                  }
                   <br/>
-                  {this.state.currentQuestion === 1
+                  {this.state.currentQuestion === 0
                     ?
                     <Row>
                       <Col xs={{size: 1, offset: 1}} lg={{size: 5, offset: 1}}>
