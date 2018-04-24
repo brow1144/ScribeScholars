@@ -50,17 +50,17 @@ class LiveGraphs extends Component {
         </Col>
 
 
-        <Col xs="12" md="2" >
-          <b>Not Started / Working / Finished</b>
-          <ResponsiveContainer width="100%" height={200}>
-            <PieChart>
-              <Pie isAnimationActive={false} data={this.props.completionGraphMap} dataKey="value" innerRadius={20} outerRadius={40} fill="#21CE99" label/>
-              <Tooltip/>
-            </PieChart>
-          </ResponsiveContainer>
-        </Col>
+        {/*<Col xs="12" md="2" >*/}
+          {/*<b>Not Started / Working / Finished</b>*/}
+          {/*<ResponsiveContainer width="100%" height={200}>*/}
+            {/*<PieChart>*/}
+              {/*<Pie isAnimationActive={false} data={this.props.completionGraphMap} dataKey="value" innerRadius={20} outerRadius={40} fill="#21CE99" label/>*/}
+              {/*<Tooltip/>*/}
+            {/*</PieChart>*/}
+          {/*</ResponsiveContainer>*/}
+        {/*</Col>*/}
 
-        <Col sm="12" md="5">
+        <Col sm="12" md="7">
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={this.props.answerMap}
                       margin={{top: 20, right: 30, left: 20, bottom: 5}}>
