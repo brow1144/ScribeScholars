@@ -885,7 +885,7 @@ class GradesTable extends Component {
               <Row className="rank" hidden={this.state.hidden}>Rank: {this.getRank(this.state.uid)}</Row>
               <br/>
               </Col>
-              <Row>
+              <Row hidden={this.state.hidden}>
                 <Col xs={{size: 5, offset: 0}}>
                   <h3 className="distLabel">Assignment Scores</h3>
                 </Col>
@@ -927,7 +927,7 @@ class GradesTable extends Component {
                 </Col>
               </Row>
 
-              <Row>
+              <Row hidden={this.state.hidden}>
                 <Col xs={{size: 5, offset: 1}}>
                   <h3 className="distLabel">Class Weighting Distribution</h3>
                 </Col>
