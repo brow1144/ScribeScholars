@@ -45,7 +45,7 @@ class AnswerBox extends Component {
         self.setState({
           image: doc.data().userImage,
         }, () => {
-          console.log("The image " + self.state.image)
+
         });
 
       } else {

@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import { Row, Col, InputGroup, Button, Alert} from 'reactstrap';
 
 import { firestore } from "../base";
+import defaultUser from '../HomePage/defUser.png';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -53,12 +54,22 @@ class AddFollowUp extends Component {
       });
     } else {
       let self = this;
-      let obj = {
-        reply: self.state.newAnswer,
-        userID: self.props.uid,
-        userImage: self.props.image,
-      };
-      console.log(obj);
+
+      let obj = {};
+      if (this.props.image) {
+        obj = {
+          reply: self.state.newAnswer,
+          userID: self.props.uid,
+          userImage: self.props.image,
+        };
+      }
+      else {
+        obj = {
+          reply: self.state.newAnswer,
+          userID: self.props.uid,
+          userImage: defaultUser,
+        };
+      }
 
       let size = this.props.replies.length;
 
