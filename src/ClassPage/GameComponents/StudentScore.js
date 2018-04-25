@@ -76,11 +76,11 @@ class StudentScore extends Component {
                   {this.props.correct
                     ?
                     <CardTitle tag={"p"} className={"cardTextStyle"}>
-                      You Answered the previous question correctly. Good job!
+                      You answered the previous question correctly. Good job!
                     </CardTitle>
                     :
                     <CardTitle tag={"p"} className={"cardTextStyle"}>
-                      You Answered the previous question incorrectly. You'll get it next time!
+                      You answered the previous question incorrectly. You'll get it next time!
                     </CardTitle>
                   }
                   <br/>
