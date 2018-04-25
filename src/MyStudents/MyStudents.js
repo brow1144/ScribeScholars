@@ -543,14 +543,14 @@ class MyStudents extends Component {
     if (avgGrade % 1 !== 0)
       avgGrade = Math.round(avgGrade * 100) / 100;
 
-    pfArr.push({name: "Failing", value: failing, color: "#FF8042"});
-    pfArr.push({name: "Passing", value: passing, color: "#00C49F"});
+    pfArr.push({name: "Failing", value: failing, color: "#7a2222"});
+    pfArr.push({name: "Passing", value: passing, color: "#30a768"});
 
-    gradeArr.push({name: "A", value: A, color: "#00C49F"});
-    gradeArr.push({name: "B", value: B, color: "#55B8D9"});
-    gradeArr.push({name: "C", value: C, color: "#E8F576"});
-    gradeArr.push({name: "D", value: D, color: "#B855D9"});
-    gradeArr.push({name: "F", value: F, color: "#FF8042"});
+    gradeArr.push({name: "A", value: A, color: "#30a768"});
+    gradeArr.push({name: "B", value: B, color: "#abd059"});
+    gradeArr.push({name: "C", value: C, color: "#dd5206"});
+    gradeArr.push({name: "D", value: D, color: "#c96f6f"});
+    gradeArr.push({name: "F", value: F, color: "#7a2222"});
 
     this.setState({
       avgGrade: avgGrade,
