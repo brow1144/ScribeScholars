@@ -548,7 +548,7 @@ class MyStudents extends Component {
 
     gradeArr.push({name: "A", value: A, color: "#30a768"});
     gradeArr.push({name: "B", value: B, color: "#abd059"});
-    gradeArr.push({name: "C", value: C, color: "#dd5206"});
+    gradeArr.push({name: "C", value: C, color: "#fda805"});
     gradeArr.push({name: "D", value: D, color: "#c96f6f"});
     gradeArr.push({name: "F", value: F, color: "#7a2222"});
 
