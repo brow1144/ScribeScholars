@@ -31,6 +31,10 @@ class Dashboard extends Component {
               <Row className="dbGraphs">
                 <Col>
                   <h1>Average Grade</h1>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
                 </Col>
               </Row>
               <Row className="dbGraphs">
@@ -43,6 +47,8 @@ class Dashboard extends Component {
             </Col>
 
             <Col>
+              <br/>
+              <br/>
               <Row className="dbGraphs">
                 <Col>
                   <h1>Grade Distribution</h1>

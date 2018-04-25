@@ -4,6 +4,11 @@
     font-size: 1.3rem;
 }
 
+.distLabel {
+    display: block;
+    text-align: center;
+}
+
 .total {
     color: #21CE99;
     font-size: 1.3rem;

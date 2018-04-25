@@ -885,6 +885,14 @@ class GradesTable extends Component {
               <Row className="rank" hidden={this.state.hidden}>Rank: {this.getRank(this.state.uid)}</Row>
               <br/>
               </Col>
+              <Row>
+                <Col xs={{size: 5, offset: 0}}>
+                  <h3 className="distLabel">Assignment Scores</h3>
+                </Col>
+                <Col xs={{size: 5}}>
+                  <h3 className="distLabel">Assignment Grades</h3>
+                </Col>
+              </Row>
               <Row hidden={this.state.hidden}>
                 <Col xs={{size: 5, offset: 1}}>
                   <ResponsiveContainer width="100%" height={300}>
@@ -894,7 +902,7 @@ class GradesTable extends Component {
                       <YAxis/>
                       <CartesianGrid strokeDasharray="3 3"/>
                       <Tooltip/>
-                      <Legend verticalAlign="top" height={36}/>
+                      <Legend verticalAlign="bottom" height={36}/>
                       <Bar dataKey="score" fill="#21CE99" />
                       <Bar dataKey="average" fill="#bf8bff" />
                       <Bar dataKey="median" fill="#f1cbff" />
@@ -910,7 +918,7 @@ class GradesTable extends Component {
                       <YAxis/>
                       <CartesianGrid strokeDasharray="3 3"/>
                       <Tooltip/>
-                      <Legend verticalAlign="top" height={36}/>
+                      <Legend verticalAlign="bottom" height={36}/>
                       <Bar dataKey="grade" fill="#21CE99" />
                       <Bar dataKey="average" fill="#bf8bff" />
                       <Bar dataKey="median" fill="#f1cbff" />
@@ -919,6 +927,11 @@ class GradesTable extends Component {
                 </Col>
               </Row>
 
+              <Row>
+                <Col xs={{size: 5, offset: 1}}>
+                  <h3 className="distLabel">Class Weighting Distribution</h3>
+                </Col>
+              </Row>
               <Row hidden={this.state.hidden}>
                 <Col xs={{size: 5, offset: 1}}>
                   <ResponsiveContainer width="100%" height={300}>
@@ -936,6 +949,14 @@ class GradesTable extends Component {
                 </Col>
 
                 <Col xs={{size: 5}}>
+                  <Row>
+                    <Col xs={{size: 5, offset: 0}}>
+                      <h3 className="distLabel">Points Earned (weighted)</h3>
+                    </Col>
+                    <Col xs={{size: 5, offset: 0}}>
+                      <h3 className="distLabel">Points Earned (unweighted)</h3>
+                    </Col>
+                  </Row>
                   <Row>
                     <ResponsiveContainer width="50%" height={150}>
                       <PieChart margin={{top: 30, right: 30, left: 30, bottom: 30}}>
@@ -962,6 +983,14 @@ class GradesTable extends Component {
                     </ResponsiveContainer>
                   </Row>
 
+                  <Row>
+                    <Col xs={{size: 5, offset: 0}}>
+                      <h3 className="distLabel">Points Possible (weighted)</h3>
+                    </Col>
+                    <Col xs={{size: 5, offset: 0}}>
+                      <h3 className="distLabel">Points Possible (unweighted)</h3>
+                    </Col>
+                  </Row>
                   <Row>
                     <ResponsiveContainer width="50%" height={150}>
                       <PieChart margin={{top: 30, right: 30, left: 30, bottom: 30}}>
