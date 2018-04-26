@@ -211,13 +211,13 @@ class LiveFeed extends Component {
     array.sort();
 
     this.setState({
-      highestScore: array[array.length - 1],
-      lowestScore: array[0],
-      highUID: this.getKeyByValue(this.state.scoresMap, array[array.length - 1]),
-      lowUID: this.getKeyByValue(this.state.scoresMap, array[0]),
+      // highestScore: array[array.length - 1],
+      // lowestScore: array[0],
+      // highUID: this.getKeyByValue(this.state.scoresMap, array[array.length - 1]),
+      // lowUID: this.getKeyByValue(this.state.scoresMap, array[0]),
     }, () => {
-      this.getHighName();
-      this.getlowName();
+      // this.getHighName();
+      // this.getlowName();
     });
 
     let size = Object.keys(this.state.scoresMap).length;
@@ -551,39 +551,44 @@ class LiveFeed extends Component {
   };
 
   getHighLowScore = () => {
-    let self = this;
-    self.state.students.forEach(function(element) {
-      let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(self.props.lessonNumber);
+    let self = this
+    let highScore = 0
+    let highUID = ''
+    let lowScore = 100
+    let lowUID = ''
+    this.state.students.forEach((element) => {
+      let lessonDataPerStudent = firestore.collection("users").doc(element).collection("inClass").doc(this.props.lessonNumber);
 
-
-      lessonDataPerStudent.onSnapshot(function (doc) {
+      lessonDataPerStudent.onSnapshot((doc) => {
         if (doc.exists) {
-          if (doc.data().currentScore > self.state.highestScore) {
-            let highScore = doc.data().currentScore;
+          if (doc.data().currentScore > highScore) {
+            highScore = doc.data().currentScore;
             highScore = Math.round(highScore * 100) / 100;
+            highUID = element
+
             self.setState({
               highUID: element,
               highestScore: highScore,
             }, () => {
-              //self.getHighName();
+              this.getHighName()
             })
           }
 
-          if (doc.data().currentScore < self.state.lowestScore) {
-            let lowScore = doc.data().currentScore;
+          if (doc.data().currentScore < lowScore) {
+            lowScore = doc.data().currentScore;
             lowScore = Math.round(lowScore * 100) / 100;
+            lowUID = element
             self.setState({
               lowUID: element,
               lowestScore: lowScore,
             }, () => {
-              //self.getlowName();
+              this.getlowName()
             })
           }
         } else {
           console.log("No such document!");
         }
       })
-
     })
   };
 
@@ -607,12 +612,6 @@ class LiveFeed extends Component {
     }).catch(function (error) {
       console.log("Error getting document:", error);
     });
-
-    let docRef1 = firestore.collection("users").doc(this.state.lowUID);
-
-    docRef1.get().then(function (doc) {
-
-    })
   };
 
   getlowName = () => {
